@@ -1,0 +1,13 @@
+augeas-0.9.0-1.el5.i386.rpm
+augeas-devel-0.9.0-1.el5.i386.rpm
+augeas-libs-0.9.0-1.el5.i386.rpm
+epel-release-5-4.noarch.rpm
+facter-1.6.0-2.el5.noarch.rpm
+ovaldi-5.3-5.el5.i386.rpm
+puppet-0.25.5-1.el5.noarch.rpm
+puppet-server-0.25.5-1.el5.noarch.rpm
+python-argparse-1.2.1-2.el5.noarch.rpm
+python-hashlib-20081119-4.el5.i386.rpm
+ruby-augeas-0.4.1-1.el5.i386.rpm
+ruby-json-1.4.3-3.el5.1.i386.rpm
+ruby-shadow-1.4.1-7.el5.i386.rpm

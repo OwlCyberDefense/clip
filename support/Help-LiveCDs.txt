@@ -1,0 +1,22 @@
+LiveCD Creator has numerous issues between 0.13 and 0.14 and each vendor appears to be carrying a unique patch set but fails to provide both of these packages that are compatible with each other:
+* pykickstart
+* livecd-tools
+* syslinux
+
+So we're going to use the patched versions that CentOS uses to roll LiveCDs their repo provides patched versions of both of those tools.  Here is are the commands to get this setup (run as root):
+'''
+echo <<EOF > /etc/yum.repos.d/centos-livecd.repo
+# Name: CentOS LiveCD repository
+[livecd]
+name = CentOS $releasever - LiveCD
+baseurl = http://www.nanotechnologies.qc.ca/propos/linux/centos-live/$basearch/live
+enabled=1
+protect=0
+gpgkey = http://www.nanotechnologies.qc.ca/propos/linux/RPM-GPG-KEY-PGuay2010
+EOF
+
+yum install livecd-tools syslinux
+'''
+
+Original guidance here:
+https://projects.centos.org/trac/livecd/wiki/GetToolset

@@ -1,0 +1,205 @@
+===========================================================================
+What is this thing?
+
+This build system allows developers and administrators to create RPMs and LiveCDs
+in a controlled environment.
+
+Specific features include:
+
+	* Generation of RPMs using mock. 
+
+	* Generation of LiveCD ISOs.
+
+
+Unique feature: 
+
+	* Versioned build-time and run-time package dependencies. Normally 
+	a packager will point mock at a	package repository full of RPMs at
+	different version levels.  This makes it difficult to ensure
+	reproducability across builds.  This build system allows one to version
+	build-time and run-time dependencies, eg create an RPM for application "foo"
+	with a build dependency bar-4.3-1, thus facilitating reproducability of
+	generated packages.
+
+
+===========================================================================
+So how do I use this system?
+
+This build system has a few constructs that must be addressed by the
+user.
+
+0. Available build targets.
+1. Updating existing repository locations.
+2. Adding custom packages.
+3. LiveCD configuration files, ie kickstart files.
+4. Existing package repositories.
+
+
+===========================================================================
+#0 - Available build targets.
+
+To view the list of available build targets run "make help". 
+
+===========================================================================
+#1 - Updating existing repository locations.
+
+Several repositories must be present for the build system to work:
+- RHEL/CentOS
+- EPEL
+- CLIP
+- Fedora Build Groups
+
+The locations of these repos is defined in the Makefile in the following
+variables:
+-  RHEL_REPO_DIR := /mnt/repos/rhel
+-  EPEL_REPO_DIR := /mnt/repos/epel
+-  CLIP_REPO_DIR := /mnt/repos/clip
+-  BUILDGROUPS_REPO_DIR := /mnt/repos/buildgroups
+
+Remember that repositories are often architecture specific so you might have
+to update these variables to build for a different architecture.
+
+===========================================================================
+#2 - Custom packages.
+
+The most common task is adding new packages and generating a custom
+repository.
+
+First, a directory is created in packages/<PACKAGE NAME>.  The contents of
+this directory will vary depending on the type of package.  
+
+If it is merely wrapping an existing project's sources, eg the intent is to
+take an existing released tarball of a library and package it in in RPM, than
+you will provide a Makefile, spec file, package tarball, and any custom
+patches.  Refer to packages/examples/tarball for more information on the
+Makefile and spec file for this scenario.
+
+If the intent is to contain custom source code, eg an internally developed
+application or library, than packages/<PACKAGE NAME> will still contain a
+Makefile and spec file, and packages/<PACKAGE NAME>/<PACKAGE NAME> will
+contain the sources and application-specific build system (eg the one that
+typically has a "make all" and "make install" target).  For more information
+on this type of package refer to packages/examples/sources.
+
+Once the package has been added to the packages/ directory you must update
+the PACKAGES variable in the top-level Makefile to ensure the package is 
+generated as part of any build. Once a package is generated it will appear
+in repos/my-repo.  To add the package to an ISO image update the
+appropriate kickstart file and add the package name to the kickstart's package
+list.
+
+===========================================================================
+#3 - LiveCD configuration files, ie kickstart files.
+
+The images/ directory contains the files needed to configure a LiveCD.  The
+Makefiles in this directory call livecd-creator in the support/ directory and
+pass in a kickstart.  This kickstart is used to generate a LiveCD.
+
+To add a new LiveCD first add an appropriate kickstart to the images/
+directory.  Then add a target to the images/Makefile such as "tos-livecd".
+This target must modify a corresponding kickstart to accept the yum
+repositories configured at the top-level.  The top-level passes these down via
+the REPO_LINES variables which can be used like so:
+"""
+ @sed --in-place 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/CLIP.ks
+"""
+Note that the string #REPO-REPLACEDMENT-PLACEHOLDER must appear in the
+kickstart for this to work appropriately.
+
+Refer to images/example for more information.
+
+
+Finally update the top-level Makefile's LIVECDS variable:
+"""
+LIVECDS := deployer-livecd tos-livecd
+"""
+
+
+===========================================================================
+#4 - Adding a new package repository
+
+Rarely are packages built without build-time dependencies.  Often these
+dependencies come from existing RPM package repositories, such as RHN or EPEL.
+The most common repositories hav been added to the Makefile already,
+RHEL/CentOS, EPEL, Build Groups, and CLIP.  If you need to add another
+repository it requires modifying the Makefile.  
+
+- Update the Makefile. Four variables must be defined for each repository,
+<PREFIX>_REPO_DIR, <PREFIX>_REPOID, <PREFIX>_PKG_LIST_FILE, and
+MY_<PREFIX>_REPO_DIR.
+"""
+	# A RHEL repo must be available. Can be a local path or an http/ftp location.
+	RHEL_REPO_DIR := /mnt/repos/rhel/rhel-5-6-i386/rhel-i386-server-5.6.z/getPackage
+	# Repo name.
+	RHEL_REPOID := rhel
+	# Where do we store a local, versioned list or packages from this repo.
+	RHEL_PKG_LIST_FILE := $(CONF_DIR)/pkglist.rhel
+
+	MY_RHEL_REPO_DIR := $(REPO_DIR)/my-rhel-repo
+"""
+
+- Add the repo to the REPO_LINES variables that will be used to customize
+  kickstart files.
+"""
+export REPO_LINES := $(shell echo 'repo --name=my-repo --baseurl=file://$(MY_REPO_DIR)\nrepo --name=my-rhel --baseurl=file://$(MY_RHEL_REPO_DIR)\nrepo --name=my-epel --baseurl=file://$(MY_EPEL_REPO_DIR)\nrepo --name=my-clip --baseurl=file://$(MY_CLIP_REPO_DIR)')
+"""
+
+- Update the targets used for creating all repos.
+"""
+create-repos: setup-rhel-repo setup-epel-repo setup-clip-repo
+setup-buildgroups-repo setup-my-repo
+"""
+
+- Add a setup repo target.
+"""
+setup-rhel-repo: $(MY_RHEL_REPO_DIR)/last-updated
+"""
+
+- Add a target for generating the repo.
+"""
+$(MY_RHEL_REPO_DIR)/last-updated: $(RHEL_PKG_LIST_FILE)
+        @echo "Cleaning RHEL yum repo, this could take a few minutes..."
+        $(VERBOSE)$(RM) -r $(MY_RHEL_REPO_DIR)
+        @echo "Populating RHEL yum repo, this could take a few minutes..."
+        $(call MKDIR,$(MY_RHEL_REPO_DIR))
+        $(VERBOSE)while read fil; do $(REPO_LINK) $(RHEL_REPO_DIR)/$$fil $(MY_RHEL_REPO_DIR)/$$fil; done < $(RHEL_PKG_LIST_FILE)
+        @echo "Generating RHEL yum repo metadata, this could take a few
+minutes..."
+        $(VERBOSE)cd $(MY_RHEL_REPO_DIR) && $(REPO_CREATE) .
+        $(VERBOSE)touch $@
+"""
+
+- Add a target for generating the repo pkg list.
+"""
+$(RHEL_PKG_LIST_FILE):
+        $(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
+        echo -e "[$(RHEL_REPOID)]\nname=$(RHEL_REPOID)\nbaseurl=file://$(RHEL_REPO_DIR)\nenabled=1" >> $(YUM_CONF_FILE) $(VERBOSE)$(REPO_QUERY) --repoid=$(RHEL_REPOID) |sort 1>$(RHEL_PKG_LIST_FILE)
+"""
+
+- Update the bare-repos target to remove the generated repo.
+"""
+bare-repos:
+        $(VERBOSE)$(RM) -r $(MY_RHEL_REPO_DIR)
+"""
+
+- Add your "setup-<reponame>-repo" to the .PHONY target.
+"""
+.PHONY: setup-rhel-repo
+"""
+
+- Update the sed command in the $(MOCK_CONF_DIR)/$(MOCK_REL).cfg target to include a search
+  and replace expression for the new repo
+"""
+-e 's:%%MY_RHEL_REPO_DIR%%:$(MY_RHEL_REPO_DIR):'
+"""
+
+- Add your repository to the list of repos used by mock to generate packages.
+Edit conf/mock/rhel-5-i386.conf.tmpl and add a new entry for the repo.
+"""
+[rhel]
+name=cds-tos
+baseurl=file://%%MY_CDS_RHEL_REPO_DIR%%
+enabled=1
+"""
+
+
