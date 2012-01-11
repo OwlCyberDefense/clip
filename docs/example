@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<body>
+<div class=”req_src” id=”<req_doc>”>
+<!-- There will be one document for each set of requirements.  The id will be “DCID6-3”, “CNSSI1253”, or “NIST800-53” -->
+
+	<div class="req">
+	<!-- This div block will wrap an entire requirement and its associated data. -->
+	
+		<div class=”req_id”>Identifier
+		<!-- There will be one req_id item for each requirement.  Examples for identifier include “Test2” or “AC-1”. -->
+		</div>
+
+		<div class=”req_objs”>
+		<!-- This div will not include an id.  It will contain one or more objectives (req_obj). -->
+			<div class=”req_obj”>Objective
+			<!-- The Objective will differ between requirement sets.  For DCID 6/3 it will be PL1-5, INTEG-B/M/H, or AVAIL-B/H/H.  For CNSSI 1253 it will be C-L/M/H, I-L/M/H, or A-L/M/H.  For 800-53 it will be P0-3, LOW, MOD, HIGH.  There should not be any other items included within this div. -->
+			</div>
+		</div>
+
+		<div class=”req_title”>Short Title for Requirement
+		<!-- This div is optional.  The DCID 6/3 does not contain a title for requirements.  The other requirement sets do. -->
+		</div>
+
+		<div class=”req_desc”>
+		<!-- This div will not include an id.  This will contain all the text for each requirement, with as much formatting extracted as possible, except where the formatting has a meaning. -->
+		</div>
+
+		<div class=”req_gap”>
+		<!-- This div will not include an id.  The information in this div will not be extracted from the requirement documents themselves.  It is a result of the gap analysis performed for each requirement on the CLIP system.  This div will contain only one of the following items (except for req_ref). -->
+
+			<div class=”req_type”>Type
+			<!-- The Type will be set to “AR” if the requirement is applicable as deemed required by the Designated Approving Authority (DAA), “C” if it is a Configuration requirement, “D” for development, or “P” for procedural. -->
+			</div>
+
+			<div class=”req_compliance”>Compliance
+			<!—- The Compliance will be one of the following: “NA” for Not Applicable, “NC” for not a CLIP Capability, “MR” for Meets Requirement, “PR” for Partially Meets Requirement, “DN” for Does Not Meet Requirement”. -->
+			</div>
+
+			<div class=”req_compliance_desc”>
+			<!—- There will be no id attribute for this div.  It will contain text between div items.  This will be the results from the analysis for this requirement against CLIP system.  -->
+       			</div>
+       
+			<div class=”req_refs”>
+			<!—- There will be no id attribute for this div.  It will contain one or more references to puppet, SCAP, etc. that were used for this requirement.  The formatting for this div is TBD.  -->
+				<div class=”req_ref”>Reference</div>
+       			</div>
+		</div>
+	</div>
+</div>
+</body>
+
+Some things I ran across while creating the examples below:
+* Spaces not permitted within the ID
+* I took out the req_set and req_sets that we talked about because I think it was capturing the same as req_obj
+* For the CNSSI 1253 document, I recommend we incorporate the changes from the third column of the table into the actual requirement and show the entire requirement, not just a part like it is doing now.  That will require more work by Emanne now, but I think it will simplify things later.
+* Each id can only appear once in the file so the id attribute was not used within the span tag.  This data was moved as text between the <div></div> tags.
+
+
+Example for DCID 6/3:
+<div class="req_src" id="DCID6-3">
+	<div class="req">
+		<div class="req_id">[Access1]</div>
+		<div class="req_objs">
+			<div class="req_obj">Pl1</div>
+			<div class="req_obj">Pl2</div>
+			<div class="req_obj">Pl3</div>
+			<div class="req_obj">Pl4</div>
+			<div class="req_obj">Pl5</div>
+		</div>
+		<div class="req_desc">
+			Access control, including:
+			<ol style="list-style-type: lower-alpha">
+				<li>Denial of physical access by unauthorized individuals unless under constant supervision of technically qualified, authorized personnel.</li>
+				<li>Procedures for controlling access by users and maintainers to IS resources, including those that are at remote locations.</li>
+			</ol>
+		</div>
+		<div class="req_gap">
+			<div class="req_type"></div>
+			<div class="req_compliance"></div>
+			<div class="req_compliance_desc"></div>
+			<div class="req_refs">
+				<div class="req_ref"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+Example for NIST 800-53:
+<div class="req_src" id="NIST800-53">
+	<div class="req">
+		<div class="req_id">AC-1</div>
+		<div class="req_objs">
+			<div class="req_obj">P1</div>
+			<div class="req_obj">LOW</div>
+			<div class="req_obj">MOD</div>
+			<div class="req_obj">HIGH</div>
+		</div>
+		<div class="req_title">Access Control Policy and Procedures</div>
+		<div class="req_desc">
+			Control: The organization develops, disseminates, and reviews/updates [<i>Assignment: organization-defined frequency</i>]:
+			<ol style="list-style-type: lower-alpha">
+				<li>A formal, documented access control policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organization entities, and compliance; and</li>
+				<li>Formal, documented procedures to facilitate the implementation of the access control policy and associated access controls.</li>
+			</ol>
+			Supplemental Guidance: This control is intended to produce the policy and procedures that are required for the effective implementation of selected security controls and control enhancements in the access control family. The policy and procedures are consistent with applicable federal laws, Executive Orders, directives, policies, regulations, standards, and guidance. Existing organizational policies and procedures may make the need for additional specific policies and procedures unnecessary. The access control policy can be included as part of the general information security policy for the organization. Access control procedures can be developed for the security program in general and for a particular information system, when required. The organizational risk management strategy is a key factor in the development of the access control policy. Related control: PM-9.<br />
+Control Enhancements: None.<br />
+References: NIST Special Publications 800-12, 800-100.<br />
+		</div>
+
+		<div class="req_gap">
+			<div class="req_type">P</div>
+			<div class="req_compliance">NA</div>
+			<div class="req_compliance_desc">
+				This requirement is procedural in nature and is outside the scope of the operating system.
+			</div>
+			<div class="req_refs">
+				<div class="req_ref">Reference1</div>
+			</div>
+		</div>
+     </div>
+</div>
+
+Example for CNSSI 1253:
+<div class="req_src" id="CNSSI1253">
+	<div class="req">
+		<div class="req_id">AC-2(3)</div>
+		<div class="req_objs">
+			<div class="req_obj" id="C-M"></div>
+			<div class="req_obj" id="C-H"></div>
+			<div class="req_obj" id="I-M"></div>
+			<div class="req_obj" id="I-H"></div>
+		</div>
+		<div class="req_title">Account Management</div>
+		<div class="req_desc">
+			Control: The organization manages information system accounts, including establishing, activating, modifying, reviewing, disabling, and removing accounts. The organization will:
+			<ol style="list-style-type: lower-alpha">
+				<li>Reviews information system accounts [Assignment organization defined frequency], or at least annually.</li>
+				<li>Identifies authorized users of the information system accounts and specifies access rights/privileges.</li>
+				<li>Requires proper identification for requests to establish information system accounts and approves all such requests.</li>
+				<li>Authorizes and monitors the use of guest/anonymous accounts and removes, disables or otherwise secures unnecessary accounts.</li>
+				<li>Notify account managers when information system users are terminated or transferred and associated accounts are removed, disabled or otherwise secured.</li>
+				<li>Notify account managers when users&#8217; information system usage or need-to-know/need to share changes.</li>
+			</ol>
+			Supplemental Guidance: Account management includes the identification of account types (i.e., individual, group, and system), establishment of conditions for group membership, and assignment of associated authorizations. The organization should consider the following aspects when granting access to the information and information systems: (i) A valid access authorization that is determined by assigned official duties and satisfying all personnel security criteria and (ii) Intended system usage.<br />
+			Control Enhancements:  The information system automatically disables inactive accounts after [<i>Assignment: organization-defined time period</i>], not to exceed 30 days.
+		</div>
+		<div class="req_gap">
+			<div class="req_type">C</div>
+			<div class="req_compliance">PR</div>
+			<div class="req_compliance_desc">
+				Linux user management allows an expiration date to be set for an account.  This could be used when creating temporary or emergency accounts to terminate them after some period of time.
+			</div>
+			<div class="req_refs">
+				<div class="req_ref">PuppetReference1</div>
+			</div>
+		</div>
+	</div>
+</div>
