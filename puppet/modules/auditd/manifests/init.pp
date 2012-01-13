@@ -92,7 +92,7 @@ class auditd {
 
 	augeas {
 		context => "/etc/auditd.conf"
-		lens 	=> "audit.lns"
+		lens 	=> "auditd.lns"
 		incl	=> "/etc/audit/audit.log"
 		exec {
 			"Disable extended ACLs for audit files":
