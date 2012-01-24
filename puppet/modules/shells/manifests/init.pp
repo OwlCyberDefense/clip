@@ -17,33 +17,33 @@
 class shells {
 		file {
 			"/bin/sh":
-                        	mode => 755,
-                        	owner => "root";
-                
+                        	owner	=> "root",
+				mode	=> '0755';
+                                        
 			"/bin/bash":
-                       		mode => 755,
-                        	owner => "root";
-                
-			"/sbin/nologin":
-                       		mode => 755,
-                        	owner => "root";
-                
+                       		owner	=> "root",
+				mode	=> '0755';                        	
+             		"/sbin/nologin":
+				owner	=> "root",  
+                     		mode	=> '0755';
+                  
 			"/bin/tcsh":
-                        	mode => 755,
-                        	owner => "root";
+				owner	=> "root",
+                        	mode	=> '0755';
                 
 			"/bin/csh":
-                        	mode => 755,
-                        	owner => "root";
-                
+				owner	=> "root",
+                        	mode 	=> '0755';
+               
 			"/bin/ksh":
-                        	mode => 755,
-                        	owner => "root";
+                        	owner	=> "root",
+				mode 	=> '0755';
 		}
 
 		augeas {
-			context	=>	"/etc/shells";
-			lens	=>	shells.lns;
+			"Map shells to augeas tree":
+				context	=> "/etc/shells",
+				lens	=> "shells.lns";
 		}
 }
 
