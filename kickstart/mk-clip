@@ -1,0 +1,30 @@
+#!/bin/bash
+[ `id -u` = 0 ] || exec sudo $0 $*
+
+NAME=clip
+KS=$NAME.ks
+VERSION="1"
+BUILDDIR="/var/tmp/pungi"
+OSDIR=$BUILDDIR/$VERSION/`uname -i`/os/
+ARGS="--destdir=$BUILDDIR --ver=$VERSION --name=$NAME --nosource --force"
+
+rm -rf $BUILDDIR/*
+
+pungi $ARGS -GCB -c $KS
+[ $? -eq 0 ] || exit 1
+
+# install kickstart
+sed -e 's/^repo/#repo/' $KS > $OSDIR/$KS
+[ $? -eq 0 ] || exit 1
+
+# fix boot menu
+sed -i -e "s/^label linux$/label $NAME/" \
+       -e "s/append initrd=initrd.img$/append initrd=initrd.img ks=cdrom:$KS/" \
+       -e "s/or upgrade an existing system/$NAME/" \
+    $OSDIR/isolinux/isolinux.cfg
+[ $? -eq 0 ] || exit 1
+
+# make ISO
+pungi $ARGS -I -c $KS
+[ $? -eq 0 ] || exit 1
+
