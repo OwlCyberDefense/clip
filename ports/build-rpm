@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+HOME=`pwd`
+TGT=${1:-.}
+rpm -hiv *.src.rpm
+rpmbuild -bb --define 'dist .clip' rpmbuild/SPECS/*.spec
+mv rpmbuild/RPMS/*/*.rpm $TGT
+rm -rf rpmbuild

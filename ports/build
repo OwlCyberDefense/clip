@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+rm -rf repo && mkdir -m 775 repo
+
+(cd pungi                 && ../build-rpm ../repo)
+(cd facter                && ../build-rpm ../repo)
+(cd puppet                && ../build-rpm ../repo)
+(cd repoview              && ../build-rpm ../repo)
+(cd python-kid            && ../build-rpm ../repo)
+(cd ruby-augeas           && ../build-rpm ../repo)
+(cd ruby-shadow           && ../build-rpm ../repo)
+(cd python-decoratortools && ../build-rpm ../repo)
+
+sudo yum localinstall repo/*rpm
+
+sudo usermod -G mock $USER
+
+rm -rf repo && mkdir -m 775 repo
+
+mock --rebuild */*src.rpm -D "dist .clip.el6" --resultdir repo
