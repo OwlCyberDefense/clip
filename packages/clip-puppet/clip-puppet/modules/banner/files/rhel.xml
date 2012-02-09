@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+<!DOCTYPE greeter SYSTEM "greeter.dtd">
+<greeter>
+
+    <item type="pixmap">
+        <pos anchor="nw" x="0" y="0" width="100%" height="100%"/>
+        <normal file="background.png" color="#cc0000"/>
+    </item>
+
+    <item type="pixmap">
+        <pos anchor="nw" x="50" y="50"/>
+        <normal file="logo.png" color="#cc0000"/>
+    </item>
+
+    <item type="rect">
+       <pos anchor="nw" x="20%" y="10" width="80%" height="100%"/>
+       <box>
+          <item type="label">
+             <normal font="Sans Bold 9" color="#ffffff"/>
+             <text>
+You are accessing a U.S. Government (USG) information system (IS) that is provided for USG-authorized use only.
+
+By using this IS, you consent to the following conditions:
+
+- The USG routinely monitors communications occurring on this IS, and any device attached to this IS, for
+  purposes including, but not limited to, penetration testing, COMSEC monitoring, network defense, quality
+  control, and employee misconduct, law enforcement, and counterintelligence investigations.
+- At any time, the USG may inspect and/or seize data stored on this IS and any device attached to this IS.
+- Communications occurring on or data stored on this IS, or any device attached to this IS, are not private.
+  They are subject to routine monitoring and search.
+- Any communications occurring on or data stored on this IS, or any device attached to this IS, may be
+  disclosed or used for any USG-authorized purpose.
+- Security protections may be utilized on this IS to protect certain interests that are important to the
+  USG. For example, passwords, access cards, encryption or biometric access controls provide security for
+  the benefit of the USG. These protections are not provided for your benefit or privacy and may be
+  modified or eliminated at the USG's discretion.
+             </text>
+          </item>
+       </box>
+    </item>
+
+
+    <item type="rect">
+	    <pos anchor="sw" x="0" y="100%" width="box" height="box"/>
+	    <box orientation="vertical" xpadding="50" spacing="5">
+		    <item type="pixmap">
+			    <pos anchor="nw" x="0" y="0"/>
+			    <normal file="distribution.png" color="#cc0000"/>
+		    </item>
+		    <item type="label" id="timed-label">
+			    <show type="timed"/>
+			    <pos anchor="c" x="50%" y="50%" width="100%" height="100%"/>
+			    <normal color="#ffffff" font="Sans Bold 12"/>
+			    <stock type="timed-label"/>
+		    </item>
+		    <item type="rect">
+			    <pos anchor="c" x="50%" y="50%" width="100%" height="box"/>
+			    <box orientation="vertical" xpadding="15">
+				    <item type="label" id="pam-prompt">
+					    <pos anchor="nw" x="0" y="0"/>
+					    <normal font="Sans 16" color="#ffffff"/>
+					    <stock type="username-label"/>
+				    </item>
+				    <item type="entry" id="user-pw-entry">
+					    <!-- 
+					    FIXME: ugh...how will we know 26
+					    is the right size for Sans 13 ?  
+					    number is a guess.. 
+					    13 * 1/72 + 
+					    6.5 (half character ypadding) * 1/72 = 0.27
+
+					    .27 * 96 = 25.9 pixels 
+
+					    Of course this all falls over if the dpi
+					    isn't 96, or the entry is configured to have a 
+					    thicker border
+					    -->
+					    <pos anchor="nw" x="0" y="0" width="100%" height="26"/>
+					    <normal font="Sans 13" color="#000000"/>
+				    </item>
+				    <item type="rect">
+					    <!-- 388 is 4/5 the size of distribution.png -->
+					    <pos anchor="se" x="100%" y="100%" width="388" height="box"/>
+
+					    <!-- box is just a trick to get padding the
+					    way I want-->
+					    <box>
+						    <item type="label" id="pam-message">
+							    <pos anchor="ne" x="100%" y="0" width="100%"/>
+							    <normal font="Sans 14" color="#ffffff"/>
+							    <text></text>
+						    </item>
+					    </box>
+				    </item>
+			    </box>
+		    </item>
+	    <item type="rect">
+		    <pos anchor="c" x="50%" y="50%" width="box" height="box"/>
+		    <box orientation="vertical" spacing="15" ypadding="30">
+			    <item type="label" id="caps-lock-warning">
+				    <pos anchor="c" x="50%" y="50%" width="388" height="100%"/>
+				    <normal color="#ffffff" font="Sans Bold 14"/>
+				    <stock type="caps-lock-warning"/>
+			    </item>
+			    <item type="rect">
+				    <pos anchor="c" x="50%" y="50%" width="388" height="box"/>
+				    <box>
+					    <item type="label" id="pam-error">
+						    <normal color="#ffffff" font="Sans 13"/>
+						    <pos anchor="c" x="50%" y="50%" width="100%" height="100%"/>
+						    <text></text>
+					    </item>
+				    </box>
+			    </item>   
+		    </box>
+	    </item>
+	    <item type="rect">
+                <pos anchor="sw" x="0" y="100%" width="box" height="box"/>
+                <box orientation="horizontal" ypadding="10">
+                    <item type="rect">
+                        <pos anchor="nw" x="0" y="0" width="box" height="box"/>
+                        <box orientation="horizontal">
+                            <item type="rect" id="language_button" button="true">
+                                <pos y="50%" anchor="w" width="box" height="box"/>
+                                <box orientation="horizontal" xpadding="6">
+                                    <item type="pixmap">
+                                        <normal file="icon-language.png"/>
+                                    </item>
+                                    <item type="label">
+                                        <active color="#b49d9c" font="Sans Bold 12"/>
+                                        <prelight color="#ccabbb" font="Sans Bold 12"/>
+                                        <normal color="#ffffff" font="Sans Bold 12"/>
+                                        <pos y="50%" anchor="w"/>
+                                        <stock type="language"/>
+                                    </item>
+                                </box>
+                            </item>
+                            <item type="rect" id="session_button" button="true">
+                                <pos y="50%" anchor="w" width="box" height="box"/>
+                                <box orientation="horizontal" xpadding="6">
+                                    <item type="pixmap">
+                                        <normal file="icon-session.png"/>
+                                    </item>
+                                    <item type="label">
+                                        <active color="#b49d9c" font="Sans Bold 12"/>
+                                        <prelight color="#ccabbb" font="Sans Bold 12"/>
+                                        <normal color="#ffffff" font="Sans Bold 12"/>
+                                        <pos y="50%" anchor="w"/>
+                                        <stock type="session"/>
+                                    </item>
+                                </box>
+                            </item>
+                            <item type="rect" id="reboot_button" button="true">
+				<show modes="console" type="reboot"/>
+                                <pos y="50%" anchor="w" width="box" height="box"/>
+                                <box orientation="horizontal" xpadding="6">
+                                    <item type="pixmap">
+                                        <normal file="icon-reboot.png"/>
+                                    </item>
+                                    <item type="label">
+                                        <active color="#b49d9c" font="Sans Bold 12"/>
+                                        <prelight color="#ccabbb" font="Sans Bold 12"/>
+                                        <normal color="#ffffff" font="Sans Bold 12"/>
+                                        <pos y="50%" anchor="w"/>
+                                        <stock type="reboot"/>
+                                    </item>
+                                </box>
+                            </item>
+                            <item type="rect" id="halt_button" button="true">
+				<show modes="console" type="halt"/>
+                                <pos y="50%" anchor="w" width="box" height="box"/>
+                                <box orientation="horizontal" xpadding="6">
+                                    <item type="pixmap">
+                                        <normal file="icon-shutdown.png"/>
+                                    </item>
+                                    <item type="label">
+                                        <active color="#b49d9c" font="Sans Bold 12"/>
+                                        <prelight color="#ccabbb" font="Sans Bold 12"/>
+                                        <normal color="#ffffff" font="Sans Bold 12"/>
+                                        <pos y="50%" anchor="w"/>
+                                        <stock type="halt"/>
+                                    </item>
+                                </box>
+                            </item>
+                            <item type="rect" id="disconnect_button" button="true">
+                                <show modes="flexi,remote"/>
+                                <pos y="50%" anchor="w" width="box" height="box"/>
+                                <box orientation="horizontal" xpadding="6">
+                                    <item type="pixmap">
+                                        <normal file="icon-shutdown.png"/>
+                                    </item>
+                                    <item type="label">
+                                        <show modes="remote"/>
+                                        <active color="#b49d9c" font="Sans Bold 12"/>
+                                        <prelight color="#ccabbb" font="Sans Bold 12"/>
+                                        <normal color="#ffffff" font="Sans Bold 12"/>
+                                        <pos y="50%" anchor="w"/>
+                                        <stock type="disconnect"/>
+                                    </item>
+                                    <item type="label">
+                                        <show modes="flexi"/>
+                                        <active color="#b49d9c" font="Sans Bold 12"/>
+                                        <prelight color="#ccabbb" font="Sans Bold 12"/>
+                                        <normal color="#ffffff" font="Sans Bold 12"/>
+                                        <pos y="50%" anchor="w"/>
+                                        <stock type="quit"/>
+                                    </item>
+                                </box>
+                            </item>
+                        </box>
+                    </item>
+                </box>
+            </item>
+        </box>
+    </item>
+</greeter>
