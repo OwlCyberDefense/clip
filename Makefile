@@ -8,13 +8,10 @@
 
 # List of all RPM packages to build, must be in $(PKG_DIR).
 # NOTE: The Makefile for each package must define VERSION, RELEASE, and ARCH.
-PACKAGES := 
+PACKAGES := clip-puppet
 
-# These are targets supported by the images/Makefile that will be used to generate LiveCD images.
-LIVECDS := clip-livecd
-
-# These are targets supported by the images/Makefile that will be used to generate installation ISOs.
-INSTISOS :=
+# This list contains a list of system images we can generate out of kickstarts in kickstart/<sysname>/sysname.ks
+SYSTEMS := clip-rhel5 clip-rhel6
 
 # Import build configuration (production vs. debug, other configurables)
 include BUILD_CONFIG
@@ -67,7 +64,7 @@ QUIET = n
 ######################################################
 
 ######################################################
-# BEGIN MAGIC
+# A FOREWARNING - BEGIN MAGIC
 $(info Boot strapping build system...)
 export ROOT_DIR ?= $(CURDIR)
 export OUTPUT_DIR ?= $(ROOT_DIR)
@@ -80,7 +77,7 @@ PKG_DIR += $(CURDIR)/packages
 REPO_DIR := $(CURDIR)/repos
 
 # This directory contains images files, the Makefiles, and other files needed for ISO generation
-IMAGES_DIR := $(CURDIR)/images
+KICKSTART_DIR := $(CURDIR)/images
 
 # Files supporting the build process
 SUPPORT_DIR := $(CURDIR)/support
@@ -144,6 +141,13 @@ ifeq ($(QUIET),y)
 endif
 
 MKDIR = $(VERBOSE)test -d $(1) || mkdir -p $(1)
+
+# These are targets supported by the kickstart/Makefile that will be used to generate LiveCD images.
+LIVECDS := $(addsuffix -livecd,$(SYSTEMS))
+
+# These are targets supported by the kickstart/Makefile that will be used to generate installation ISOs.
+INSTISOS := $(addsuffix -installation-iso,$(SYSTEMS))
+
 
 # Add a file to a repo by either downloading it (if http/ftp), or symlinking if local.
 # TODO: add support for wget (problem with code below, running echo/grep for each file instead of once for the whole repo
@@ -243,10 +247,10 @@ srpms: $(SRPMS)
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
 $(LIVECDS): VERSION create-repos $(RPMS)
-	$(MAKE) -C $(IMAGES_DIR)/ $@
+	$(MAKE) -C $(KICKSTART_DIR)/ $@
 
 $(INSTISOS):
-	$(MAKE) -C $(IMAGES_DIR)/ $@
+	$(MAKE) -C $(KICKSTART_DIR)/ $@
 
 $(MOCK_CONF_DIR)/$(MOCK_REL).cfg: $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
 	$(VERBOSE)sed -e 's:%%MY_RHEL_REPO_DIR%%:$(MY_RHEL_REPO_DIR):' -e 's:%%MY_EPEL_REPO_DIR%%:$(MY_EPEL_REPO_DIR):' \
@@ -307,13 +311,13 @@ FORCE:
 .PHONY: all all-vm create-repos setup-my-repo setup-epel-repo setup-rhel-repo setup-buildgroups-repo srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE
 
 help:
-	@echo "The following make targets are available for generating Live CDs:"
-	@echo "	all (generate all Live CDs)"
-	@for cd in $(LIVECDS); do echo "	$$cd"; done
+	@echo "The following make targets are available for generating installable ISOs:"
+	@echo "	all (generate all installation ISOs and Live CDs)"
+	@for cd in $(INSTISOS); do echo "	$$cd"; done
 	@echo
-	@echo "The following make targets are available for generating Live CDs for use in VMs:"
-	@echo "	all-vm (generate all Live CDs for use in VMs)"
-	@for cd in $(VM_LIVECDS); do echo "	$$cd"; done
+	@echo "The following make targets are available for generating Live CDs:"
+	@echo "	all (generate all installation ISOs and Live CDs)"
+	@for cd in $(LIVECDS); do echo "	$$cd"; done
 	@echo
 	@echo "The following make targets are available for generating RPMs in mock:"
 	@echo "	rpms (generate all rpms in mock)"

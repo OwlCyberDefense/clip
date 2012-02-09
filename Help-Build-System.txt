@@ -91,12 +91,12 @@ list.
 ===========================================================================
 #3 - LiveCD configuration files, ie kickstart files.
 
-The images/ directory contains the files needed to configure a LiveCD.  The
+The kickstart// directory contains the files needed to configure a LiveCD.  The
 Makefiles in this directory call livecd-creator in the support/ directory and
 pass in a kickstart.  This kickstart is used to generate a LiveCD.
 
-To add a new LiveCD first add an appropriate kickstart to the images/
-directory.  Then add a target to the images/Makefile such as "tos-livecd".
+To add a new LiveCD first add an appropriate kickstart to the kickstart/
+directory.  Then add a target to the kickstart/Makefile such as "tos-livecd".
 This target must modify a corresponding kickstart to accept the yum
 repositories configured at the top-level.  The top-level passes these down via
 the REPO_LINES variables which can be used like so:
@@ -105,8 +105,6 @@ the REPO_LINES variables which can be used like so:
 """
 Note that the string #REPO-REPLACEDMENT-PLACEHOLDER must appear in the
 kickstart for this to work appropriately.
-
-Refer to images/example for more information.
 
 
 Finally update the top-level Makefile's LIVECDS variable:
