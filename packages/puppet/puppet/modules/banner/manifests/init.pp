@@ -31,6 +31,12 @@
 #	CCE-4188-9
 #	CCE-3717-6
 #
+# NIST800.53:
+#	AC-8
+#
+# DCID6/3:
+#	4.B.4.a(23)
+#
 class banner {
 
 	file {
