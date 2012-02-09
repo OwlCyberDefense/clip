@@ -19,7 +19,7 @@ rm -rf "$RPM_BUILD_ROOT"
 mkdir -p "$RPM_BUILD_ROOT/etc"
 mkdir -p "$RPM_BUILD_ROOT/etc/puppet"
 mkdir -p "$RPM_BUILD_ROOT/var/lib/puppet/lib/puppet/type/"
-cp -a * "$RPM_BUILD_ROOT/etc/puppet"
+cp -ra * "$RPM_BUILD_ROOT/etc/puppet"
 mv "$RPM_BUILD_ROOT/etc/puppet/plugins/append_if_no_such_line.rb" "$RPM_BUILD_ROOT/var/lib/puppet/lib/puppet/type/"
 rmdir "$RPM_BUILD_ROOT/etc/puppet/plugins"
 
