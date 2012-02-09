@@ -45,14 +45,14 @@ class banner {
 			owner  => "root",
 			group  => "root",
 			mode   => 644,
-			source => "puppet:///modules/banner/issue";
+			source => "/etc/puppet/modules/banner/files/issue";
 
-		# 2.3.7.2 Create Warning Banners for GUI Login Users
+		# Create Warning Banners for GUI Login Users
 		"/usr/share/gdm/themes/RHEL/RHEL.xml":
 			owner  => "root",
 			group  => "root",
 			mode   => 644,
-			source => "puppet:///modules/banner/rhel.xml";		
+			source => "/etc/puppet/modules/banner/files/rhel.xml";		
 	}
 
 	# 3.6.2.1 Create Warning Banners for GUI Login Users
