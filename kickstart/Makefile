@@ -7,8 +7,7 @@
 # The name of the Vendor
 VENDOR ?= Tresys Technology, LLC
 
-CWD := $(shell pwd)
-ROOT_DIR ?= $(CWD)
+ROOT_DIR ?= $(CURDIR)
 TMP_DIR ?= $(ROOT_DIR)/tmp
 OUTPUT_DIR ?= $(ROOT_DIR)
 
@@ -17,9 +16,9 @@ BUILD_DATE ?= $(shell date +%m-%d-%y)
 
 TMP_DIR ?= tmp
 
-all: clip-livecd
+all: clip-rhel5-livecd clip-rhel6-livecd clip-rhel5 clip-rhel6
 
-clip-livecd:
+clip-rhel5-livecd clip-rhel6-livecd:
 	$(MAKE) -C $@ $@
 
 clean:
@@ -27,4 +26,4 @@ clean:
 
 bare: clean
 
-.PHONY: all clip-livecd clean bare
+.PHONY: all clip-rhel5-livecd clip-rhel6-livecd clip-rhel5 clip-rhel6 clean bare
