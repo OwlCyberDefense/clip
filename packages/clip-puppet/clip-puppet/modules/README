@@ -6,3 +6,6 @@ cronat, password, and shells modules built using GEN requirements from CLIP5.4
 Michael Palmiotto
 1/13/2012
 ---
+
+To test
+sudo puppet apply --modulepath=/home/joe/clip/packages/clip-puppet/clip-puppet/modules -e "include banner"

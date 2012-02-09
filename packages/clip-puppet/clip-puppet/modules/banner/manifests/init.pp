@@ -31,6 +31,12 @@
 #	CCE-4188-9
 #	CCE-3717-6
 #
+# NIST800.53:
+#	AC-8
+#
+# DCID6/3:
+#	4.B.4.a(23)
+#
 class banner {
 
 	file {
@@ -39,16 +45,25 @@ class banner {
 			owner  => "root",
 			group  => "root",
 			mode   => 644,
-			source => "puppet:///modules/banner/issue";
-
-		# 2.3.7.2 Create Warning Banners for GUI Login Users
-		"/usr/share/gdm/themes/RHEL/RHEL.xml":
-			owner  => "root",
-			group  => "root",
-			mode   => 644,
-			source => "puppet:///modules/banner/rhel.xml";		
+			source => "/etc/puppet/modules/banner/files/issue";
 	}
 
-	# 3.6.2.1 Create Warning Banners for GUI Login Users
-	# Not implemented - redundant with the RHEL themed banner
+        # default path for following execs
+        Exec { path => "/usr/bin:/usr/sbin:/bin:sbin" }
+
+        exec { "sshd_banner":
+                command => "sed -i '/^#Banner/ c\\Banner /etc/issue' /etc/ssh/sshd_config",
+                onlyif => "test -f /etc/ssh/sshd_config",
+        }
+
+        # handle graphical logins
+        exec { "enable_gdm_banner":
+                command => "gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type bool --set /apps/gdm/simple-greeter/banner_message_enable true",
+                onlyif => "test -e /usr/bin/gconftool-2"
+        }
+        exec { "set_gdm_banner":
+                command => "gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type string --set /apps/gdm/simple-greeter/banner_message_text \"$(cat /etc/puppet/modules/banner/files/gdm_banner)\"",
+                onlyif => "test -e /usr/bin/gconftool-2"
+        }
 }
+
