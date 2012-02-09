@@ -1,9 +1,0 @@
-/var/log/audit/audit.log
-{
-	daily
-	notifempty
-	missingok
-	postrotate
-	/sbin/service auditd restart 2> /dev/null > /dev/null || true
-	endscript
-}
