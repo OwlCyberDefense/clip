@@ -97,15 +97,6 @@ class auditd {
 			lens 	=> "auditd.lns",
 			incl	=> "/etc/audit/audit.log";
 
-		"pam":
-			context => "/etc/pam.d/system-auth.tpl",
-			lens 	=> "pam.lns";
-		
-		"deny root logins":
-			context => "/etc/ssh/sshd_config",
-			lens 	=> "sshd.lns",
-			changes	=> "set PermitRootLogin no";
-		
 		"ensure DoD authoritative clock":
 			context => "/etc/ntp.conf",
 			lens	=> "ntpd.lns",
