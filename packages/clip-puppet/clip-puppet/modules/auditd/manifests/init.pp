@@ -54,11 +54,6 @@ class auditd {
 		"/etc/logrotate.d/audit":
 			source 	=> "../files/audit.logrotate";
 
-		"/etc/ntp.conf":
-			owner	=> root,
-			group   => root,
-			mode	=> '0640';
-			
 		"/sbin/auditctl":
 			owner	=> root,
 			group   => root,
@@ -97,11 +92,6 @@ class auditd {
 			lens 	=> "auditd.lns",
 			incl	=> "/etc/audit/audit.log";
 
-		"ensure DoD authoritative clock":
-			context => "/etc/ntp.conf",
-			lens	=> "ntpd.lns",
-			changes	=> "set server tock.usno.navy.mil";
-
 
 #		"Disable Extended ACLs for audit executables":
 #			context	=> "/sbin/au*";
@@ -110,9 +100,6 @@ class auditd {
 	 exec {
                 "Disable Extended ACLs for auditd.conf":
                         command => 'setfacl -b "/etc/auditd.conf"';
-
-                "Disable Extended ACLs in NTP":
-                        command => 'setfacl -b "/etc/ntp.conf"';
 
                 "Disable Extended ACLs for audit executables":
                         command => 'setfacl -b "/sbin/auditctl" "/sbin/audispd" "/sbin/auditd/" "/sbin/aureport" "/sbin/ausearch" "/sbin/autrace"';
