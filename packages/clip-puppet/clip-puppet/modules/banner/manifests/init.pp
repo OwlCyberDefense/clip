@@ -48,22 +48,24 @@ class banner {
 			source => "/etc/puppet/modules/banner/files/issue";
 	}
 
-        # default path for following execs
-        Exec { path => "/usr/bin:/usr/sbin:/bin:sbin" }
+	# default path for following execs
+	Exec { path => "/usr/bin:/usr/sbin:/bin:sbin" }
 
-        exec { "sshd_banner":
-                command => "sed -i '/^#Banner/ c\\Banner /etc/issue' /etc/ssh/sshd_config",
-                onlyif => "test -f /etc/ssh/sshd_config",
-        }
+	# Configure sshd if installed
+	augeas { "sshd_banner":
+		context => "/files/etc/ssh/",
+		changes => ["set sshd_config/Banner /etc/issue"],
+		onlyif  => "match ./sshd_config size > 0"
+	}
 
-        # handle graphical logins
-        exec { "enable_gdm_banner":
-                command => "gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type bool --set /apps/gdm/simple-greeter/banner_message_enable true",
-                onlyif => "test -e /usr/bin/gconftool-2"
-        }
-        exec { "set_gdm_banner":
-                command => "gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type string --set /apps/gdm/simple-greeter/banner_message_text \"$(cat /etc/puppet/modules/banner/files/gdm_banner)\"",
-                onlyif => "test -e /usr/bin/gconftool-2"
-        }
+	# handle graphical logins
+	exec { "enable_gdm_banner":
+		command => "gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type bool --set /apps/gdm/simple-greeter/banner_message_enable true",
+		onlyif => "test -e /usr/bin/gconftool-2"
+	}
+	exec { "set_gdm_banner":
+		command => "gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type string --set /apps/gdm/simple-greeter/banner_message_text \"$(cat /etc/puppet/modules/banner/files/gdm_banner)\"",
+		onlyif => "test -e /usr/bin/gconftool-2"
+	}
 }
 
