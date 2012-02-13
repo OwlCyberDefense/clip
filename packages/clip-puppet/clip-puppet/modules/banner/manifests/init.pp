@@ -19,7 +19,7 @@
 #
 # Files:
 #	issue
-#	rhel.xml
+#	gdm_banner
 #
 # LinuxGuide:
 #	2.3.7.1
@@ -34,7 +34,7 @@
 # NIST800.53:
 #	AC-8
 #
-# DCID6/3:
+# DCID 6/3:
 #	4.B.4.a(23)
 #
 class banner {

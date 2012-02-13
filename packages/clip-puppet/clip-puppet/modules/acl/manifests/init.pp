@@ -24,45 +24,25 @@
 #
 # CCERef#:
 #
-# NIST800.53:
+# NIST 800-53:
 #	AC-3
 #
-# DCID6/3:
+# DCID 6/3:
 #	4.B.4.a(2)
 #
 
-# AC-3(1)
+define set_fs_opt ($fs, $opt) {
+        augeas { $title:
+                context => "/files/etc/fstab",
+                changes => ["ins opt after *[file='$fs']/opt[last()]",
+                            "set *[file='$fs']/opt[last()] $opt"],
+		onlyif  => "match *[file='$fs' and count(opt[.='$opt'])=0] size > 0", 
+        }
+
 class acl {
-	Exec { path => "/usr/bin:/usr/sbin/:/bin:/sbin" }
-	
-	#nosuid, nodev, and acl on /home
-	exec { "fstab_home":
-		command => "sed -i 's/\( \/home.*defaults\)/\1,nosuid,nodev,acl/' /etc/fstab",
-		onlyif => "test `grep ' \/home ' /etc/fstab | grep -c nosuid` -eq 0",
-	}
-
-	#nosuid and acl on /sys
-	exec { "fstab_sys":
-		command => "sed -i 's/\( \/sys.*defaults\)/\1,nosuid,acl/' /etc/fstab",
-		onlyif => "test `grep ' \/sys ' /etc/fstab | grep -c nosuid` -eq 0",
-	}
-
-	#nosuid and acl on /boot
-	exec { "fstab_boot":
-		command => "sed -i 's/\( \/boot.*defaults\)/\1,nosuid,acl/' /etc/fstab",
-		onlyif => "test `grep ' \/boot ' /etc/fstab | grep -c nosuid` -eq 0",
-	}
-
-	#nodev and acl on /usr
-	exec { "fstab_usr":
-		command => "sed -i 's/\( \/usr.*defaults\)/\1,nodev,acl/' /etc/fstab",
-		onlyif => "test `grep ' \/usr ' /etc/fstab | grep -c nodev` -eq 0",
-	}
-
-	#nodev and acl on /usr/local
-	exec { "fstab_usr_local":
-		command => "sed -i 's/\( \/usr\/local.*defaults\)/\1,nodev,acl/' /etc/fstab",
-		onlyif => "test `grep ' \/usr/local ' /etc/fstab | grep -c nodev` -eq 0",
-	}
+        set_fs_opt { "home_fs_acl": fs=>'/home', opt=>'acl' }
+        set_fs_opt { "root_fs_acl": fs=>'/',     opt=>'acl' }
+        set_fs_opt { "var_fs_acl":  fs=>'/var',  opt=>'acl' }
+        set_fs_opt { "tmp_fs_acl":  fs=>'/tmp',  opt=>'acl' }
+        }
 }
-
