@@ -4,71 +4,34 @@
 #
 
 ######################################################
-# BEGIN USER CONFIGURATION
-
-# List of all RPM packages to build, must be in $(PKG_DIR).
-# NOTE: The Makefile for each package must define VERSION, RELEASE, and ARCH.
-PACKAGES := clip-puppet
-
-# This list contains a list of system images we can generate out of kickstarts in kickstart/<sysname>/sysname.ks
-SYSTEMS := clip-rhel5 clip-rhel6
-
-# Import build configuration (production vs. debug, other configurables)
+# See BUILD_CONFIG for configuration options
+# Import build config (version, release, repos, etc)
 include BUILD_CONFIG
-
-# Define version and release in the VERSION file
-include VERSION
-
-export BUILD_DATE ?= $(shell date +%m-%d-%y)
-
-# These should be left alone, they only appear here for the simply expanded vars that follow
-CONF_DIR := ./conf
-
-# This variable can be leveraged by sub-makes (eg in the packages/foo/Makefile) if files at this top-level should trigger a rebuild
-export ADDTL_DEPS := $(CURDIR)/VERSION
-
-# TODO: All repo information should be extracted from the mock cfg/yum.conf
-# A RHEL repo must be available. Can be a local path or an http/ftp location.
-RHEL_REPO_DIR := /mnt/repos/rhel/rhel-5-6-i386/rhel-i386-server-5.6.z/getPackage
-# Repo name.
-RHEL_REPOID := rhel
-# Where do we store a local, versioned list or packages from this repo.
-RHEL_PKG_LIST_FILE := $(CONF_DIR)/pkglist.rhel
-
-# A EPEL repo must be available. Can be a local path or an http/ftp location.
-EPEL_REPO_DIR := /mnt/repos/other/EPEL-Pinned-Versions
-# Repo name.
-EPEL_REPOID := epel
-# Where do we store a local, versioned list or packages from this repo.
-EPEL_PKG_LIST_FILE := $(CONF_DIR)/pkglist.epel
-
-# A groups repo must be available. Can be a local path or an http/ftp location.
-BUILDGROUPS_REPO_DIR := /mnt/repos/buildgroups
-# Repo name.
-BUILDGROUPS_REPOID := groups
-# Where do we store a local, versioned list or packages from this repo.
-BUILDGROUPS_PKG_LIST_FILE := $(CONF_DIR)/pkglist.buildgroups
-
-# MOCK_REL must be configured in MOCK_CONF_DIR/MOCK_REL.cfg
-MOCK_REL := rhel-5-i386
-
-# Set to "y" to disable the use of mock for building packages.
-DISABLE_MOCK ?= n
-
-# Enable signing of packages (must have RPM macros properly configured, see man page of RPM)
-ENABLE_SIGNING ?= n
-
-# Quiet down the build output a bit.
-QUIET = n
-# END USER CONFIGURATION
+# See REPOS_CONFIG to setup yum repos
 ######################################################
 
 ######################################################
-# A FOREWARNING - BEGIN MAGIC
+# BEGIN MAGIC
 $(info Boot strapping build system...)
 export ROOT_DIR ?= $(CURDIR)
 export OUTPUT_DIR ?= $(ROOT_DIR)
 export RPM_TMPDIR ?= $(ROOT_DIR)/tmp
+export CONF_DIR ?= $(ROOT_DIR)/conf
+
+BUILD_DATE := $(shell date +%m-%d-%y)
+
+# This the system image type.  This should be a valid directory in kickstart/$(SYSTEM)
+SYSTEM := clip-rhel$(RHEL_VER)
+
+# Config deps
+BUILD_CONFIG_DEPS = $(ROOT_DIR)/BUILD_CONFIG $(ROOT_DIR)/REPOS_CONFIG
+
+# Typically we are rolling builds on the target arch.  Changing this may have dire consequences 
+# # (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
+ARCH := $(shell uname -i)
+
+# MOCK_REL must be configured in MOCK_CONF_DIR/MOCK_REL.cfg
+MOCK_REL := rhel-$(RHEL_VER)-$(ARCH)
 
 # This directory contains all of our packages we will be building.
 PKG_DIR += $(CURDIR)/packages
@@ -93,8 +56,11 @@ YUM_CONF_FILE := $(CONF_DIR)/yum/yum.conf
 MY_REPO_DIR := $(REPO_DIR)/my-repo
 MY_RHEL_REPO_DIR := $(REPO_DIR)/my-rhel-repo
 MY_EPEL_REPO_DIR := $(REPO_DIR)/my-epel-repo
-MY_BUILDGROUPS_REPO_DIR := $(REPO_DIR)/my-buildgroups-repo
+ifeq ($(RHEL_VER),5)
+	MY_BUILDGROUPS_REPO_DIR := $(REPO_DIR)/my-buildgroups-repo
+endif
 MY_SRPM_REPO_DIR := $(REPO_DIR)/my-srpm-repo
+
 export REPO_LINES := $(shell echo 'repo --name=my-repo --baseurl=file://$(MY_REPO_DIR)\nrepo --name=my-rhel --baseurl=file://$(MY_RHEL_REPO_DIR)\nrepo --name=my-epel --baseurl=file://$(MY_EPEL_REPO_DIR)\n' )
 
 export SRPM_OUTPUT_DIR ?= $(MY_SRPM_REPO_DIR)
@@ -113,10 +79,11 @@ REPO_QUERY =  repoquery -c $(YUM_CONF_FILE) --quiet -a --queryformat '%{NAME}-%{
 MOCK_ARGS += --resultdir=$(MY_REPO_DIR) -r $(MOCK_REL) --configdir=$(MOCK_CONF_DIR) --unpriv --rebuild
 
 # Repos deps
+ifeq ($(RHEL_VER),5)
 MY_REPO_DEPS := $(MY_RHEL_REPO_DIR)/last-updated $(MY_EPEL_REPO_DIR)/last-updated $(MY_BUILDGROUPS_REPO_DIR)/last-updated
-
-# Config deps
-BUILD_CONFIG_DEPS := $(ROOT_DIR)/BUILD_CONFIG
+else
+MY_REPO_DEPS := $(MY_RHEL_REPO_DIR)/last-updated $(MY_EPEL_REPO_DIR)/last-updated 
+endif
 
 # This deps list gets propegated down to sub-makefiles
 # Add to this list to pass deps down to SRPM creation
@@ -143,11 +110,10 @@ endif
 MKDIR = $(VERBOSE)test -d $(1) || mkdir -p $(1)
 
 # These are targets supported by the kickstart/Makefile that will be used to generate LiveCD images.
-LIVECDS := $(addsuffix -livecd,$(SYSTEMS))
+LIVECDS := $(addsuffix -livecd,$(SYSTEM))
 
 # These are targets supported by the kickstart/Makefile that will be used to generate installation ISOs.
-INSTISOS := $(addsuffix -installation-iso,$(SYSTEMS))
-
+INSTISOS := $(addsuffix -installation-iso,$(SYSTEM))
 
 # Add a file to a repo by either downloading it (if http/ftp), or symlinking if local.
 # TODO: add support for wget (problem with code below, running echo/grep for each file instead of once for the whole repo
@@ -185,6 +151,41 @@ $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-clean:
 	$(RM) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 endef
 
+GET_REPO_ID = $(strip $(shell echo "$(1)" | sed -e 's/\(.*\)=.*/\1/'))
+GET_REPO_PATH = $(strip $(shell echo "$(1)" | sed -e 's/.*=\(.*\)/\1/'))
+GET_REPO_URL = $(strip $(shell if `echo "$(1)" | grep -Eq '^\/.*$$'`; then echo "file://$(1)"; else echo "$(1)"; fi))
+
+define REPO_RULE_template
+REPO_ID := $(call GET_REPO_ID,$(1))
+REPO_PATH := $(call GET_REPO_PATH,$(1))
+REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1)))
+setup_all_repos += setup-$$(REPO_ID)-repo
+
+setup-$$(REPO_ID)-repo: $$(REPO_DIR)/my-$$(REPO_ID)/last-updated
+
+$$(REPO_DIR)/my-$$(REPO_ID)/last-updated: $$(CONF_DIR)/pkglist.$$(REPO_ID)$$(RHEL_VER)
+	@echo "Cleaning $(REPO_ID) yum repo, this could take a few minutes..."
+	$(VERBOSE)$(RM) -r $(REPO_DIR)/my-$(REPO_ID)-repo
+	@echo "Populating $(REPO_ID) yum repo, this could take a few minutes..."
+	$(call MKDIR,$(REPO_DIR)/my-$(REPO_ID)-repo)
+	$(VERBOSE)while read fil; do $(REPO_LINK) $(REPO_PATH)/$$$$fil $(REPO_DIR)/my-$(REPO_ID)-repo/$$$$fil; done < $$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
+	@echo "Generating $(REPO_ID) yum repo metadata, this could take a few minutes..."
+	$(VERBOSE)cd $(REPO_DIR)/my-$(REPO_ID)-repo && $(REPO_CREATE) .
+	$(VERBOSE)touch $(REPO_DIR)/my-$(REPO_ID)-repo/last-updated
+
+# Figure out if the repo is local or remote
+YUM_CONF := "[$$(REPO_ID)]\nname=$$(REPO_ID)\nbaseurl=$$(REPO_URL)\nenabled=1\n"
+
+$$(CONF_DIR)/pkglist.$$(REPO_ID)$(RHEL_VER):
+	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
+	echo -e $(YUM_CONF) >> $(YUM_CONF_FILE)
+	$(VERBOSE)$(REPO_QUERY) --repoid=$(REPO_ID) |sort 1>$$(CONF_DIR)/pkglist.$$(REPO_ID)$(RHEL_VER)
+
+MOCK_YUM_CONF += $(YUM_CONF)
+
+
+endef
+
 # END MAGIC
 ######################################################
 
@@ -192,53 +193,18 @@ endef
 # BEGIN RULES
 all: create-repos $(LIVECDS)
 
-create-repos: setup-rhel-repo setup-epel-repo setup-buildgroups-repo setup-my-repo
+$(foreach REPO,$(strip $(shell cat REPOS_CONFIG|grep -E '^[a-zA-Z].*=.*'|sed -e 's/ \?= \?/=/')),$(eval $(call REPO_RULE_template,$(REPO))))
+# The following line calls our RPM rule template defined above allowing us to build a proper dependency list.
+$(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
+
+create-repos: $(setup_all_repos) setup-my-repo
 
 setup-my-repo: $(RPMS)
 	$(VERBOSE)for pkg in $(PREPACKAGED); do ln -s $$pkg $(MY_REPO_DIR); done
 	@echo "Generating yum repo metadata, this could take a few minutes..."
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
 
-setup-rhel-repo: $(MY_RHEL_REPO_DIR)/last-updated
-
-setup-epel-repo: $(MY_EPEL_REPO_DIR)/last-updated
-
-setup-buildgroups-repo: $(MY_BUILDGROUPS_REPO_DIR)/last-updated
-
-$(MY_RHEL_REPO_DIR)/last-updated: $(RHEL_PKG_LIST_FILE)
-	@echo "Cleaning RHEL yum repo, this could take a few minutes..."
-	$(VERBOSE)$(RM) -r $(MY_RHEL_REPO_DIR)
-	@echo "Populating RHEL yum repo, this could take a few minutes..."
-	$(call MKDIR,$(MY_RHEL_REPO_DIR))
-	$(VERBOSE)while read fil; do $(REPO_LINK) $(RHEL_REPO_DIR)/$$fil $(MY_RHEL_REPO_DIR)/$$fil; done < $(RHEL_PKG_LIST_FILE)
-	@echo "Generating RHEL yum repo metadata, this could take a few minutes..."
-	$(VERBOSE)cd $(MY_RHEL_REPO_DIR) && $(REPO_CREATE) .
-	$(VERBOSE)touch $@
-
-$(MY_EPEL_REPO_DIR)/last-updated: $(EPEL_PKG_LIST_FILE)
-	@echo "Cleaning EPEL yum repo, this could take a few minutes..."
-	$(VERBOSE)$(RM) -r $(MY_EPEL_REPO_DIR)
-	@echo "Populating EPEL yum repo, this could take a few minutes..."
-	$(call MKDIR,$(MY_EPEL_REPO_DIR))
-	$(VERBOSE)while read fil; do $(REPO_LINK) $(EPEL_REPO_DIR)/$$fil $(MY_EPEL_REPO_DIR)/$$fil; done < $(EPEL_PKG_LIST_FILE)
-	@echo "Generating EPEL yum repo metadata, this could take a few minutes..."
-	$(VERBOSE)cd $(MY_EPEL_REPO_DIR) && $(REPO_CREATE) .
-	$(VERBOSE)touch $@
-
-$(MY_BUILDGROUPS_REPO_DIR)/last-updated: $(BUILDGROUPS_PKG_LIST_FILE)
-	@echo "Cleaning Build Groups yum repo, this could take a few minutes..."
-	$(VERBOSE)$(RM) -r $(MY_BUILDGROUPS_REPO_DIR)
-	@echo "Populating Build Groups yum repo, this could take a few minutes..."
-	$(call MKDIR,$(MY_BUILDGROUPS_REPO_DIR))
-	$(VERBOSE)while read fil; do $(REPO_LINK) $(BUILDGROUPS_REPO_DIR)/$$fil $(MY_BUILDGROUPS_REPO_DIR)/$$fil; done < $(BUILDGROUPS_PKG_LIST_FILE)
-	@echo "Generating Build Groups yum repo metadata, this could take a few minutes..."
-	$(VERBOSE)cd $(MY_BUILDGROUPS_REPO_DIR) && $(REPO_CREATE) .
-	$(VERBOSE)touch $@
-
 rpms: $(RPMS)
-
-# The following line calls our RPM rule template defined above allowing us to build a proper dependency list.
-$(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 
 srpms: $(SRPMS)
 
@@ -246,30 +212,13 @@ srpms: $(SRPMS)
 	$(call MKDIR,$(SRPM_OUTPUT_DIR))
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
-$(LIVECDS): VERSION create-repos $(RPMS)
-	$(MAKE) -C $(KICKSTART_DIR)/ $@
-
-$(INSTISOS):
+$(LIVECDS) $(INSTISOS): VERSION create-repos $(RPMS)
 	$(MAKE) -C $(KICKSTART_DIR)/ $@
 
 $(MOCK_CONF_DIR)/$(MOCK_REL).cfg: $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
-	$(VERBOSE)sed -e 's:%%MY_RHEL_REPO_DIR%%:$(MY_RHEL_REPO_DIR):' -e 's:%%MY_EPEL_REPO_DIR%%:$(MY_EPEL_REPO_DIR):' \
-	-e 's:%%MY_BUILDGROUPS_REPO_DIR%%:$(MY_BUILDGROUPS_REPO_DIR):' $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl > $@
-
-$(RHEL_PKG_LIST_FILE):
-	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
-	echo -e "[$(RHEL_REPOID)]\nname=$(RHEL_REPOID)\nbaseurl=file://$(RHEL_REPO_DIR)\nenabled=1" >> $(YUM_CONF_FILE)
-	$(VERBOSE)$(REPO_QUERY) --repoid=$(RHEL_REPOID) |sort 1>$(RHEL_PKG_LIST_FILE)
-
-$(EPEL_PKG_LIST_FILE):
-	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
-	echo -e "[$(EPEL_REPOID)]\nname=$(EPEL_REPOID)\nbaseurl=file://$(EPEL_REPO_DIR)\nenabled=1" >> $(YUM_CONF_FILE)
-	$(VERBOSE)$(REPO_QUERY) --repoid=$(EPEL_REPOID) |sort 1>$(EPEL_PKG_LIST_FILE)
-
-$(BUILDGROUPS_PKG_LIST_FILE):
-	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
-	echo -e "[$(BUILDGROUPS_REPOID)]\nname=$(BUILDGROUPS_REPOID)\nbaseurl=file://$(BUILDGROUPS_REPO_DIR)\nenabled=1" >> $(YUM_CONF_FILE)
-	$(VERBOSE)$(REPO_QUERY) --repoid=$(BUILDGROUPS_REPOID) |sort 1>$(BUILDGROUPS_PKG_LIST_FILE)
+	$(VERBOSE)cat $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl > $@
+	$(VERBOSE)echo -e $(MOCK_YUM_CONF) >> $@
+	$(VERBOSE)echo '"""' >> $@
 
 iso-to-disk:
 	@if [ x"$(ISO_FILE)" = "x" -o x"$(USB_DEV)" = "x" ]; then echo "Error: set ISO_FILE=<filename> and USB_DEV=<dev> on command line to generate a bootable thumbdrive." && exit 1; fi

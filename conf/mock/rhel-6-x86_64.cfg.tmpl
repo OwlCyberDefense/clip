@@ -1,0 +1,30 @@
+#!/usr/bin/python -tt
+config_opts['root'] = 'rhel-6-x86_64'
+config_opts['target_arch'] = 'x86_64'
+config_opts['chroot_setup_cmd'] = 'groupinstall buildsys-build'
+config_opts['dist'] = 'el6'  # only useful for --resultdir variable subst
+
+config_opts['yum.conf'] = """
+[main]
+cachedir=cache
+debuglevel=1
+logfile=/dev/null
+reposdir=/dev/null
+retries=20
+obsoletes=1
+gpgcheck=0
+assumeyes=1
+
+# repos
+
+[rhel]
+name=base
+baseurl=file://%%MY_RHEL_REPO_DIR%%
+enabled=1
+
+[epel]
+name=epel
+baseurl=file://%%MY_EPEL_REPO_DIR%%
+enabled=1
+
+"""

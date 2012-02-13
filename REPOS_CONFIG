@@ -1,0 +1,13 @@
+# Copyright (C) 2011-2012 Tresys Technology, LLC
+#
+# Authors: Spencer Shimko <sshimko@tresys.com>
+#
+
+# A RHEL repo must be available. Can be a local path or an http/ftp location.
+rhel = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-6/getPackage
+# A EPEL repo must be available. Can be a local path or an http/ftp location.
+epel = /mnt/repos/epel-pinned-revisions
+
+# NOTE: <= RHEL 5 requires BUILDGROUPS repo.  RHEL 6 has the BUILDGROUPS stuff built-in.
+# A groups repo must be available. Can be a local path or an http/ftp location.
+#buildgroups = /mnt/repos/buildgroups
