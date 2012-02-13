@@ -1,0 +1,44 @@
+#!/usr/bin/python
+import fileinput, re
+
+doc=""
+module=""
+description=""
+indescription=False
+for line in fileinput.input():
+    match = re.match (r'^#', line)
+    if not match:
+        break
+
+    match = re.match (r'^#\s+Description:\s*$', line)
+    if match:
+        description=""
+        indescription=True 
+        continue
+
+    if indescription:
+        match = re.match (r'^#\s*$', line)
+        if match:
+            indescription=False 
+            continue
+        match = re.match (r'^#\s+([^\n]+)\s*$', line)
+        if len(description) > 0:
+            description += " "
+        description += match.groups()[0]
+
+    match = re.match (r'^#\s+Module:\s*([A-Za-z0-9]+)\s*$', line)
+    if match:
+        module=match.groups()[0]
+        continue
+
+    match = re.match (r'^#\s+(DCID 6/3|NIST 800-53):\s*$', line)
+    if match:
+        doc=match.groups()[0]
+        continue
+
+    if doc not in ["DCID 6/3", "NIST 800-53"]:
+        continue
+
+    match = re.match (r'^#\s+([0-9A-Za-z-.()]+)\s*$', line)
+    if match:
+        print "%s: %s: %s: %s" % (doc, match.groups()[0], module, description)
