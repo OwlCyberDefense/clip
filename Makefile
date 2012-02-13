@@ -51,17 +51,15 @@ MOCK_CONF_DIR := $(CONF_DIR)/mock
 # we need a yum.conf to use for repo querying (to determine appropriate package versions when multiple version are present)
 YUM_CONF_FILE := $(CONF_DIR)/yum/yum.conf
 
+export MOCK_YUM_CONF :=
+export MY_REPO_DEPS :=
+export setup_all_repos := setup-my-repo
+
 # These are the directories where we will put our custom copies of
 # the yum repos.  These will be removed by "make bare".
 MY_REPO_DIR := $(REPO_DIR)/my-repo
-MY_RHEL_REPO_DIR := $(REPO_DIR)/my-rhel-repo
-MY_EPEL_REPO_DIR := $(REPO_DIR)/my-epel-repo
-ifeq ($(RHEL_VER),5)
-	MY_BUILDGROUPS_REPO_DIR := $(REPO_DIR)/my-buildgroups-repo
-endif
 MY_SRPM_REPO_DIR := $(REPO_DIR)/my-srpm-repo
-
-export REPO_LINES := $(shell echo 'repo --name=my-repo --baseurl=file://$(MY_REPO_DIR)\nrepo --name=my-rhel --baseurl=file://$(MY_RHEL_REPO_DIR)\nrepo --name=my-epel --baseurl=file://$(MY_EPEL_REPO_DIR)\n' )
+export REPO_LINES := repo --name=my-repo --baseurl=file://$(MY_REPO_DIR)\n
 
 export SRPM_OUTPUT_DIR ?= $(MY_SRPM_REPO_DIR)
 
@@ -77,13 +75,6 @@ REPO_CREATE = /usr/bin/createrepo -d -c $(REPO_DIR)/yumcache
 REPO_REFRESH = $(CURDIR)/support/yumnew.sh
 REPO_QUERY =  repoquery -c $(YUM_CONF_FILE) --quiet -a --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}.rpm'
 MOCK_ARGS += --resultdir=$(MY_REPO_DIR) -r $(MOCK_REL) --configdir=$(MOCK_CONF_DIR) --unpriv --rebuild
-
-# Repos deps
-ifeq ($(RHEL_VER),5)
-MY_REPO_DEPS := $(MY_RHEL_REPO_DIR)/last-updated $(MY_EPEL_REPO_DIR)/last-updated $(MY_BUILDGROUPS_REPO_DIR)/last-updated
-else
-MY_REPO_DEPS := $(MY_RHEL_REPO_DIR)/last-updated $(MY_EPEL_REPO_DIR)/last-updated 
-endif
 
 # This deps list gets propegated down to sub-makefiles
 # Add to this list to pass deps down to SRPM creation
@@ -126,17 +117,22 @@ define REPO_ADD_FILE
 	$(VERBOSE)[ -h $(3)/$(1) ] || $(REPO_LINK) $(2)/$(1) $(3)/$(1)
 endef
 
-# These macros are used to generate build rules.  This is an unfortunate consequence of not being able to do complex
+######################################################
+# BEGIN RPM GENERATION RULES (BEWARE OF DRAGONS)
+# This define directive is used to generate build rules.
+# This is an unfortunate consequence of not being able to do complex
 # target name->dependency name munging, eg not being able to convert foo.<random arch>.rpm into foo.src.rpm.
 define RPM_RULE_template
 ifneq ($(DISABLE_MOCK),y)
 $(1):   $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)$(MOCK) $(MOCK_ARGS) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
+	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
 else
 $(1):   $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)OUTPUT_DIR=$(MY_REPO_DIR) $(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $(1))) rpm
+	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
 endif
 ifeq ($(ENABLE_SIGNING),y)
 	$(RPM) --addsign $(MY_REPO_DIR)/*
@@ -145,48 +141,59 @@ $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-rpm: $(1)
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-nomock-rpm: $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)OUTPUT_DIR=$(MY_REPO_DIR) $(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $(1))) rpm
+	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-srpm: $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-clean:
 	$(RM) $(1)
 	$(RM) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 endef
+# END RPM GENERATION RULES (BEWARE OF DRAGONS)
+######################################################
 
 GET_REPO_ID = $(strip $(shell echo "$(1)" | sed -e 's/\(.*\)=.*/\1/'))
 GET_REPO_PATH = $(strip $(shell echo "$(1)" | sed -e 's/.*=\(.*\)/\1/'))
 GET_REPO_URL = $(strip $(shell if `echo "$(1)" | grep -Eq '^\/.*$$'`; then echo "file://$(1)"; else echo "$(1)"; fi))
 
+######################################################
+# BEGIN REPO GENERATION RULES (BEWARE OF RMS)
+# This define directive is used to generate rules for managing the yum repos.
+# Since the user of the build system can customize the repos in REPOS_CONFIG
+# we need to generate targets out of the contents of that file.  The previous
+# implementation had static rules and required a lot of work to add/remove
+# or otherwise customize the repos.
 define REPO_RULE_template
 REPO_ID := $(call GET_REPO_ID,$(1))
 REPO_PATH := $(call GET_REPO_PATH,$(1))
 REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1)))
-setup_all_repos += setup-$$(REPO_ID)-repo
+setup_all_repos += setup-$$(REPO_ID)$(RHEL_VER)-repo
 
-setup-$$(REPO_ID)-repo: $$(REPO_DIR)/my-$$(REPO_ID)/last-updated
+setup-$$(REPO_ID)$(RHEL_VER)-repo: $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo/last-updated
 
-$$(REPO_DIR)/my-$$(REPO_ID)/last-updated: $$(CONF_DIR)/pkglist.$$(REPO_ID)$$(RHEL_VER)
-	@echo "Cleaning $(REPO_ID) yum repo, this could take a few minutes..."
-	$(VERBOSE)$(RM) -r $(REPO_DIR)/my-$(REPO_ID)-repo
+# The last-updated file determines if the yum repo is newer or older than the corresponding pkglist file.
+$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
+	@echo "Cleaning $$(REPO_ID) yum repo, this could take a few minutes..."
+	$(VERBOSE)$(RM) -r $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo
 	@echo "Populating $(REPO_ID) yum repo, this could take a few minutes..."
-	$(call MKDIR,$(REPO_DIR)/my-$(REPO_ID)-repo)
-	$(VERBOSE)while read fil; do $(REPO_LINK) $(REPO_PATH)/$$$$fil $(REPO_DIR)/my-$(REPO_ID)-repo/$$$$fil; done < $$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
+	$(call MKDIR,$(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo)
+	$(VERBOSE)while read fil; do $(REPO_LINK) $$(REPO_PATH)/$$$$fil $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo/$$$$fil; done < $(CONF_DIR)/pkglist.$$(REPO_ID)$(RHEL_VER)
 	@echo "Generating $(REPO_ID) yum repo metadata, this could take a few minutes..."
-	$(VERBOSE)cd $(REPO_DIR)/my-$(REPO_ID)-repo && $(REPO_CREATE) .
-	$(VERBOSE)touch $(REPO_DIR)/my-$(REPO_ID)-repo/last-updated
+	$(VERBOSE)cd $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo && $(REPO_CREATE) .
+	$(VERBOSE)touch $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo/last-updated
 
 # Figure out if the repo is local or remote
-YUM_CONF := "[$$(REPO_ID)]\nname=$$(REPO_ID)\nbaseurl=$$(REPO_URL)\nenabled=1\n"
+YUM_CONF := [$$(REPO_ID)$(RHEL_VER)]\nname=$$(REPO_ID)$(RHEL_VER)\nbaseurl=$$(REPO_URL)\nenabled=1\n
 
 $$(CONF_DIR)/pkglist.$$(REPO_ID)$(RHEL_VER):
 	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
-	echo -e $(YUM_CONF) >> $(YUM_CONF_FILE)
-	$(VERBOSE)$(REPO_QUERY) --repoid=$(REPO_ID) |sort 1>$$(CONF_DIR)/pkglist.$$(REPO_ID)$(RHEL_VER)
+	echo -e $$(YUM_CONF) >> $(YUM_CONF_FILE)
+	$(VERBOSE)$(REPO_QUERY) --repoid=$$(REPO_ID)$(RHEL_VER) |sort 1>$(CONF_DIR)/pkglist.$$(REPO_ID)$(RHEL_VER)
 
-MOCK_YUM_CONF += $(YUM_CONF)
-
+export MOCK_YUM_CONF += $$(YUM_CONF)
+export MY_REPO_DEPS += $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo/last-updated
+export REPO_LINES += repo --name=my-$$(REPO_ID)$(RHEL_VER) --baseurl=$(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo\n
 
 endef
-
-# END MAGIC
+# END REPO GENERATION RULES (BEWARE OF RMS)
 ######################################################
 
 ######################################################
@@ -197,10 +204,10 @@ $(foreach REPO,$(strip $(shell cat REPOS_CONFIG|grep -E '^[a-zA-Z].*=.*'|sed -e 
 # The following line calls our RPM rule template defined above allowing us to build a proper dependency list.
 $(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 
-create-repos: $(setup_all_repos) setup-my-repo
+$(info $(setup_all_repos))
+create-repos: $(setup_all_repos)
 
 setup-my-repo: $(RPMS)
-	$(VERBOSE)for pkg in $(PREPACKAGED); do ln -s $$pkg $(MY_REPO_DIR); done
 	@echo "Generating yum repo metadata, this could take a few minutes..."
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
 
@@ -212,7 +219,7 @@ srpms: $(SRPMS)
 	$(call MKDIR,$(SRPM_OUTPUT_DIR))
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
-$(LIVECDS) $(INSTISOS): VERSION create-repos $(RPMS)
+$(LIVECDS) $(INSTISOS): BUILD_CONFIG create-repos $(RPMS)
 	$(MAKE) -C $(KICKSTART_DIR)/ $@
 
 $(MOCK_CONF_DIR)/$(MOCK_REL).cfg: $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
@@ -240,10 +247,7 @@ iso-to-disk:
 	$(VERBOSE)sudo $(CURDIR)/support/livecd-iso-to-disk --resetmbr $(ISO_FILE) $(USB_DEV)1
 
 bare-repos:
-	$(VERBOSE)$(RM) -r $(MY_RHEL_REPO_DIR)
-	$(VERBOSE)$(RM) -r $(MY_EPEL_REPO_DIR)
-	$(VERBOSE)$(RM) -r $(MY_REPO_DIR)
-	$(VERBOSE)$(RM) -r $(MY_SRPM_REPO_DIR)
+	$(VERBOSE)$(RM) -r $(REPOS_DIR)
 	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
 
 clean:
