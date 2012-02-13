@@ -2,7 +2,7 @@
 tmp
 *.rpm
 *.iso
-conf/mock/rhel-5-i386.cfg
+conf/mock/*.cfg
 repos/yumcache/*
 repodata
 repos/my-repo/*.log

@@ -24,8 +24,6 @@ PACKAGER ?= Tresys Technology, LLC
 # Hard code an arch if cross-compiling or going noarch.
 ARCH := noarch
 
-CWD := $(shell pwd)
-
 # This file will be created by tar'ing up $(PKGNAME)/
 TARBALL = $(SRPM_OUTPUT_DIR)/clip-puppet-$(VERSION).tar.gz
 # All sources for the package.
@@ -35,7 +33,7 @@ RPM_SPEC := $(PKGNAME).spec
 
 ####################################################
 ## things below this line should rarely change
-ROOT_DIR ?= $(CWD)
+ROOT_DIR ?= $(CURDIR)
 OUTPUT_DIR ?= $(ROOT_DIR)
 SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
 
