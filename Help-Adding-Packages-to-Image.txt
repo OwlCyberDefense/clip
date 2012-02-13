@@ -4,5 +4,5 @@ To add a package to the generated image:
 3. Add the package filename to the pkglist.<reponame> file in conf/.
 4. Run "make bare-repos".
 5. Run "make create-repos".
-5. Build you image.
+5. Build your image.
 
