@@ -165,32 +165,32 @@ define REPO_RULE_template
 REPO_ID := $(call GET_REPO_ID,$(1))
 REPO_PATH := $(call GET_REPO_PATH,$(1))
 REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1)))
-setup_all_repos += setup-$$(REPO_ID)$(RHEL_VER)-repo
+setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo
 
-setup-$$(REPO_ID)$(RHEL_VER)-repo: $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo/last-updated
+setup-$(REPO_ID)$(RHEL_VER)-repo: $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated
 
 # The last-updated file determines if the yum repo is newer or older than the corresponding pkglist file.
 $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
-	@echo "Cleaning $$(REPO_ID) yum repo, this could take a few minutes..."
-	$(VERBOSE)$(RM) -r $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo
+	@echo "Cleaning $(REPO_ID) yum repo, this could take a few minutes..."
+	$(VERBOSE)$(RM) -r $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo
 	@echo "Populating $(REPO_ID) yum repo, this could take a few minutes..."
-	$(call MKDIR,$(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo)
-	$(VERBOSE)while read fil; do $(REPO_LINK) $$(REPO_PATH)/$$$$fil $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo/$$$$fil; done < $(CONF_DIR)/pkglist.$$(REPO_ID)$(RHEL_VER)
+	$(call MKDIR,$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo)
+	$(VERBOSE)while read fil; do $(REPO_LINK) $(REPO_PATH)/$$$$fil $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/$$$$fil; done < $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
 	@echo "Generating $(REPO_ID) yum repo metadata, this could take a few minutes..."
-	$(VERBOSE)cd $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo && $(REPO_CREATE) .
-	$(VERBOSE)touch $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo/last-updated
+	$(VERBOSE)cd $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo && $(REPO_CREATE) .
+	$(VERBOSE)touch $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated
 
 # Figure out if the repo is local or remote
-YUM_CONF := [$$(REPO_ID)$(RHEL_VER)]\nname=$$(REPO_ID)$(RHEL_VER)\nbaseurl=$$(REPO_URL)\nenabled=1\n
+YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\nname=$(REPO_ID)$(RHEL_VER)\nbaseurl=$(REPO_URL)\nenabled=1\n
 
-$$(CONF_DIR)/pkglist.$$(REPO_ID)$(RHEL_VER):
+$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER):
 	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
-	echo -e $$(YUM_CONF) >> $(YUM_CONF_FILE)
-	$(VERBOSE)$(REPO_QUERY) --repoid=$$(REPO_ID)$(RHEL_VER) |sort 1>$(CONF_DIR)/pkglist.$$(REPO_ID)$(RHEL_VER)
+	echo -e $(YUM_CONF) >> $(YUM_CONF_FILE)
+	$(VERBOSE)$(REPO_QUERY) --repoid=$(REPO_ID)$(RHEL_VER) |sort 1>$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
 
-export MOCK_YUM_CONF += $$(YUM_CONF)
-export MY_REPO_DEPS += $(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo/last-updated
-export REPO_LINES += repo --name=my-$$(REPO_ID)$(RHEL_VER) --baseurl=$(REPO_DIR)/my-$$(REPO_ID)$(RHEL_VER)-repo\n
+export MOCK_YUM_CONF += $(YUM_CONF)
+export MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated
+export REPO_LINES += repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n
 
 endef
 # END REPO GENERATION RULES (BEWARE OF RMS)
