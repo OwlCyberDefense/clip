@@ -26,8 +26,8 @@ SYSTEM := clip-rhel$(RHEL_VER)
 # Config deps
 BUILD_CONFIG_DEPS = $(ROOT_DIR)/BUILD_CONFIG $(ROOT_DIR)/REPOS_CONFIG
 
-# Typically we are rolling builds on the target arch.  Changing this may have dire consequences 
-# # (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
+# Typically we are rolling builds on the target arch.  Changing this may have dire consequences
+# (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
 ARCH := $(shell uname -i)
 
 # MOCK_REL must be configured in MOCK_CONF_DIR/MOCK_REL.cfg
@@ -40,7 +40,7 @@ PKG_DIR += $(CURDIR)/packages
 REPO_DIR := $(CURDIR)/repos
 
 # This directory contains images files, the Makefiles, and other files needed for ISO generation
-KICKSTART_DIR := $(CURDIR)/images
+KICKSTART_DIR := $(CURDIR)/kickstart
 
 # Files supporting the build process
 SUPPORT_DIR := $(CURDIR)/support
@@ -162,15 +162,22 @@ GET_REPO_URL = $(strip $(shell if `echo "$(1)" | grep -Eq '^\/.*$$'`; then echo 
 # implementation had static rules and required a lot of work to add/remove
 # or otherwise customize the repos.
 define REPO_RULE_template
-REPO_ID := $(call GET_REPO_ID,$(1))
-ifneq ($(REPO_ID),)
-REPO_PATH := $(call GET_REPO_PATH,$(1))
-REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1)))
-setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo
+$(eval REPO_ID := $(call GET_REPO_ID, $(1)))
+ifneq ($(strip $(1)),)
+$(eval REPO_PATH := $(call GET_REPO_PATH,$(1)))
+$(eval REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1))))
+
+$(eval setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo)
+
+$(eval YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n)
+$(eval MOCK_YUM_CONF += $(YUM_CONF))
+$(eval MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated)
+$(eval REPO_LINES += repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
+
+$(info $(REPO_ID) $(REPO_PATH))
 
 setup-$(REPO_ID)$(RHEL_VER)-repo: $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated
 
-# The last-updated file determines if the yum repo is newer or older than the corresponding pkglist file.
 $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
 	@echo "Cleaning $(REPO_ID) yum repo, this could take a few minutes..."
 	$(VERBOSE)$(RM) -r $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo
@@ -181,17 +188,13 @@ $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(RE
 	$(VERBOSE)cd $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo && $(REPO_CREATE) .
 	$(VERBOSE)touch $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated
 
-# Figure out if the repo is local or remote
-YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\nname=$(REPO_ID)$(RHEL_VER)\nbaseurl=$(REPO_URL)\nenabled=1\n
 
 $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER):
+	@echo "Generating list of packages for $(call GET_REPO_ID,$(1))$(RHEL_VER)"
 	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
 	echo -e $(YUM_CONF) >> $(YUM_CONF_FILE)
 	$(VERBOSE)$(REPO_QUERY) --repoid=$(REPO_ID)$(RHEL_VER) |sort 1>$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
 
-export MOCK_YUM_CONF += $(YUM_CONF)
-export MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated
-export REPO_LINES += repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n
 endif
 endef
 # END REPO GENERATION RULES (BEWARE OF RMS)
@@ -201,7 +204,9 @@ endef
 # BEGIN RULES
 all: create-repos $(LIVECDS)
 
+# Generate custom targets for managing the yum repos.  We have to generate the rules since the user provides the set of repos.
 $(foreach REPO,$(strip $(shell cat REPOS_CONFIG|grep -E '^[a-zA-Z].*=.*'|sed -e 's/ \?= \?/=/')),$(eval $(call REPO_RULE_template,$(REPO))))
+
 # The following line calls our RPM rule template defined above allowing us to build a proper dependency list.
 $(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 
@@ -219,7 +224,7 @@ srpms: $(SRPMS)
 	$(call MKDIR,$(SRPM_OUTPUT_DIR))
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
-$(LIVECDS) $(INSTISOS): BUILD_CONFIG create-repos $(RPMS)
+$(LIVECDS) $(INSTISOS): $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(MAKE) -C $(KICKSTART_DIR)/ $@
 
 $(MOCK_CONF_DIR)/$(MOCK_REL).cfg: $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
@@ -261,7 +266,7 @@ bare: bare-repos clean
 
 FORCE:
 
-.PHONY: all all-vm create-repos setup-my-repo setup-epel-repo setup-rhel-repo setup-buildgroups-repo srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE
+.PHONY: all all-vm create-repos $(setup_all_repos) srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE
 
 help:
 	@echo "The following make targets are available for generating installable ISOs:"
