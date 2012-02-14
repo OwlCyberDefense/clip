@@ -163,6 +163,7 @@ GET_REPO_URL = $(strip $(shell if `echo "$(1)" | grep -Eq '^\/.*$$'`; then echo 
 # or otherwise customize the repos.
 define REPO_RULE_template
 REPO_ID := $(call GET_REPO_ID,$(1))
+ifneq ($(REPO_ID),)
 REPO_PATH := $(call GET_REPO_PATH,$(1))
 REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1)))
 setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo
@@ -191,7 +192,7 @@ $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER):
 export MOCK_YUM_CONF += $(YUM_CONF)
 export MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated
 export REPO_LINES += repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n
-
+endif
 endef
 # END REPO GENERATION RULES (BEWARE OF RMS)
 ######################################################
@@ -204,7 +205,6 @@ $(foreach REPO,$(strip $(shell cat REPOS_CONFIG|grep -E '^[a-zA-Z].*=.*'|sed -e 
 # The following line calls our RPM rule template defined above allowing us to build a proper dependency list.
 $(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 
-$(info $(setup_all_repos))
 create-repos: $(setup_all_repos)
 
 setup-my-repo: $(RPMS)
