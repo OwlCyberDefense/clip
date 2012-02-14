@@ -95,6 +95,11 @@ class auditd {
 
 #		"Disable Extended ACLs for audit executables":
 #			context	=> "/sbin/au*";
+
+		"AuditBoot, 2.6.2.3":
+			context => "/boot/grub/",
+			changes => ["set *[file='grub.conf']/title/kernel[last()] 'audit=1'"],
+			onlyif	=> "match *[file='grub.conf' and count(./title/kernel[.='audit=1'])=0] size > 0",
 	}
 
 	 exec {
