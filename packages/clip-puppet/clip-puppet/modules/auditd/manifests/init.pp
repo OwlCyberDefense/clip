@@ -38,7 +38,7 @@ class auditd {
 	# Configure default comprehensive rules
 	file {
 
-		"etc/audit/audit.rules":
+		"/etc/audit/audit.rules":
 			content => template("../files/audit.rules"),
 			mode 	=> '0640';
 	
@@ -95,6 +95,11 @@ class auditd {
 
 #		"Disable Extended ACLs for audit executables":
 #			context	=> "/sbin/au*";
+
+		"AuditBoot, 2.6.2.3":
+			context => "/boot/grub/",
+			changes => ["ins 'audit=1' after *[file='grub.conf']/title/kernel/[last()]", "set *[file='grub.conf']/title/kernel[last()] 'audit=1'"],
+			onlyif	=> "match *[file='grub.conf' and count(./title/kernel[.='audit'])=0] size > 0",
 	}
 
 	 exec {
@@ -104,11 +109,11 @@ class auditd {
                 "Disable Extended ACLs for audit executables":
                         command => 'setfacl -b "/sbin/auditctl" "/sbin/audispd" "/sbin/auditd/" "/sbin/aureport" "/sbin/ausearch" "/sbin/autrace"';
 
-                "AuditBoot, 2.6.2.3":
-                        command => "/bin/sed -i 's/quiet/quiet audit=1/g' /boot/grub/grub.conf",
-                        onlyif  => "/usr/bin/test `grep audit /boot/grub/grub.conf |wc -l` -eq 0",
-                        user    => "root",
-                        require => Package["audit"];
+                #"AuditBoot, 2.6.2.3":
+                #        command => "/bin/sed -i 's/quiet/quiet audit=1/g' /boot/grub/grub.conf",
+                #        onlyif  => "/usr/bin/test `grep audit /boot/grub/grub.conf |wc -l` -eq 0",
+                #        user    => "root",
+                #        require => Package["audit"];
        }
 
 }
