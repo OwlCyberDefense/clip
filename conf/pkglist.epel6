@@ -2,8 +2,7 @@ epel-release-6-5.noarch.rpm
 facter-1.6.4-1.el6.noarch.rpm
 puppet-2.6.13-2.el6.noarch.rpm
 puppet-server-2.6.13-2.el6.noarch.rpm
-python-argparse-1.2.1-2.el6.noarch.rpm 
+python-argparse-1.2.1-2.el6.noarch.rpm
 ruby-augeas-0.3.0-2.el6.x86_64.rpm
 ruby-json-1.4.6-1.el6.x86_64.rpm
 ruby-shadow-1.4.1-13.el6.x86_64.rpm
-
