@@ -24,7 +24,7 @@ BUILD_DATE := $(shell date +%m-%d-%y)
 SYSTEM := clip-rhel$(RHEL_VER)
 
 # Config deps
-BUILD_CONFIG_DEPS = $(ROOT_DIR)/BUILD_CONFIG $(ROOT_DIR)/REPOS_CONFIG
+BUILD_CONFIG_DEPS = $(ROOT_DIR)/BUILD_CONFIG $(ROOT_DIR)/REPOS_CONFIG $(ROOT_DIR)/Makefile
 
 # Typically we are rolling builds on the target arch.  Changing this may have dire consequences
 # (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
@@ -170,15 +170,15 @@ $(eval REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1))))
 $(eval setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo)
 
 $(eval YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n)
-$(eval MOCK_YUM_CONF += $(YUM_CONF))
+$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)$(YUM_CONF))
 $(eval MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated)
 $(eval REPO_LINES += repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
 
-$(info $(REPO_ID) $(REPO_PATH))
+$(info Generating rules baed on configured repo ID="$(REPO_ID)" PATH=$(REPO_PATH))
 
-setup-$(REPO_ID)$(RHEL_VER)-repo: $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated
+setup-$(REPO_ID)$(RHEL_VER)-repo: $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated $(BUILD_CONFIG_DEPS)
 
-$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
+$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER) $(BUILD_CONFIG_DEPS)
 	@echo "Cleaning $(REPO_ID) yum repo, this could take a few minutes..."
 	$(VERBOSE)$(RM) -r $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo
 	@echo "Populating $(REPO_ID) yum repo, this could take a few minutes..."
@@ -189,7 +189,7 @@ $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(RE
 	$(VERBOSE)touch $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated
 
 
-$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER):
+$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER): $(BUILD_CONFIG_DEPS)
 	@echo "Generating list of packages for $(call GET_REPO_ID,$(1))$(RHEL_VER)"
 	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
 	echo -e $(YUM_CONF) >> $(YUM_CONF_FILE)
