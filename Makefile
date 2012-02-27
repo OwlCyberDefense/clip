@@ -172,7 +172,7 @@ $(eval setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo)
 $(eval YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n)
 $(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)$(YUM_CONF))
 $(eval MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated)
-$(eval REPO_LINES += repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
+$(eval REPO_LINES := $(REPO_LINES)repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=$(REPO_URL)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
 
 $(info Generating rules baed on configured repo ID="$(REPO_ID)" PATH=$(REPO_PATH))
 
@@ -225,10 +225,10 @@ srpms: $(SRPMS)
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
 $(LIVECDS): $(BUILD_CONF_DEPS) create-repos $(RPMS)
-	DIR="`echo '$(INSTISOS)'|sed -e 's/\(.*\)-livecd/\1/'`" $(MAKE) -C $(KICKSTART_DIR)/$$DIR livecd
+	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-livecd/\1/'`" livecd
 
 $(INSTISOS): $(BUILD_CONF_DEPS) create-repos $(RPMS)
-	DIR="`echo '$(INSTISOS)'|sed -e 's/\(.*\)-installation-iso/\1/'`" $(MAKE) -C $(KICKSTART_DIR)/$$DIR installation-iso
+	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-installation-iso/\1/'`" installation-iso
 
 $(MOCK_CONF_DIR)/$(MOCK_REL).cfg: $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
 	$(VERBOSE)cat $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl > $@

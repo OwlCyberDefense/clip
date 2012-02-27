@@ -10,10 +10,9 @@ timezone --utc Etc/GMT
 auth --useshadow --enablemd5
 selinux --enforcing
 firewall --enabled
-network --hostname=clip --noipv6 --bootproto=static --device=eth0 --ip=192.168.20.98 --netmask=255.255.255.0 --nodefroute --nodns
 
-repo --name=centos --baseurl=http://mirror.centos.org/centos/6.2/os/$basearch
-repo --name=epel   --baseurl=http://download.fedora.redhat.com/pub/epel/6/$basearch
+# DO NOT REMOVE THE FOLLOWING LINE. NON-EXISTENT WARRANTY VOID IF REMOVED.
+#REPO-REPLACEMENT-PLACEHOLDER
 
 zerombr
 bootloader --location=mbr --timeout=5 --append="audit=1" --driveorder=sda
@@ -68,6 +67,7 @@ policycoreutils-newrole
 policycoreutils-python
 procps
 puppet
+clip-puppet
 rootfiles
 rpm
 rsyslog
