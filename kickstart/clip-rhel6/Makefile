@@ -37,7 +37,7 @@ LIVECD_ARGS := --skip-compress --extra-space=104857600 --config="$(BUILD_DIR)/$(
 
 REPO_LINES ?= repo --name=rhel --baseurl=file:///mnt/repos/rhel/rhel-5-6-i386/rhel-i386-server-5.6.z/getPackage\nrepo --name=epel --baseurl=file:///mnt/repos/rhel/EL-5-i386-EPEL\n
 
-all: installation-iso
+all: installation-iso livecd
 
 installation-iso:
 	sudo rm -rf $(BUILD_DIR)/*

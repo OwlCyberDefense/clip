@@ -224,8 +224,11 @@ srpms: $(SRPMS)
 	$(call MKDIR,$(SRPM_OUTPUT_DIR))
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
-$(LIVECDS) $(INSTISOS): $(BUILD_CONF_DEPS) create-repos $(RPMS)
-	$(MAKE) -C $(KICKSTART_DIR)/ $@
+$(LIVECDS): $(BUILD_CONF_DEPS) create-repos $(RPMS)
+	DIR="`echo '$(INSTISOS)'|sed -e 's/\(.*\)-livecd/\1/'`" $(MAKE) -C $(KICKSTART_DIR)/$$DIR livecd
+
+$(INSTISOS): $(BUILD_CONF_DEPS) create-repos $(RPMS)
+	DIR="`echo '$(INSTISOS)'|sed -e 's/\(.*\)-installation-iso/\1/'`" $(MAKE) -C $(KICKSTART_DIR)/$$DIR installation-iso
 
 $(MOCK_CONF_DIR)/$(MOCK_REL).cfg: $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
 	$(VERBOSE)cat $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl > $@
