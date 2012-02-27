@@ -172,7 +172,7 @@ $(eval setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo)
 $(eval YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n)
 $(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)$(YUM_CONF))
 $(eval MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated)
-$(eval REPO_LINES := $(REPO_LINES)repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=$(REPO_URL)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
+$(eval REPO_LINES := $(REPO_LINES)repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=file://$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
 
 $(info Generating rules baed on configured repo ID="$(REPO_ID)" PATH=$(REPO_PATH))
 
