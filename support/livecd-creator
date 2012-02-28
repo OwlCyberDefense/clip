@@ -42,7 +42,7 @@ def create_minimized_image(destimg, srcimg):
         origimg.mount()
         du = subprocess.Popen(["/usr/bin/du", "-s", "--block-size=1", origmount], stdout=subprocess.PIPE)
         du.wait()
-        newsize = int(int(du.stdout.read().split()[0]) * 1.01)
+        newsize = int(int(du.stdout.read().split()[0]) * 1.10)
         newmount = tempfile.mkdtemp(suffix=".mount", prefix=os.path.basename(destimg))
         newimg = imgcreate.fs.SparseExtLoopbackMount(destimg, newmount, newsize, "ext3", 4096, "live")
         newimg.mount()
@@ -88,7 +88,7 @@ allowoptions 0
 
 label clip 
   kernel vmlinuz0
-  append initrd=initrd0.img root=CDLABEL=clip rootfstype=iso9660 ro quiet liveimg live_ram vga=0x317 mem=8704M nodmraid nompath %(extraspace)s
+  append initrd=initrd0.img root=CDLABEL=clip rootfstype=iso9660 ro quiet liveimg live_ram vga=0x317 nodmraid nompath %(extraspace)s
 """ % boot_args
 
 	# these functions have side effects we need, such as copying the kernel image :-/
