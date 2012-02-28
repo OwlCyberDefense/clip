@@ -123,6 +123,7 @@ endef
 # This is an unfortunate consequence of not being able to do complex
 # target name->dependency name munging, eg not being able to convert foo.<random arch>.rpm into foo.src.rpm.
 define RPM_RULE_template
+$(info Generating rules for rolling package $(1).)
 ifneq ($(DISABLE_MOCK),y)
 $(1):   $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
 	$(call MKDIR,$(MY_REPO_DIR))
@@ -166,6 +167,7 @@ $(eval REPO_ID := $(call GET_REPO_ID, $(1)))
 ifneq ($(strip $(1)),)
 $(eval REPO_PATH := $(call GET_REPO_PATH,$(1)))
 $(eval REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1))))
+$(info Generating rules based on configured yum repository ID="$(REPO_ID)" PATH=$(REPO_PATH))
 
 $(eval setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo)
 
@@ -174,10 +176,10 @@ $(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)$(YUM_CONF))
 $(eval MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated)
 $(eval REPO_LINES := $(REPO_LINES)repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=file://$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
 
-$(info Generating rules baed on configured repo ID="$(REPO_ID)" PATH=$(REPO_PATH))
-
 setup-$(REPO_ID)$(RHEL_VER)-repo: $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated $(BUILD_CONFIG_DEPS)
 
+# This is the key target for managing yum repos.  If the pkg list for the repo 
+# is more recent then our private repo regen the repo by symlink'ing the packages into our repo.
 $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER) $(BUILD_CONFIG_DEPS)
 	@echo "Cleaning $(REPO_ID) yum repo, this could take a few minutes..."
 	$(VERBOSE)$(RM) -r $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo
@@ -188,7 +190,10 @@ $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(RE
 	$(VERBOSE)cd $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo && $(REPO_CREATE) .
 	$(VERBOSE)touch $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated
 
-
+# If a pkglist is missing then assume we should generate one ourselves.
+# Note that the recommended method here is to commit your pkglist file to your own dev repo.
+# Then you can consistently rebuild an ISO using the exact same package versions as the last time.
+# Effectively versioning the packages you use when rolling RPMs and ISOs.
 $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER): $(BUILD_CONFIG_DEPS)
 	@echo "Generating list of packages for $(call GET_REPO_ID,$(1))$(RHEL_VER)"
 	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
