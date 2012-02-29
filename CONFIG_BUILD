@@ -18,7 +18,7 @@ ARCH := $(shell uname -i)
 PACKAGES := clip-puppet
 
 # This variable can be leveraged by sub-makes (eg in the packages/foo/Makefile) if files at this top-level should trigger a rebuild
-ADDTL_DEPS := $(CURDIR)/VERSION $(CURDIR)/REPOS_CONFIG $(CURDIR)/BUILD_CONFIG
+ADDTL_DEPS := $(CURDIR)/CONFIG_REPOS $(CURDIR)/CONFIG_BUILD
 
 # Set to "y" to disable the use of mock for building packages.
 DISABLE_MOCK := n

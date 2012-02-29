@@ -4,10 +4,10 @@
 #
 
 ######################################################
-# See BUILD_CONFIG for configuration options
+# See CONFIG_BUILD for configuration options
 # Import build config (version, release, repos, etc)
-include BUILD_CONFIG
-# See REPOS_CONFIG to setup yum repos
+include CONFIG_BUILD
+# See CONFIG_REPOS to setup yum repos
 ######################################################
 
 ######################################################
@@ -24,7 +24,7 @@ BUILD_DATE := $(shell date +%m-%d-%y)
 SYSTEM := clip-rhel$(RHEL_VER)
 
 # Config deps
-BUILD_CONFIG_DEPS = $(ROOT_DIR)/BUILD_CONFIG $(ROOT_DIR)/REPOS_CONFIG $(ROOT_DIR)/Makefile
+CONFIG_BUILD_DEPS = $(ROOT_DIR)/CONFIG_BUILD $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile
 
 # Typically we are rolling builds on the target arch.  Changing this may have dire consequences
 # (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
@@ -78,7 +78,7 @@ MOCK_ARGS += --resultdir=$(MY_REPO_DIR) -r $(MOCK_REL) --configdir=$(MOCK_CONF_D
 
 # This deps list gets propegated down to sub-makefiles
 # Add to this list to pass deps down to SRPM creation
-export SRPM_DEPS := $(BUILD_CONFIG_DEPS)
+export SRPM_DEPS := $(CONFIG_BUILD_DEPS)
 
 # Macros to determine package info: version, release, arch.
 PKG_VER = $(strip $(eval $(shell $(GREP) ^VERSION $(PKG_DIR)/$(1)/Makefile))$(VERSION))
@@ -158,7 +158,7 @@ GET_REPO_URL = $(strip $(shell if `echo "$(1)" | grep -Eq '^\/.*$$'`; then echo 
 ######################################################
 # BEGIN REPO GENERATION RULES (BEWARE OF RMS)
 # This define directive is used to generate rules for managing the yum repos.
-# Since the user of the build system can customize the repos in REPOS_CONFIG
+# Since the user of the build system can customize the repos in CONFIG_REPOS
 # we need to generate targets out of the contents of that file.  The previous
 # implementation had static rules and required a lot of work to add/remove
 # or otherwise customize the repos.
@@ -176,11 +176,11 @@ $(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)$(YUM_CONF))
 $(eval MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated)
 $(eval REPO_LINES := $(REPO_LINES)repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=file://$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
 
-setup-$(REPO_ID)$(RHEL_VER)-repo: $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated $(BUILD_CONFIG_DEPS)
+setup-$(REPO_ID)$(RHEL_VER)-repo: $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated $(CONFIG_BUILD_DEPS)
 
-# This is the key target for managing yum repos.  If the pkg list for the repo 
+# This is the key target for managing yum repos.  If the pkg list for the repo
 # is more recent then our private repo regen the repo by symlink'ing the packages into our repo.
-$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER) $(BUILD_CONFIG_DEPS)
+$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER) $(CONFIG_BUILD_DEPS)
 	@echo "Cleaning $(REPO_ID) yum repo, this could take a few minutes..."
 	$(VERBOSE)$(RM) -r $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo
 	@echo "Populating $(REPO_ID) yum repo, this could take a few minutes..."
@@ -194,7 +194,7 @@ $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(RE
 # Note that the recommended method here is to commit your pkglist file to your own dev repo.
 # Then you can consistently rebuild an ISO using the exact same package versions as the last time.
 # Effectively versioning the packages you use when rolling RPMs and ISOs.
-$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER): $(BUILD_CONFIG_DEPS)
+$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER): $(CONFIG_BUILD_DEPS)
 	@echo "Generating list of packages for $(call GET_REPO_ID,$(1))$(RHEL_VER)"
 	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
 	echo -e $(YUM_CONF) >> $(YUM_CONF_FILE)
@@ -210,7 +210,7 @@ endef
 all: create-repos $(LIVECDS)
 
 # Generate custom targets for managing the yum repos.  We have to generate the rules since the user provides the set of repos.
-$(foreach REPO,$(strip $(shell cat REPOS_CONFIG|grep -E '^[a-zA-Z].*=.*'|sed -e 's/ \?= \?/=/')),$(eval $(call REPO_RULE_template,$(REPO))))
+$(foreach REPO,$(strip $(shell cat CONFIG_REPOS|grep -E '^[a-zA-Z].*=.*'|sed -e 's/ \?= \?/=/')),$(eval $(call REPO_RULE_template,$(REPO))))
 
 # The following line calls our RPM rule template defined above allowing us to build a proper dependency list.
 $(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
