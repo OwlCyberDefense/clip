@@ -38,23 +38,24 @@ LIVECD_ARGS := --skip-compress --extra-space=104857600 --config="$(BUILD_DIR)/$(
 
 REPO_LINES ?= repo --name=centos --baseurl=http://mirror.centos.org/centos/6.2/os/$$basearch\nrepo --name=epel   --baseurl=http://download.fedora.redhat.com/pub/epel/$(RHEL_VER)/$$basearch
 
-DEPS := $(PUNGI) $(LIVECD_CREATOR) Makefile $(KS)
+DEPS := $(PUNGI) $(LIVECD_CREATOR) $(CURDIR)/Makefile $(CURDIR)/$(KS)
 
 all: installation-iso livecd
 
 installation-iso: $(DEPS) $(ADDTL_DEPS)
-	@test -d $(PUNGI_OS_DIR) || mkdir -p $(BUILD_DIR)
-	@cp --force $(NAME).ks $(BUILD_DIR)/$(KS)
-	@sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
+	$(VERBOSE)test -d $(PUNGI_OS_DIR) || mkdir -p $(PUNGI_OS_DIR)
+	$(VERBOSE)cp --force $(NAME).ks $(BUILD_DIR)/$(KS)
+	$(VERBOSE)sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
 	@echo "Gathering things with pungi..."
 	sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(BUILD_DIR)/$(KS)"
 	@echo "Fixing the boot menu..."
-	sudo sed -i -e "s/^label linux$$/label clip/" \
+	$(VERBOSE)sudo sed -i -e "s/^label linux$$/label clip/" \
 	       -e "s/append initrd=initrd.img$$/append initrd=initrd.img ks=cdrom:$(KS)/" \
 	       -e "s/or upgrade an existing system/$(NAME)/" \
 	$(PUNGI_OS_DIR)/isolinux/isolinux.cfg
-	@echo "Building ISO with pungi..."
+	$(VERBOSE)echo "Building ISO with pungi..."
 	sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(BUILD_DIR)/$(KS)
+	$(VERBOSE)sudo mv --force $(PUNGI_OS_DIR)/../iso/$(NAME)* $(OUTPUT_DIR)/
 
 
 livecd: $(DEPS) $(ADDTL_DEPS)
@@ -65,11 +66,11 @@ livecd: $(DEPS) $(ADDTL_DEPS)
 	@sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
 	@sed -i -e 's;CDLABEL;live:CDLABEL;g' $(BUILD_DIR)/livecd-creator
 	@echo "livecd creator needs root permissions - please enter your sudo password"
-	sudo $(BUILD_DIR)/livecd-creator  $(LIVECD_ARGS) --shell
+	sudo $(BUILD_DIR)/livecd-creator  $(LIVECD_ARGS)
 	@mv --force $(NAME).iso $(OUTPUT_DIR)/
 
 clean:
-	rm -rf $(BUILD_DIR)
+	sudo rm -rf $(BUILD_DIR)
 
 bare: clean
 	rm -rf $(TMP_DIR)
