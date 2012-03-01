@@ -25,7 +25,7 @@ SUPPORT_DIR ?= $(ROOT_DIR)/support
 
 OUTPUT_DIR ?= $(ROOT_DIR)
 
-OS_DIR := $(BUILD_DIR)/$(VERSION)/$(shell uname -i)/os/
+PUNGI_OS_DIR := $(BUILD_DIR)/$(RHEL_VER)/$(shell uname -i)/os/
 
 LIVECD_CREATOR ?= $(SUPPORT_DIR)/livecd-creator
 PUNGI ?= /usr/bin/pungi
@@ -33,7 +33,7 @@ BUILD_DATE ?= $(shell date +%m-%d-%y)
 
 DEBUG ?= y
 
-PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(RHEL_VER)" --name="$(NAME)" --nosource --force
+PUNGI_ARGS := --destdir="$(PUNGI_OS_DIR)" --ver="$(RHEL_VER)" --name="$(NAME)" --nosource --force
 LIVECD_ARGS := --skip-compress --extra-space=104857600 --config="$(BUILD_DIR)/$(NAME).ks" --fslabel="$(NAME)"
 
 REPO_LINES ?= repo --name=centos --baseurl=http://mirror.centos.org/centos/6.2/os/$$basearch\nrepo --name=epel   --baseurl=http://download.fedora.redhat.com/pub/epel/$(RHEL_VER)/$$basearch
@@ -43,21 +43,21 @@ DEPS := $(PUNGI) $(LIVECD_CREATOR) Makefile $(KS)
 all: installation-iso livecd
 
 installation-iso: $(DEPS) $(ADDTL_DEPS)
-	@test -d $(OS_DIR) || mkdir -p $(OS_DIR)
-	@cp --force $(NAME).ks $(OS_DIR)/$(KS)
-	@cd $(OS_DIR)
-	@sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(OS_DIR)/$(KS)
+	@test -d $(PUNGI_OS_DIR) || mkdir -p $(PUNGI_OS_DIR)
+	@cp --force $(NAME).ks $(PUNGI_OS_DIR)/$(KS)
+	@cd $(PUNGI_OS_DIR)
+	@sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(PUNGI_OS_DIR)/$(KS)
 	@echo "Gather things with pungi..."
-	sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(OS_DIR)/$(KS)"
+	sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(PUNGI_OS_DIR)/$(KS)"
 	#@echo "Generating modified kickstart..."
-	#sudo sh -c "sed -e 's/^repo/#repo/' '$(KS)' > '$(OS_DIR)/$(KS)'"
+	#sudo sh -c "sed -e 's/^repo/#repo/' '$(KS)' > '$(PUNGI_OS_DIR)/$(KS)'"
 	@echo "Fixing the boot menu..."
 	sudo sed -i -e "s/^label linux$$/label clip/" \
 	       -e "s/append initrd=initrd.img$$/append initrd=initrd.img ks=cdrom:$(KS)/" \
 	       -e "s/or upgrade an existing system/$(NAME)/" \
-	$(OS_DIR)/isolinux/isolinux.cfg
+	$(PUNGI_OS_DIR)/isolinux/isolinux.cfg
 	@echo "Building ISO with pungi..."
-	sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(OS_DIR)/$(KS)
+	sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(PUNGI_OS_DIR)/$(KS)
 
 
 livecd: $(DEPS) $(ADDTL_DEPS)
@@ -69,7 +69,7 @@ livecd: $(DEPS) $(ADDTL_DEPS)
 	@sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
 	@sed -i -e 's;CDLABEL;live:CDLABEL;g' $(BUILD_DIR)/livecd-creator
 	@echo "livecd creator needs root permissions - please enter your sudo password"
-	sudo $(BUILD_DIR)/livecd-creator  $(LIVECD_ARGS)
+	sudo $(BUILD_DIR)/livecd-creator  $(LIVECD_ARGS) --shell
 	@mv --force $(NAME).iso $(OUTPUT_DIR)/
 
 clean:
