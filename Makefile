@@ -54,6 +54,7 @@ YUM_CONF_FILE := $(CONF_DIR)/yum/yum.conf
 export MOCK_YUM_CONF :=
 export MY_REPO_DEPS :=
 export setup_all_repos := setup-my-repo
+MY_REPO_DIRS :=
 
 # These are the directories where we will put our custom copies of
 # the yum repos.  These will be removed by "make bare".
@@ -176,6 +177,8 @@ $(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)$(YUM_CONF))
 $(eval MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated)
 $(eval REPO_LINES := $(REPO_LINES)repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=file://$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
 
+$(eval MY_REPO_DIRS += "$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo")
+
 setup-$(REPO_ID)$(RHEL_VER)-repo: $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated $(CONFIG_BUILD_DEPS)
 
 # This is the key target for managing yum repos.  If the pkg list for the repo
@@ -260,7 +263,7 @@ iso-to-disk:
 	$(VERBOSE)sudo $(CURDIR)/support/livecd-iso-to-disk --resetmbr $(ISO_FILE) $(USB_DEV)1
 
 bare-repos:
-	$(VERBOSE)$(RM) -r $(REPOS_DIR)
+	$(VERBOSE)$(RM) -r $(MY_REPO_DIRS) $(MY_REPO_DIR)
 	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
 
 clean:
