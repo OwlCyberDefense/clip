@@ -51,6 +51,9 @@ MOCK_CONF_DIR := $(CONF_DIR)/mock
 # we need a yum.conf to use for repo querying (to determine appropriate package versions when multiple version are present)
 YUM_CONF_FILE := $(CONF_DIR)/yum/yum.conf
 
+# Pungi needs a comps.xml - why does every single yum front-end suck in different ways?
+COMPS_FILE := $(CONF_DIR)/yum/comps.xml
+
 export MOCK_YUM_CONF :=
 export MY_REPO_DEPS :=
 export setup_all_repos := setup-my-repo
@@ -222,7 +225,7 @@ create-repos: $(setup_all_repos)
 
 setup-my-repo: $(RPMS)
 	@echo "Generating yum repo metadata, this could take a few minutes..."
-	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
+	$(VERBOSE)cd $(MY_REPO_DIR) && $(REPO_CREATE) -g $(COMPS_FILE) .
 
 rpms: $(RPMS)
 
