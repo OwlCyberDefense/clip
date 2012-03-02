@@ -383,10 +383,10 @@ dmraid-events-logwatch-1.0.0.rc16-10.el6.x86_64.rpm
 dovecot-devel-2.0-0.10.beta6.20100630.el6.i686.rpm
 dovecot-devel-2.0.9-2.el6_1.1.x86_64.rpm
 doxygen-doxywizard-1.6.1-6.el6.x86_64.rpm
-dracut-caps-004-256.el6.noarch.rpm
-dracut-fips-aesni-004-256.el6.noarch.rpm
-dracut-generic-004-256.el6.noarch.rpm
-dracut-tools-004-256.el6.noarch.rpm
+dracut-caps-004-256.el6_2.1.noarch.rpm
+dracut-fips-aesni-004-256.el6_2.1.noarch.rpm
+dracut-generic-004-256.el6_2.1.noarch.rpm
+dracut-tools-004-256.el6_2.1.noarch.rpm
 drpmsync-3.5-0.5.20090913git.el6.x86_64.rpm
 dvipdfm-0.13.2d-41.1.el6.x86_64.rpm
 dvipdfmx-0-0.31.20090708cvs.el6.x86_64.rpm
@@ -1402,7 +1402,7 @@ libutempter-devel-1.1.5-4.1.el6.x86_64.rpm
 libv4l-devel-0.6.3-2.el6.i686.rpm
 libv4l-devel-0.6.3-2.el6.x86_64.rpm
 libvirt-java-javadoc-0.4.7-1.el6.noarch.rpm
-libvirt-lock-sanlock-0.9.4-23.el6_2.4.x86_64.rpm
+libvirt-lock-sanlock-0.9.4-23.el6_2.6.x86_64.rpm
 libvisual-devel-0.4.0-9.1.el6.i686.rpm
 libvisual-devel-0.4.0-9.1.el6.x86_64.rpm
 libvncserver-0.9.7-4.el6.i686.rpm
@@ -1447,7 +1447,7 @@ libXfont-devel-1.4.1-2.el6_1.i686.rpm
 libXfont-devel-1.4.1-2.el6_1.x86_64.rpm
 libxklavier-devel-4.0-7.el6_2.1.i686.rpm
 libxklavier-devel-4.0-7.el6_2.1.x86_64.rpm
-libxml2-static-2.7.6-4.el6_2.1.x86_64.rpm
+libxml2-static-2.7.6-4.el6_2.4.x86_64.rpm
 libXres-devel-1.0.4-1.el6.i686.rpm
 libXres-devel-1.0.4-1.el6.x86_64.rpm
 libxslt-python-1.1.26-2.el6.x86_64.rpm
@@ -1678,8 +1678,8 @@ nmap-frontend-5.21-4.el6.noarch.rpm
 nss_compat_ossl-0.9.6-1.el6.i686.rpm
 nss_compat_ossl-devel-0.9.6-1.el6.i686.rpm
 nss_compat_ossl-devel-0.9.6-1.el6.x86_64.rpm
-nss-pkcs11-devel-3.12.10-17.el6_2.i686.rpm
-nss-pkcs11-devel-3.12.10-17.el6_2.x86_64.rpm
+nss-pkcs11-devel-3.13.1-7.el6_2.i686.rpm
+nss-pkcs11-devel-3.13.1-7.el6_2.x86_64.rpm
 ntp-doc-4.2.4p8-2.el6.noarch.rpm
 ntp-perl-4.2.4p8-2.el6.x86_64.rpm
 numpy-f2py-1.3.0-6.2.el6.x86_64.rpm
@@ -1901,7 +1901,7 @@ opensp-devel-1.5.2-12.1.el6.x86_64.rpm
 openssh-ldap-5.3p1-70.el6_2.2.x86_64.rpm
 openssl-perl-1.0.0-20.el6_2.1.x86_64.rpm
 openssl-static-1.0.0-20.el6_2.1.x86_64.rpm
-openswan-doc-2.6.32-9.el6.x86_64.rpm
+openswan-doc-2.6.32-10.el6_2.x86_64.rpm
 openwsman-perl-2.2.3-8.el6.x86_64.rpm
 openwsman-python-2.2.3-8.el6.x86_64.rpm
 openwsman-ruby-2.2.3-8.el6.x86_64.rpm
@@ -2403,7 +2403,7 @@ scons-2.0.1-1.el6.noarch.rpm
 SDL-static-1.2.14-2.el6.x86_64.rpm
 seahorse-devel-2.28.1-4.el6.i686.rpm
 seahorse-devel-2.28.1-4.el6.x86_64.rpm
-selinux-policy-doc-3.7.19-126.el6_2.6.noarch.rpm
+selinux-policy-doc-3.7.19-126.el6_2.9.noarch.rpm
 sendmail-devel-8.14.4-8.el6.i686.rpm
 sendmail-devel-8.14.4-8.el6.x86_64.rpm
 sendmail-doc-8.14.4-8.el6.noarch.rpm
@@ -2515,7 +2515,7 @@ texlive-texmf-errata-xetex-2007-7.1.el6.noarch.rpm
 texlive-texmf-xetex-2007-38.el6.noarch.rpm
 texlive-xetex-2007-57.el6_2.x86_64.rpm
 thai-scalable-fonts-compat-0.4.12-2.1.el6.noarch.rpm
-thunderbird-3.1.18-2.el6_2.x86_64.rpm
+thunderbird-10.0.1-3.el6_2.x86_64.rpm
 tidy-0.99.0-19.20070615.1.el6.x86_64.rpm
 tigervnc-server-applet-1.0.90-0.17.20110314svn4359.el6.noarch.rpm
 tigervnc-server-module-1.0.90-0.17.20110314svn4359.el6.x86_64.rpm
@@ -2702,8 +2702,8 @@ xqilla-2.2.3-8.el6.x86_64.rpm
 xqilla-devel-2.2.3-8.el6.i686.rpm
 xqilla-devel-2.2.3-8.el6.x86_64.rpm
 xqilla-doc-2.2.3-8.el6.noarch.rpm
-xulrunner-devel-1.9.2.26-2.el6_2.i686.rpm
-xulrunner-devel-1.9.2.26-2.el6_2.x86_64.rpm
+xulrunner-devel-10.0.1-2.el6_2.i686.rpm
+xulrunner-devel-10.0.1-2.el6_2.x86_64.rpm
 yajl-devel-1.0.7-3.el6.i686.rpm
 yajl-devel-1.0.7-3.el6.x86_64.rpm
 yap-5.1.3-2.1.el6.i686.rpm
