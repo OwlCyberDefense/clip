@@ -25,7 +25,7 @@ SUPPORT_DIR ?= $(ROOT_DIR)/support
 
 OUTPUT_DIR ?= $(ROOT_DIR)
 
-OS_DIR := $(BUILD_DIR)/$(VERSION)/$(shell uname -i)/os/
+PUNGI_OS_DIR := $(BUILD_DIR)/$(RHEL_VER)/$(shell uname -i)/os/
 
 LIVECD_CREATOR ?= $(SUPPORT_DIR)/livecd-creator
 PUNGI ?= /usr/bin/pungi
@@ -38,26 +38,24 @@ LIVECD_ARGS := --skip-compress --extra-space=104857600 --config="$(BUILD_DIR)/$(
 
 REPO_LINES ?= repo --name=centos --baseurl=http://mirror.centos.org/centos/6.2/os/$$basearch\nrepo --name=epel   --baseurl=http://download.fedora.redhat.com/pub/epel/$(RHEL_VER)/$$basearch
 
-DEPS := $(PUNGI) $(LIVECD_CREATOR) Makefile $(KS)
+DEPS := $(PUNGI) $(LIVECD_CREATOR) $(CURDIR)/Makefile $(CURDIR)/$(KS)
 
 all: installation-iso livecd
 
 installation-iso: $(DEPS) $(ADDTL_DEPS)
-	@test -d $(OS_DIR) || mkdir -p $(OS_DIR)
-	@cp --force $(NAME).ks $(OS_DIR)/$(KS)
-	@cd $(OS_DIR)
-	@sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(OS_DIR)/$(KS)
-	@echo "Gather things with pungi..."
-	sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(OS_DIR)/$(KS)"
-	#@echo "Generating modified kickstart..."
-	#sudo sh -c "sed -e 's/^repo/#repo/' '$(KS)' > '$(OS_DIR)/$(KS)'"
+	$(VERBOSE)test -d $(PUNGI_OS_DIR) || mkdir -p $(PUNGI_OS_DIR)
+	$(VERBOSE)cp --force $(NAME).ks $(BUILD_DIR)/$(KS)
+	$(VERBOSE)sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
+	@echo "Gathering things with pungi..."
+	sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(BUILD_DIR)/$(KS)"
 	@echo "Fixing the boot menu..."
-	sudo sed -i -e "s/^label linux$$/label clip/" \
+	$(VERBOSE)sudo sed -i -e "s/^label linux$$/label clip/" \
 	       -e "s/append initrd=initrd.img$$/append initrd=initrd.img ks=cdrom:$(KS)/" \
 	       -e "s/or upgrade an existing system/$(NAME)/" \
-	$(OS_DIR)/isolinux/isolinux.cfg
-	@echo "Building ISO with pungi..."
-	sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(OS_DIR)/$(KS)
+	$(PUNGI_OS_DIR)/isolinux/isolinux.cfg
+	$(VERBOSE)echo "Building ISO with pungi..."
+	sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(BUILD_DIR)/$(KS)
+	$(VERBOSE)sudo mv --force $(PUNGI_OS_DIR)/../iso/$(NAME)* $(OUTPUT_DIR)/
 
 
 livecd: $(DEPS) $(ADDTL_DEPS)
@@ -65,7 +63,6 @@ livecd: $(DEPS) $(ADDTL_DEPS)
 	@cp --force $(KS) $(BUILD_DIR)/$(KS)
 	@cp --force $(MAYFLOWER) $(BUILD_DIR)/mayflower
 	@cp --force $(LIVECD_CREATOR) $(BUILD_DIR)/livecd-creator
-	@cd $(BUILD_DIR)
 	@sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
 	@sed -i -e 's;CDLABEL;live:CDLABEL;g' $(BUILD_DIR)/livecd-creator
 	@echo "livecd creator needs root permissions - please enter your sudo password"
@@ -73,7 +70,7 @@ livecd: $(DEPS) $(ADDTL_DEPS)
 	@mv --force $(NAME).iso $(OUTPUT_DIR)/
 
 clean:
-	rm -rf $(BUILD_DIR)
+	sudo rm -rf $(BUILD_DIR)
 
 bare: clean
 	rm -rf $(TMP_DIR)
