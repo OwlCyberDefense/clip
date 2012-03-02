@@ -12,3 +12,4 @@ repos/my-srpm-repo/*.tar.gz
 repos/my-srpm-repo/*.bz2
 conf/yum/yum.conf
 ports/repo/*
+*CHECKSUM
