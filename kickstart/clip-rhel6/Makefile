@@ -25,15 +25,17 @@ SUPPORT_DIR ?= $(ROOT_DIR)/support
 
 OUTPUT_DIR ?= $(ROOT_DIR)
 
-PUNGI_OS_DIR := $(BUILD_DIR)/$(RHEL_VER)/$(shell uname -i)/os/
+#PUNGI_OS_DIR := $(BUILD_DIR)/$(RHEL_VER)/$(shell uname -i)/os/
+PUNGI_OS_DIR := $(BUILD_DIR)/1/$(shell uname -i)/os/
 
 LIVECD_CREATOR ?= $(SUPPORT_DIR)/livecd-creator
-PUNGI ?= /usr/bin/pungi
+PUNGI ?= $(SUPPORT_DIR)/pungi
 BUILD_DATE ?= $(shell date +%m-%d-%y)
 
 DEBUG ?= y
 
-PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(RHEL_VER)" --name="$(NAME)" --nosource --force
+#PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(RHEL_VER)" --name="$(NAME)" --nosource --force
+PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="1" --name="clip" --nosource --force
 LIVECD_ARGS := --skip-compress --extra-space=104857600 --config="$(BUILD_DIR)/$(NAME).ks" --fslabel="$(NAME)"
 
 REPO_LINES ?= repo --name=centos --baseurl=http://mirror.centos.org/centos/6.2/os/$$basearch\nrepo --name=epel   --baseurl=http://download.fedora.redhat.com/pub/epel/$(RHEL_VER)/$$basearch
@@ -57,7 +59,7 @@ installation-iso: $(DEPS) $(ADDTL_DEPS)
 	$(PUNGI_OS_DIR)/isolinux/isolinux.cfg
 	$(VERBOSE)echo "Building ISO with pungi..."
 	sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(BUILD_DIR)/$(KS)
-	$(VERBOSE)sudo mv --force $(PUNGI_OS_DIR)/../iso/$(NAME)* $(OUTPUT_DIR)/
+	$(VERBOSE)sudo mv --force $(BUILD_DIR)/../iso/$(NAME)* $(OUTPUT_DIR)/
 
 
 livecd: $(DEPS) $(ADDTL_DEPS)
