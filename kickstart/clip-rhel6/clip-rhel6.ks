@@ -164,7 +164,7 @@ yum
 reboot
 
 %post --log=/root/post_install.log
-export PATH="/usr/bin:/bin:/usr/local/bin"
+export PATH="/sbin:/usr/bin:/bin:/usr/local/bin"
 
 chkconfig --add gpm
 chkconfig --del postfix
