@@ -10,6 +10,7 @@ timezone --utc Etc/GMT
 auth --useshadow --enablemd5
 selinux --enforcing
 firewall --enabled
+reboot
 
 # DO NOT REMOVE THE FOLLOWING LINE. NON-EXISTENT WARRANTY VOID IF REMOVED.
 #REPO-REPLACEMENT-PLACEHOLDER
@@ -48,7 +49,6 @@ dhclient
 e2fsprogs
 filesystem
 glibc
-gpm
 initscripts
 iproute
 iptables
@@ -161,13 +161,12 @@ yum
 
 %end
 
-reboot
-
 %post --log=/root/post_install.log
 export PATH="/sbin:/usr/bin:/bin:/usr/local/bin"
 
-chkconfig --add gpm
 chkconfig --del postfix
+
+puppet -d -l /root/install.puppet.log /etc/puppet/manifests/site.pp
 
 touch /.autorelabel
 
