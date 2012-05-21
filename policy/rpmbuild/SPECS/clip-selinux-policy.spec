@@ -32,7 +32,6 @@ Source13: policygentool
 Source14: securetty_types-clip
 Source15: securetty_types-mls
 Source20: customizable_types
-Source21: config.tgz
 Source22: users-mls
 Source23: users-clip
 
@@ -43,8 +42,6 @@ BuildRequires: python gawk checkpolicy >= %{CHECKPOLICYVER} m4 policycoreutils-p
 Requires(pre): policycoreutils >= %{POLICYCOREUTILSVER} libsemanage >= 2.0.14-3
 Requires(post): /usr/bin/bunzip2 /bin/mktemp /bin/awk
 Requires: checkpolicy >= %{CHECKPOLICYVER} m4 
-Obsoletes: selinux-policy <= %{version}-%{release}
-Provides: selinux-policy-devel = %{version}-%{release}
 
 %description 
 Certifiable Linux Integration Platform SELinux Base package
@@ -188,10 +185,9 @@ cp %{SOURCE9} %{SOURCE10} %{SOURCE11} policy/modules/apps
 
 %install
 mkdir selinux_config
-for i in %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE8} %{SOURCE13} %{SOURCE14} %{SOURCE15} %{SOURCE20} %{SOURCE21} %{SOURCE22} %{SOURCE23};do
+for i in %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE8} %{SOURCE13} %{SOURCE14} %{SOURCE15} %{SOURCE20} %{SOURCE22} %{SOURCE23};do
  cp $i selinux_config
 done
-tar zxvf selinux_config/config.tgz
 # Build clip policy
 %{__rm} -fR %{buildroot}
 mkdir -p %{buildroot}%{_mandir}

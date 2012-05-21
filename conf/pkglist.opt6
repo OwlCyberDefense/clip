@@ -358,7 +358,7 @@ dbus-python-devel-0.83.0-6.1.el6.x86_64.rpm
 dbus-qt-0.70-7.2.el6.i686.rpm
 dbus-qt-devel-0.70-7.2.el6.i686.rpm
 dbus-qt-devel-0.70-7.2.el6.x86_64.rpm
-debugmode-9.03.27-1.el6.x86_64.rpm
+debugmode-9.03.27-1.el6_2.1.x86_64.rpm
 dejavu-lgc-sans-fonts-2.30-2.el6.noarch.rpm
 dejavu-lgc-serif-fonts-2.30-2.el6.noarch.rpm
 deltaiso-3.5-0.5.20090913git.el6.x86_64.rpm
@@ -416,7 +416,7 @@ emacs-anthy-9100h-10.1.el6.noarch.rpm
 emacs-anthy-el-9100h-10.1.el6.noarch.rpm
 emacs-auctex-doc-11.85-10.el6.noarch.rpm
 emacs-auctex-el-11.85-10.el6.noarch.rpm
-emacs-el-23.1-21.el6_2.1.x86_64.rpm
+emacs-el-23.1-21.el6_2.3.x86_64.rpm
 emacs-git-1.7.1-2.el6_0.1.noarch.rpm
 emacs-git-el-1.7.1-2.el6_0.1.noarch.rpm
 emacs-gnuplot-el-4.2.6-2.el6.x86_64.rpm
@@ -595,7 +595,7 @@ glpk-devel-4.40-1.1.el6.x86_64.rpm
 glpk-doc-4.40-1.1.el6.x86_64.rpm
 glpk-static-4.40-1.1.el6.x86_64.rpm
 glpk-utils-4.40-1.1.el6.x86_64.rpm
-gmp-static-4.3.1-7.el6.x86_64.rpm
+gmp-static-4.3.1-7.el6_2.2.x86_64.rpm
 gnome-bluetooth-libs-devel-2.28.6-8.el6.i686.rpm
 gnome-bluetooth-libs-devel-2.28.6-8.el6.x86_64.rpm
 gnome-disk-utility-devel-2.30.1-2.el6.i686.rpm
@@ -857,7 +857,7 @@ ibus-table-devel-1.2.0.20100111-4.el6.noarch.rpm
 ibutils-devel-1.5.7-4.el6.i686.rpm
 ibutils-devel-1.5.7-4.el6.x86_64.rpm
 ibutils-libs-1.5.4-3.el6.i686.rpm
-icedtea-web-javadoc-1.1.4-1.el6.x86_64.rpm
+icedtea-web-javadoc-1.1.5-1.el6_2.x86_64.rpm
 icon-naming-utils-0.8.90-3.1.el6.noarch.rpm
 icu-4.2.1-9.1.el6_2.x86_64.rpm
 icu4j-4.2.1-5.el6.x86_64.rpm
@@ -1899,8 +1899,8 @@ opensm-static-3.3.9-1.el6.x86_64.rpm
 opensp-devel-1.5.2-12.1.el6.i686.rpm
 opensp-devel-1.5.2-12.1.el6.x86_64.rpm
 openssh-ldap-5.3p1-70.el6_2.2.x86_64.rpm
-openssl-perl-1.0.0-20.el6_2.1.x86_64.rpm
-openssl-static-1.0.0-20.el6_2.1.x86_64.rpm
+openssl-perl-1.0.0-20.el6_2.2.x86_64.rpm
+openssl-static-1.0.0-20.el6_2.2.x86_64.rpm
 openswan-doc-2.6.32-10.el6_2.x86_64.rpm
 openwsman-perl-2.2.3-8.el6.x86_64.rpm
 openwsman-python-2.2.3-8.el6.x86_64.rpm
@@ -2125,9 +2125,9 @@ pinentry-qt4-0.7.6-6.el6.x86_64.rpm
 pixman-spice-0.13.3-5.el6.i686.rpm
 pixman-spice-devel-0.13.3-5.el6.i686.rpm
 pixman-spice-devel-0.13.3-5.el6.x86_64.rpm
-pki-common-javadoc-9.0.3-20.el6.noarch.rpm
-pki-java-tools-javadoc-9.0.3-20.el6.noarch.rpm
-pki-util-javadoc-9.0.3-20.el6.noarch.rpm
+pki-common-javadoc-9.0.3-21.el6_2.noarch.rpm
+pki-java-tools-javadoc-9.0.3-21.el6_2.noarch.rpm
+pki-util-javadoc-9.0.3-21.el6_2.noarch.rpm
 pl-5.7.11-6.el6.i686.rpm
 pl-5.7.11-6.el6.x86_64.rpm
 planner-0.14.4-9.el6.i686.rpm
@@ -2247,7 +2247,7 @@ python-matplotlib-tk-0.99.1.2-1.el6.x86_64.rpm
 python-mutagen-1.16-2.1.el6.noarch.rpm
 python-nss-doc-0.11-3.el6.x86_64.rpm
 python-paver-1.0-4.el6.noarch.rpm
-python-perf-2.6.32-220.4.2.el6.x86_64.rpm
+python-perf-2.6.32-220.7.1.el6.x86_64.rpm
 python-psycopg2-doc-2.0.14-1.el6_2.1.x86_64.rpm
 python-reportlab-docs-2.3-3.el6.noarch.rpm
 python-repoze-what-docs-1.0.8-6.el6.noarch.rpm
@@ -2403,7 +2403,7 @@ scons-2.0.1-1.el6.noarch.rpm
 SDL-static-1.2.14-2.el6.x86_64.rpm
 seahorse-devel-2.28.1-4.el6.i686.rpm
 seahorse-devel-2.28.1-4.el6.x86_64.rpm
-selinux-policy-doc-3.7.19-126.el6_2.9.noarch.rpm
+selinux-policy-doc-3.7.19-126.el6_2.10.noarch.rpm
 sendmail-devel-8.14.4-8.el6.i686.rpm
 sendmail-devel-8.14.4-8.el6.x86_64.rpm
 sendmail-doc-8.14.4-8.el6.noarch.rpm
@@ -2474,7 +2474,7 @@ syslinux-devel-4.02-4.el6.x86_64.rpm
 syslinux-extlinux-4.02-4.el6.x86_64.rpm
 syslinux-perl-4.02-4.el6.x86_64.rpm
 syslinux-tftpboot-4.02-4.el6.x86_64.rpm
-systemtap-testsuite-1.6-4.el6.x86_64.rpm
+systemtap-testsuite-1.6-5.el6_2.x86_64.rpm
 t1lib-5.1.2-6.el6_2.1.i686.rpm
 t1lib-apps-5.1.2-6.el6_2.1.x86_64.rpm
 t1lib-devel-5.1.2-6.el6_2.1.i686.rpm
@@ -2686,12 +2686,12 @@ xorg-x11-drv-synaptics-devel-1.4.1-3.el6.x86_64.rpm
 xorg-x11-drv-wacom-devel-0.10.5-14.el6.i686.rpm
 xorg-x11-drv-wacom-devel-0.10.5-14.el6.x86_64.rpm
 xorg-x11-fonts-ISO8859-15-100dpi-7.2-9.1.el6.noarch.rpm
-xorg-x11-server-devel-1.10.4-6.el6_2.1.i686.rpm
-xorg-x11-server-devel-1.10.4-6.el6_2.1.x86_64.rpm
-xorg-x11-server-source-1.10.4-6.el6_2.1.noarch.rpm
-xorg-x11-server-Xdmx-1.10.4-6.el6_2.1.x86_64.rpm
-xorg-x11-server-Xnest-1.10.4-6.el6_2.1.x86_64.rpm
-xorg-x11-server-Xvfb-1.10.4-6.el6_2.1.x86_64.rpm
+xorg-x11-server-devel-1.10.4-6.el6_2.3.i686.rpm
+xorg-x11-server-devel-1.10.4-6.el6_2.3.x86_64.rpm
+xorg-x11-server-source-1.10.4-6.el6_2.3.noarch.rpm
+xorg-x11-server-Xdmx-1.10.4-6.el6_2.3.x86_64.rpm
+xorg-x11-server-Xnest-1.10.4-6.el6_2.3.x86_64.rpm
+xorg-x11-server-Xvfb-1.10.4-6.el6_2.3.x86_64.rpm
 xorg-x11-util-macros-1.14.0-2.el6.noarch.rpm
 xorg-x11-xbitmaps-1.0.1-9.1.el6.x86_64.rpm
 xorg-x11-xinit-session-1.0.9-13.el6.x86_64.rpm
@@ -2711,7 +2711,7 @@ yap-5.1.3-2.1.el6.x86_64.rpm
 yap-devel-5.1.3-2.1.el6.i686.rpm
 yap-devel-5.1.3-2.1.el6.x86_64.rpm
 yap-docs-5.1.3-2.1.el6.x86_64.rpm
-yum-cron-3.2.29-22.el6.noarch.rpm
+yum-cron-3.2.29-22.el6_2.2.noarch.rpm
 yum-NetworkManager-dispatcher-1.1.30-10.el6.noarch.rpm
 yum-plugin-auto-update-debug-info-1.1.30-10.el6.noarch.rpm
 yum-plugin-fastestmirror-1.1.30-10.el6.noarch.rpm

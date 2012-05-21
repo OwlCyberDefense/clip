@@ -10,6 +10,8 @@ epel = /mnt/repos/epel-pinned-revisions
 # RHEL optional repo provides some necessary packages.
 opt = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackage
 
+tresys = /mnt/repos/tresys
+
 # NOTE: <= RHEL 5 requires BUILDGROUPS repo.  RHEL 6 has the BUILDGROUPS stuff built-in.
 # A groups repo must be available. Can be a local path or an http/ftp location.
 #buildgroups = /mnt/repos/buildgroups

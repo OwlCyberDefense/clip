@@ -53,6 +53,7 @@ installation-iso: $(DEPS) $(ADDTL_DEPS)
 	@echo "Gathering things with pungi..."
 	sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(BUILD_DIR)/$(KS)"
 	sed -e 's/^repo/#repo/' $(BUILD_DIR)/$(KS) > $(PUNGI_OS_DIR)/$(KS)
+	sed -i -e 's/^clip-selinux-policy/#clip-selinux-policy/' $(PUNGI_OS_DIR)/$(KS)
 	@echo "Fixing the boot menu..."
 	$(VERBOSE)sudo sed -i -e "s/^label linux$$/label clip/" \
 	       -e "s/append initrd=initrd.img$$/append initrd=initrd.img ks=cdrom:$(KS)/" \

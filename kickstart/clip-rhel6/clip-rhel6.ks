@@ -1,13 +1,37 @@
+# Copyright (C) 2012 Tresys Technology, LLC
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1) Distributed source includes this license and disclaimer,
+# 2) Binary distributions must reproduce the license and disclaimer in the 
+#    documentation and/or other materials provided with the distribution,
+# 3) Tresys and contributors may not be used to endorse or promote products 
+#    derived from this software without specific prior written permission
+#
+# THIS SOFTWARE IS PROVIDED BY TRESYS ``AS IS'' AND ANY EXPRESS OR IMPLIED 
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO 
+# EVENT SHALL  TRESYS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+# INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 rootpw neutronbass
 
 lang en_US.UTF-8
 keyboard us
 
-#text
+#text - is broken bz 785400 anaconda abrt - No module named textw.netconfig_text
 cdrom
 install
 timezone --utc Etc/GMT
 auth --useshadow --enablemd5
+network --hostname=clip --noipv6 --bootproto=static --ip=192.168.20.12 --netmask=255.255.255.0 --onboot=yes
+
 selinux --enforcing
 firewall --enabled
 reboot
@@ -16,7 +40,7 @@ reboot
 #REPO-REPLACEMENT-PLACEHOLDER
 
 zerombr
-bootloader --location=mbr --timeout=5 --append="audit=1" --driveorder=sda
+bootloader --location=mbr --timeout=5 --append="audit=1" --driveorder=sda --password=neutronbass
 clearpart --drives=sda --all --initlabel
 part /boot --size=200 --fstype ext4 --asprimary --ondisk=sda
 part pv.os --size=1   --grow        --asprimary --ondisk=sda
@@ -27,13 +51,21 @@ logvol /var           --vgname=vg00 --name=var   --fstype=ext4 --size 4000 --fso
 logvol /home          --vgname=vg00 --name=home  --fstype=ext4 --size=1    --fsoptions=defaults,nosuid,nodev --percent=10 --grow
 logvol swap           --vgname=vg00 --name=swap  --fstype=swap --recommended
 
-logvol /var/log/audit --vgname=vg00 --name=log   --fstype=ext4 --size 1500 --fsoptions=defaults,nosuid,noexec,nodev --maxsize 25000 --grow
+logvol /var/log       --vgname=vg00 --name=log   --fstype=ext4 --size 1500 --fsoptions=defaults,nosuid,noexec,nodev --maxsize 25000 --grow
+logvol /var/log/audit --vgname=vg00 --name=audit --fstype=ext4 --size 1500 --fsoptions=defaults,nosuid,noexec,nodev --maxsize 25000 --grow
 #logvol /tmp           --vgname=vg00 --name=tmp   --fstype=ext4 --size 100  --fsoptions=defaults,bind,nosuid,noexec,nodev --maxsize 6000  --grow
 #logvol /var/tmp       --vgname=vg00 --name=vtmp  --fstype=ext4 --size 100  --fsoptions=defaults,nosuid,noexec,nodev --maxsize 5000  --grow
 logvol /tmp           --vgname=vg00 --name=tmp   --fstype=ext4 --size 100  --maxsize 6000  --grow
 logvol /var/tmp       --vgname=vg00 --name=vtmp  --fstype=ext4 --size 100  --maxsize 5000  --grow
 
 %packages --excludedocs
+
+clip-selinux-policy
+clip-selinux-policy-clip
+clip-selinux-policy-mls
+scap-security-guide
+aqueduct-ssg-bash
+
 acl
 aide
 attr
@@ -42,6 +74,8 @@ augeas
 authconfig
 basesystem
 bash
+bind-libs
+bind-utils
 chkconfig
 coreutils
 cpio
@@ -60,6 +94,7 @@ ncurses
 openscap
 openscap-content
 openscap-utils
+openswan
 passwd
 perl
 policycoreutils
@@ -92,6 +127,7 @@ yum
 -blktrace
 -bridge-utils
 -cryptsetup-luks
+-dbus
 -dhclient
 -dmraid
 -dosfstools
@@ -107,8 +143,6 @@ yum
 -mtr
 -nano
 -ntsysv
--openssh-clients
--openssh-server
 -pinfo
 -prelink
 -pm-utils
@@ -132,6 +166,7 @@ yum
 -yum-rhn-plugin
 
 -aic94xx-firmware
+-at
 -atmel-firmware
 -bfa-firmware
 -ipw2100-firmware
@@ -162,12 +197,71 @@ yum
 %end
 
 %post --log=/root/post_install.log
-export PATH="/sbin:/usr/bin:/bin:/usr/local/bin"
+export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
 
 chkconfig --del postfix
+chkconfig ntpd on
 
-puppet -d -l /root/install.puppet.log /etc/puppet/manifests/site.pp
+# install clip refpol, there has to be a better way
+semanage login -a -s user_u   __default__
+semanage login -a -s sysadm_u root
 
+semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  root
+semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  staff_u
+semanage user -m                      -Rsystem_r  system_u
+
+rpm -e selinux-policy selinux-policy-targeted
+
+mount /dev/sr0 /mnt
+cd /mnt/Packages
+rpm -hiv clip-selinux-policy-4* clip-selinux-policy-clip-4*
+cd /
+umount /mnt
+
+sed -i -e 's/disabled/permissive/' -e 's/targeted/clip/' /etc/selinux/config
+
+#puppet -d -l /root/install.puppet.log /etc/puppet/manifests/site.pp
+
+# iptables setup
+cat >/etc/sysconfig/iptables <<EOF
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+EOF
+
+# scap-security-guide setup
+cat > /root/oscap.sh << EOF
+#!/bin/bash
+oscap xccdf eval --profile server --results results.xml --report report.html /usr/local/scap-security-guide/content/rhel6-xccdf-scap-security-guide.xml
+EOF
+chmod u+x /root/oscap.sh
+
+cat > /root/oscap2.sh << EOF
+#!/bin/bash
+oscap xccdf eval --profile server /usr/local/scap-security-guide/content/rhel6-xccdf-scap-security-guide.xml | sed -e "s/^M//" | grep "^R" | awk '
+/Rule ID:/, /Result:/ { printf "%s ", \$0 }
+/Result:/ { print "" }' | sed -e "s/Rule ID:[[:space:]]\+//" -e "s/ Result:[[:space:]]\+/: /"
+EOF
+chmod u+x /root/oscap2.sh
+
+sysctl -p /etc/sysctl.conf
+# aqueduct rediation scripts
+SCRIPTDIR=/usr/local/bin/aqueduct-ssg-bash
+SCRIPTZ=$( ls $SCRIPTDIR/*.sh )
+for file in $SCRIPTZ; do
+   echo -e "\e[00;32mEXECUTING $file\e[00m"
+   $SCRIPTDIR/$file
+done
+
+# relabel with refpol on reboot
 touch /.autorelabel
 
 %end

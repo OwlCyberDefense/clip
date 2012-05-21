@@ -41,10 +41,6 @@ files_read_usr_symlinks(oscap_t)
 
 miscfiles_read_localization(oscap_t)
 
-# run oscap_t process unconfined
-optional_policy(`
-	unconfined_domain(oscap_t)
-')
 #######################################
 #
 # oscap-probe local policy
@@ -86,10 +82,10 @@ optional_policy(`
 ')
 
 require {
-    type unconfined_t;
-    role unconfined_r;
+    type secadm_t;
+    role secadm_r;
  };
 
-# needs to be part of unconfineduser
-oscap_run(unconfined_t, unconfined_r)
-oscap_probe_run(unconfined_t, unconfined_r)
+# needs to be part of secadmuser
+oscap_run(secadm_t, secadm_r)
+oscap_probe_run(secadm_t, secadm_r)
