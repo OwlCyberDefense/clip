@@ -1,6 +1,6 @@
 *.swp
 tmp
-*.rpm
+./*.rpm
 *.iso
 conf/mock/*.cfg
 repos/yumcache/*
