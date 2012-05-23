@@ -220,7 +220,7 @@ umount /mnt
 
 sed -i -e 's/disabled/permissive/' -e 's/targeted/clip/' /etc/selinux/config
 
-#puppet -d -l /root/install.puppet.log /etc/puppet/manifests/site.pp
+puppet -d -l /root/install.puppet.log /etc/puppet/manifests/site.pp
 
 # iptables setup
 cat >/etc/sysconfig/iptables <<EOF
