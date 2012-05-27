@@ -215,7 +215,7 @@ rpm -e selinux-policy selinux-policy-targeted
 
 mount /dev/sr0 /mnt
 cd /mnt/Packages
-rpm -hiv clip-selinux-policy-4* clip-selinux-policy-clip-4*
+rpm -hiv clip-selinux-policy-6* clip-selinux-policy-clip-6*
 cd /
 umount /mnt
 
@@ -262,7 +262,8 @@ sysctl -p /etc/sysctl.conf
 SCRIPTDIR=/usr/local/bin/aqueduct-ssg-bash
 SCRIPTZ=$( ls $SCRIPTDIR/*.sh )
 for script in $SCRIPTZ; do
-   echo -e "\e[00;32mEXECUTING $file\e[00m"
+   [ "$script" == "$SCRIPTDIR/selinux_policytype_targeted.sh" ] && continue
+   echo $script
    $script
 done
 
