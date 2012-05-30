@@ -29,8 +29,8 @@ keyboard us
 cdrom
 install
 timezone --utc Etc/GMT
-auth --useshadow --enablemd5
-network --hostname=clip --noipv6 --bootproto=static --ip=192.168.20.12 --netmask=255.255.255.0 --onboot=yes
+auth --useshadow --passalgo=sha512
+network --hostname=clip --noipv6 --bootproto=static --ip=172.16.32.5 --netmask=255.255.255.0 --onboot=yes
 
 selinux --enforcing
 firewall --enabled
@@ -113,6 +113,7 @@ setools-console
 shadow-utils
 util-linux-ng
 vim-minimal
+vlock
 yum
 -Red_Hat_Enterprise_Linux-Release_Notes-6-en-US
 -abrt-addon-ccpp
@@ -220,13 +221,13 @@ umount /mnt
 
 sed -i -e 's/disabled/permissive/' -e 's/targeted/clip/' /etc/selinux/config
 
-#puppet -d -l /root/install.puppet.log /etc/puppet/manifests/site.pp
+puppet -d -l /root/install.puppet.log /etc/puppet/manifests/site.pp
 
 # iptables setup
 cat >/etc/sysconfig/iptables <<EOF
 *filter
-:INPUT ACCEPT [0:0]
-:FORWARD ACCEPT [0:0]
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
 :OUTPUT ACCEPT [0:0]
 -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 -A INPUT -p icmp -j ACCEPT
@@ -236,6 +237,10 @@ cat >/etc/sysconfig/iptables <<EOF
 -A FORWARD -j REJECT --reject-with icmp-host-prohibited
 COMMIT
 EOF
+
+chkconfig --add iptables
+chkconfig --add ip6tables
+chkconfig --level 0123456 netfs off
 
 # scap-security-guide setup
 cat > /root/oscap.sh << EOF
@@ -252,13 +257,13 @@ oscap xccdf eval --profile server /usr/local/scap-security-guide/content/rhel6-x
 EOF
 chmod u+x /root/oscap2.sh
 
+# aqueduct remediation scripts
 sysctl -p /etc/sysctl.conf
-# aqueduct rediation scripts
 SCRIPTDIR=/usr/local/bin/aqueduct-ssg-bash
 SCRIPTZ=$( ls $SCRIPTDIR/*.sh )
-for file in $SCRIPTZ; do
+for script in $SCRIPTZ; do
    echo -e "\e[00;32mEXECUTING $file\e[00m"
-   $SCRIPTDIR/$file
+   $script
 done
 
 # relabel with refpol on reboot
