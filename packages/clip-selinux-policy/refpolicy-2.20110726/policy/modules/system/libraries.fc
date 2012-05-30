@@ -1,0 +1,328 @@
+#
+# /emul
+#
+ifdef(`distro_debian',`
+/emul/ia32-linux/usr(/.*)?/lib(/.*)?		gen_context(system_u:object_r:lib_t,s0)
+/emul/ia32-linux/usr(/.*)?/lib(/.*)?/ld-[^/]*\.so(\.[^/]*)* gen_context(system_u:object_r:ld_so_t,s0)
+/emul/ia32-linux/lib(/.*)?			gen_context(system_u:object_r:lib_t,s0)
+/emul/ia32-linux/lib(/.*)?/ld-[^/]*\.so(\.[^/]*)* -- gen_context(system_u:object_r:ld_so_t,s0)
+')
+
+ifdef(`distro_gentoo',`
+/emul/linux/x86/usr(/.*)?/lib(/.*)?		gen_context(system_u:object_r:lib_t,s0)
+/emul/linux/x86/lib(/.*)?			gen_context(system_u:object_r:lib_t,s0)
+/emul/linux/x86/lib(/.*)?/ld-[^/]*\.so(\.[^/]*)* -- gen_context(system_u:object_r:ld_so_t,s0)
+')
+
+ifdef(`distro_redhat',`
+/emul/ia32-linux/usr(/.*)?/lib(/.*)?		gen_context(system_u:object_r:lib_t,s0)
+/emul/ia32-linux/usr(/.*)?/java/.+\.so(\.[^/]*)* -- gen_context(system_u:object_r:lib_t,s0)
+/emul/ia32-linux/usr(/.*)?/java/.*\.jar	--	gen_context(system_u:object_r:lib_t,s0)
+/emul/ia32-linux/usr(/.*)?/java/.*\.jsa	--	gen_context(system_u:object_r:lib_t,s0)
+/emul/ia32-linux/usr(/.*)?/lib(/.*)?/ld-[^/]*\.so(\.[^/]*)* gen_context(system_u:object_r:ld_so_t,s0)
+/emul/ia32-linux/lib(/.*)?			gen_context(system_u:object_r:lib_t,s0)
+/emul/ia32-linux/lib(/.*)?/ld-[^/]*\.so(\.[^/]*)* -- gen_context(system_u:object_r:ld_so_t,s0)
+')
+
+#
+# /etc
+#
+/etc/ld\.so\.cache			--	gen_context(system_u:object_r:ld_so_cache_t,s0)
+/etc/ld\.so\.preload			--	gen_context(system_u:object_r:ld_so_cache_t,s0)
+
+/etc/ppp/plugins/rp-pppoe\.so 		--	gen_context(system_u:object_r:lib_t,s0)
+
+#
+# /lib(64)?
+#
+/lib					-d	gen_context(system_u:object_r:lib_t,s0)
+/lib/.*						gen_context(system_u:object_r:lib_t,s0)
+/lib64					-d	gen_context(system_u:object_r:lib_t,s0)
+/lib64/.*					gen_context(system_u:object_r:lib_t,s0)
+/lib/ld-[^/]*\.so(\.[^/]*)*		--	gen_context(system_u:object_r:ld_so_t,s0)
+/lib64/ld-[^/]*\.so(\.[^/]*)*		--	gen_context(system_u:object_r:ld_so_t,s0)
+
+/lib/security/pam_poldi\.so		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/lib64/security/pam_poldi\.so		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+ifdef(`distro_debian',`
+/lib32					-l	gen_context(system_u:object_r:lib_t,s0)
+/lib64					-l	gen_context(system_u:object_r:lib_t,s0)
+')
+
+ifdef(`distro_gentoo',`
+/lib					-l	gen_context(system_u:object_r:lib_t,s0)
+/lib32					-d	gen_context(system_u:object_r:lib_t,s0)
+/lib32/.*					gen_context(system_u:object_r:lib_t,s0)
+/lib32/ld-[^/]*\.so(\.[^/]*)*		--	gen_context(system_u:object_r:ld_so_t,s0)
+')
+
+#
+# /opt
+#
+/opt/.*\.so					gen_context(system_u:object_r:lib_t,s0)
+/opt/(.*/)?lib(/.*)?				gen_context(system_u:object_r:lib_t,s0)
+/opt/(.*/)?lib64(/.*)?				gen_context(system_u:object_r:lib_t,s0)
+/opt/(.*/)?java/.+\.jar			--	gen_context(system_u:object_r:lib_t,s0)
+/opt/(.*/)?jre.*/.+\.so(\.[^/]*)*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/opt/(.*/)?jre/.+\.jar			--	gen_context(system_u:object_r:lib_t,s0)
+
+/opt/(.*/)?/RealPlayer/.+\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+# despite the extensions, they are actually libs
+/opt/Acrobat[5-9]/Reader/intellinux/plugins/.*\.api -- gen_context(system_u:object_r:lib_t,s0)
+
+/opt/Komodo-Edit-5/lib/python/lib/python2.6/lib-dynload/.*\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+ifdef(`distro_gentoo',`
+# despite the extensions, they are actually libs
+/opt/Acrobat[5-9]/Reader/intellinux/plug_ins/.*\.api -- gen_context(system_u:object_r:lib_t,s0)
+/opt/Acrobat[5-9]/Reader/intellinux/plug_ins3d/.*\.x3d -- gen_context(system_u:object_r:lib_t,s0)
+/opt/Acrobat[5-9]/Reader/intellinux/SPPlugins/.*\.ap[il] -- gen_context(system_u:object_r:lib_t,s0)
+
+/opt/netscape/plugins(/.*)?			gen_context(system_u:object_r:lib_t,s0)
+/opt/netscape/plugins/libflashplayer\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/opt/netscape/plugins/nppdf\.so		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/opt/RealPlayer/codecs(/.*)?			gen_context(system_u:object_r:lib_t,s0)
+/opt/RealPlayer/common(/.*)?			gen_context(system_u:object_r:lib_t,s0)
+/opt/RealPlayer/lib(/.*)?			gen_context(system_u:object_r:lib_t,s0)
+/opt/RealPlayer/mozilla(/.*)?			gen_context(system_u:object_r:lib_t,s0)
+/opt/RealPlayer/plugins(/.*)?			gen_context(system_u:object_r:lib_t,s0)
+')
+
+ifdef(`distro_redhat',`
+/opt/Adobe.*/libcurl\.so 		-- 	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/opt/Adobe(/.*?)/nppdf\.so 		-- 	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/opt/Adobe/Reader.?/Reader/intellinux/plug_ins/.*\.api -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/opt/Adobe/Reader.?/Reader/intellinux/SPPlugins/.*\.ap[il] -- gen_context(system_u:object_r:lib_t,s0)
+/opt/cisco-vpnclient/lib/libvpnapi\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/opt/cx.*/lib/wine/.+\.so		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/opt/f-secure/fspms/libexec/librapi\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/opt/ibm/java.*/jre/.+\.jar		--	gen_context(system_u:object_r:lib_t,s0)
+/opt/ibm/java.*/jre/.+\.so(\.[^/]*)*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/opt/ibm/java.*/jre/bin/.+\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/opt/netbeans(.*/)?jdk.*/linux/.+\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+')
+
+#
+# /sbin
+#
+/sbin/ldconfig				--	gen_context(system_u:object_r:ldconfig_exec_t,s0)
+
+#
+# /usr
+#
+/usr/(.*/)?/HelixPlayer/.+\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(.*/)?/RealPlayer/.+\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/(.*/)?java/.+\.so(\.[^/]*)*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(.*/)?java/.+\.jar			--	gen_context(system_u:object_r:lib_t,s0)
+/usr/(.*/)?java/.+\.jsa			--	gen_context(system_u:object_r:lib_t,s0)
+
+/usr/(.*/)?lib(/.*)?				gen_context(system_u:object_r:lib_t,s0)
+/usr/(.*/)?lib64(/.*)?				gen_context(system_u:object_r:lib_t,s0)
+
+/usr/(.*/)?lib(64)?(/.*)?/ld-[^/]*\.so(\.[^/]*)* gen_context(system_u:object_r:ld_so_t,s0)
+
+/usr/(.*/)?nvidia/.+\.so(\..*)?		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/lib64/altivec/libavcodec\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/cedega/.+\.so(\.[^/]*)*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/vlc/video_chroma/libi420_rgb_mmx_plugin\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/vlc/codec/librealvideo_plugin\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/vlc/codec/libdmo_plugin\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/vlc/codec/librealaudio_plugin\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib64/vlc/codec/librealvideo_plugin\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib64/vlc/codec/libdmo_plugin\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib64/vlc/codec/librealaudio_plugin\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libtfmessbsp\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/xorg/libGL\.so(\.[^/]*)*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/X11R6/lib/libGL\.so.* 		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libGL\.so(\.[^/]*)*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/catalyst/libGL\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libADM5.*\.so(\.[^/]*)*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libatiadlxx\.so(\.[^/]*)*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/win32/.*\.so(\.[^/]*)*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/lib/ADM_plugins/videoFilter/.*\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/(.*/)?lib(64)?(/.*)?/nvidia/.+\.so(\..*)? -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?(/.*)?/nvidia/.+\.so(\..*)? --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libsipphoneapi\.so.*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ati-fglrx/.+\.so(\..*)?	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/fglrx/.*\.so(\.[^/]*)*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libjs\.so.*		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/sse2/libx264\.so(\.[^/]*)* 	-- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?(/.*)?/libnvidia.+\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?(/.*)?/nvidia_drv.*\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/nero/plug-ins/libMP3\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/nvidia-graphics(-[^/]*/)?libGL(core)?\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/nvidia-graphics(-[^/]*/)?libnvidia.*\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/nvidia-graphics(-[^/]*/)?libXvMCNVIDIA\.so.* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/nvidia/libGL(core)?\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/xorg/modules/glesx\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/(local/)?.*\.so(\.[^/]*)*		--	gen_context(system_u:object_r:lib_t,s0)
+/usr/(local/)?lib(64)?/wine/.+\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(local/)?lib(64)?/(sse2/)?libfame-.*\.so.*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/NX/lib/libXcomp\.so.*		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/NX/lib/libjpeg\.so.* 		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/X11R6/lib/libXvMCNVIDIA\.so.* 	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/lib(64)?/xorg/modules/drivers/fglrx_drv\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/xorg/modules/drivers/nvidia_drv\.o -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/xorg/modules/extensions/nvidia(-[^/]*)?/libglx\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/xorg/modules/extensions/libglx\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/x11R6/lib/modules/extensions/libglx\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+ifdef(`distro_debian',`
+/usr/lib32				-l	gen_context(system_u:object_r:lib_t,s0)
+')
+
+ifdef(`distro_gentoo',`
+/usr/lib				-l	gen_context(system_u:object_r:lib_t,s0)
+')
+
+ifdef(`distro_redhat',`
+/usr/share/rhn/rhn_applet/eggtrayiconmodule\.so -- gen_context(system_u:object_r:lib_t,s0)
+
+# The following are libraries with text relocations in need of execmod permissions
+# Some of them should be fixed and removed from this list
+
+# Fedora Core packages: gstreamer-plugins, compat-libstdc++, Glide3, libdv
+# 	HelixPlayer, SDL, xorg-x11, xorg-x11-libs, Hermes, valgrind, openoffice.org-libs, httpd - php
+HOME_DIR/.*/plugins/nppdf\.so.* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/allegro/(.*/)?alleg-vga\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/firefox-[^/]*/extensions(/.*)?/libqfaservices.so -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/firefox-[^/]*/plugins/nppdf.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/firefox/plugins/libractrl\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/libFLAC\.so.*			--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/libfglrx_gamma\.so.* 		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/mozilla/plugins/nppdf\.so 	-- 	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/mozilla/plugins/libvlcplugin\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/nx/libXcomp\.so.*		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/nx/libjpeg\.so.* 		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/VBoxVMM\.so			--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib64/mozilla/plugins/libvlcplugin\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/lib(64)?/libstdc\+\+\.so\.2\.7\.2\.8 --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libg\+\+\.so\.2\.7\.2\.8	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libgpac\.so.* 		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libglide3\.so.* 		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libglide3-v[0-9]*\.so.* 	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/helix/plugins/[^/]*\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/helix/codecs/[^/]*\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/X11R6/lib/libfglrx_gamma\.so.* 	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libHermes\.so.*		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/valgrind/hp2ps		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/valgrind/stage2		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/valgrind/vg.*\.so		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/.*/program/libicudata\.so.* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/.*/program/libsts645li\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/.*/program/libvclplug_gen645li\.so -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/.*/program/libwrp645li\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/.*/program/libswd680li\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/.*/program/librecentfile\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/.*/program/libsvx680li\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/.*/program/libcomphelp4gcc3\.so -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/.*/program/libsoffice\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(.*/)?pcsc/drivers(/.*)?/lib(cm2020|cm4000|SCR24x)\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+# Fedora Extras packages: ladspa, imlib2, ocaml
+/usr/lib(64)?/ladspa/analogue_osc_1416\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/bandpass_a_iir_1893\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/bandpass_iir_1892\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/butterworth_1902\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/fm_osc_1415\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/gsm_1215\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/gverb_1216\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/hermes_filter_1200\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/highpass_iir_1890\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/lowpass_iir_1891\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/notch_iir_1894\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/pitch_scale_1193\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/pitch_scale_1194\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/sc1_1425\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/sc2_1426\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/sc3_1427\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/sc4_1882\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ladspa/se4_1883\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/sane/libsane-epkowa\.so.* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/ocaml/stublibs/dllnums\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+# Livna.org packages: xmms-mp3, ffmpeg, xvidcore, xine-lib, gsm, lame
+/usr/lib(64)?.*/libmpg123\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/local(/.*)?/libmpg123\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/codecs/drv[1-9c]\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/local/lib/codecs/drv[1-9c]\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+HOME_DIR/.*/plugins/nppdf\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+HOME_DIR/.mozilla/plugins/nprhapengine\.so.* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/.*/nprhapengine\.so.*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/local/(.*/)?nprhapengine\.so.*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+# Jai, Sun Microsystems (Jpackage SPRM)
+/usr/lib(64)?/libmlib_jai\.so		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libdivxdecore\.so\.0	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/libdivxencore\.so\.0	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/lib(64)?/libdvdcss\.so.*		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/lib(64)?/python2.4/site-packages/M2Crypto/__m2crypto\.so -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+# vmware
+/usr/lib(64)?/vmware/lib(/.*)?/libgdk-x11-.*\.so.* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/vmware/lib(/.*)?/HConfig\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/vmware/(.*/)?VmPerl\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/vmware/lib(/.*)?/libvmware-gksu.*\.so.* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/lib(64)?/(virtualbox(-ose)?/)?(components/)?VBox.*\.so -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/virtualbox/.*\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+# Java, Sun Microsystems (JPackage SRPM)
+/usr/(.*/)?jre.*/.*\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/local/(.*/)?jre.*/.*\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib(64)?/(.*/)?jre.*/.*\.so(\.[^/]*)* --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/(local/)?Adobe/(.*/)?intellinux/nppdf\.so -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(local/)?Adobe/(.*/)?intellinux/sidecars/* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/(local/)?acroread/(.*/)?intellinux/nppdf\.so -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(local/)?Adobe/(.*/)?lib/[^/]*\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(local/)?acroread/(.*/)?lib/[^/]*\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(local/)?Adobe/.*\.api		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(local/)?lib/xchat/plugins/systray\.so --	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(local/)?matlab.*/bin/glnx86/libmwlapack\.so -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(local/)?matlab.*/bin/glnx86/(libmw(lapack|mathutil|services)|lapack|libmkl)\.so -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/(local/)?matlab.*/sys/os/glnx86/libtermcap\.so -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/(.*/)?intellinux/SPPlugins/ADMPlugin\.apl -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+
+/usr/lib/acroread/(.*/)?sidecars/*	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/acroread/(.*/)?nppdf\.so	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/acroread/(.*/)?lib/[^/]*\.so(\.[^/]*)* -- gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/acroread/.+\.api		--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/acroread/(.*/)?ADMPlugin\.apl	--	gen_context(system_u:object_r:textrel_shlib_t,s0)
+/usr/lib/.*/program(/.*)?\.so			gen_context(system_u:object_r:lib_t,s0)
+/usr/lib64/.*/program(/.*)?\.so			gen_context(system_u:object_r:lib_t,s0)
+') dnl end distro_redhat
+
+#
+# /var
+#
+/var/cache/ldconfig(/.*)?			gen_context(system_u:object_r:ldconfig_cache_t,s0)
+
+/var/ftp/lib(64)?(/.*)?				gen_context(system_u:object_r:lib_t,s0)
+/var/ftp/lib(64)?/ld[^/]*\.so(\.[^/]*)*	--	gen_context(system_u:object_r:ld_so_t,s0)
+
+/var/lib/spamassassin/compiled/.*\.so.*	--	gen_context(system_u:object_r:lib_t,s0)
+
+/var/mailman/pythonlib(/.*)?/.+\.so(\..*)? --	gen_context(system_u:object_r:lib_t,s0)
+
+ifdef(`distro_suse',`
+/var/lib/samba/bin/.+\.so(\.[^/]*)*	-l	gen_context(system_u:object_r:lib_t,s0)
+')
+
+/var/spool/postfix/lib(64)?(/.*)? 		gen_context(system_u:object_r:lib_t,s0)
+/var/spool/postfix/usr(/.*)?			gen_context(system_u:object_r:lib_t,s0)
+/var/spool/postfix/lib(64)?/ld.*\.so.*	--	gen_context(system_u:object_r:ld_so_t,s0)
