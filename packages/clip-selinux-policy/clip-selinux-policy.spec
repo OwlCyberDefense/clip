@@ -1,24 +1,4 @@
-Name:   %{pkgname}
-Version: %{version}
-Release: %{release}
-Summary: CLIP SELinux Policy
-Requires: kernel
-
-License: GPL or BSD
-Group: System Environment/Base
-
-BuildRoot: %{_tmppath}/%{name}-root
-BuildRequires: make bash python gawk checkpolicy >= %{CHECKPOLICYVER} m4 policycoreutils-python >= %{POLICYCOREUTILSVER} bzip2 
-Requires(pre): policycoreutils >= %{POLICYCOREUTILSVER} libsemanage >= 2.0.14-3
-Requires(post): /usr/bin/bunzip2 /bin/mktemp /bin/awk
-Requires: checkpolicy >= %{CHECKPOLICYVER} m4 
-
-Source0: %{pkgname}-%{version}.tgz
-Patch0: %(pkgname}.patch
-
-==
-
-%define distro clip
+%define distro redhat 
 %define polyinstatiate n
 %define monolithic n
 %if %{?BUILD_TARGETED:0}%{!?BUILD_TARGETED:1}
@@ -31,29 +11,15 @@ Patch0: %(pkgname}.patch
 %define libsepolver 2.0.41-1
 %define POLICYCOREUTILSVER 2.0.78-1
 %define CHECKPOLICYVER 2.0.21-1
+Name:   %{pkgname}
+Version: %{version}
+Release: %{release}
 Summary: Certifiable Linux Integration Platform Policy configuration
-Name: clip-selinux-policy
 Version: 4.0.0
 Release: 0%{?dist}
 License: GPLv2+
 Group: System Environment/Base
-Source: refpolicy-2.20110726.tar.bz2
-Source1: modules-clip.conf
-Source2: booleans-clip.conf
-Source3: Makefile.devel
-Source4: setrans-clip.conf
-Source5: modules-mls.conf
-Source6: booleans-mls.conf
-Source8: setrans-mls.conf
-Source9: oscap.te
-Source10: oscap.if
-Source11: oscap.fc
-Source13: policygentool
-Source14: securetty_types-clip
-Source15: securetty_types-mls
-Source20: customizable_types
-Source22: users-mls
-Source23: users-clip
+Source: %{pkgname}-%{version}.tar.bz2
 
 Url: http://oss.tresys.com/repos/refpolicy/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -102,9 +68,6 @@ fi
 %define makeCmds() \
 make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=n DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 bare \
 make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=n DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024  conf \
-cp -f selinux_config/modules-%1.conf  ./policy/modules.conf \
-cp -f selinux_config/booleans-%1.conf ./policy/booleans.conf \
-cp -f selinux_config/users-%1 ./policy/users \
 
 %define installCmds() \
 make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=n DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 base.pp \
@@ -122,9 +85,7 @@ touch %{buildroot}%{_sysconfdir}/selinux/%1/seusers \
 touch %{buildroot}%{_sysconfdir}/selinux/%1/policy/policy.%{POLICYVER} \
 touch %{buildroot}%{_sysconfdir}/selinux/%1/contexts/files/file_contexts \
 touch %{buildroot}%{_sysconfdir}/selinux/%1/contexts/files/file_contexts.homedirs \
-install -m0644 selinux_config/securetty_types-%1 %{buildroot}%{_sysconfdir}/selinux/%1/contexts/securetty_types \
-install -m0644 selinux_config/setrans-%1.conf %{buildroot}%{_sysconfdir}/selinux/%1/setrans.conf \
-install -m0644 selinux_config/customizable_types %{buildroot}%{_sysconfdir}/selinux/%1/contexts/customizable_types \
+install -m0644 config/setrans.conf %{buildroot}%{_sysconfdir}/selinux/%1/setrans.conf \
 bzip2 %{buildroot}/%{_usr}/share/selinux/%1/*.pp \
 awk '$1 !~ "/^#/" && $2 == "=" && $3 == "module" { printf "%%s.pp.bz2 ", $1 }' ./policy/modules.conf > %{buildroot}/%{_usr}/share/selinux/%1/modules.lst
 %nil
@@ -196,14 +157,9 @@ Certifiable Linux Integration Platform SELinux Reference Policy - modular.
 %build
 
 %prep 
-%setup -n refpolicy -q
-cp %{SOURCE9} %{SOURCE10} %{SOURCE11} policy/modules/apps
+%setup -q
 
 %install
-mkdir selinux_config
-for i in %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE8} %{SOURCE13} %{SOURCE14} %{SOURCE15} %{SOURCE20} %{SOURCE22} %{SOURCE23};do
- cp $i selinux_config
-done
 # Build clip policy
 %{__rm} -fR %{buildroot}
 mkdir -p %{buildroot}%{_mandir}
@@ -234,13 +190,11 @@ make UNK_PERMS=allow NAME=clip TYPE=mcs DISTRO=%{distro} UBAC=n DIRECT_INITRC=n 
 mkdir %{buildroot}%{_usr}/share/selinux/devel/
 mkdir %{buildroot}%{_usr}/share/selinux/packages/
 mv %{buildroot}%{_usr}/share/selinux/clip/include %{buildroot}%{_usr}/share/selinux/devel/include
-install -m 755 selinux_config/policygentool %{buildroot}%{_usr}/share/selinux/devel/
-install -m 644 selinux_config/Makefile.devel %{buildroot}%{_usr}/share/selinux/devel/Makefile
+install -m 644 config/Makefile.devel %{buildroot}%{_usr}/share/selinux/devel/Makefile
 install -m 644 doc/example.* %{buildroot}%{_usr}/share/selinux/devel/
 install -m 644 doc/policy.* %{buildroot}%{_usr}/share/selinux/devel/
 echo  "xdg-open file:///usr/share/doc/clip-selinux-policy-%{version}/html/index.html"> %{buildroot}%{_usr}/share/selinux/devel/policyhelp
 chmod +x %{buildroot}%{_usr}/share/selinux/devel/policyhelp
-rm -rf selinux_config
 %clean
 %{__rm} -fR %{buildroot}
 

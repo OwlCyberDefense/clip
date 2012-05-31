@@ -1,30 +1,30 @@
-# Copyright (C) 2011 Tresys Technology, LLC
+# Copyright (C) 2012 Tresys Technology, LLC
 #
 # Authors: Spencer Shimko <sshimko@tresys.com>
 #
 
 # The name of the package
-PKGNAME := example
+PKGNAME := clip-selinux-policy
 
 # This is the version number of the RPM that will be
 # generated.  Typically you bump this for delivery.
-VERSION := 1
+VERSION := 6.2.0
 
 # bump this if creating multiple releases from the same
 # version (think about this... why are you doing this?)
 RELEASE := 1
 
 # The name of the Vendor
-VENDOR := Example Vendor
+VENDOR := Tresys Technology, LLC
 
 # The name of the Packager
-PACKAGER ?= Example Packager
+PACKAGER ?= Tresys Technology, LLC
 
 # snag the architecture, hard code an arch if cross-compiling or going noarch
 ARCH ?= $(shell uname -i)
 
 # the filename of the tarball
-TARBALL = $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION).tgz
+TARBALL = $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION).tar.bz2
 
 # spec file name
 RPM_SPEC := $(PKGNAME).spec
@@ -70,7 +70,7 @@ $(PKGNAME)-srpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 
 $(TARBALL): $(TAR_DEPS)
 	@echo "Building $(PKGNAME) source tarball..."
-	tar -czf $@ $(PKGNAME)/
+	tar -cjf $@ $(PKGNAME)/
 
 $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 	@echo "Building $(PKGNAME) RPM..."
