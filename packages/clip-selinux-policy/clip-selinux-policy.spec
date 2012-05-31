@@ -15,8 +15,6 @@ Name:   %{pkgname}
 Version: %{version}
 Release: %{release}
 Summary: Certifiable Linux Integration Platform Policy configuration
-Version: 4.0.0
-Release: 0%{?dist}
 License: GPLv2+
 Group: System Environment/Base
 Source: %{pkgname}-%{version}.tar.bz2
@@ -42,7 +40,6 @@ Certifiable Linux Integration Platform SELinux Base package
 %ghost %{_sysconfdir}/sysconfig/selinux
 %{_usr}/share/selinux/devel/include/*
 %{_usr}/share/selinux/devel/Makefile
-%{_usr}/share/selinux/devel/policygentool
 %{_usr}/share/selinux/devel/example.*
 %{_usr}/share/selinux/devel/policy.*
 
@@ -51,6 +48,7 @@ Summary: Certifiable Linux Integration Platform SELinux policy documentation
 Group: System Environment/Base
 Requires(pre): clip-selinux-policy = %{version}-%{release}
 Requires: /usr/bin/xdg-open
+BuildRequires: policycoreutils-python m4 policycoreutils python make gcc checkpolicy >= %{CHECKPOL_VERSION}
 
 %description doc
 Certifiable Linux Integration Platform SELinux policy documentation package
@@ -157,7 +155,7 @@ Certifiable Linux Integration Platform SELinux Reference Policy - modular.
 %build
 
 %prep 
-%setup -q
+%setup -n %{pkgname} -q
 
 %install
 # Build clip policy

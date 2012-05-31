@@ -15,7 +15,7 @@ ARCH := $(shell uname -i)
 
 # List of all RPM packages to build, must be in $(PKG_DIR).
 # NOTE: The Makefile for each package must define VERSION, RELEASE, and ARCH.
-PACKAGES := clip-puppet
+PACKAGES := clip-puppet clip-selinux-policy
 
 # This variable can be leveraged by sub-makes (eg in the packages/foo/Makefile) if files at this top-level should trigger a rebuild
 ADDTL_DEPS := $(CURDIR)/CONFIG_REPOS $(CURDIR)/CONFIG_BUILD
