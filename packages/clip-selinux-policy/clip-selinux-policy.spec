@@ -239,7 +239,7 @@ exit 0
 %if %{BUILD_TARGETED}
 %package clip
 Summary: Certifiable Linux Integration Platform SELinux clip base policy
-Provides: clip-selinux-policy-base = %{version}-%{release}
+Provides: selinux-policy-base = %{version}-%{release}
 Group: System Environment/Base
 Requires(pre): policycoreutils >= %{POLICYCOREUTILSVER}
 Requires(pre): coreutils
@@ -277,7 +277,7 @@ exit 0
 %package mls 
 Summary: Certifiable Linux Integration Platform SELinux mls base policy
 Group: System Environment/Base
-Provides: clip-selinux-policy-base = %{version}-%{release}
+Provides: selinux-policy-base = %{version}-%{release}
 Requires: policycoreutils-newrole >= %{POLICYCOREUTILSVER} setransd
 Requires(pre): policycoreutils >= %{POLICYCOREUTILSVER}
 Requires(pre): coreutils
