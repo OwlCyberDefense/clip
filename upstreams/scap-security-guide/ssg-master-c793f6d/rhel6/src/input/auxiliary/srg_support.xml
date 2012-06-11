@@ -1,0 +1,35 @@
+<Group id="srg_support" hidden="true">
+<title>Documentation to Support DISA OS SRG Mapping</title>
+<description>These groups exist to document how the Red Hat Enterprise Linux
+product meets (or does not meet) requirements listed in the DISA OS SRG, for
+those cases where Groups or Rules elsewhere in scap-security-guide do
+not clearly relate.
+</description>
+
+<Group id="met_inherently">
+<title>Product Meets this Requirement</title>
+<description>
+Red Hat Enterprise Linux meets this requirement by design.
+<!-- We could include discussion of Common Criteria Testing if so desired here. -->
+</description>
+<ref disa="131" />
+</Group> <!-- end met_inherently -->
+
+<Group id="unmet_impractical_guidance">
+<title>Guidance Does Not Meet this Requirement Due to Impracticality or Scope</title>
+<description>
+The guidance does not meet this requirement.
+The requirement is impractical or out of scope.
+</description>
+<ref disa="354,1094" />
+</Group> <!-- end unmet_impractical_guidance -->
+
+<Group id="unmet_impractical_product">
+<title>Product Does Not Meet this Requirement Due to Impracticality or Scope</title>
+<description>
+The product does not meet this requirement.
+The requirement is impractical or out of scope.
+</description>
+</Group> <!-- end unmet_impractical_product -->
+
+</Group>
