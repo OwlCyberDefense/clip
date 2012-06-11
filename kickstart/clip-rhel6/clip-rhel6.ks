@@ -20,6 +20,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# FIXME: This *must* be changed by the end-user prior to generating a build!!
 rootpw neutronbass
 
 lang en_US.UTF-8
@@ -30,7 +31,7 @@ cdrom
 install
 timezone --utc Etc/GMT
 auth --useshadow --passalgo=sha512
-network --hostname=clip --noipv6 --bootproto=static --ip=172.16.32.5 --netmask=255.255.255.0 --onboot=yes
+#network --hostname=clip --noipv6 --bootproto=static --ip=172.16.32.5 --netmask=255.255.255.0 --onboot=yes
 
 selinux --enforcing
 firewall --enabled
@@ -63,8 +64,8 @@ logvol /var/tmp       --vgname=vg00 --name=vtmp  --fstype=ext4 --size 100  --max
 clip-selinux-policy
 clip-selinux-policy-clip
 clip-selinux-policy-mls
-scap-security-guide
-aqueduct-ssg-bash
+#scap-security-guide
+#aqueduct-ssg-bash
 
 acl
 aide
@@ -107,7 +108,7 @@ rootfiles
 rpm
 rsyslog
 ruby
-selinux-policy-targeted
+-selinux-policy-targeted
 setup
 setools-console
 shadow-utils
@@ -145,6 +146,7 @@ yum
 -nano
 -ntsysv
 -pinfo
+-postfix
 -prelink
 -pm-utils
 -redhat-indexhtml
@@ -211,17 +213,7 @@ semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  root
 semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  staff_u
 semanage user -m                      -Rsystem_r  system_u
 
-rpm -e selinux-policy selinux-policy-targeted
-
-mount /dev/sr0 /mnt
-cd /mnt/Packages
-rpm -hiv clip-selinux-policy-6* clip-selinux-policy-clip-6*
-cd /
-umount /mnt
-
-sed -i -e 's/disabled/permissive/' -e 's/targeted/clip/' /etc/selinux/config
-
-puppet -d -l /root/install.puppet.log /etc/puppet/manifests/site.pp
+#puppet -d -l /root/install.puppet.log /etc/puppet/manifests/site.pp
 
 # iptables setup
 cat >/etc/sysconfig/iptables <<EOF
@@ -243,29 +235,29 @@ chkconfig --add ip6tables
 chkconfig --level 0123456 netfs off
 
 # scap-security-guide setup
-cat > /root/oscap.sh << EOF
+#cat > /root/oscap.sh << EOF
 #!/bin/bash
-oscap xccdf eval --profile server --results results.xml --report report.html /usr/local/scap-security-guide/content/rhel6-xccdf-scap-security-guide.xml
-EOF
-chmod u+x /root/oscap.sh
+#oscap xccdf eval --profile server --results results.xml --report report.html /usr/local/scap-security-guide/content/rhel6-xccdf-scap-security-guide.xml
+#EOF
+#chmod u+x /root/oscap.sh
 
-cat > /root/oscap2.sh << EOF
+#cat > /root/oscap2.sh << EOF
 #!/bin/bash
-oscap xccdf eval --profile server /usr/local/scap-security-guide/content/rhel6-xccdf-scap-security-guide.xml | sed -e "s/^M//" | grep "^R" | awk '
-/Rule ID:/, /Result:/ { printf "%s ", \$0 }
-/Result:/ { print "" }' | sed -e "s/Rule ID:[[:space:]]\+//" -e "s/ Result:[[:space:]]\+/: /"
-EOF
-chmod u+x /root/oscap2.sh
+#oscap xccdf eval --profile server /usr/local/scap-security-guide/content/rhel6-xccdf-scap-security-guide.xml | sed -e "s/^M//" | grep "^R" | awk '
+#/Rule ID:/, /Result:/ { printf "%s ", \$0 }
+#/Result:/ { print "" }' | sed -e "s/Rule ID:[[:space:]]\+//" -e "s/ Result:[[:space:]]\+/: /"
+#EOF
+#chmod u+x /root/oscap2.sh
 
 # aqueduct remediation scripts
-sysctl -p /etc/sysctl.conf
-SCRIPTDIR=/usr/local/bin/aqueduct-ssg-bash
-SCRIPTZ=$( ls $SCRIPTDIR/*.sh )
-for script in $SCRIPTZ; do
-   [ "$script" == "$SCRIPTDIR/selinux_policytype_targeted.sh" ] && continue
-   echo $script
-   $script
-done
+#sysctl -p /etc/sysctl.conf
+#SCRIPTDIR=/usr/local/bin/aqueduct-ssg-bash
+#SCRIPTZ=$( ls $SCRIPTDIR/*.sh )
+#for script in $SCRIPTZ; do
+#   [ "$script" == "$SCRIPTDIR/selinux_policytype_targeted.sh" ] && continue
+#   echo $script
+#   $script
+#done
 
 # relabel with refpol on reboot
 touch /.autorelabel
