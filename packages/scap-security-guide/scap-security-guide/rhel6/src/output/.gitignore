@@ -1,0 +1,10 @@
+# files not to track in git
+*.xml
+*.html
+*.pdf
+*.ini
+*.spec
+*.tar
+*.gz
+scap-security-guide-*/
+RPMS/
