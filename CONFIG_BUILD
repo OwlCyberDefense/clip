@@ -3,6 +3,8 @@
 # Authors: Spencer Shimko <sshimko@tresys.com>
 #
 
+# WARNING: This file is imported by GNU make, thus avoid trailing whitespace.
+
 VERSION := 4.0
 RELEASE := 0
 
@@ -15,7 +17,7 @@ ARCH := $(shell uname -i)
 
 # List of all RPM packages to build, must be in $(PKG_DIR).
 # NOTE: The Makefile for each package must define VERSION, RELEASE, and ARCH.
-PACKAGES := clip-puppet clip-selinux-policy
+PACKAGES := clip-puppet clip-selinux-policy aqueduct scap-security-guide
 
 # This variable can be leveraged by sub-makes (eg in the packages/foo/Makefile) if files at this top-level should trigger a rebuild
 ADDTL_DEPS := $(CURDIR)/CONFIG_REPOS $(CURDIR)/CONFIG_BUILD
