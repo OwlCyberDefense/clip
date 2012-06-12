@@ -1,8 +1,13 @@
 To add a package to the generated image:
 1. Copy the package to the appropriate repo directory (eg, /mnt/repos/custom-yum-repo).
 2. Run "createrepo -d <repodir>".
-3. Add the package filename to the pkglist.<reponame> file in conf/.
-4. Run "make bare-repos".
-5. Run "make create-repos".
-5. Build your image.
+3. Add the repo to CONFIG_REPOS
+4a. Add the package filename to the pkglist.<reponame> file in conf/.
+or
+4b. Run "make conf/pkglist.<reponame>"
+5. Run "make bare-repos".
+6. Run "make create-repos".
+7. Add the packages you want to include in the ISO to the appropriate
+kickstart.
+7. Build your image.
 
