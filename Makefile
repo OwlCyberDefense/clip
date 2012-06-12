@@ -280,6 +280,9 @@ bare: bare-repos clean
 
 FORCE:
 
+# Unfortunately mock isn't exactly "parallel" friendly which sucks since we could roll a bunch of packages in parallel.
+.NOTPARALLEL:
+
 .PHONY: all all-vm create-repos $(setup_all_repos) srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE
 
 help:
