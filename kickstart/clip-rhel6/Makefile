@@ -8,10 +8,6 @@ NAME := clip-rhel$(RHEL_VER)
 KS := $(NAME).ks
 VER := 2
 
-# This is the version number of the RPM that will be
-# generated.  Typically you bump this for delivery.
-VERSION ?= 0.1
-
 # bump this if creating multiple releases from the same
 # version (think about this... why are you doing this?)
 RELEASE ?= 1
@@ -51,6 +47,7 @@ installation-iso: $(DEPS) $(ADDTL_DEPS)
 	$(VERBOSE)cp --force $(NAME).ks $(BUILD_DIR)/$(KS)
 	$(VERBOSE)sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
 	@echo "Gathering things with pungi..."
+	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
 	sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(BUILD_DIR)/$(KS)"
 	sed -e 's/^repo/#repo/' $(BUILD_DIR)/$(KS) > $(PUNGI_OS_DIR)/$(KS)
 	@echo "Fixing the boot menu..."
@@ -58,7 +55,8 @@ installation-iso: $(DEPS) $(ADDTL_DEPS)
 	       -e "s/append initrd=initrd.img$$/append initrd=initrd.img ks=cdrom:$(KS)/" \
 	       -e "s/or upgrade an existing system/$(NAME)/" \
 	$(PUNGI_OS_DIR)/isolinux/isolinux.cfg
-	$(VERBOSE)echo "Building ISO with pungi..."
+	@echo "Building ISO with pungi..."
+	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
 	sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(BUILD_DIR)/$(KS)
 	$(VERBOSE)sudo mv --force $(PUNGI_ISO_DIR)/$(NAME)-$(VER)-x86_64.iso $(OUTPUT_DIR)/
 
@@ -70,7 +68,7 @@ livecd: $(DEPS) $(ADDTL_DEPS)
 	@cp --force $(LIVECD_CREATOR) $(BUILD_DIR)/livecd-creator
 	@sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
 	@sed -i -e 's;CDLABEL;live:CDLABEL;g' $(BUILD_DIR)/livecd-creator
-	@echo "livecd creator needs root permissions - please enter your sudo password"
+	@echo "Live CD Creator needs root permissions - please enter your sudo password if prompted."
 	sudo $(BUILD_DIR)/livecd-creator  $(LIVECD_ARGS)
 	@mv --force $(NAME).iso $(OUTPUT_DIR)/
 
