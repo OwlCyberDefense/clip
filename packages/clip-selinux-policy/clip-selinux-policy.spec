@@ -64,8 +64,8 @@ if /usr/sbin/selinuxenabled; then
 fi
 
 %define makeCmds() \
-make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=n DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 bare \
-make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=n DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024  conf \
+#make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=n DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 bare \
+#make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=n DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024  conf \
 
 %define installCmds() \
 make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=n DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 base.pp \
@@ -174,13 +174,13 @@ mkdir -p %{buildroot}%{_usr}/share/selinux/{clip,mls,modules}/
 make clean
 %if %{BUILD_TARGETED}
 # Build clip policy
-%makeCmds clip mcs n y allow
+#%makeCmds clip mcs n y allow
 %installCmds clip mcs n y allow
 %endif
 
 %if %{BUILD_MLS}
 # Build mls policy
-%makeCmds mls mls n y deny
+#%makeCmds mls mls n y deny
 %installCmds mls mls n y deny
 %endif
 

@@ -70,6 +70,8 @@ dev_dontaudit_rw_generic_chr_files(mount_t)
 
 domain_use_interactive_fds(mount_t)
 
+dev_read_usbfs(mount_t)
+
 files_search_all(mount_t)
 files_read_etc_files(mount_t)
 files_manage_etc_runtime_files(mount_t)

@@ -547,6 +547,7 @@ selinux_compute_user_contexts(setfiles_t)
 
 term_use_all_ttys(setfiles_t)
 term_use_all_ptys(setfiles_t)
+term_use_generic_ptys(setfiles_t)
 term_use_unallocated_ttys(setfiles_t)
 
 # this is to satisfy the assertion:
