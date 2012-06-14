@@ -31,6 +31,6 @@
 /root/\.Xauth.*         --      gen_context(sysadm_u:object_r:xauth_home_t,s0)
 /root/\.xauth.*         --      gen_context(sysadm_u:object_r:xauth_home_t,s0)
 /root/\.hushlogin   --      gen_context(sysadm_u:object_r:local_login_home_t,s0)
-/root(/.*)?             gen_context(sysadm_u:object_r:admin_home_t,s0)
+/root(/.*)?             gen_context(sysadm_u:object_r:user_home_dir_t,s0)
 /root/\.cert(/.*)?      gen_context(sysadm_u:object_r:home_cert_t,s0)
 /root/\.debug(/.*)?    <<none>>
