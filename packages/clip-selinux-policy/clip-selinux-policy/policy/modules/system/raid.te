@@ -81,7 +81,9 @@ userdom_dontaudit_use_unpriv_user_fds(mdadm_t)
 userdom_dontaudit_search_user_home_content(mdadm_t)
 userdom_dontaudit_use_user_terminals(mdadm_t)
 
-mta_send_mail(mdadm_t)
+optional_policy(`
+	mta_send_mail(mdadm_t)
+')
 
 optional_policy(`
 	gpm_dontaudit_getattr_gpmctl(mdadm_t)
