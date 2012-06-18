@@ -1,0 +1,42 @@
+AUTHOR: Francisco Slavin <fslavin@tresys.com>
+DATE:   6/22/10
+
+
+This is a puppet module that extends the ParsedFile provider to support managing PAM files.  For example, if you want a PAM line that looks like:
+
+	password required pam_cracklib.so retry=3 try_first_pass
+
+in the file:
+	/etc/pam.d/password-auth
+
+The puppetry for that would be:
+
+pam { "pam_cracklib.so":
+    ensure => present,
+    type => "password",
+    control => "required",
+    module_args => ["try_first_pass", "retry=3"],
+    args_membership => minimum,  ## can be minimum or inclusive
+    target => "/etc/pam.d/password-auth"  ## defaults to /etc/pam.d/system-auth
+}
+
+The 'type' is the first field in the PAM record.
+The 'control' is the second field in the PAM record.
+The namevar is the third field in the PAM record.
+	Note: The namevar is the top line's quoted field, i.e. "pam_cracklib.so"
+The 'module_args' is an array of each argument after the third field in the PAM record.
+The 'args_membership' tells how to handle the 'module_args'
+	Set 'minimum' to add those arguments to whichever were already present
+	Set 'inclusive' to throw out any arguments which were already present
+The 'target' is the file to manage.  The default is /etc/pam.d/system-auth
+
+Note that any lines in the managed file which begin with '#' are treated as comment lines and retained as-is.
+
+
+Plans for expanding this module include adding an 'exclusive' option to the args_membership field, and adding greater sophistication for module_args handling.
+
+For more on the behind-the-scenes handling, see implementation details in for /usr/lib/ruby/site_ruby/1.8/puppet/ (or your equivalent site_ruby version directory).  A `locate puppet/application` should find it for you.  The relevent files from that directory are:
+
+	provider/parsedfile.rb
+	util/fileparsing.rb
+

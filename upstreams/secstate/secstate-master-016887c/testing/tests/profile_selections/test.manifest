@@ -1,0 +1,14 @@
+[requires]
+usage
+
+[test]
+import
+
+list_default_selections
+select_profile_minlen-deselected
+list_minlen-deselected
+select_profile_passgroup-deselected
+list_passgroup-deselected
+
+[verify]
+

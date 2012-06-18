@@ -1,0 +1,48 @@
+<oval_definitions xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix unix-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#linux linux-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#independent independent-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5 oval-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <generator>
+        <product_name xmlns="http://oval.mitre.org/XMLSchema/oval-common-5">squashed circle</product_name>
+        <product_version xmlns="http://oval.mitre.org/XMLSchema/oval-common-5">0.5</product_version>
+        <schema_version xmlns="http://oval.mitre.org/XMLSchema/oval-common-5">5.6</schema_version>
+        <timestamp xmlns="http://oval.mitre.org/XMLSchema/oval-common-5">2010-09-24T12:09:56</timestamp>
+    </generator>
+    <definitions>
+        <definition class="compliance" id="oval:com.tresys.oval.rhel:def:1000" version="1">
+            <metadata>
+                <title>One Zero UID user</title>
+                <description>Only the root user should have UID equal to zero</description>
+                <reference ref_id="GEN000880" source="UNIX STIG" />
+                <affected family="unix">
+                    <platform>RedHat Enterprise Linux 5</platform>
+                </affected>
+            </metadata>
+            <criteria operator="AND">
+                <criterion test_ref="oval:com.tresys.oval.rhel:tst:1001" />
+            </criteria>
+        </definition>
+    </definitions>
+    <tests>
+        <password_test check="all" check_existence="only_one_exists" comment="Only the root user should have a UID of zero" id="oval:com.tresys.oval.rhel:tst:1001" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+            <object object_ref="oval:com.tresys.oval.rhel:obj:1001" />
+            <state state_ref="oval:com.tresys.oval.rhel:ste:1001" />
+        </password_test>
+    </tests>
+    <objects>
+        <password_object id="oval:com.tresys.oval.rhel:obj:1001" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+            <set xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+                <object_reference>oval:com.tresys.oval.rhel:obj:1002</object_reference>
+                <filter>oval:com.tresys.oval.rhel:ste:1003</filter>
+            </set>
+        </password_object>
+        <password_object id="oval:com.tresys.oval.rhel:obj:1002" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+            <username operation="pattern match">.+</username>
+        </password_object>
+    </objects>
+    <states>
+        <password_state id="oval:com.tresys.oval.rhel:ste:1001" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+            <username>root</username>
+        </password_state>
+        <password_state id="oval:com.tresys.oval.rhel:ste:1003" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+            <user_id operation="greater than or equal" datatype="int">1</user_id>
+        </password_state>
+    </states>
+</oval_definitions>

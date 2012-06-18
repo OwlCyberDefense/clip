@@ -1,0 +1,15 @@
+[requires]
+usage
+
+[test]
+change_owner
+change_perms
+import
+audit_fail
+remediate
+audit_pass
+
+[verify]
+test_owner
+test_group
+test_mode

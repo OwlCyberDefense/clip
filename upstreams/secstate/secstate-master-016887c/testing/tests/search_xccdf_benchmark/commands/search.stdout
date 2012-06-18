@@ -1,0 +1,102 @@
+In benchmark password-req:
+	pass-reqs:
+		Title:  'Linux Password Requirement Rules'
+		Description:  
+            Requirements relating to the length, content, age and reuse of passwords on a Linux system.
+        
+
+	password-change-time:
+		Title:  'GEN0000540 - Password Change Time'
+		Description:  
+                Before changing a password, it is required to wait 1 or more days after changing the password.
+            
+
+	passwd-accts-password:
+		Title:  'GEN0000560 - Passwd Accounts Have Passwords'
+		Description:  
+                Accounts existing within the /etc/passwd file must have a password.
+            
+
+	pass-min-length:
+		Title:  'GEN0000580 - Password Minimum Length'
+		Description:  
+                A password minimum length must be specified.
+            
+
+	pam-pass-min-length:
+		Title:  'GEN0000580 - (PAM) Password Minimum Length'
+		Description:  
+                Utilizing PAM, a password minimum length must be specified.
+            
+
+	pass-min-alpha-upper:
+		Title:  'GEN0000600 - (PAM) Password Minimum Uppercase Characters'
+		Description:  
+                Utilizing PAM, a password must contain a minimum number of uppercause characters.
+            
+
+	pass-min-num:
+		Title:  'GEN0000620 - (PAM) Password Minimum Numerics'
+		Description:  
+                Utilizing PAM, a password must contain a minimum number of numeric characters.
+            
+
+	pass-min-special:
+		Title:  'GEN0000640 - (PAM) Password Minimum Special Characters'
+		Description:  
+                Utilizing PAM, a password must contain a minimum number of special characters.
+            
+
+	pass-no-repeat:
+		Title:  'GEN0000680 - (PAM) Passwords Cannot Repeat Characters'
+		Description:  
+                Utilizing PAM, a password cannot repeat characters.
+            
+
+	login-defs-pass-max-age:
+		Title:  'GEN0000700-720 - (Login.defs) Passwords Are Changed Every N Days'
+		Description:  
+                Verify within the /etc/login.defs file that the variable PASS_MAX_DAYS is set and less than or equal to the specified value.
+            
+
+	pass-max-age:
+		Title:  'GEN0000700-720 - Passwords Are Changed Every N Days'
+		Description:  
+                Verify within the /etc/shadow file that all users with passwords are required to change their password in a specified number of days.
+            
+
+	pass-min-reuse:
+		Title:  'GEN0000800 - (PAM) Passwords Cannot Be Reused Within N Days'
+		Description:  
+                Utilizing PAM, a password cannot be reused within a specified N days or more.
+            
+
+In benchmark PassComp:
+	PassComp-G-2-2:
+		Title:  'Password'
+		Description:  Group containing all groups and rules pertaining to passwords.
+
+	PassComp-G-2-3:
+		Title:  'Password Complexity'
+		Description:  Group pertaining specifically to password complexity.
+
+	PassComp-R-2-1:
+		Title:  'Lowercase'
+		Description:  Password contains minimum number of lowercase letters.
+
+	PassComp-R-2-2:
+		Title:  'Min. Length'
+		Description:  Password has a minimum length.
+
+	PassComp-R-2-3:
+		Title:  'Numeric'
+		Description:  Passwords must have minimum amount of numbers.
+
+	PassComp-R-2-4:
+		Title:  'Special'
+		Description:  Password must contain certain number of special characters.
+
+	PassComp-R-2-5:
+		Title:  'Uppercase'
+		Description:  Passwords must contain number of uppercase letters.
+

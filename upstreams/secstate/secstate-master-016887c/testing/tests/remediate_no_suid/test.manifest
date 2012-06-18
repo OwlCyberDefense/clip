@@ -1,0 +1,10 @@
+[requires]
+
+[test]
+import
+deselect_proc_mounts_rule
+audit_fail
+remediate
+audit_pass
+
+[verify]
