@@ -78,6 +78,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/puppet/modules/ifdefined/*
 
 %changelog
+* Mon Jun 18 2012 Spencer Shimko <sshimko@tresys.com> 0.5-git.016887c
+- Pulled into CLIP build system. 
+
 * Mon Sep 13 2010 Marshall Miller <mmiller@tresys.com> 0.4.1-1
 - Updates to man page
 - Updated the human-readable output transform
