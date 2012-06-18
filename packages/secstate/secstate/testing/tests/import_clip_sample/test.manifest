@@ -1,0 +1,8 @@
+[requires]
+clip_puppet_content
+
+[test]
+import
+
+[verify]
+

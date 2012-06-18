@@ -1,0 +1,26 @@
+This is a puppet module for using a variable if it is defined, and otherwise not
+doing anything with the variable.
+
+Example:
+
+file { "/path/to/foo.txt":
+   mode => ifdefined('mode')
+}
+
+This will do nothing if an external nodes tool does not set $mode, and if it is
+set, will use the mode, exactly as specified.
+
+This is a shortcut around this syntax:
+
+file { "/path/to/foo.txt":
+   mode ? { 
+      '' : undef,
+      default : $mode
+   }
+}
+
+This will allow the file to stay as set on the system unless explicitly set,
+in other words.
+
+Michael DeHaan <michael@puppetlabs.com>
+

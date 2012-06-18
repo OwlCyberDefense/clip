@@ -1,0 +1,8 @@
+[requires]
+select_rule
+
+[test]
+audit
+
+[verify]
+
