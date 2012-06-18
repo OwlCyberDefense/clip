@@ -68,6 +68,7 @@ scap-security-guide
 aqueduct
 aqueduct-DISA
 #aqueduct-ssg-bash
+secstate
 
 acl
 aide
