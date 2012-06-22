@@ -1,4 +1,0 @@
-sudo usermod -G mock $USER
-rm -rf repos
-mkdir repos
-mock --rebuild */*src.rpm --resultdir repos
