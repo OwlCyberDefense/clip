@@ -2,12 +2,33 @@
 #
 # Authors: Spencer Shimko <sshimko@tresys.com>
 #
+#
+# Basic instructions:
+#
+# This is the file where you configure yum repos.  The packages found in these
+# yum repos can be referenced from the kickstart files in 
+# ./kickstarts/<name>/<name>.ks.  The packages from the repos below will be 
+# included in generated ISOs.
+#
+# Some basic repos *must* be available for CLIP itself.  They are RHEL/CentOS,
+# EPEL, and RHEL/CentOS Optional repos.
+#
+# Note that for now, these must be local repos.  We plan on adding FTP/HTTP
+# support in the future.  One of the issues we are trying to wrap our heads
+# around is ensuring we still version the packages used when rolling the
+# builds.  To do this with FTP/HTTP we would like to wget the packages when
+# rolling the ISO.  We do not want to just stick URLs into kickstarts
+# because we lose the benefit of rigorously versioning the packages used.
+# Anywho, we're thinking about it, but no timeline yet ;)
 
-# A RHEL repo must be available. Can be a local path or an http/ftp location.
+# A RHEL repo must be available. Must be a local path (we use NFS mounts).
 rhel = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-6/getPackage
-# A EPEL repo must be available. Can be a local path or an http/ftp location.
+
+# An EPEL repo must be available. Must be a local path (we use NFS mounts).
 epel = /mnt/repos/epel-pinned-revisions
-# RHEL optional repo provides some necessary packages.
+
+# An RHEL Optional repo must be available. Must be a local path (we use NFS 
+# mounts).
 opt = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackage
 
 # NOTE: <= RHEL 5 requires BUILDGROUPS repo.  RHEL 6 has the BUILDGROUPS stuff built-in.
