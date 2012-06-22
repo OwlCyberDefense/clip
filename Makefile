@@ -13,6 +13,11 @@ include CONFIG_BUILD
 ######################################################
 # BEGIN MAGIC
 $(info Boot strapping build system...)
+
+# Unfortunately there is a package we need that isn't in RHEL/EPEL/Opt.
+# So we will roll it ourselves inside of mock :)
+HOST_REQD_PKGS := pungi
+
 export ROOT_DIR ?= $(CURDIR)
 export OUTPUT_DIR ?= $(ROOT_DIR)
 export RPM_TMPDIR ?= $(ROOT_DIR)/tmp
@@ -220,6 +225,12 @@ $(foreach REPO,$(strip $(shell cat CONFIG_REPOS|grep -E '^[a-zA-Z].*=.*'|sed -e 
 
 # The following line calls our RPM rule template defined above allowing us to build a proper dependency list.
 $(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
+
+# We need some packages on the build host that aren't available in EPEL, RHEL, Opt.
+# So we will generate them just like we always do.
+HOST_RPMS := $(addprefix $(MY_REPO_DIR)/,$(foreach PKG,$(HOST_REQD_PKGS),$(call RPM_FROM_PKG_NAME,$(strip $(PKG)))))
+SRPMS := $(addprefix $(SRPM_OUTPUT_DIR)/,$(foreach RPM,$(HOST_RPMS),$(call SRPM_FROM_RPM,$(notdir $(RPM)))))
+$(foreach RPM, $(HOST_RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 
 create-repos: $(setup_all_repos)
 
