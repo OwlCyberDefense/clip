@@ -1,0 +1,58 @@
+CLIP targets several use cases.  Each use case interacts and leverages CLIP in different ways.  Please review the use cases below to see where you fall.
+
+===================================================
+1. Developer starting from scratch.
+
+A developer starting from scratch has the opportunity to leverage all of the
+features available in CLIP: 
+- Remediation content (QA'd snapshots from Aqueuduct)
+- Audit content (QA'd XCCDF & OVAL snapshots from SCAP Security Guide)
+- Build system:
+  - mock for rolling RPMs from source.
+  - Pungi for rolling installation ISOs.
+  - Configuration management friendly yum repos and package lists.
+
+This type of developer will want to insert new sources into the
+packages/ directory.  This source will be rolled up into RPMs, placed into yum
+repositories, and can then be included and used in a kickstart ending up in
+the installed system.
+
+===================================================
+2. Developer with existing custom yum repositories but needs help rolling ISOs.
+
+This developer already has packages and yum repositories.  They want to
+leverage the following features:
+- Remediation content (QA'd snapshots from Aqueuduct)
+- Audit content (QA'd XCCDF & OVAL snapshots from SCAP Security Guide)
+- Build system:
+  - Pungi for rolling installation ISOs.
+  - Configuration management friendly yum repos and package lists.
+ 
+The developer uses the CLIP build system to roll ISOs with the remediation
+content, audit content, and their existing custom packages present.  This
+develop will want to start with CONFIG_REPOS and CONFIG_BUILD files in the root
+of the CLIP repo.  They will add an entry to CONFIG_REPOS that points to their to their custom yum repo
+and will move modifying kickstarts and rolling ISOs.
+
+===================================================
+3. A developer who only wants the remediation and audit content.
+
+
+This developer already has packages and yum repositories.  They can already
+roll ISOs.  They only want to use these features: 
+leverage the following features:
+- Remediation content (QA'd snapshots from Aqueuduct)
+- Audit content (QA'd XCCDF & OVAL snapshots from SCAP Security Guide)
+
+NOTE: Tresys recommends moving to the CLIP build system.  This build system
+was developed based on our experiences developing cross-domain solutions.  One
+of the problems we constantly see is the lack of reproducability of builds.
+This build system allows you to roll RPMs in mock eliminating build host
+dependencies.  It allows you to version the packages used to roll an RPM.  It
+manages yum repositories and carries patched versions of ISO generation tools
+to address a number of problems in those tools.  
+
+However, if you still want to just use the remediation and audit content you
+must roll their RPMs.  You should be running "$ make scap-security-guide-rpm"
+and "$ make aqueduct-rpm".  The generated RPMs will end up in repos/my-repo.
+You can then copy the RPMs into your own build environment and roll ISOs.
