@@ -14,9 +14,16 @@ include CONFIG_BUILD
 # BEGIN MAGIC
 $(info Boot strapping build system...)
 
+# NOTE: DO NOT REMOVE THIS CHECK. RUNNING MOCK AS ROOT *WILL* BREAK THINGS.
+ifeq ($(shell id -u),0)
+$(error Never run "make" as root! Try again as an unprivileged user with sudo access)
+endif
+
 # Unfortunately there is a package we need that isn't in RHEL/EPEL/Opt.
 # So we will roll it ourselves inside of mock :)
 HOST_REQD_PKGS := pungi
+
+HOST_RPM_DEPS := createrepo rpm-build createrepo livecd-tools mock
 
 export ROOT_DIR ?= $(CURDIR)
 export OUTPUT_DIR ?= $(ROOT_DIR)
@@ -134,12 +141,12 @@ endef
 define RPM_RULE_template
 $(info Generating rules for rolling package $(1).)
 ifneq ($(DISABLE_MOCK),y)
-$(1):   $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
+$(1): checkrpmdeps  $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)$(MOCK) $(MOCK_ARGS) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
 else
-$(1):   $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
+$(1):   checkrpmdeps $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)OUTPUT_DIR=$(MY_REPO_DIR) $(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $(1))) rpm
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
@@ -147,13 +154,13 @@ endif
 ifeq ($(ENABLE_SIGNING),y)
 	$(RPM) --addsign $(MY_REPO_DIR)/*
 endif
-$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-rpm: $(1)
-$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-nomock-rpm: $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
+$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-rpm: checkrpmdeps $(1)
+$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-nomock-rpm: checkrpmdeps $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)OUTPUT_DIR=$(MY_REPO_DIR) $(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $(1))) rpm
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
-$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-srpm: $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
-$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-clean:
+$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-srpm: checkrpmdeps $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
+$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-clean: checkrpmdeps
 	$(RM) $(1)
 	$(RM) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 endef
@@ -187,7 +194,7 @@ $(eval REPO_LINES := $(REPO_LINES)repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl
 
 $(eval MY_REPO_DIRS += "$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo")
 
-setup-$(REPO_ID)$(RHEL_VER)-repo: $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated $(CONFIG_BUILD_DEPS)
+setup-$(REPO_ID)$(RHEL_VER)-repo: checkrpmdeps $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated $(CONFIG_BUILD_DEPS)
 
 # This is the key target for managing yum repos.  If the pkg list for the repo
 # is more recent then our private repo regen the repo by symlink'ing the packages into our repo.
@@ -218,7 +225,47 @@ endef
 
 ######################################################
 # BEGIN RULES
-all: create-repos $(LIVECDS)
+
+help: checkrpmdeps
+	@echo -e "\n\n################################################################################"
+	@echo "The following make targets are available for generating installable ISOs:"
+	@echo "	all (roll all packages and generate all installation ISOs)"
+	@for cd in $(INSTISOS); do echo "	$$cd"; done
+	@echo
+	@echo "The following make targets are available for generating Live CDs:"
+	@echo "	all (generate all installation ISOs and Live CDs)"
+	@for cd in $(LIVECDS); do echo "	$$cd"; done
+	@echo
+	@echo "The following make targets are available for generating RPMs in mock:"
+	@echo "	rpms (generate all rpms in mock)"
+	@for pkg in $(PACKAGES); do echo "	$$pkg-rpm"; done
+	@echo
+	@echo "The following make targets are available for generating RPMs without mock:"
+	@for pkg in $(PACKAGES); do echo "	$$pkg-nomock-rpm"; done
+	@echo
+	@echo "The following make targets are available for generating SRPMS:"
+	@echo "	srpms (generate all src rpms)"
+	@for pkg in $(PACKAGES); do echo "	$$pkg-srpm"; done
+	@echo
+	@echo "To burn a livecd image to a thumbdrive:"
+	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
+	@echo
+	@echo "The following make targets are available for cleaning:"
+	@for pkg in $(PACKAGES); do echo "	$$pkg-clean (remove rpm and srpm)"; done
+	@echo "	clean (cleans transient files)"
+	@echo "	bare-repos (deletes local repos)"
+	@echo "	bare (deletes everything except ISOs)"
+	@echo
+	@echo "The following variables are useful for overriding settings from the command line:"
+	@echo "	DISABLE_MOCK=<y/n> - If set to 'y' this variable will disable mock for generation of all RPMs"
+	@echo -e "\n\n################################################################################"
+
+all: checkrpmdeps create-repos $(INSTISOS)
+
+checkrpmdeps:
+	@echo "Checking for required packages..."
+	@rpm -q $(HOST_RPM_DEPS) 2>&1 >/dev/null || echo "Please ensure the following RPMs are installed: $(HOST_RPM_DEPS)." || exit 1
+	@rpm -q $(HOST_REQD_PKGS) 2>&1 >/dev/null || echo "Pungi must be installed.  Please read Help-Getting-Started.txt." || exit 1
 
 # Generate custom targets for managing the yum repos.  We have to generate the rules since the user provides the set of repos.
 $(foreach REPO,$(strip $(shell cat CONFIG_REPOS|grep -E '^[a-zA-Z].*=.*'|sed -e 's/ \?= \?/=/')),$(eval $(call REPO_RULE_template,$(REPO))))
@@ -232,9 +279,9 @@ HOST_RPMS := $(addprefix $(MY_REPO_DIR)/,$(foreach PKG,$(HOST_REQD_PKGS),$(call 
 SRPMS := $(addprefix $(SRPM_OUTPUT_DIR)/,$(foreach RPM,$(HOST_RPMS),$(call SRPM_FROM_RPM,$(notdir $(RPM)))))
 $(foreach RPM, $(HOST_RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 
-create-repos: $(setup_all_repos)
+create-repos: checkrpmdeps $(setup_all_repos)
 
-setup-my-repo: $(RPMS)
+setup-my-repo: checkrpmdeps $(RPMS)
 	@echo "Generating yum repo metadata, this could take a few minutes..."
 	$(VERBOSE)cd $(MY_REPO_DIR) && $(REPO_CREATE) -g $(COMPS_FILE) .
 
@@ -242,17 +289,17 @@ rpms: $(RPMS)
 
 srpms: $(SRPMS)
 
-%.src.rpm: FORCE
+%.src.rpm: checkrpmdeps FORCE
 	$(call MKDIR,$(SRPM_OUTPUT_DIR))
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
-$(LIVECDS): $(BUILD_CONF_DEPS) create-repos $(RPMS)
+$(LIVECDS): checkrpmdeps $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-livecd/\1/'`" livecd
 
-$(INSTISOS): $(BUILD_CONF_DEPS) create-repos $(RPMS)
+$(INSTISOS): checkrpmdeps $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-installation-iso/\1/'`" installation-iso
 
-$(MOCK_CONF_DIR)/$(MOCK_REL).cfg: $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
+$(MOCK_CONF_DIR)/$(MOCK_REL).cfg: checkrpmdeps $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
 	$(VERBOSE)cat $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl > $@
 	$(VERBOSE)echo -e $(MOCK_YUM_CONF) >> $@
 	$(VERBOSE)echo '"""' >> $@
@@ -294,39 +341,7 @@ FORCE:
 # Unfortunately mock isn't exactly "parallel" friendly which sucks since we could roll a bunch of packages in parallel.
 .NOTPARALLEL:
 
-.PHONY: all all-vm create-repos $(setup_all_repos) srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE
-
-help:
-	@echo "The following make targets are available for generating installable ISOs:"
-	@echo "	all (generate all installation ISOs and Live CDs)"
-	@for cd in $(INSTISOS); do echo "	$$cd"; done
-	@echo
-	@echo "The following make targets are available for generating Live CDs:"
-	@echo "	all (generate all installation ISOs and Live CDs)"
-	@for cd in $(LIVECDS); do echo "	$$cd"; done
-	@echo
-	@echo "The following make targets are available for generating RPMs in mock:"
-	@echo "	rpms (generate all rpms in mock)"
-	@for pkg in $(PACKAGES); do echo "	$$pkg-rpm"; done
-	@echo
-	@echo "The following make targets are available for generating RPMs without mock:"
-	@for pkg in $(PACKAGES); do echo "	$$pkg-nomock-rpm"; done
-	@echo
-	@echo "The following make targets are available for generating SRPMS:"
-	@echo "	srpms (generate all src rpms)"
-	@for pkg in $(PACKAGES); do echo "	$$pkg-srpm"; done
-	@echo
-	@echo "To burn a livecd image to a thumbdrive:"
-	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
-	@echo
-	@echo "The following make targets are available for cleaning:"
-	@for pkg in $(PACKAGES); do echo "	$$pkg-clean (remove rpm and srpm)"; done
-	@echo "	clean (cleans transient files)"
-	@echo "	bare-repos (deletes local repos)"
-	@echo "	bare (deletes everything except ISOs)"
-	@echo
-	@echo "The following variables are useful for overriding settings from the command line:"
-	@echo "	DISABLE_MOCK=<y/n> - If set to 'y' this variable will disable mock for generation of all RPMs"
+.PHONY: checkrpmdeps all all-vm create-repos $(setup_all_repos) srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE
 
 
 # END RULES
