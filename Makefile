@@ -202,6 +202,7 @@ $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(RE
 	@echo "Cleaning $(REPO_ID) yum repo, this could take a few minutes..."
 	$(VERBOSE)$(RM) -r $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo
 	@echo "Populating $(REPO_ID) yum repo, this could take a few minutes..."
+	@if [ ! -d $(REPO_PATH) ]; then echo -e "\nError yum repo path doesn't exist: $(REPO_PATH)\n"; exit 1; fi
 	$(call MKDIR,$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo)
 	$(VERBOSE)while read fil; do $(REPO_LINK) $(REPO_PATH)/$$$$fil $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/$$$$fil; done < $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
 	@echo "Generating $(REPO_ID) yum repo metadata, this could take a few minutes..."
