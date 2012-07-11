@@ -30,7 +30,7 @@ leverage the following features:
  
 The developer uses the CLIP build system to roll ISOs with the remediation
 content, audit content, and their existing custom packages present.  This
-develop will want to start with CONFIG_REPOS and CONFIG_BUILD files in the root
+developer will want to start with CONFIG_REPOS and CONFIG_BUILD files in the root
 of the CLIP repo.  They will add an entry to CONFIG_REPOS that points to their to their custom yum repo
 and will move modifying kickstarts and rolling ISOs.
 

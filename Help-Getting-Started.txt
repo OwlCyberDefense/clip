@@ -1,11 +1,23 @@
 Here is a quick list of the things you need to do to get started.
 
 1. Your build host most be able to pull packages from RHEL, Opt, and EPEL yum repos.  The details of doing this are discussed in detail elsewhere but here is a list of packages you will need to install:
+- rpm-build
+- mock
+- createrepo
+
+Note: you may have to install other packages as well.  We don't know what you
+installation base contains ;)
 
 2. Modify CONFIG_REPOS to point to your *local* RHEL, Opt, and EPEL repos.
-3. Roll a Pungi RPM to install on the build host by running "make pungi-rpm".
-4. Install the generated pungi rpm "# yum localinstall repos/my-repo/pungi*.noarch.rpm".
-5. Roll an ISO by running "$ make clip-rhel6-installation-iso".
+
+3. Add your user to /etc/sudoers (required since mock and livecd creator use
+chroots)
+
+4. Roll a Pungi RPM to install on the build host by running "make pungi-rpm".
+
+5. Install the generated pungi rpm "# yum localinstall repos/my-repo/pungi*.noarch.rpm".
+
+6. Roll an ISO by running "$ make clip-rhel6-installation-iso".
 Note: for a complete list of targets available please run "$ make help".
 
 After you have successfully rolled an installation ISO it is time to move on
