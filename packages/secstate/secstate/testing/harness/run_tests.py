@@ -77,6 +77,7 @@ binary_deps = ['/usr/bin/python',
                '/bin/chown',
                '/bin/chgrp',
                '/bin/sh',
+               '/bin/bash',
                '/usr/bin/stat',
                '/bin/uname',
                '/bin/hostname',
@@ -156,6 +157,7 @@ def main():
                  print(e)
                  traceback.print_exc()
       finally:
+         #raw_input("Press Enter to continue")
          chroot.clean_chroot()
    
    success = 0

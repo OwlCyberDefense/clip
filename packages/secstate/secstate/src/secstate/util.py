@@ -493,15 +493,17 @@ def is_parent(parent, item):
 
     return False
 
-def parse_puppet_fixes(benchmark, ignore_ids=[]):
+def parse_fixes(benchmark, ignore_ids=[]):
    fixes = xccdf_get_fixes(benchmark, ignore_ids)
    all_puppet = {'classes' : set(), 'environment' : "", 'parameters' : {}}
+   all_bash = []
 
    line_reg = re.compile(r'\s*(class|environment|parameter|array)\s*:\s*((\S+)\s*:\s*(\S+)|\S+)\s*', re.IGNORECASE)
 
    for fix in fixes:
+      content = dereference_sub_elements(fix, benchmark)
+      # Parse puppet-specific fix elements
       if fix.system == 'urn:xccdf:fix:script:puppet':
-         content = dereference_sub_elements(fix, benchmark)
 
          for line in content.split('\n'):
             mtch = line_reg.match(line)
@@ -525,10 +527,15 @@ def parse_puppet_fixes(benchmark, ignore_ids=[]):
             else:
                #assume comment line
                pass
+      # Parse bash-specific fix elements
+      elif fix.system == 'urn:xccdf:fix:script:bash':
+         for line in content.split('\n'):
+            all_bash.append(line)
+
 
    all_puppet['classes'] = list(all_puppet['classes'])
 
-   return all_puppet
+   return (all_puppet, all_bash)
 
 def dict_to_external(puppet_dict):
    content = ['---','classes:']

@@ -1068,7 +1068,7 @@ class Secstate:
                     
         return (result_ids, passing_ids)
 
-    def remediate_puppet(self, args, xccdf_results=None, log_dest=None, noop=False, verbose=False, yes_all=False):
+    def run_remediation(self, args, xccdf_results=None, log_dest=None, noop=False, verbose=False, yes_all=False):
         template = '%s\n'
 
         if args == []:
@@ -1116,29 +1116,43 @@ class Secstate:
                         ignore_ids.append(key)
                 ignore_ids += passing_ids
                 ignore_ids += benchmark.mitigations.keys()
-                puppet_content = parse_puppet_fixes(benchmark, ignore_ids)
+                (puppet_content, bash_content) = parse_fixes(benchmark, ignore_ids)
             except SecstateException, se:
                 sys.stderr.write('Error: %s\n' % str(se))
                 return False
 
-            if (puppet_content["classes"] == []) and (puppet_content["parameters"] == {}):
+            # Checking if there is automated content to run
+            if (puppet_content["classes"] == []) and (puppet_content["parameters"] == {}) and (bash_content == []):
                 sys.stderr.write("No remediation to be done.\n")
                 if verbose:
                     sys.stderr.write("Either results XCCDF did not report any failures, or failures reported did not have a well formed <fix> element in the corresponding XCCDF benchmark.\n")
 
+            # Running automated content
             else:
-                handle, fname = tempfile.mkstemp(suffix='.yaml')
-                self.tempfiles['files'].append(fname)
-                os.write(handle, template % dict_to_external(puppet_content))
-                os.close(handle)
-                puppet_args = ['/usr/bin/puppet', '--external_node', '/usr/libexec/secstate/secstate_external_node %s' % fname, '--node_terminus', 'exec', site_pp]
-                if noop:
-                    puppet_args.append('--noop')
-                if log_dest:
-                    puppet_args.extend(['-l', log_dest])
-                if verbose:
-                    puppet_args.append('--verbose')
-                subprocess.call(puppet_args)
+                # Running puppet automated content if appropriate
+                if (puppet_content["classes"] != []) or (puppet_content["parameters"] != {}):
+                    handle, fname = tempfile.mkstemp(suffix='.yaml')
+                    self.tempfiles['files'].append(fname)
+                    os.write(handle, template % dict_to_external(puppet_content))
+                    os.close(handle)
+                    puppet_args = ['/usr/bin/puppet', '--external_node', '/usr/libexec/secstate/secstate_external_node %s' % fname, '--node_terminus', 'exec', site_pp]
+                    if noop:
+                        puppet_args.append('--noop')
+                    if log_dest:
+                        puppet_args.extend(['-l', log_dest])
+                    if verbose:
+                        puppet_args.append('--verbose')
+
+                    subprocess.call(puppet_args)
+
+
+                # Running bash automated content
+                if (bash_content != []):
+                    for script_path in bash_content:
+                        if os.path.exists(script_path):
+                            subprocess.call(["/bin/bash", script_path])
+                        else:
+                            sys.stderr.write("Script: %s does not exist" % script_path)
 
         return True
 

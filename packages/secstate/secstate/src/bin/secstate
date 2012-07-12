@@ -281,7 +281,7 @@ def remediate(arguments):
 
     kwargs['noop'] = options.noop
     
-    if not sec_instance.remediate_puppet(**kwargs):
+    if not sec_instance.run_remediation(**kwargs):
         return -1
 
 def search(arguments):
