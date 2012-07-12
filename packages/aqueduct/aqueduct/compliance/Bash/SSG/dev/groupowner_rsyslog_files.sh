@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -21,7 +23,9 @@
  
 FILE=/etc/rsyslog.conf
 
-# For every /var/log/LOGFILE entry in rsyslog.conf, change the groupowner
-for LOGFILE in `grep -E -o "\/var\/log\/.*$" $FILE`; do
-	chown -v :root $LOGFILE
+# For every LOGFILE entry in rsyslog.conf, change the groupowner
+for LOGFILE in `grep -E -o "(\s)*.*(\s+)(\-|\+)*(\/[^\/]*)+(\s)*$" $FILE`; do
+	LOGFILE=${LOGFILE#"-"}
+  LOGFILE=${LOGFILE#"+"}
+	[ -f $LOGFILE ] && chown -v :root $LOGFILE
 done

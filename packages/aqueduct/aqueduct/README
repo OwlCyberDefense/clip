@@ -63,6 +63,8 @@ Commit access: svn co svn+ssh://svn.fedorahosted.org/svn/aqueduct
 │   │   │   └── rhel6
 │   │   │       ├── dev
 │   │   │       └── prod
+│   │   ├── SSG
+│   │   │   └── dev
 │   │   └── STIG
 │   │       └── rhel-5-beta
 │   │           ├── dev

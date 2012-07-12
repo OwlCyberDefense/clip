@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2010, 2011 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -19,4 +21,6 @@
 # If it isn't installed, it can't be configured
 [ -d /etc/yum.repos.d ] || exit 1
 
-sed -i -e 's/^\s*gpgcheck\s*=\s*0/gpgcheck=1/g' /etc/yum.repos.d/*
+for CONFS in /etc/yum.repos.d/*; do
+	sed -i -e 's/^\s*gpgcheck\s*=\s*0/gpgcheck=1/g' ${CONFS}
+done

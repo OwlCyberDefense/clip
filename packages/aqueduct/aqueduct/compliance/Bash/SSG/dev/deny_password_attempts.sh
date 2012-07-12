@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -54,15 +56,14 @@ function fix_line_in_pamd {
         PATTERN=$1; ANCHOR=$2; REPLACE=$3; FILE=$4; i=0;
 
 	grep -Pqi $PATTERN $FILE
-        if [ $? -eq 1 ]
-        then
+	if [ $? -eq 1 ]; then
 		sed -i -r -e "s|$ANCHOR|$REPLACE|g" $FILE
 	fi
 	}
 
 # Replace the pam_unix.so line.  If this fails, add the pam_unix line under the pam_deny line.
 for files in ${FILES[@]}; do
-	sed -i -r -e "s@$P1@$R1@g" $files
+	sed -i -r -e "s|$P1|$R1|g" $files
 	fix_line_in_pamd $P1 $P3 "$R3\n$R1" $files
 	sed -i -r -e "s|(\#)*$P2|\#$R2|g" $files
 	sed -i -r -e "s|(\#)*$P3|\#$R3|g" $files

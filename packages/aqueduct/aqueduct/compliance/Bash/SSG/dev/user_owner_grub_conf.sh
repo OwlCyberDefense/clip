@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -19,7 +21,7 @@
 # user_owner_grub_conf
 # 
 
-FILE=/boot/grub/grub.conf
+FILE=/etc/grub.conf
 
 # If it doesn't exist, no user owner can be specified.
 [ -f $FILE ] || exit 1

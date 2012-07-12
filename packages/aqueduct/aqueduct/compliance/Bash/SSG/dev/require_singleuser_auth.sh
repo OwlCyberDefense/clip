@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -23,7 +25,7 @@ STRING='SINGLE=/sbin/sulogin'
 grep -q "^$STRING$" $FILE && exit 0
 
 # fix if wrong
-sed -i -e "s#^SINGLE=.*#$STRING#" $FILE
+sed -i -e "s#^(\s*)(\#*)(\s*)SINGLE=.*#\3$STRING#" $FILE
 
 # bail if now done
 grep -q "^$STRING$" $FILE && exit 0

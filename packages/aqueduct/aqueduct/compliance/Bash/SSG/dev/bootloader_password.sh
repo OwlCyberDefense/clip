@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -16,14 +18,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FILE=test/grub_test/etc/grub.conf
+FILE=/etc/grub.conf
 
 # Can't set the password in grub.conf if it doesn't exist
 [ -f $FILE ] || exit 1
 
-var=$( grub-crypt --sha-512 )
+var=$( grub-crypt --sha-512 ) || exit 1
 
-pcregrep -Mq "default\=[0-9]+\ntimeout\=[0-9]+\nsplashimage" $FILE
+pcregrep -Mq "default\=[0-9]+\ntimeout\=[0-9]+" $FILE
 if [ $? -eq 0 ]
 then
 	var=$var' --encrypted password-hash'

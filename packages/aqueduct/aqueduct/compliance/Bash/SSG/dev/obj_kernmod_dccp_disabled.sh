@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -17,7 +19,7 @@
 # limitations under the License.
 
 # bail if already done
-FILE=/etc/modprobe.d/scap_obj_kernmod_dccp_disabled.conf
+FILE=/etc/modprobe\.d/scap_obj_kernmod_dccp_disabled\.conf
 [ -f $FILE ] && grep -q "install dccp /bin/true" $FILE && exit 0
 
-echo "install dccp /bin/true"  > $FILE
+echo "install dccp /bin/false"  > $FILE

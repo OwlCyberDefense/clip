@@ -19,6 +19,8 @@ delete_nis_lines()
 	{
 	FILE=$1
 	
+	[ -f $FILE ] || exit 0
+
 	grep -i "^\+\:" $FILE
 	if [ $? -eq 0 ]
 	then

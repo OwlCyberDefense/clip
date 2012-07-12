@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -17,6 +19,8 @@
 # limitations under the License.
 
 FILE=/etc/audit/audit.rules
+
+[ -f $FILE ] || exit 1
 
 # -e 2 needs to be the last line in the file
 

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -19,6 +21,8 @@
 # Remove any lines starting with +: in /etc/passwd
 
 FILE=/etc/passwd
+
+[ -f $FILE ] || exit 1
 
 . $(dirname $0)/no_nis_inclusions_common
 

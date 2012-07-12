@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -16,7 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FILE=test/modprobe_test/etc/modprobe.d/mounting.conf
+FILE=/etc/modprobe.d/mounting.conf
 
 . $(dirname $0)/modprobe_common
 

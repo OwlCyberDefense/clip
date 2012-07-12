@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -16,10 +18,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FILE=/etc/rsyslog.conf
+FILE=/etc/fstab
 
-# if no rsyslog, exit
-[ -f $FILE ] || exit 0
+[ -f $FILE ] || exit 1
 
-# delete all occurences
-sed -i -r -e "/^[\$]Input(TCP|UDP|RELP)ServerRun\s+\d*/d" $FILE
+grep -Pq "^\s*([^.\/dev]|[^.\/chroot])\/*\s+.*,?nodev,?.*$" $FILE
+exit $?

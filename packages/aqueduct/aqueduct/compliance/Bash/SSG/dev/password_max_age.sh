@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -19,6 +21,8 @@
 FILE=/etc/login.defs
 PARAM=PASS_MAX_DAYS
 DESIRED=60
+
+[ -f $FILE ] || exit 1
 
 # delete if multiple, add if missing
 COUNT=$( egrep "^$PARAM\s+" $FILE | wc -l )

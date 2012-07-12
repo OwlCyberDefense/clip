@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -20,4 +22,4 @@
 FILE=/etc/modprobe.d/scap_obj_kernmod_rds_disabled.conf
 [ -f $FILE ] && grep -q "install rds /bin/true" $FILE && exit 0
 
-echo "install rds /bin/true"  > $FILE
+echo "install rds /bin/false"  > $FILE

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -16,7 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FILE=test/rsyslog_test/etc/rsyslog.conf
+FILE=/etc/rsyslog.conf
 
 # if no rsyslog, exit
 [ -f $FILE ] || exit 1

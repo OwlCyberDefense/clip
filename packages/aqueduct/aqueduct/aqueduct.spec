@@ -61,6 +61,11 @@ Summary: 	Compliance scripts for the PCI (Payment Card Industry).
 %description PCI
 This package contains the compliance scripts and default profiles for PCI compliance. 
 
+%package SSG
+Group:		Application/SystemTools
+Summary: 	Compliance scripts for the SCAP SEcurity Guide
+%description SSG
+This package contains the bash compliance scripts for SSG compliance. 
 
 
 %prep
@@ -130,6 +135,9 @@ install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/PCI/firefox/scripts
 # install -m 0640 etc/aqueduct/profiles/PCI/firefox/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/PCI/firefox/default.profile
 install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/PCI/rhel-6-beta/scripts compliance/Bash/PCI/rhel6/prod/pci*
 
+# Files involved in the SCAP Scerity Guide (SSG)
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/scripts
+install -m 0750 -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/scripts compliance/Bash/SSG/dev/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -189,11 +197,16 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/aqueduct/PCI/rhel-6-beta/scripts
 /usr/libexec/aqueduct/PCI/firefox/scripts
 
+%files SSG
+/usr/libexec/aqueduct/SSG/scripts
+
 
 %post
 
 %changelog
-* Sun Apr 8 2012 Shannon Mitchell <shannon.mitchell@fusiontechnology-llc.com>
-  - Initial Spec file creation
+* Thu Jun 28 2012 Joe Nall <joe@nall.com>
+  - SSG section added to spec file.
 * Tue May 4 2012 Ted Brunell <tbrunell@redhat.com>
   - CIS, DHS, NISPOM, & PCI sections added to Spec file.
+* Sun Apr 8 2012 Shannon Mitchell <shannon.mitchell@fusiontechnology-llc.com>
+  - Initial Spec file creation

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -17,11 +19,15 @@
 # limitations under the License.
 
 # rsyslog_file_permissions
-# 
-
+#
+ 
 FILE=/etc/rsyslog.conf
 
-# For every /var/log/.* entry in /etc/rsyslog.conf, set the permissions
-for LOGFILE in `grep -E -o "\/var\/log\/.*$" $FILE`; do
-	chmod 0600 $LOGFILE
+[ -f $FILE ] || exit 1
+
+# For every LOGFILE entry in rsyslog.conf, change the permissions
+for LOGFILE in `grep -E -o "(\s)*.*(\s+)(\-|\+)*(\/[^\/]*)+(\s)*$" $FILE`; do
+	LOGFILE=${LOGFILE#"-"}
+  LOGFILE=${LOGFILE#"+"}
+	[ -f $LOGFILE ] && chmod 0600 $LOGFILE
 done

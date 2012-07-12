@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -17,11 +19,15 @@
 # limitations under the License.
 
 # userowner_rsyslog_files
-# 
-
+#
+ 
 FILE=/etc/rsyslog.conf
 
-# For every /var/log/.* entry in rsyslog.conf, change the user ownership
-for LOGFILE in `grep -E -o "\/var\/log\/.*$" $FILE`; do
-	chown -v root $LOGFILE
+[ -f $FILE ] || exit 1
+
+# For every LOGFILE entry in rsyslog.conf, change the userowner
+for LOGFILE in `grep -E -o "(\s)*.*(\s+)(\-|\+)*(\/[^\/]*)+(\s)*$" $FILE`; do
+	LOGFILE=${LOGFILE#"-"}
+	LOGFILE=${LOGFILE#"+"}
+	[ -f $LOGFILE && chown -v root $LOGFILE
 done

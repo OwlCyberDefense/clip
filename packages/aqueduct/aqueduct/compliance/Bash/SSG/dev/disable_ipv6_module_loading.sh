@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
@@ -17,7 +19,7 @@
 # limitations under the License.
 
 # bail if already done
-FILE=test/modprobe_test/etc/modprobe.d/disable_ipv6_module_loading.conf
+FILE=/etc/modprobe.d/disable_ipv6_module_loading.conf
 [ -f $FILE ] && grep -q "options ipv6 disable=1" $FILE && exit 0
 
 echo "options ipv6 disable=1"  > $FILE

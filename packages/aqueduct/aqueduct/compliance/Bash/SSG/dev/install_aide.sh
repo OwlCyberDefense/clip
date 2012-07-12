@@ -16,7 +16,9 @@
 #Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #Boston, MA  02110-1301, USA.
 
-#!/bin/bash
+#!/bin/bash -u
+set -e
+
 # Copied from GEN006575 script
 
 rpm -q aide > /dev/null
