@@ -74,7 +74,6 @@ acl
 aide
 attr
 audit
-augeas
 authconfig
 basesystem
 bash
@@ -105,8 +104,6 @@ policycoreutils
 policycoreutils-newrole
 policycoreutils-python
 procps
-puppet
-clip-puppet
 rootfiles
 rpm
 rsyslog
@@ -171,6 +168,8 @@ yum
 -wget
 -yum-rhn-plugin
 
+-libreport
+
 -aic94xx-firmware
 -at
 -atmel-firmware
@@ -215,8 +214,6 @@ semanage login -a -s sysadm_u root
 semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  root
 semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  staff_u
 semanage user -m                      -Rsystem_r  system_u
-
-#puppet -d -l /root/install.puppet.log /etc/puppet/manifests/site.pp
 
 # iptables setup
 cat >/etc/sysconfig/iptables <<EOF
