@@ -1,0 +1,1 @@
+/usr/bin/secstate deselect nosuid-reqs proc-mounts-nosuid

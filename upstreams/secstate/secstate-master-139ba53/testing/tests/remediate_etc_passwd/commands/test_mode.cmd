@@ -1,0 +1,1 @@
+stat --format=%a /etc/passwd

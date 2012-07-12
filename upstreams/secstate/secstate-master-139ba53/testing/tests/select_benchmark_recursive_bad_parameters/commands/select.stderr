@@ -1,0 +1,3 @@
+usage: secstate select [options] <ContentID> [GroupID|RuleID|ProfileID]
+
+secstate: error: no such option: -j
