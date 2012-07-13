@@ -19,9 +19,10 @@
 import sys, re, os
 
 def map_fixes():
-	FIXES = "/usr/local/scap-security-guide/rhel6/src/input/fixes"
- 	PROFILES = "/usr/local/sbin/cap-security-guide/rhel6/src/input/profiles"
-	DCID_PROFILE=PROFILES+"/dcid_6-3.xml"
+	FIXES = "/usr/local/scap-security-guide/RHEL6/input/fixes"
+ 	PROFILES = "/usr/local/scap-security-guide/RHEL6/input/profiles"
+	COMMON_PROFILE=PROFILES+"/common.xml"
+	#DCID_PROFILE=PROFILES+"/dcid_6-3.xml"
 	MANUAL_DCID=PROFILES+"/dcid_6-3_manual.xml"
 
 	FIX_FILE=FIXES+"/dcid_lockdown_bash-ks.xml"
@@ -33,13 +34,13 @@ def map_fixes():
 	with open(FIX_FILE, "w") as fixes:
 		fixes.write('<fix-group id="bash" system="urn:xccdf:fix:script:bash" xmlns="http://checklists.nist.gov/xccdf/1.1">')
 
-		with open(DCID_PROFILE, "r") as profile:
+		with open(COMMON_PROFILE, "r") as profile:
 			for line in profile:
 				inclusion = re.search("idref\=\"[^\"]*\"", line)
-
+				
 				if inclusion and line not in exclusions:
 					inclusion = re.sub("(idref\=\"|\")", "", inclusion.group(0))
-					fixes.write("<fix rule=\"%s\">/usr/libexec/aqueduct/SSG/rhel-6-beta/scripts/%s</fix>\n" %(inclusion, inclusion))
+					fixes.write("<fix rule=\"%s\">/usr/libexec/aqueduct/SSG/scripts/%s</fix>\n" %(inclusion, inclusion))
 
 
 		fixes.write("</fix-group>")

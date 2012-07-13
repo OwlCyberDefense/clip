@@ -16,9 +16,9 @@
 #Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #Boston, MA  02110-1301, USA.
 
-Name:		aqueduct
-Version:	1
-Release:	0.1
+Name: 		aqueduct
+Version: 	1
+Release: 	0.1
 Summary:	BASH scripts from the Aqueduct Project (https:/fedorahosted.org/aqueduct) that are meant to assist in the securing of a RHEL server.
 
 Group:		Application/SystemTools
@@ -26,7 +26,7 @@ License:	GPL
 Source0:	%{name}-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
-Requires: 	bash filesystem gzip
+Requires: 	bash filesystem gzip python python-lxml
 
 %description
 BASH scripts from the Aqueduct Project (https:/fedorahosted.org/aqueduct) that are meant to assist in the securing of a RHEL server.
@@ -69,7 +69,7 @@ This package contains the bash compliance scripts for SSG compliance.
 
 
 %prep
-%setup -q
+%setup -q 
 
 
 %build
@@ -138,6 +138,7 @@ install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/PCI/rhel-6-beta/scripts
 # Files involved in the SCAP Scerity Guide (SSG)
 install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/scripts
 install -m 0750 -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/scripts compliance/Bash/SSG/dev/*
+install -m 0750 -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools compliance/Bash/SSG/tools/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -199,11 +200,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %files SSG
 /usr/libexec/aqueduct/SSG/scripts
-
+/usr/libexec/aqueduct/SSG/tools
 
 %post
 
 %changelog
+* Fri Jul 13 2012 Mike Palmiotto <mpalmiotto@tresys.com>
+ - Added SSG tools and require python, python-lxml
 * Thu Jun 28 2012 Joe Nall <joe@nall.com>
   - SSG section added to spec file.
 * Tue May 4 2012 Ted Brunell <tbrunell@redhat.com>
