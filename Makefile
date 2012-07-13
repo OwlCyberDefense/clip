@@ -88,7 +88,6 @@ MOCK = /usr/bin/mock
 REPO_LINK = /bin/ln -s
 REPO_WGET = /usr/bin/wget
 REPO_CREATE = /usr/bin/createrepo -d -c $(REPO_DIR)/yumcache
-REPO_REFRESH = $(CURDIR)/support/yumnew.sh
 REPO_QUERY =  repoquery -c $(YUM_CONF_FILE) --quiet -a --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}.rpm'
 MOCK_ARGS += --resultdir=$(MY_REPO_DIR) -r $(MOCK_REL) --configdir=$(MOCK_CONF_DIR) --unpriv --rebuild
 
@@ -140,17 +139,10 @@ endef
 # target name->dependency name munging, eg not being able to convert foo.<random arch>.rpm into foo.src.rpm.
 define RPM_RULE_template
 $(info Generating rules for rolling package $(1).)
-ifneq ($(DISABLE_MOCK),y)
 $(1): checkrpmdeps  $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)$(MOCK) $(MOCK_ARGS) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
-else
-$(1):   checkrpmdeps $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
-	$(call MKDIR,$(MY_REPO_DIR))
-	$(VERBOSE)OUTPUT_DIR=$(MY_REPO_DIR) $(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $(1))) rpm
-	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
-endif
 ifeq ($(ENABLE_SIGNING),y)
 	$(RPM) --addsign $(MY_REPO_DIR)/*
 endif
@@ -193,6 +185,7 @@ $(eval MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated)
 $(eval REPO_LINES := $(REPO_LINES)repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=file://$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
 
 $(eval MY_REPO_DIRS += "$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo")
+$(eval PKG_LISTS += "./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)$(RHEL_VER)")
 
 setup-$(REPO_ID)$(RHEL_VER)-repo: checkrpmdeps $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated $(CONFIG_BUILD_DEPS)
 
@@ -248,6 +241,9 @@ help: checkrpmdeps
 	@echo "	srpms (generate all src rpms)"
 	@for pkg in $(PACKAGES); do echo "	$$pkg-srpm"; done
 	@echo
+	@echo "The following make targets are available for updating the package lists used for mock and ISO generation:"
+	@for pkg in $(PKG_LISTS); do echo "	$$pkg"; done
+	@echo
 	@echo "To burn a livecd image to a thumbdrive:"
 	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
 	@echo
@@ -256,9 +252,6 @@ help: checkrpmdeps
 	@echo "	clean (cleans transient files)"
 	@echo "	bare-repos (deletes local repos)"
 	@echo "	bare (deletes everything except ISOs)"
-	@echo
-	@echo "The following variables are useful for overriding settings from the command line:"
-	@echo "	DISABLE_MOCK=<y/n> - If set to 'y' this variable will disable mock for generation of all RPMs"
 	@echo -e "\n\n################################################################################"
 
 all: checkrpmdeps create-repos $(INSTISOS)

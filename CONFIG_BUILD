@@ -6,7 +6,7 @@
 # WARNING: This file is imported by GNU make, thus avoid trailing whitespace.
 
 VERSION := 4.0
-RELEASE := 0
+RELEASE := alpha
 
 # This should match the RHEL version we're building.  
 RHEL_VER := 6
@@ -23,13 +23,11 @@ PACKAGES := aqueduct scap-security-guide secstate clip-selinux-policy
 # This variable can be leveraged by sub-makes (eg in the packages/foo/Makefile) if files at this top-level should trigger a rebuild
 ADDTL_DEPS := $(CURDIR)/CONFIG_REPOS $(CURDIR)/CONFIG_BUILD
 
-# Set to "y" to disable the use of mock for building packages.
-DISABLE_MOCK := n
-
 # Enable signing of packages (must have RPM macros properly configured, see man page of RPM)
 ENABLE_SIGNING := n
+
 #
 # Quiet down the build output a bit.
 QUIET := n
 
-export VERSION RELEASE RHEL_VER ARCH PACKAGES ADDTL_DEPS DISABLE_MOCK ENABLE_SIGNING QUIET
+export VERSION RELEASE RHEL_VER ARCH PACKAGES ADDTL_DEPS ENABLE_SIGNING QUIET
