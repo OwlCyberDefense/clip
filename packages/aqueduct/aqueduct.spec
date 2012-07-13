@@ -138,6 +138,7 @@ install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/PCI/rhel-6-beta/scripts
 # Files involved in the SCAP Scerity Guide (SSG)
 install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/scripts
 install -m 0750 -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/scripts compliance/Bash/SSG/dev/*
+mkdir -p $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools
 install -m 0750 -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools compliance/Bash/SSG/tools/*
 
 %clean
