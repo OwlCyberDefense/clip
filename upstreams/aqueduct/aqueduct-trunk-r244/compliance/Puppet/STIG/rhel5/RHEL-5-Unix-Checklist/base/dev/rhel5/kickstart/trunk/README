@@ -1,1 +1,0 @@
-when you create kickstart files and add them to an architecture, x86_32 or ia32 for example, don't put an extension on the file, .cfg, .txt, etc.  I use the file name as the -n "name" with the create kickstart command and it will not process "." 

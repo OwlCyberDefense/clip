@@ -1,3 +1,0 @@
-vim isolinux/isolinux.cfg
-
-mkisofs -o ./alec.iso -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -l -r -T -v -V "dev-alec RHEL Boot" .

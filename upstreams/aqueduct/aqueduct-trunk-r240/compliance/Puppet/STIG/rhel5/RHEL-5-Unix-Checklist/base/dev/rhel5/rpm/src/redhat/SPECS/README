@@ -1,7 +1,0 @@
-rpmbuild -ba *.spec
-
-# Sample .rpmmacros file for non-root RPM build env.
-[sysutil@nces-util-01 SPECS]$ cat ~sysutil/.rpmmacros
-#%_topdir %(echo $HOME)/rpmbuild
-%_topdir %(echo $HOME)/svn.forge.mil/slim/base/dev/rhel5/rpm/src/redhat
-
