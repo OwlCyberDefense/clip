@@ -135,8 +135,9 @@ install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/PCI/firefox/scripts
 # install -m 0640 etc/aqueduct/profiles/PCI/firefox/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/PCI/firefox/default.profile
 install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/PCI/rhel-6-beta/scripts compliance/Bash/PCI/rhel6/prod/pci*
 
-# Files involved in the SCAP Scerity Guide (SSG)
+# Files involved in the SCAP Security Guide (SSG)
 install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/scripts
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools
 install -m 0750 -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/scripts compliance/Bash/SSG/dev/*
 install -m 0750 -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools compliance/Bash/SSG/tools/*
 
