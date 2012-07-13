@@ -5,9 +5,9 @@
 
 ######################################################
 # See CONFIG_BUILD for configuration options
+# See CONFIG_REPOS to setup yum repos
 # Import build config (version, release, repos, etc)
 include CONFIG_BUILD
-# See CONFIG_REPOS to setup yum repos
 ######################################################
 
 ######################################################
@@ -213,7 +213,7 @@ $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(RE
 # Note that the recommended method here is to commit your pkglist file to your own dev repo.
 # Then you can consistently rebuild an ISO using the exact same package versions as the last time.
 # Effectively versioning the packages you use when rolling RPMs and ISOs.
-$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER): $(CONFIG_BUILD_DEPS)
+$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER) ./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)$(RHEL_VER): $(CONFIG_BUILD_DEPS)
 	@echo "Generating list of packages for $(call GET_REPO_ID,$(1))$(RHEL_VER)"
 	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
 	echo -e $(YUM_CONF) >> $(YUM_CONF_FILE)
@@ -295,6 +295,8 @@ srpms: $(SRPMS)
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
 $(LIVECDS): checkrpmdeps $(BUILD_CONF_DEPS) create-repos $(RPMS)
+	@if [ x"$(RHEL_VER)" == "x6" ]; then echo "Sorry but at this time RHEL 6 LiveCDs won't boot due to dracut issues.";\
+echo "Press enter to continue anyway or ctrl-c to exit."; read; fi
 	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-livecd/\1/'`" livecd
 
 $(INSTISOS): checkrpmdeps $(BUILD_CONF_DEPS) create-repos $(RPMS)
