@@ -1,6 +1,10 @@
 <Profile id="common" xmlns="http://checklists.nist.gov/xccdf/1.1" >
 <title>Profile for Attended/Manual portion of DCID6/3 remediation</title>
 <description>This profile contains items from the DCID6/3 lockdown requirements that require user interaction.</description>
+<select idref="install_aide" selected="true"/>
+<select idref="install_vsftpd" selected="true"/>
+<select idref="install_openswan" selected="true"/>
+<select idref="install_vlock_package" selected="true"/>
 <select idref="bios_disable_usb_boot" selected="true"/>
 <select idref="bootloader_password" selected="true"/>
 <select idref="rsyslog_send_messages_to_logserver" selected="true"/>

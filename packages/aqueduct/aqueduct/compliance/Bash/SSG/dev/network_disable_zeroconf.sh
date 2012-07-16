@@ -1,5 +1,4 @@
 #!/bin/bash -u
-set -e
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
 # This software was developed by Tresys Technology LLC
@@ -16,11 +15,13 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
+
 FILE=/etc/sysconfig/network
 
 [ -f $FILE ] || exit 1
 
-grep -Pq "^(\s*)(\#*)(\s*)(NOZEROCONF\=)"
+grep -Pq "^(\s*)(\#*)(\s*)(NOZEROCONF\=)" $FILE
 if [ $? -eq 0 ]
 then
 	sed -i -r -e "s/^(\s*)(\#*)(\s*)(NOZEROCONF\=).*/\3\4yes/g" $FILE

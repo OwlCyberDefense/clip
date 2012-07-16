@@ -22,7 +22,7 @@ FILE="/etc/selinux/config"
 
 [ -f $FILE ] || exit 1
 
-grep -Eq "SELINUX\="
+grep -Eq "SELINUX\=" $FILE
 if [ $? -eq 0 ]
 then
 	sed -i -r -e "s/^(\s)*(\#)*(\s)*(SELINUX(\s)*\=).*/\3\4enforcing/g" $FILE

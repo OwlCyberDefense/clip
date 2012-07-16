@@ -20,4 +20,9 @@ set -e
 
 # no_hashes_outside_shadow
 #
-awk -F '($2 != "x") {print}' /etc/passwd || exit 1
+awk -F: '($2 != "x") {pwconv $1}' /etc/passwd
+if [ $? -eq 0 ]; then
+	exit 0
+else
+	pwconv
+fi

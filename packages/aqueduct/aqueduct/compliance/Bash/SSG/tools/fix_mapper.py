@@ -22,13 +22,12 @@ def map_fixes():
 	FIXES = "/usr/local/scap-security-guide/RHEL6/input/fixes"
  	PROFILES = "/usr/local/scap-security-guide/RHEL6/input/profiles"
 	COMMON_PROFILE=PROFILES+"/common.xml"
-	#DCID_PROFILE=PROFILES+"/dcid_6-3.xml"
-	MANUAL_DCID=PROFILES+"/dcid_6-3_manual.xml"
+	MANUAL=PROFILES+"/manual.xml"
 
-	FIX_FILE=FIXES+"/dcid_lockdown_bash-ks.xml"
+	FIX_FILE=FIXES+"/bash-ks.xml"
 	exclusions=""
-	if os.path.exists(MANUAL_DCID):
-		with open(MANUAL_DCID, "r") as manual_file:
+	if os.path.exists(MANUAL):
+		with open(MANUAL, "r") as manual_file:
 			exclusions = manual_file.read()
 
 	with open(FIX_FILE, "w") as fixes:
@@ -40,8 +39,7 @@ def map_fixes():
 				
 				if inclusion and line not in exclusions:
 					inclusion = re.sub("(idref\=\"|\")", "", inclusion.group(0))
-					fixes.write("<fix rule=\"%s\">/usr/libexec/aqueduct/SSG/scripts/%s</fix>\n" %(inclusion, inclusion))
-
+					fixes.write("<fix rule=\"%s\">/usr/libexec/aqueduct/SSG/scripts/%s.sh</fix>\n" %(inclusion, inclusion))
 
 		fixes.write("</fix-group>")
 
