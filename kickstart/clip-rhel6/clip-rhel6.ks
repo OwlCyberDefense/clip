@@ -236,10 +236,10 @@ chkconfig --add ip6tables
 chkconfig --level 0123456 netfs off
 
 # secstate remediate
-#cd /var/lib/secstate
-#secstate import /usr/local/scap-security-guide/RHEL6/output/rhel6-xccdf-scap-security-guide.xml
-#secstate select -r RHEL-6
-#secstate remediate -y
+cd /var/lib/secstate
+secstate import /usr/local/scap-security-guide/RHEL6/output/rhel6-xccdf-scap-security-guide.xml
+secstate select -r RHEL-6
+secstate remediate -y
 	
 # scap-security-guide setup
 #cat > /root/oscap.sh << EOF
