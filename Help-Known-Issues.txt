@@ -1,0 +1,19 @@
+Our journey towards perfection is still a WiP so here are the CLIP known
+issues:
+
+=============================================================================
+CLIP for RHEL 6.2 Alpha Release - July 17ish, 2012:
+
+- SELinux policy needs more work to boot in enforcing mode.  This is a blocker
+  for our beta release thus the beta will include a policy that supports a
+default CLIP configuration in enforcing mode.
+
+- We have the ability to roll LiveCDs which are great for stateless solutions.
+  While the system works for RHEL 5, we are having issues with dracut in RHEL
+6.  I hope to have these addressed by the beta release but this is not a
+blocker.
+
+- We have not updated the oss.tresys.com/projects/clip website (aside adding
+  links to the new releases).  This will be done for beta and final releases.
+
+=============================================================================
