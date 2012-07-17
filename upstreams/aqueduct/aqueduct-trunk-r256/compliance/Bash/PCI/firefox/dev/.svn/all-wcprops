@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/aqueduct/!svn/ver/191/trunk/compliance/Bash/PCI/firefox/dev
+END
+mozilla-aqueduct-pci.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/aqueduct/!svn/ver/191/trunk/compliance/Bash/PCI/firefox/dev/mozilla-aqueduct-pci.cfg
+END
+firefox-lockdown.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/191/trunk/compliance/Bash/PCI/firefox/dev/firefox-lockdown.sh
+END
+ReadMe.txt
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/aqueduct/!svn/ver/191/trunk/compliance/Bash/PCI/firefox/dev/ReadMe.txt
+END

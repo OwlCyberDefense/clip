@@ -1,0 +1,40 @@
+10
+
+dir
+256
+http://svn.fedorahosted.org/svn/aqueduct/trunk/compliance/Puppet
+http://svn.fedorahosted.org/svn/aqueduct
+
+
+
+2012-03-17T01:45:47.787097Z
+131
+vpassaro
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+222a7096-7963-498e-82ae-632bd6af5a1a
+
+STIG
+dir
+
+CNSSI-1253
+dir
+
+NIST-800-53
+dir
+
+DCID-6-3-PL4-HIGH-HIGH
+dir
+

@@ -1,0 +1,353 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev
+END
+NISPOM-Set_CDE_Screen_Saver.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Set_CDE_Screen_Saver.sh
+END
+NISPOM-System_Configuration_File_Permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-System_Configuration_File_Permissions.sh
+END
+NISPOM-Home_Directory_Permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Home_Directory_Permissions.sh
+END
+NISPOM-Disable_Ctrl-Alt-Del.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Disable_Ctrl-Alt-Del.sh
+END
+NISPOM-Secure_Unowned_Files.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Secure_Unowned_Files.sh
+END
+NISPOM-Password_Perms.sh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Password_Perms.sh
+END
+NISPOM-Secure_World_Writable_Files.sh
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Secure_World_Writable_Files.sh
+END
+NISPOM-Set_Mandatory_Screen_Saver.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Set_Mandatory_Screen_Saver.sh
+END
+NISPOM-Restrict_Use_of_Compiler_Tools.sh
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Restrict_Use_of_Compiler_Tools.sh
+END
+NISPOM-Secure_Audio_Devices.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Secure_Audio_Devices.sh
+END
+NISPOM-Home_Directory_Ownership.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Home_Directory_Ownership.sh
+END
+NISPOM-System_Command_File_Permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-System_Command_File_Permissions.sh
+END
+NISPOM-Disable_Telnet.sh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Disable_Telnet.sh
+END
+NISPOM-Restrict_Write-Access_on_Man_Pages.sh
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Restrict_Write-Access_on_Man_Pages.sh
+END
+NISPOM-Secure_Authpriv_Logging.sh
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Secure_Authpriv_Logging.sh
+END
+NISPOM-System_Log_File_Permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-System_Log_File_Permissions.sh
+END
+NISPOM-Password_Policy_Special_Characters.sh
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Password_Policy_Special_Characters.sh
+END
+NISPOM-Password_Policy_Lowercase_Minimum.sh
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Password_Policy_Lowercase_Minimum.sh
+END
+NISPOM-Audit_Rules.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Audit_Rules.sh
+END
+NISPOM-Sysctlconf_Permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Sysctlconf_Permissions.sh
+END
+NISPOM-Password_Policy_Uppercase_Minimum.sh
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Password_Policy_Uppercase_Minimum.sh
+END
+NISPOM-Home_Directory_Contents.sh
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Home_Directory_Contents.sh
+END
+NISPOM-Create_Login_FTP_Banner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Create_Login_FTP_Banner.sh
+END
+NISPOM-Set_shell_timeout_period.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Set_shell_timeout_period.sh
+END
+NISPOM-Create_ftpusers_File.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Create_ftpusers_File.sh
+END
+NISPOM-Password_Policy_Numeric_Minimum.sh
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Password_Policy_Numeric_Minimum.sh
+END
+NISPOM-Set_TFTP_Startup_Directory.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Set_TFTP_Startup_Directory.sh
+END
+NISPOM-No_Empty_Passwords.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-No_Empty_Passwords.sh
+END
+NISPOM-Disable_UUCP.sh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Disable_UUCP.sh
+END
+NISPOM-Correct_Uneven_File_Permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Correct_Uneven_File_Permissions.sh
+END
+NISPOM-Disable_USB_and_PCMCIA_Devices.sh
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Disable_USB_and_PCMCIA_Devices.sh
+END
+NISPOM-Require_GRUB_Password.sh
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Require_GRUB_Password.sh
+END
+NISPOM-Password_Policy_Length_Minimum.sh
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Password_Policy_Length_Minimum.sh
+END
+NISPOM-Maximum_Time_Between_Password_Changes.sh
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Maximum_Time_Between_Password_Changes.sh
+END
+NISPOM-InterNetNews_Config_File_Perms.sh
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-InterNetNews_Config_File_Perms.sh
+END
+NISPOM-Create_Login_Banner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Create_Login_Banner.sh
+END
+NISPOM-Disable_FTP-gssftp.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Disable_FTP-gssftp.sh
+END
+NISPOM-Disable_FTP-vsftpd.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Disable_FTP-vsftpd.sh
+END
+NISPOM-Secure_SUID-SGID_Executables.sh
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Secure_SUID-SGID_Executables.sh
+END
+NISPOM-Secure_World_Writable_Directories.sh
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Secure_World_Writable_Directories.sh
+END
+NISPOM-Expired_Password_Invalidation.sh
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Expired_Password_Invalidation.sh
+END
+NISPOM-User_Mountable_Media.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-User_Mountable_Media.sh
+END
+NISPOM-Default_umask.sh
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Default_umask.sh
+END
+NISPOM-System_Device_Directory_Ownership.sh
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-System_Device_Directory_Ownership.sh
+END
+NISPOM-System_Run_Control_Script_Permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-System_Run_Control_Script_Permissions.sh
+END
+NISPOM-Secure_Shell_Binaries.sh
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Secure_Shell_Binaries.sh
+END
+NISPOM-Enable_the_Audit_Subsystem.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Enable_the_Audit_Subsystem.sh
+END
+NISPOM-Set_FTP_Umask_gssftp.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Set_FTP_Umask_gssftp.sh
+END
+NISPOM-Set_delay_after_ed_login.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Set_delay_after_ed_login.sh
+END
+NISPOM-Restrict_Use_of_Traceroute_and_Ping.sh
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Restrict_Use_of_Traceroute_and_Ping.sh
+END
+NISPOM-Set_X_Screen_Saver_Application_Defaults.sh
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Set_X_Screen_Saver_Application_Defaults.sh
+END
+NISPOM-SSHD_Enable_Banner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-SSHD_Enable_Banner.sh
+END
+NISPOM-Lock_account_after_three_ed_login_attempts.sh
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Lock_account_after_three_ed_login_attempts.sh
+END
+NISPOM-Lock_Non-Root_Accounts_with_UID_0.sh
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Lock_Non-Root_Accounts_with_UID_0.sh
+END
+NISPOM-Lock_Invalid_Accounts.sh
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Lock_Invalid_Accounts.sh
+END
+NISPOM-Crontab_Perms.sh
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Crontab_Perms.sh
+END
+NISPOM-Disable_TFTP.sh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-Disable_TFTP.sh
+END
+NISPOM-System_Library_File_Permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/dev/NISPOM-System_Library_File_Permissions.sh
+END

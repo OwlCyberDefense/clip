@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 155
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/generate_iso_script_from_host_list
+END
+hosts
+K 25
+svn:wc:ra_dav:version-url
+V 161
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/generate_iso_script_from_host_list/hosts
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 162
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/generate_iso_script_from_host_list/README
+END
+isogen.sh
+K 25
+svn:wc:ra_dav:version-url
+V 165
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/generate_iso_script_from_host_list/isogen.sh
+END

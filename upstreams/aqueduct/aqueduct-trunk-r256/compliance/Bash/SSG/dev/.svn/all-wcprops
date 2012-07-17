@@ -1,0 +1,1493 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/aqueduct/!svn/ver/256/trunk/compliance/Bash/SSG/dev
+END
+no_shelllogin_for_systemaccounts.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/no_shelllogin_for_systemaccounts.sh
+END
+service_ntpdate_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_ntpdate_disabled.sh
+END
+userowner_passwd_file.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/userowner_passwd_file.sh
+END
+disable_module_hfsplus.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_module_hfsplus.sh
+END
+uninstall_httpd.sh
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/uninstall_httpd.sh
+END
+disable_protocol_sctp.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_protocol_sctp.sh
+END
+service_mdmonitor_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_mdmonitor_disabled.sh
+END
+network_disable_zeroconf.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/249/trunk/compliance/Bash/SSG/dev/network_disable_zeroconf.sh
+END
+avahi_ip_only.sh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/avahi_ip_only.sh
+END
+service_sysstat_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_sysstat_disabled.sh
+END
+password_max_age.sh
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/password_max_age.sh
+END
+service_network_enabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_network_enabled.sh
+END
+disable_dhcp_client_temp.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_dhcp_client_temp.sh
+END
+file_permissions_etc_passwd.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/file_permissions_etc_passwd.sh
+END
+service_acpid_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_acpid_disabled.sh
+END
+sshd_do_not_permit_user_env.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/sshd_do_not_permit_user_env.sh
+END
+mountopt_noexec_on_removable_partitions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/aqueduct/!svn/ver/248/trunk/compliance/Bash/SSG/dev/mountopt_noexec_on_removable_partitions.sh
+END
+set_sysctl_common
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_common
+END
+service_rsyslog_enabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_rsyslog_enabled.sh
+END
+audit_manual_session_edits.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_manual_session_edits.sh
+END
+no_empty_passwords.sh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/no_empty_passwords.sh
+END
+service_saslauthd_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_saslauthd_disabled.sh
+END
+kernel_module_bluetooth_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/kernel_module_bluetooth_disabled.sh
+END
+audit_privileged_commands.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_privileged_commands.sh
+END
+deny_password_attempts.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/deny_password_attempts.sh
+END
+set_blank_screensaver.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_blank_screensaver.sh
+END
+set_screensaver_inactivity_timeout.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_screensaver_inactivity_timeout.sh
+END
+mount_option_tmp_nodev.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/mount_option_tmp_nodev.sh
+END
+ensure_logrotate_activated.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/ensure_logrotate_activated.sh
+END
+service_messagebus_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_messagebus_disabled.sh
+END
+enable_selinux_bootloader.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/enable_selinux_bootloader.sh
+END
+no_hashes_outside_shadow.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/252/trunk/compliance/Bash/SSG/dev/no_hashes_outside_shadow.sh
+END
+mountopt_nosuid_on_removable_partitions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/aqueduct/!svn/ver/248/trunk/compliance/Bash/SSG/dev/mountopt_nosuid_on_removable_partitions.sh
+END
+no_rsh_trust_files.sh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/no_rsh_trust_files.sh
+END
+set_sysctl_net_ipv4_conf_all_secure_redirects.sh
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_conf_all_secure_redirects.sh
+END
+service_oddjobd_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_oddjobd_disabled.sh
+END
+ldap_client_start_tls.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/ldap_client_start_tls.sh
+END
+disable_protocol_dccp.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_protocol_dccp.sh
+END
+set_sysctl_net_ipv4_tcp_syncookies.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_tcp_syncookies.sh
+END
+httpd_servertokens_prod.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/httpd_servertokens_prod.sh
+END
+set_selinux_policy.sh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_selinux_policy.sh
+END
+groupowner_gshadow_file.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/groupowner_gshadow_file.sh
+END
+set_sysctl_net_ipv4_conf_all_accept_redirects.sh
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_conf_all_accept_redirects.sh
+END
+password_require_lowercases.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/password_require_lowercases.sh
+END
+audit_file_access.sh
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_file_access.sh
+END
+service_cgconfig_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_cgconfig_disabled.sh
+END
+ldap_server_config_bdb_file_security.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/ldap_server_config_bdb_file_security.sh
+END
+disable_vsftpd.sh
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_vsftpd.sh
+END
+mount_option_dev_shm_nodev.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/mount_option_dev_shm_nodev.sh
+END
+service_irqbalance_enabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_irqbalance_enabled.sh
+END
+xwindows_no_listen.sh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/xwindows_no_listen.sh
+END
+userowner_rsyslog_files.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/255/trunk/compliance/Bash/SSG/dev/userowner_rsyslog_files.sh
+END
+enable_ip6tables.sh
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/enable_ip6tables.sh
+END
+mount_option_dev_shm_noexec.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/mount_option_dev_shm_noexec.sh
+END
+sshd_set_keepalive.sh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/sshd_set_keepalive.sh
+END
+ldap_server_config_directory_file_security.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/ldap_server_config_directory_file_security.sh
+END
+httpd_conf_files_permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/httpd_conf_files_permissions.sh
+END
+password_warn_age.sh
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/password_warn_age.sh
+END
+disable_httpd.sh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_httpd.sh
+END
+console_device_restrict_access_server.sh
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/console_device_restrict_access_server.sh
+END
+enable_cron.sh
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/enable_cron.sh
+END
+audit_kernel_module_loading.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_kernel_module_loading.sh
+END
+obj_kernmod_sctp_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/obj_kernmod_sctp_disabled.sh
+END
+console_device_restrict_access_desktop.sh
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/console_device_restrict_access_desktop.sh
+END
+bootloader_password.sh
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/aqueduct/!svn/ver/256/trunk/compliance/Bash/SSG/dev/bootloader_password.sh
+END
+user_owner_grub_conf.sh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/user_owner_grub_conf.sh
+END
+rpm_verify_hashes.sh
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/rpm_verify_hashes.sh
+END
+service_atd_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_atd_disabled.sh
+END
+mount_option_dev_shm_nosuid.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/mount_option_dev_shm_nosuid.sh
+END
+service_netconsole_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_netconsole_disabled.sh
+END
+set_sysctl_net_ipv6_conf_default_accept_ra.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv6_conf_default_accept_ra.sh
+END
+password_min_age.sh
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/password_min_age.sh
+END
+network_ipv6_disable_interfaces.sh
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/network_ipv6_disable_interfaces.sh
+END
+service_sssd_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_sssd_disabled.sh
+END
+mountopt_nodev_on_removable_partitions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/aqueduct/!svn/ver/248/trunk/compliance/Bash/SSG/dev/mountopt_nodev_on_removable_partitions.sh
+END
+set_password_hashing_algorithm.sh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_password_hashing_algorithm.sh
+END
+service_rhnsd_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_rhnsd_disabled.sh
+END
+audit_network_modifications.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_network_modifications.sh
+END
+disable_dhcp_server.sh
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_dhcp_server.sh
+END
+service_kdump_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_kdump_disabled.sh
+END
+iptables_cupsd_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/iptables_cupsd_disabled.sh
+END
+password_require_uppercases.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/password_require_uppercases.sh
+END
+disable_rexec.sh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_rexec.sh
+END
+group_owner_grub_conf.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/group_owner_grub_conf.sh
+END
+disable_protocol_rds.sh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_protocol_rds.sh
+END
+rsyslog_send_messages_to_logserver.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/255/trunk/compliance/Bash/SSG/dev/rsyslog_send_messages_to_logserver.sh
+END
+service_quota_nld_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_quota_nld_disabled.sh
+END
+enable_randomize_va_space.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/enable_randomize_va_space.sh
+END
+user_umask_cshrc.sh
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/user_umask_cshrc.sh
+END
+disable_module_jffs2.sh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_module_jffs2.sh
+END
+postfix_server_denial_of_service.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/postfix_server_denial_of_service.sh
+END
+rsyslog_accept_remote_messages_none.sh
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/rsyslog_accept_remote_messages_none.sh
+END
+service_rhsmcertd_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_rhsmcertd_disabled.sh
+END
+ensure_gpgcheck_globally_activated.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/ensure_gpgcheck_globally_activated.sh
+END
+selinux_confinement_of_daemons.sh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/selinux_confinement_of_daemons.sh
+END
+no_nis_inclusions_group.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/no_nis_inclusions_group.sh
+END
+network_ipv6_privacy_extensions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/network_ipv6_privacy_extensions.sh
+END
+enable_iptables.sh
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/enable_iptables.sh
+END
+obj_kernmod_dccp_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/obj_kernmod_dccp_disabled.sh
+END
+service_certmonger_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_certmonger_disabled.sh
+END
+restrict_serial_port_logins.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/restrict_serial_port_logins.sh
+END
+disable_rsh.sh
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_rsh.sh
+END
+install_openswan.sh
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/aqueduct/!svn/ver/251/trunk/compliance/Bash/SSG/dev/install_openswan.sh
+END
+disable_module_freevxfs.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_module_freevxfs.sh
+END
+postfix_network_listening.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/postfix_network_listening.sh
+END
+disable_interactive_boot.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_interactive_boot.sh
+END
+enable_execshield.sh
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/enable_execshield.sh
+END
+password_retry.sh
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/password_retry.sh
+END
+set_pam_common
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/aqueduct/!svn/ver/234/trunk/compliance/Bash/SSG/dev/set_pam_common
+END
+set_sysctl_ipv6_default_accept_redirects.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_ipv6_default_accept_redirects.sh
+END
+install_aide.sh
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/aqueduct/!svn/ver/251/trunk/compliance/Bash/SSG/dev/install_aide.sh
+END
+sshd_use_approved_ciphers.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/sshd_use_approved_ciphers.sh
+END
+ensure_redhat_gpgkey_installed.sh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/ensure_redhat_gpgkey_installed.sh
+END
+audit_dac_actions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_dac_actions.sh
+END
+avahi_disable_publishing.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/avahi_disable_publishing.sh
+END
+permissions_grub_conf.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/permissions_grub_conf.sh
+END
+enable_auditd_service.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/enable_auditd_service.sh
+END
+password_require_digits.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/password_require_digits.sh
+END
+set_avahi_common
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/aqueduct/!svn/ver/240/trunk/compliance/Bash/SSG/dev/set_avahi_common
+END
+disable_module_cramfs.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_module_cramfs.sh
+END
+selinux_unlabeled_device_files.sh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/selinux_unlabeled_device_files.sh
+END
+no_unpackaged_suid_files.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/no_unpackaged_suid_files.sh
+END
+disable_gnome_thumbnailers.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_gnome_thumbnailers.sh
+END
+mountopt_nodev_on_nonroot_partitions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/mountopt_nodev_on_nonroot_partitions.sh
+END
+service_autofs_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_autofs_disabled.sh
+END
+audit_account_changes.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_account_changes.sh
+END
+mount_option_tmp_noexec.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/mount_option_tmp_noexec.sh
+END
+groupowner_rsyslog_files.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/groupowner_rsyslog_files.sh
+END
+disable_avahi.sh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_avahi.sh
+END
+disable_sysctl_ipv4_all_send_redirects.sh
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_sysctl_ipv4_all_send_redirects.sh
+END
+service_rdisc_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_rdisc_disabled.sh
+END
+package_rsyslog_installed.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/package_rsyslog_installed.sh
+END
+rpm_verify_permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/rpm_verify_permissions.sh
+END
+wireless_disable_drivers.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/wireless_disable_drivers.sh
+END
+install_vlock_package.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/251/trunk/compliance/Bash/SSG/dev/install_vlock_package.sh
+END
+sshd_set_idle_timeout.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/sshd_set_idle_timeout.sh
+END
+iptables_smtp_enabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/iptables_smtp_enabled.sh
+END
+enable_screensaver_password_lock.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/enable_screensaver_password_lock.sh
+END
+ensure_gpgcheck_never_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/ensure_gpgcheck_never_disabled.sh
+END
+postfix_seperate_internal_external.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/248/trunk/compliance/Bash/SSG/dev/postfix_seperate_internal_external.sh
+END
+set_sysctl_net_ipv4_icmp_echo_ignore_broadcasts.sh
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_icmp_echo_ignore_broadcasts.sh
+END
+homedir_perms_no_groupwrite_worldread.sh
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/homedir_perms_no_groupwrite_worldread.sh
+END
+enable_auditd_bootloader.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/enable_auditd_bootloader.sh
+END
+perms_shadow_file.sh
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/perms_shadow_file.sh
+END
+tftpd_uses_secure_mode.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/tftpd_uses_secure_mode.sh
+END
+mount_option_tmp_nosuid.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/mount_option_tmp_nosuid.sh
+END
+service_cgred_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_cgred_disabled.sh
+END
+uninstall_dhcp_server.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/uninstall_dhcp_server.sh
+END
+audit_time_rules.sh
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_time_rules.sh
+END
+obj_kernmod_tipc_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/obj_kernmod_tipc_disabled.sh
+END
+ldap_server_config_logging.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/ldap_server_config_logging.sh
+END
+service_smartd_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_smartd_disabled.sh
+END
+httpd_logs_permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/httpd_logs_permissions.sh
+END
+disable_protocol_tipc.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_protocol_tipc.sh
+END
+password_min_len.sh
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/password_min_len.sh
+END
+service_abrtd_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_abrtd_disabled.sh
+END
+service_cups_disabled2.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_cups_disabled2.sh
+END
+enable_screensaver_after_idle.sh
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/enable_screensaver_after_idle.sh
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/aqueduct/!svn/ver/231/trunk/compliance/Bash/SSG/dev/Makefile
+END
+userowner_gshadow_file.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/userowner_gshadow_file.sh
+END
+disable_module_hfs.sh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_module_hfs.sh
+END
+user_umask_logindefs.sh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/user_umask_logindefs.sh
+END
+avahi_prevent_port_sharing.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/avahi_prevent_port_sharing.sh
+END
+groupowner_shadow_file.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/groupowner_shadow_file.sh
+END
+no_nis_inclusions_passwd.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/no_nis_inclusions_passwd.sh
+END
+audit_rules_common
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/aqueduct/!svn/ver/240/trunk/compliance/Bash/SSG/dev/audit_rules_common
+END
+postfix_install_ssl_cert.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/251/trunk/compliance/Bash/SSG/dev/postfix_install_ssl_cert.sh
+END
+sshd_enable_warning_banner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/sshd_enable_warning_banner.sh
+END
+disable_sysctl_ipv4_ip_forward.sh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_sysctl_ipv4_ip_forward.sh
+END
+disable_sysctl_ipv4_ipforward.sh
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_sysctl_ipv4_ipforward.sh
+END
+disable_sysctl_ipv4_default_send_redirects.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_sysctl_ipv4_default_send_redirects.sh
+END
+service_portreserve_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_portreserve_disabled.sh
+END
+no_uidzero_except_root.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/no_uidzero_except_root.sh
+END
+audit_media_exports.sh
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_media_exports.sh
+END
+audit_config_immutable.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_config_immutable.sh
+END
+network_sniffer_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/network_sniffer_disabled.sh
+END
+aide_periodic_cron_checking.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/aide_periodic_cron_checking.sh
+END
+restrict_root_console_logins.sh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/restrict_root_console_logins.sh
+END
+uninstall_vsftpd.sh
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/uninstall_vsftpd.sh
+END
+user_umask_bashrc.sh
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/user_umask_bashrc.sh
+END
+disable_rhnsd.sh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_rhnsd.sh
+END
+network_disable_unused_interfaces.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/network_disable_unused_interfaces.sh
+END
+audit_audit_mac_changes.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_audit_mac_changes.sh
+END
+disable_users_coredumps.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_users_coredumps.sh
+END
+modprobe_common
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/aqueduct/!svn/ver/234/trunk/compliance/Bash/SSG/dev/modprobe_common
+END
+service_psacct_enabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_psacct_enabled.sh
+END
+set_sysctl_net_ipv4_conf_all_rp_filter.sh
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_conf_all_rp_filter.sh
+END
+avahi_check_ttl.sh
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/avahi_check_ttl.sh
+END
+disable_ipv6_module_loading.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_ipv6_module_loading.sh
+END
+avahi_restrict_published_information.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/avahi_restrict_published_information.sh
+END
+audit_file_deletions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_file_deletions.sh
+END
+user_umask_common
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/aqueduct/!svn/ver/240/trunk/compliance/Bash/SSG/dev/user_umask_common
+END
+set_sysctl_net_ipv4_conf_all_accept_source_route.sh
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_conf_all_accept_source_route.sh
+END
+service_cpuspeed_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_cpuspeed_disabled.sh
+END
+password_require_specials.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/password_require_specials.sh
+END
+disable_module_squashfs.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_module_squashfs.sh
+END
+network_ipv6_limit_requests.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/network_ipv6_limit_requests.sh
+END
+kernel_module_usb-storage_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/kernel_module_usb-storage_disabled.sh
+END
+groupowner_passwd_file.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/groupowner_passwd_file.sh
+END
+disable_at.sh
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_at.sh
+END
+set_sysctl_net_ipv4_conf_default_secure_redirects.sh
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_conf_default_secure_redirects.sh
+END
+obj_kernmod_rds_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/obj_kernmod_rds_disabled.sh
+END
+rsyslog_accept_remote_messages_tcp.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/rsyslog_accept_remote_messages_tcp.sh
+END
+install_vsftpd.sh
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/aqueduct/!svn/ver/251/trunk/compliance/Bash/SSG/dev/install_vsftpd.sh
+END
+rsyslog_file_permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/rsyslog_file_permissions.sh
+END
+require_singleuser_auth.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/require_singleuser_auth.sh
+END
+userowner_shadow_file.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/userowner_shadow_file.sh
+END
+disable_telnet_service.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_telnet_service.sh
+END
+user_umask_profile.sh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/user_umask_profile.sh
+END
+service_haldaemon_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_haldaemon_disabled.sh
+END
+set_sysctl_net_ipv4_conf_default_accept_redirects.sh
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_conf_default_accept_redirects.sh
+END
+limit_password_reuse.sh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/limit_password_reuse.sh
+END
+userowner_group_file.sh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/userowner_group_file.sh
+END
+disable_module_udf.sh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_module_udf.sh
+END
+package_rhn_gpgkey_installed.sh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/package_rhn_gpgkey_installed.sh
+END
+password_require_diffchars.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/password_require_diffchars.sh
+END
+sshd_disable_empty_passwords.sh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/sshd_disable_empty_passwords.sh
+END
+service_bluetooth_disabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_bluetooth_disabled.sh
+END
+set_system_login_banner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_system_login_banner.sh
+END
+set_daemon_umask.sh
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_daemon_umask.sh
+END
+set_sysctl_net_ipv4_icmp_ignore_bogus_error_messages.sh
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_icmp_ignore_bogus_error_messages.sh
+END
+gconf_gnome_disable_automount.sh
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/gconf_gnome_disable_automount.sh
+END
+service_restorecond_enabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_restorecond_enabled.sh
+END
+groupowner_group_file.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/groupowner_group_file.sh
+END
+set_sysctl_net_ipv4_conf_default_rp_filter.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_conf_default_rp_filter.sh
+END
+network_ipv6_disable_rpc.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/network_ipv6_disable_rpc.sh
+END
+httpd_serversignature_off.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/httpd_serversignature_off.sh
+END
+aide_verify_integrity_manually.sh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/aqueduct/!svn/ver/248/trunk/compliance/Bash/SSG/dev/aide_verify_integrity_manually.sh
+END
+service_postfix_enabled.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/service_postfix_enabled.sh
+END
+disable_prelink.sh
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_prelink.sh
+END
+selinux_policytype_targeted.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/selinux_policytype_targeted.sh
+END
+audit_manual_logon_edits.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_manual_logon_edits.sh
+END
+no_nis_inclusions_common
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/240/trunk/compliance/Bash/SSG/dev/no_nis_inclusions_common
+END
+set_sysctl_net_ipv4_conf_default_accept_source_route.sh
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_conf_default_accept_source_route.sh
+END
+rsyslog_accept_remote_messages_udp.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/rsyslog_accept_remote_messages_udp.sh
+END
+postfix_create_cert.sh
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/aqueduct/!svn/ver/251/trunk/compliance/Bash/SSG/dev/postfix_create_cert.sh
+END
+audit_sysadmin_actions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/audit_sysadmin_actions.sh
+END
+disable_dns_server.sh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/disable_dns_server.sh
+END
+no_nis_inclusions_shadow.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/no_nis_inclusions_shadow.sh
+END
+set_sysctl_net_ipv4_conf_all_log_martians.sh
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/set_sysctl_net_ipv4_conf_all_log_martians.sh
+END
+perms_group_file.sh
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/perms_group_file.sh
+END
+perms_gshadow_file.sh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/perms_gshadow_file.sh
+END
+bootloader_nousb_argument.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/bootloader_nousb_argument.sh
+END
+postfix_logging.sh
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/aqueduct/!svn/ver/239/trunk/compliance/Bash/SSG/dev/postfix_logging.sh
+END
+set_selinux_state.sh
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/aqueduct/!svn/ver/252/trunk/compliance/Bash/SSG/dev/set_selinux_state.sh
+END
+sshd_allow_only_protocol2.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/sshd_allow_only_protocol2.sh
+END
+aide_build_database.sh
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/aide_build_database.sh
+END
+uninstall_bind.sh
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/aqueduct/!svn/ver/238/trunk/compliance/Bash/SSG/dev/uninstall_bind.sh
+END

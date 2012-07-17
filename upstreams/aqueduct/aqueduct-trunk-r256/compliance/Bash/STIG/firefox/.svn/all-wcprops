@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/aqueduct/!svn/ver/193/trunk/compliance/Bash/STIG/firefox
+END
+mozilla-aqueduct-stig.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/193/trunk/compliance/Bash/STIG/firefox/mozilla-aqueduct-stig.cfg
+END
+firefox-lockdown.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/aqueduct/!svn/ver/193/trunk/compliance/Bash/STIG/firefox/firefox-lockdown.sh
+END
+ReadMe.txt
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/aqueduct/!svn/ver/193/trunk/compliance/Bash/STIG/firefox/ReadMe.txt
+END

@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts
+END
+slim-channels-svn-to-sat.sh
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/slim-channels-svn-to-sat.sh
+END
+svn_update_RPM_build_puppet-stig.sh
+K 25
+svn:wc:ra_dav:version-url
+V 156
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/svn_update_RPM_build_puppet-stig.sh
+END
+slim-kickstart-svn-to-sat.sh
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/slim-kickstart-svn-to-sat.sh
+END
+slim-sat-rhnpush-rpm.sh
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/slim-sat-rhnpush-rpm.sh
+END
+satellite-db-backup.sh
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/satellite-db-backup.sh
+END
+errata-2.0.pl
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/errata-2.0.pl
+END
+slim-svn-to-sat.sh
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/slim-svn-to-sat.sh
+END
+sat-clone-channels.sh
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/sat-clone-channels.sh
+END
+satellite-db-restore-secondary.sh
+K 25
+svn:wc:ra_dav:version-url
+V 154
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/satellite-db-restore-secondary.sh
+END
+sat-inventory.sh
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/sat-inventory.sh
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/README
+END
+slim-rpm-src-svn-to-util.sh
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/slim-rpm-src-svn-to-util.sh
+END
+svn_update_RPM_build_uvscan.sh
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/svn_update_RPM_build_uvscan.sh
+END
+sat-set-org-system-sw-entitlements.sh
+K 25
+svn:wc:ra_dav:version-url
+V 158
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/sat-set-org-system-sw-entitlements.sh
+END
+rpm_addsign.sh
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/rpm_addsign.sh
+END
+slim-sat-kickstart-create.sh
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/slim-sat-kickstart-create.sh
+END
+svn_update_RPM_build_avvdat-xxxx.sh
+K 25
+svn:wc:ra_dav:version-url
+V 156
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/svn_update_RPM_build_avvdat-xxxx.sh
+END
+satellite-db-backup-rsync-primary.sh
+K 25
+svn:wc:ra_dav:version-url
+V 157
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/satellite-db-backup-rsync-primary.sh
+END
+slim.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/slim.cfg
+END
+rpm_build-svn-to-rpmbuild-puppet-stig.sh
+K 25
+svn:wc:ra_dav:version-url
+V 161
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/rpm_build-svn-to-rpmbuild-puppet-stig.sh
+END
+satellite-db-backup-primary.sh
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/satellite-db-backup-primary.sh
+END
+satellite-sync-cron.sh
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/satellite-sync-cron.sh
+END
+slim-sat-oracle-backup.sh
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/slim-sat-oracle-backup.sh
+END
+sat-create-orgs.sh
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/sat-create-orgs.sh
+END
+slim-sat-channel-create.sh
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/slim-sat-channel-create.sh
+END
+satellite-db-backup-secondary.sh
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/satellite-db-backup-secondary.sh
+END
+svn_update_RPM_build_puppet-site.sh
+K 25
+svn:wc:ra_dav:version-url
+V 156
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/svn_update_RPM_build_puppet-site.sh
+END
+disk-check.sh
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/scripts/trunk/scripts/disk-check.sh
+END

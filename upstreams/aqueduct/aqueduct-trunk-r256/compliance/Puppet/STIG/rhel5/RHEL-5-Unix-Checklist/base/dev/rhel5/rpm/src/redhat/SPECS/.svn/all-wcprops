@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/rpm/src/redhat/SPECS
+END
+puppet-nces-sb-vm-04.spec
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/rpm/src/redhat/SPECS/puppet-nces-sb-vm-04.spec
+END
+uvscanspawar.spec
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/rpm/src/redhat/SPECS/uvscanspawar.spec
+END
+puppet-site.spec
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/rpm/src/redhat/SPECS/puppet-site.spec
+END
+puppet-stig.spec
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/rpm/src/redhat/SPECS/puppet-stig.spec
+END
+avvdatspawar.spec
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/rpm/src/redhat/SPECS/avvdatspawar.spec
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/rpm/src/redhat/SPECS/README
+END

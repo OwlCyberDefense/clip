@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod
+END
+DHS-Basic-Disable_Innd.sh
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-Disable_Innd.sh
+END
+DHS-Basic-SSHD_Disable_Host-based_Authentication.sh
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-SSHD_Disable_Host-based_Authentication.sh
+END
+DHS-Basic-SSHD_Enable_Ignore_Rhosts.sh
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-SSHD_Enable_Ignore_Rhosts.sh
+END
+DHS-Basic-Disable_Remote_Login-rlogin.sh
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-Disable_Remote_Login-rlogin.sh
+END
+DHS-Basic-Disable_Remote_Shell-rsh.sh
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-Disable_Remote_Shell-rsh.sh
+END
+DHS-Basic-SSHD_Disable_Root_Login.sh
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-SSHD_Disable_Root_Login.sh
+END
+DHS-Basic-SSH_Parameters.sh
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-SSH_Parameters.sh
+END
+DHS-Basic-Root_Console_Only_Logins.sh
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-Root_Console_Only_Logins.sh
+END
+DHS-Basic-SSHD_Protocol.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-SSHD_Protocol.sh
+END
+DHS-Basic-SSHD_Disable_Rhosts_Authentication.sh
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-SSHD_Disable_Rhosts_Authentication.sh
+END
+DHS-Basic-Disable_Remote_Exec-rexec.sh
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-Disable_Remote_Exec-rexec.sh
+END
+DHS-Basic-SSHD_Disable_Empty_Passwords.sh
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-SSHD_Disable_Empty_Passwords.sh
+END
+DHS-Basic-SSHD_Disable_Rhosts_RSA_Authentication.sh
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/prod/DHS-Basic-SSHD_Disable_Rhosts_RSA_Authentication.sh
+END

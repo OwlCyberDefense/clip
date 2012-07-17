@@ -1,0 +1,593 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev
+END
+DHS-Basic-Disable_Power_Management.sh
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Power_Management.sh
+END
+DHS-Basic-Remove_Halt_User_Account.sh
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Remove_Halt_User_Account.sh
+END
+DHS-Basic-Remove_Insecure_Locks_option_for_NFS_Server.sh
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Remove_Insecure_Locks_option_for_NFS_Server.sh
+END
+DHS-Basic-System_Log_File_Permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-System_Log_File_Permissions.sh
+END
+DHS-Basic-Audit_Rules.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Audit_Rules.sh
+END
+DHS-Basic-Disable_Console_Mouse_Support.sh
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Console_Mouse_Support.sh
+END
+DHS-Basic-Password_Expiration_Warning.sh
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Password_Expiration_Warning.sh
+END
+DHS-Basic-Disable_Source_Routing.sh
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Source_Routing.sh
+END
+DHS-Basic-Disable_Accepting_Secure_Redirects.sh
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Accepting_Secure_Redirects.sh
+END
+DHS-Basic-Use_NOSUID_and_NODEV_for_Removable_Media.sh
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Use_NOSUID_and_NODEV_for_Removable_Media.sh
+END
+DHS-Basic-Disable_Accepting_ICMP_Redirects.sh
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Accepting_ICMP_Redirects.sh
+END
+DHS-Basic-No_Empty_Passwords.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-No_Empty_Passwords.sh
+END
+DHS-Basic-Limit_Password_Reuse.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Limit_Password_Reuse.sh
+END
+DHS-Basic-Daemon_Umask.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Daemon_Umask.sh
+END
+DHS-Basic-Disable_Restorecon.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Restorecon.sh
+END
+DHS-Basic-Disable_NFS_Client.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_NFS_Client.sh
+END
+DHS-Basic-Enable_vsftpd_Additional_Logging.sh
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Enable_vsftpd_Additional_Logging.sh
+END
+DHS-Basic-Remove_Gopher_User_Account.sh
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Remove_Gopher_User_Account.sh
+END
+DHS-Basic-Minimum_Delay_Between_Password_Changes.sh
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Minimum_Delay_Between_Password_Changes.sh
+END
+DHS-Basic-Password_Policy_Length_Minimum.sh
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Password_Policy_Length_Minimum.sh
+END
+DHS-Basic-Maximum_Time_Between_Password_Changes.sh
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Maximum_Time_Between_Password_Changes.sh
+END
+DHS-Basic-Disable_Sendmail.sh
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Sendmail.sh
+END
+DHS-Basic-Create_Login_Banner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Create_Login_Banner.sh
+END
+DHS-Basic-Disable_FTP-gssftp.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_FTP-gssftp.sh
+END
+DHS-Basic-Disable_FTP-vsftpd.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_FTP-vsftpd.sh
+END
+DHS-Basic-Secure_SUID-SGID_Executables.sh
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Secure_SUID-SGID_Executables.sh
+END
+DHS-Basic-Expired_Password_Invalidation.sh
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Expired_Password_Invalidation.sh
+END
+DHS-Basic-Create_Pre-Session_GUI_Banner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Create_Pre-Session_GUI_Banner.sh
+END
+DHS-Basic-Disable_Sending_ICMP_Redirects.sh
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Sending_ICMP_Redirects.sh
+END
+DHS-Basic-Disable_Postgresql.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Postgresql.sh
+END
+DHS-Basic-Audit_Log_Rotation.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Audit_Log_Rotation.sh
+END
+DHS-Basic-Disable_Portmap_Daemon.sh
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Portmap_Daemon.sh
+END
+DHS-Basic-Disable_Bluetooth.sh
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Bluetooth.sh
+END
+DHS-Basic-Disable_MySQL.sh
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_MySQL.sh
+END
+DHS-Basic-Ignore_ICMP_ECHO_and_TIMESTAMP_Requests.sh
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Ignore_ICMP_ECHO_and_TIMESTAMP_Requests.sh
+END
+DHS-Basic-Lock_account_after_three_failed_login_attempts.sh
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Lock_account_after_three_failed_login_attempts.sh
+END
+DHS-Basic-Enable_the_Audit_Subsystem.sh
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Enable_the_Audit_Subsystem.sh
+END
+DHS-Basic-Adjust_Maximum_Pending_Connections.sh
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Adjust_Maximum_Pending_Connections.sh
+END
+DHS-Basic-Lock_Non-Root_Accounts_with_UID_0.sh
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Lock_Non-Root_Accounts_with_UID_0.sh
+END
+DHS-Basic-Use_NOSUID_on_User_Filesystems.sh
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Use_NOSUID_on_User_Filesystems.sh
+END
+DHS-Basic-Disable_NFS_Server.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_NFS_Server.sh
+END
+DHS-Basic-Disable_TFTP.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_TFTP.sh
+END
+DHS-Basic-Disable_Tux.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Tux.sh
+END
+DHS-Basic-Remove_News_User_Account.sh
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Remove_News_User_Account.sh
+END
+DHS-Basic-System_Configuration_File_Permissions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-System_Configuration_File_Permissions.sh
+END
+DHS-Basic-Disable_Ctrl-Alt-Del.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Ctrl-Alt-Del.sh
+END
+DHS-Basic-Secure_Unowned_Files.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Secure_Unowned_Files.sh
+END
+DHS-Basic-Disable_NIS_Client.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_NIS_Client.sh
+END
+DHS-Basic-Disable_IPv6_Kernel_Module.sh
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_IPv6_Kernel_Module.sh
+END
+DHS-Basic-Disable_IP_Forwarding.sh
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_IP_Forwarding.sh
+END
+DHS-Basic-Disable_Telnet.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Telnet.sh
+END
+DHS-Basic-Secure_Authpriv_Logging.sh
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Secure_Authpriv_Logging.sh
+END
+DHS-Basic-Disable_Printer_Configuration_Daemon.sh
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Printer_Configuration_Daemon.sh
+END
+DHS-Basic-Disable_ISDN.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_ISDN.sh
+END
+DHS-Basic-Secure_Option_for_NFS_Server.sh
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Secure_Option_for_NFS_Server.sh
+END
+DHS-Basic-Remove_ftp_Account.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Remove_ftp_Account.sh
+END
+DHS-Basic-Restrict_Remote_X_Clients.sh
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Restrict_Remote_X_Clients.sh
+END
+DHS-Basic-Disable_Kudzu.sh
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Kudzu.sh
+END
+DHS-Basic-Enable_Reverse_Path_Source_Validation.sh
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Enable_Reverse_Path_Source_Validation.sh
+END
+DHS-Basic-Disable_Printer_Daemon.sh
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Printer_Daemon.sh
+END
+DHS-Basic-Create_Login_FTP_Banner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Create_Login_FTP_Banner.sh
+END
+DHS-Basic-Limit_Access_To_Root_From_Su.sh
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Limit_Access_To_Root_From_Su.sh
+END
+DHS-Basic-Disable_Broadcast_Packet_Forwarding.sh
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Broadcast_Packet_Forwarding.sh
+END
+DHS-Basic-Disable_UUCP.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_UUCP.sh
+END
+DHS-Basic-Disable_Rhosts_Support.sh
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Rhosts_Support.sh
+END
+DHS-Basic-Disable_NetFS.sh
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_NetFS.sh
+END
+DHS-Basic-Disable_NIS_Server.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_NIS_Server.sh
+END
+DHS-Basic-Enable_Strong_TCP_Sequence_Number_Generation.sh
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Enable_Strong_TCP_Sequence_Number_Generation.sh
+END
+DHS-Basic-Disable_MCS_Translation_Service.sh
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_MCS_Translation_Service.sh
+END
+DHS-Basic-Disable_Webmin.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Webmin.sh
+END
+DHS-Basic-Disable_SETroubleshoot.sh
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_SETroubleshoot.sh
+END
+DHS-Basic-Disable_SNMP_if_default_public_string_exists.sh
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_SNMP_if_default_public_string_exists.sh
+END
+DHS-Basic-Single_User_Mode_Password.sh
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Single_User_Mode_Password.sh
+END
+DHS-Basic-Create_Pre-Login_GUI_Banner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Create_Pre-Login_GUI_Banner.sh
+END
+DHS-Basic-Disable_USB_and_PCMCIA_Devices.sh
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_USB_and_PCMCIA_Devices.sh
+END
+DHS-Basic-Require_GRUB_Password.sh
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Require_GRUB_Password.sh
+END
+DHS-Basic-SSHD_Maximum_Authentication_Attempts.sh
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-SSHD_Maximum_Authentication_Attempts.sh
+END
+DHS-Basic-Enable_Stack_Protection.sh
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Enable_Stack_Protection.sh
+END
+DHS-Basic-Disable_HP_Printing_and_Imaging.sh
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_HP_Printing_and_Imaging.sh
+END
+DHS-Basic-SSHD_Enable_X11_Forwarding.sh
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-SSHD_Enable_X11_Forwarding.sh
+END
+DHS-Basic-Secure_World_Writable_Directories.sh
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Secure_World_Writable_Directories.sh
+END
+DHS-Basic-Remove_Games_User_Account.sh
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Remove_Games_User_Account.sh
+END
+DHS-Basic-Default_umask.sh
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Default_umask.sh
+END
+DHS-Basic-SSHD_Enable_Banner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-SSHD_Enable_Banner.sh
+END
+DHS-Basic-Use_NODEV_Option_for_Non-root_Partitions.sh
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Use_NODEV_Option_for_Non-root_Partitions.sh
+END
+DHS-Basic-Block_System_Accounts.sh
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Block_System_Accounts.sh
+END
+DHS-Basic-Lock_Invalid_Accounts.sh
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Lock_Invalid_Accounts.sh
+END
+DHS-Basic-Disable_SNMP.sh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_SNMP.sh
+END
+DHS-Basic-Enable_TCP_Syncookies.sh
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Enable_TCP_Syncookies.sh
+END
+DHS-Basic-No_Plus_Entries_in_Password_Files.sh
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-No_Plus_Entries_in_Password_Files.sh
+END
+DHS-Basic-Remove_Shutdown_User_Account.sh
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Remove_Shutdown_User_Account.sh
+END
+DHS-Basic-Disable_SMB.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_SMB.sh
+END
+DHS-Basic-Disable_Apache.sh
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Apache.sh
+END
+DHS-Basic-Disable_DNS.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_DNS.sh
+END
+DHS-Basic-Disable_Squid.sh
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Disable_Squid.sh
+END
+DHS-Basic-Configure_Sendmail_Options.sh
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Configure_Sendmail_Options.sh
+END
+DHS-Basic-Secure_World_Writable_Files.sh
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Secure_World_Writable_Files.sh
+END
+DHS-Basic-Set_Password_Aging_on_Active_Accounts.sh
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/aqueduct/!svn/ver/189/trunk/compliance/Bash/DHS/rhel6/basic/dev/DHS-Basic-Set_Password_Aging_on_Active_Accounts.sh
+END

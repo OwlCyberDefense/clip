@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/prod
+END
+NISPOM-Disable_Remote_Exec-rexec.sh
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/prod/NISPOM-Disable_Remote_Exec-rexec.sh
+END
+NISPOM-SSHD_Disable_Empty_Passwords.sh
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/prod/NISPOM-SSHD_Disable_Empty_Passwords.sh
+END
+NISPOM-Disable_Finger.sh
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/prod/NISPOM-Disable_Finger.sh
+END
+NISPOM-Disable_Remote_Login-rlogin.sh
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/prod/NISPOM-Disable_Remote_Login-rlogin.sh
+END
+NISPOM-Disable_Remote_Shell-rsh.sh
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/prod/NISPOM-Disable_Remote_Shell-rsh.sh
+END
+NISPOM-SSHD_Disable_Root_Login.sh
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/aqueduct/!svn/ver/190/trunk/compliance/Bash/NISPOM/rhel6/prod/NISPOM-SSHD_Disable_Root_Login.sh
+END

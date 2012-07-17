@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/puppet/trunk/etc/puppet/manifests
+END
+site.pp
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/puppet/trunk/etc/puppet/manifests/site.pp
+END
+stig.pp
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/aqueduct/!svn/ver/131/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5/puppet/trunk/etc/puppet/manifests/stig.pp
+END

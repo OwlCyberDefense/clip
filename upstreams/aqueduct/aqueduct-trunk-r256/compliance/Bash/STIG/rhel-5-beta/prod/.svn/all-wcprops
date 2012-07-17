@@ -1,0 +1,2957 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/aqueduct/!svn/ver/207/trunk/compliance/Bash/STIG/rhel-5-beta/prod
+END
+GEN002000.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002000.sh
+END
+GEN003200.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003200.sh
+END
+GEN004010.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004010.sh
+END
+GEN002040.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002040.sh
+END
+GEN003240.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003240.sh
+END
+GEN002430.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002430.sh
+END
+GEN000460.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000460.sh
+END
+GEN001270.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001270.sh
+END
+GEN000000-LNX001434.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX001434.sh
+END
+GEN005600.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005600.sh
+END
+GEN002820.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002820.sh
+END
+GEN004440.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004440.sh
+END
+GEN006060.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006060.sh
+END
+GEN003280.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003280.sh
+END
+GEN001660.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001660.sh
+END
+GEN000850.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000850.sh
+END
+GEN003523.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003523.sh
+END
+GEN003604.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003604.sh
+END
+GEN005305.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005305.sh
+END
+GEN001391.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001391.sh
+END
+GEN008420.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008420.sh
+END
+GEN001365.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001365.sh
+END
+GEN007260.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007260.sh
+END
+GEN004480.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004480.sh
+END
+GEN005533.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005533.sh
+END
+GEN002753.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002753.sh
+END
+GEN005507.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005507.sh
+END
+GEN008460.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008460.sh
+END
+GEN000595.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000595.sh
+END
+GEN006571.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006571.sh
+END
+GEN001379.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001379.sh
+END
+GEN000140-1.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000140-1.sh
+END
+GEN001320.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001320.sh
+END
+GEN005300.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005300.sh
+END
+GEN002520.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002520.sh
+END
+GEN000900.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000900.sh
+END
+GEN001360.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001360.sh
+END
+GEN008120.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008120.sh
+END
+GEN003720.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003720.sh
+END
+GEN005340.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005340.sh
+END
+GEN006150.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006150.sh
+END
+GEN002560.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002560.sh
+END
+GEN003613.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003613.sh
+END
+GEN000590.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000590.sh
+END
+GEN007700.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007700.sh
+END
+GEN001374.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001374.sh
+END
+GEN004920.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004920.sh
+END
+GEN008160.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008160.sh
+END
+GEN003760.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003760.sh
+END
+GEN000980.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000980.sh
+END
+GEN003815.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003815.sh
+END
+GEN005516.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005516.sh
+END
+GEN001845.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001845.sh
+END
+GEN005770.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005770.sh
+END
+GEN006580.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006580.sh
+END
+GEN002990.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002990.sh
+END
+GEN000000-LNX00600.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00600.sh
+END
+GEN007780.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007780.sh
+END
+GEN000000-LNX00640.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00640.sh
+END
+GEN005000.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005000.sh
+END
+GEN002220.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002220.sh
+END
+GEN001410.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001410.sh
+END
+GEN000250.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000250.sh
+END
+GEN001060.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001060.sh
+END
+GEN005040-1.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005040-1.sh
+END
+GEN006200.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006200.sh
+END
+GEN003501.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/207/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003501.sh
+END
+GEN003420.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003420.sh
+END
+GEN001800.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001800.sh
+END
+GEN005040.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005040.sh
+END
+GEN000640.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000640.sh
+END
+GEN000452.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000452.sh
+END
+GEN003810.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003810.sh
+END
+GEN004620.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004620.sh
+END
+GEN005511.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005511.sh
+END
+GEN006240.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006240.sh
+END
+GEN003460.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003460.sh
+END
+GEN001840.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001840.sh
+END
+GEN000290-5.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000290-5.sh
+END
+GEN005080.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005080.sh
+END
+GEN001490.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001490.sh
+END
+GEN000680.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000680.sh
+END
+GEN005820.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005820.sh
+END
+GEN003850.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003850.sh
+END
+GEN004660.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004660.sh
+END
+GEN006280.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006280.sh
+END
+GEN002690.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002690.sh
+END
+GEN001880.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001880.sh
+END
+GEN003581.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003581.sh
+END
+GEN005525.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005525.sh
+END
+GEN002719.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002719.sh
+END
+GEN007480.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007480.sh
+END
+GEN005539.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005539.sh
+END
+GEN000000-LNX00380.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00380.sh
+END
+GEN000300.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000300.sh
+END
+GEN003120.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003120.sh
+END
+GEN001500.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001500.sh
+END
+GEN000340.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000340.sh
+END
+GEN002700.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002700.sh
+END
+GEN003510.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003510.sh
+END
+GEN003160.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003160.sh
+END
+GEN001540.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001540.sh
+END
+GEN000380.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000380.sh
+END
+GEN001190.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001190.sh
+END
+GEN008300.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008300.sh
+END
+GEN004710.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004710.sh
+END
+GEN005520.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005520.sh
+END
+GEN006330.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006330.sh
+END
+GEN007140.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007140.sh
+END
+GEN002740.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002740.sh
+END
+GEN004360.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004360.sh
+END
+GEN001580.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001580.sh
+END
+GEN005306.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005306.sh
+END
+GEN003255.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003255.sh
+END
+GEN001392.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001392.sh
+END
+GEN008340.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008340.sh
+END
+GEN001366.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001366.sh
+END
+GEN003940.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003940.sh
+END
+GEN007920.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007920.sh
+END
+GEN003619.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003619.sh
+END
+GEN003980.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003980.sh
+END
+GEN007960.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007960.sh
+END
+GEN001200.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001200.sh
+END
+GEN003210.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003210.sh
+END
+GEN001240.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001240.sh
+END
+GEN003600.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003600.sh
+END
+GEN003250.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003250.sh
+END
+GEN002440.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002440.sh
+END
+GEN001280.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001280.sh
+END
+GEN001361.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001361.sh
+END
+GEN004800.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004800.sh
+END
+GEN005610.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005610.sh
+END
+GEN006420.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006420.sh
+END
+GEN008040.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008040.sh
+END
+GEN002480.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002480.sh
+END
+GEN001375.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001375.sh
+END
+GEN008080.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008080.sh
+END
+GEN005517.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005517.sh
+END
+GEN008820.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008820.sh
+END
+GEN007660.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007660.sh
+END
+GEN004880.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004880.sh
+END
+GEN000000-LNX00520.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00520.sh
+END
+GEN005395.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005395.sh
+END
+GEN000000-LNX00560.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00560.sh
+END
+GEN002100.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002100.sh
+END
+GEN000500-1.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000500-1.sh
+END
+GEN003300.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003300.sh
+END
+GEN002140.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002140.sh
+END
+GEN000251.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000251.sh
+END
+GEN004500.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004500.sh
+END
+GEN006120.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006120.sh
+END
+GEN003502.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003502.sh
+END
+GEN003340.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003340.sh
+END
+GEN001720.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001720.sh
+END
+GEN000560.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000560.sh
+END
+GEN007320.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007320.sh
+END
+GEN003730.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003730.sh
+END
+GEN004540.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004540.sh
+END
+GEN005350.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005350.sh
+END
+GEN005512.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005512.sh
+END
+GEN006160.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006160.sh
+END
+GEN001760.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001760.sh
+END
+GEN000950.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000950.sh
+END
+GEN008520.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008520.sh
+END
+GEN004930.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004930.sh
+END
+GEN005740.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005740.sh
+END
+GEN002960.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002960.sh
+END
+GEN003770.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003770.sh
+END
+GEN004580.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004580.sh
+END
+GEN005390.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005390.sh
+END
+GEN003825.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003825.sh
+END
+GEN005526.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005526.sh
+END
+GEN000588.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000588.sh
+END
+GEN003865.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003865.sh
+END
+GEN000220.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000220.sh
+END
+GEN003040.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003040.sh
+END
+GEN002230.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002230.sh
+END
+GEN000610.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000610.sh
+END
+GEN001420.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001420.sh
+END
+GEN000290-1.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000290-1.sh
+END
+GEN005400.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005400.sh
+END
+GEN006210.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006210.sh
+END
+GEN007020.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007020.sh
+END
+GEN003430.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003430.sh
+END
+GEN001810.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001810.sh
+END
+GEN003080.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003080.sh
+END
+GEN001460.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001460.sh
+END
+GEN006600.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006600.sh
+END
+GEN008220.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008220.sh
+END
+GEN003820.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003820.sh
+END
+GEN003470.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003470.sh
+END
+GEN002660.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002660.sh
+END
+GEN001850.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001850.sh
+END
+GEN002715.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002715.sh
+END
+GEN005307.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005307.sh
+END
+GEN007800.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007800.sh
+END
+GEN001393.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001393.sh
+END
+GEN008260.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008260.sh
+END
+GEN001367.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001367.sh
+END
+GEN003860.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003860.sh
+END
+GEN005480.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005480.sh
+END
+GEN006290.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006290.sh
+END
+GEN001890.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001890.sh
+END
+GEN001120.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001120.sh
+END
+GEN005100.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005100.sh
+END
+GEN002320.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002320.sh
+END
+GEN000700.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000700.sh
+END
+GEN000000-LNX001431.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX001431.sh
+END
+GEN001160.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001160.sh
+END
+GEN006300.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006300.sh
+END
+GEN002710.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002710.sh
+END
+GEN001900.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001900.sh
+END
+GEN003520.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003520.sh
+END
+GEN003601.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003601.sh
+END
+GEN005140.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005140.sh
+END
+GEN002360.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002360.sh
+END
+GEN001550.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001550.sh
+END
+GEN001605.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001605.sh
+END
+GEN001362.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001362.sh
+END
+GEN005530.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005530.sh
+END
+GEN006340.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006340.sh
+END
+GEN002750.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002750.sh
+END
+GEN001940.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001940.sh
+END
+GEN004370.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004370.sh
+END
+GEN005180.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005180.sh
+END
+GEN001590.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001590.sh
+END
+GEN007540.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007540.sh
+END
+GEN003950.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003950.sh
+END
+GEN006380.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006380.sh
+END
+GEN001980.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001980.sh
+END
+GEN000000-LNX00400.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00400.sh
+END
+GEN005518.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005518.sh
+END
+GEN008740.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008740.sh
+END
+GEN000000-LNX00440.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00440.sh
+END
+GEN007970.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007970.sh
+END
+GEN008780.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008780.sh
+END
+GEN000000-LNX00480.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00480.sh
+END
+GEN002020.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002020.sh
+END
+GEN000500-2.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000500-2.sh
+END
+GEN000400.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000400.sh
+END
+GEN001210.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001210.sh
+END
+GEN001600.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001600.sh
+END
+GEN002060.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002060.sh
+END
+GEN000440.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000440.sh
+END
+GEN000252.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000252.sh
+END
+GEN007200.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007200.sh
+END
+GEN002800.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002800.sh
+END
+GEN003610.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003610.sh
+END
+GEN003503.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003503.sh
+END
+GEN003260.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003260.sh
+END
+GEN001640.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001640.sh
+END
+GEN001290.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001290.sh
+END
+GEN001371.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001371.sh
+END
+GEN000454.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000454.sh
+END
+GEN004460.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004460.sh
+END
+GEN006080.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006080.sh
+END
+GEN001680.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001680.sh
+END
+GEN008440.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008440.sh
+END
+GEN003745.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003745.sh
+END
+GEN005365.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005365.sh
+END
+GEN005527.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005527.sh
+END
+GEN008480.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008480.sh
+END
+GEN006565.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006565.sh
+END
+GEN000000-LNX00530.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00530.sh
+END
+GEN000100.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000100.sh
+END
+GEN001300.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001300.sh
+END
+Aqueduct-STIG.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/Aqueduct-STIG.sh
+END
+GEN002500.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002500.sh
+END
+GEN008100.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008100.sh
+END
+GEN000290-2.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000290-2.sh
+END
+GEN003700.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003700.sh
+END
+GEN004510.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004510.sh
+END
+GEN005320.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005320.sh
+END
+GEN002540.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002540.sh
+END
+GEN001730.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001730.sh
+END
+GEN000920.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000920.sh
+END
+GEN001380.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001380.sh
+END
+GEN004900.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004900.sh
+END
+GEN008140.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008140.sh
+END
+GEN003740.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003740.sh
+END
+GEN005360.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005360.sh
+END
+GEN005522.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005522.sh
+END
+GEN000960.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000960.sh
+END
+GEN006225.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006225.sh
+END
+GEN002716.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002716.sh
+END
+GEN003607.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003607.sh
+END
+GEN007720.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007720.sh
+END
+GEN001394.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001394.sh
+END
+GEN001475.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001475.sh
+END
+GEN004940.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004940.sh
+END
+GEN005750.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005750.sh
+END
+GEN008180.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008180.sh
+END
+GEN001368.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001368.sh
+END
+GEN003780.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003780.sh
+END
+GEN003835.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003835.sh
+END
+GEN005536.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005536.sh
+END
+GEN007760.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007760.sh
+END
+GEN000000-LNX00620.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00620.sh
+END
+GEN005495.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005495.sh
+END
+GEN000000-LNX00660.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00660.sh
+END
+GEN001000.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001000.sh
+END
+GEN002200.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002200.sh
+END
+GEN003400.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003400.sh
+END
+GEN003050.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003050.sh
+END
+GEN000620.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000620.sh
+END
+GEN001430.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001430.sh
+END
+GEN000000-LNX001432.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX001432.sh
+END
+GEN004600.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004600.sh
+END
+GEN001901.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001901.sh
+END
+GEN001820.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001820.sh
+END
+GEN003521.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003521.sh
+END
+GEN003252.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003252.sh
+END
+GEN003090.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003090.sh
+END
+GEN002280.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002280.sh
+END
+GEN001470.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001470.sh
+END
+GEN001363.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001363.sh
+END
+GEN005800.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005800.sh
+END
+GEN003830.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003830.sh
+END
+GEN004640.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004640.sh
+END
+GEN005531.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005531.sh
+END
+GEN006260.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006260.sh
+END
+GEN003480.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003480.sh
+END
+GEN002751.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002751.sh
+END
+GEN001860.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001860.sh
+END
+GEN005840.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005840.sh
+END
+GEN004680.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004680.sh
+END
+GEN005490.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005490.sh
+END
+GEN000000-LNX00320.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00320.sh
+END
+GEN005519.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005519.sh
+END
+GEN007850.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007850.sh
+END
+GEN0000600-2.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN0000600-2.sh
+END
+GEN005880.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005880.sh
+END
+GEN000000-LNX00360.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00360.sh
+END
+GEN003100.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003100.sh
+END
+GEN000500-3.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000500-3.sh
+END
+GEN000320.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000320.sh
+END
+GEN003140.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003140.sh
+END
+GEN002330.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002330.sh
+END
+GEN001520.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001520.sh
+END
+GEN000360.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000360.sh
+END
+GEN001170.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001170.sh
+END
+GEN000253.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000253.sh
+END
+GEN005500.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005500.sh
+END
+GEN006310.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006310.sh
+END
+GEN002720.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002720.sh
+END
+GEN003611.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003611.sh
+END
+GEN003504.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003504.sh
+END
+GEN003180.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003180.sh
+END
+GEN001560.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001560.sh
+END
+GEN000750.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000750.sh
+END
+GEN001372.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001372.sh
+END
+GEN008320.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008320.sh
+END
+GEN003920.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003920.sh
+END
+GEN002760.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002760.sh
+END
+GEN004380.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004380.sh
+END
+GEN005190.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005190.sh
+END
+GEN000790.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000790.sh
+END
+GEN007900.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007900.sh
+END
+GEN008360.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008360.sh
+END
+GEN003960.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003960.sh
+END
+GEN005528.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005528.sh
+END
+GEN000000-LNX00800.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00800.sh
+END
+GEN000000-LNX00450.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00450.sh
+END
+GEN007980.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007980.sh
+END
+GEN000020.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000020.sh
+END
+GEN000600-1.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000600-1.sh
+END
+GEN004000.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004000.sh
+END
+GEN000410.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000410.sh
+END
+GEN001220.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001220.sh
+END
+GEN002420.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002420.sh
+END
+GEN001610.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001610.sh
+END
+GEN000800.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000800.sh
+END
+GEN000450.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000450.sh
+END
+GEN001260.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001260.sh
+END
+GEN006400.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006400.sh
+END
+GEN008020.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008020.sh
+END
+GEN000290-3.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000290-3.sh
+END
+GEN003270.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003270.sh
+END
+GEN004820.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004820.sh
+END
+GEN008060.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008060.sh
+END
+GEN003660.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003660.sh
+END
+GEN005280.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005280.sh
+END
+GEN005523.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005523.sh
+END
+GEN000880.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000880.sh
+END
+GEN002717.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002717.sh
+END
+GEN003608.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003608.sh
+END
+GEN001476.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001476.sh
+END
+GEN000585.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000585.sh
+END
+GEN001369.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001369.sh
+END
+GEN000000-LNX00500.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00500.sh
+END
+GEN003755.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003755.sh
+END
+GEN005375.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005375.sh
+END
+GEN005537.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005537.sh
+END
+GEN006575.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006575.sh
+END
+GEN000000-LNX00580.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00580.sh
+END
+GEN002120.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002120.sh
+END
+GEN001310.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001310.sh
+END
+GEN006100.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006100.sh
+END
+GEN003320.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003320.sh
+END
+GEN000540.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000540.sh
+END
+GEN000000-LNX001433.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX001433.sh
+END
+GEN006140.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006140.sh
+END
+GEN001902.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001902.sh
+END
+GEN001740.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001740.sh
+END
+GEN000930.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000930.sh
+END
+GEN003522.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003522.sh
+END
+GEN003603.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003603.sh
+END
+GEN000580.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000580.sh
+END
+GEN001390.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001390.sh
+END
+GEN008500.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008500.sh
+END
+GEN001364.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001364.sh
+END
+GEN005720.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005720.sh
+END
+GEN003750.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003750.sh
+END
+GEN004560.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004560.sh
+END
+GEN005532.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005532.sh
+END
+GEN006180.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006180.sh
+END
+GEN002752.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002752.sh
+END
+GEN001780.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001780.sh
+END
+GEN005506.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005506.sh
+END
+GEN006235.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006235.sh
+END
+GEN008540.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008540.sh
+END
+GEN004950.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004950.sh
+END
+GEN005760.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005760.sh
+END
+GEN006570.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006570.sh
+END
+GEN002980.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002980.sh
+END
+GEN001378.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001378.sh
+END
+GEN003790.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003790.sh
+END
+GEN003845.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003845.sh
+END
+GEN002210.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002210.sh
+END
+GEN001400.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001400.sh
+END
+GEN000402.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000402.sh
+END
+GEN003410.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003410.sh
+END
+GEN003060.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003060.sh
+END
+GEN001440.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001440.sh
+END
+GEN008200.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008200.sh
+END
+GEN005420.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005420.sh
+END
+GEN005501.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005501.sh
+END
+GEN006230.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006230.sh
+END
+GEN002640.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002640.sh
+END
+GEN001830.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001830.sh
+END
+GEN003612.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003612.sh
+END
+GEN001480.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001480.sh
+END
+GEN003505.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003505.sh
+END
+GEN001373.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001373.sh
+END
+GEN005810.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005810.sh
+END
+GEN006620.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006620.sh
+END
+GEN008240.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008240.sh
+END
+GEN003840.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003840.sh
+END
+GEN006270.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006270.sh
+END
+GEN007080.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007080.sh
+END
+GEN003490.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003490.sh
+END
+GEN002680.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002680.sh
+END
+GEN001870.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001870.sh
+END
+GEN005515.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005515.sh
+END
+GEN007820.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007820.sh
+END
+GEN008280.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008280.sh
+END
+GEN005529.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005529.sh
+END
+GEN007860.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007860.sh
+END
+GEN000000-LNX00720.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00720.sh
+END
+GEN003110.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003110.sh
+END
+GEN002300.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002300.sh
+END
+GEN001140.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001140.sh
+END
+GEN003500.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003500.sh
+END
+GEN005120.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005120.sh
+END
+GEN002340.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002340.sh
+END
+GEN001180.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001180.sh
+END
+GEN004700.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004700.sh
+END
+GEN005510.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005510.sh
+END
+GEN006320.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006320.sh
+END
+GEN002730.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002730.sh
+END
+GEN000290-4.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000290-4.sh
+END
+GEN003540.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003540.sh
+END
+GEN003190.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003190.sh
+END
+GEN002380.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002380.sh
+END
+GEN001570.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001570.sh
+END
+GEN003245.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003245.sh
+END
+GEN005900.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005900.sh
+END
+GEN003930.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003930.sh
+END
+GEN005550.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005550.sh
+END
+GEN006360.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN006360.sh
+END
+GEN001960.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN001960.sh
+END
+GEN004390.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN004390.sh
+END
+GEN005524.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005524.sh
+END
+GEN002825.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002825.sh
+END
+GEN008720.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008720.sh
+END
+GEN002718.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN002718.sh
+END
+GEN003609.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN003609.sh
+END
+GEN005590.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005590.sh
+END
+GEN000000-LNX00420.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN000000-LNX00420.sh
+END
+GEN005538.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN005538.sh
+END
+GEN007950.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN007950.sh
+END
+GEN008760.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/aqueduct/!svn/ver/195/trunk/compliance/Bash/STIG/rhel-5-beta/prod/GEN008760.sh
+END
