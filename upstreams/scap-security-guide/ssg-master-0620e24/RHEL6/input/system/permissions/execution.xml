@@ -1,0 +1,191 @@
+<Group id="restrictions">
+<title>Restrict Programs from Dangerous Execution Patterns</title>
+<description>The recommendations in this section provide broad
+protection against information disclosure or other misbehavior.
+These protections are applied at the system initialization or
+kernel level, and defend against certain types of badly-configured
+or compromised programs.</description>
+
+<Group id="daemon_umask">
+<title>Set Daemon umask</title>
+<description>The settings file <tt>/etc/sysconfig/init</tt> contains
+settings which apply to all processes started at boot time. The
+system umask must be set to at least 022, or daemon processes may
+create world-writable files. The more restrictive setting 027
+protects files, including temporary files and log files, from
+unauthorized reading by unprivileged users on the system.
+<br /><br />
+If a particular daemon needs a less restrictive umask,
+consider editing the startup script or sysconfig file of that
+daemon to make a specific exception.</description>
+
+<Value id="var_umask_for_daemons" type="string" operator="equals" interactive="0">
+<title>daemon umask</title>
+<description>Enter umask for daemons</description>
+<value selector="">027</value>
+<value selector="022">022</value>
+<value selector="027">027</value>
+</Value>
+
+<Rule id="set_daemon_umask">
+<title>Set Daemon umask</title>
+<description>The daemon umask should be set as appropriate</description>
+<rationale>The umask influences the permissions assigned to files created by a process at run time.
+A misconfigured umask could result in files being assigned extremely generous permissions upon creation.</rationale>
+<ident cce="4220-0" />
+<oval id="umask_for_daemons" value="var_umask_for_daemons"/>
+<ref nist="AC-3, CM-6"/>
+</Rule>
+</Group>
+
+<Group id="coredumps">
+<title>Disable Core Dumps</title>
+<description>A core dump file is the memory image of an executable
+program when it was terminated by the operating system due to
+errant behavior. In most cases, only software developers would
+legitimately need to access these files. The core dump files may
+also contain sensitive information, or unnecessarily occupy large
+amounts of disk space.
+<br /><br />
+By default, the system sets a soft limit to stop the creation
+of core dump files for all users. This is accomplished in
+<tt>/etc/profile</tt> with the line: <tt>ulimit -S -c 0 &gt; /dev/null
+2$gt;&amp;1</tt>. However, compliance with this limit is voluntary; it is
+a default intended only to protect users from the annoyance of
+generating unwanted core files. Users can increase the allowed core
+file size up to the hard limit, which is unlimited by default.
+<br /><br />
+Once a hard limit is set in <tt>/etc/security/limits.conf</tt>, the
+user cannot increase that limit within his own session. If access
+to core dumps is required, consider restricting them to only
+certain users or groups. See the <tt>limits.conf</tt> man page for more
+information.
+<br /><br />
+The core dumps of setuid programs are further protected. The
+<tt>sysctl</tt> variable <tt>fs.suid_dumpable</tt> controls whether
+the kernel allows core dumps from these programs at all. The default
+value of 0 is recommended.</description>
+
+<Rule id="disable_users_coredumps">
+<title>Disable Core Dumps for all users</title>
+<description>Core dumps for all users should be disabled.</description>
+<rationale>The core dump includes a memory image taken at the time the operating system
+terminates an application. The memory image often contains sensitive data. The creation
+of these files should be prevented.</rationale>
+<ident cce="4225-9" />
+<oval id="core_dumps_limitsconf" />
+<ref nist="SC-5" />
+</Rule>
+
+
+<Rule id="disable_setuid_coredumps">
+<title>Disable Core Dumps for SUID programs</title>
+<description>Core dumps for setuid programs should be disabled.</description>
+<rationale>The core dump includes a memory image taken at the time the operating system
+terminates an application. The memory image often contains sensitive data. The creation
+of these files should be prevented.</rationale>
+<ident cce="4247-3" />
+<oval id="core_dump_suid_progs_limits_conf" />
+<ref nist="SI-11" />
+</Rule>
+</Group>
+
+<Group id="enable_execshield_settings">
+<title>Enable ExecShield</title>
+<description>ExecShield comprises a number of kernel features to
+provide protection against buffer overflows. These features include
+random placement of the stack and other memory regions, prevention
+of execution in memory that should only hold data, and special
+handling of text buffers. This protection is enabled by default,
+but the <tt>sysctl</tt> variables <tt>kernel.exec-shield</tt> and
+<tt>kernel.randomize_va_space</tt> should be checked to ensure that it
+has not been disabled.
+<br /><br />
+ExecShield uses the segmentation feature on all x86 systems
+to prevent execution in memory higher than a certain address. It
+writes an address as a limit in the code segment descriptor, to
+control where code can be executed, on a per-process basis. When
+the kernel places a process's memory regions such as the stack and
+heap higher than this address, the hardware prevents execution
+there. However, this cannot always be done for all memory regions
+in which execution should not occur, so follow guidance in Section
+2.2.4.4 to further protect the system.</description>
+
+<Rule id="enable_execshield">
+<title>Enable ExecShield</title>
+<description>ExecShield should be enabled</description>
+<rationale>The ExecShield feature can be used to render malware harmless. It should be enabled.</rationale>
+<ident cce="4168-1" />
+<oval id="sysctl_kernel_exec_shield" />
+<ref nist="CM-7" />
+</Rule>
+
+<Rule id="enable_randomize_va_space">
+<title>Enable ExecShield randomized placement of virtual
+memory regions</title>
+<description>ExecShield randomized placement of virtual memory
+regions should be enabled</description>
+<rationale>
+This makes it more difficult for an attacker to predict the location of
+attack code they've introduced into the address space. It also makes it
+more difficult for an attacker to know the
+location of existing code in order to re-purpose it via ROP.
+</rationale>
+<ident cce="4146-7" />
+<oval id="sysctl_kernel_randomize_va_space" />
+<ref nist="AC-3, CM-6" />
+</Rule>
+</Group>
+
+
+
+<Group id="enable_nx">
+<title>Enable Execute Disable (XD) or No Execute (NX) Support on
+x86 Systems</title>
+<description>Recent processors in the x86 family support the
+ability to prevent code execution on a per memory page basis.
+Generically and on AMD processors, this ability is called No
+Execute (NX), while on Intel processors it is called Execute
+Disable (XD). This ability can help prevent exploitation of buffer
+overflow vulnerabilities and should be activated whenever possible.
+Extra steps must be taken to ensure that this protection is
+enabled, particularly on 32-bit x86 systems. Other processors, such
+as Itanium and POWER, have included such support since inception
+and the standard kernel for those platforms supports the
+feature.</description>
+
+<Rule id="install_PAE_kernel_on_x86-32">
+<title>Install PAE Kernel on Supported 32-bit x86 Systems</title>
+<description>Systems that are using the 64-bit x86 kernel package
+do not need to install the kernel-PAE package because the 64-bit
+x86 kernel already includes this support. However, if the system is
+32-bit and also supports the PAE and NX features as
+determined in the previous section, the kernel-PAE package should
+be installed to enable XD or NX support:
+<pre># yum install kernel-PAE</pre>
+The installation process should also have configured the
+bootloader to load the new kernel at boot. Verify this at reboot
+and modify <tt>/etc/grub.conf</tt> if necessary.</description>
+<warning category="hardware">The kernel-PAE package should not be
+installed on older systems that do not support the XD or NX bit, as
+this may prevent them from booting.</warning>
+<rationale>On 32-bit systems that support the XD or NX bit, the vendor-supplied
+PAE kernel is required to enable either Execute Disable (XD) or No Execute (NX) support.</rationale>
+<ident cce="4172-3" />
+<ref nist="CM-7" />
+</Rule>
+
+<Rule id="bios_enable_execution_restrictions">
+<title>Enable NX or XD Support in the BIOS</title>
+<description>Reboot the system and enter the BIOS or “Setup” configuration menu.
+Navigate the BIOS configuration menu and make sure that the option is enabled. The setting may be located
+under a “Security” section. Look for Execute Disable (XD) on Intel-based systems and No Execute (NX)
+on AMD-based systems.</description>
+<rationale>Computers with the ability to prevent this type of code execution frequently put an option in the BIOS that will
+allow users to turn the feature on or off at will.</rationale>
+<ident cce="4177-2" />
+<ref nist="CM-6" />
+</Rule>
+
+</Group> <!--<Group id="enable_nx"> -->
+</Group> <!--<Group id="restrictions"> -->
