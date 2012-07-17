@@ -1,0 +1,12 @@
+[requires]
+
+[test]
+import
+deselect_users_assigned_home
+test_noexist_not_exists
+audit_fail
+remediate
+audit_pass
+test_noexist_does_exist
+
+[verify]

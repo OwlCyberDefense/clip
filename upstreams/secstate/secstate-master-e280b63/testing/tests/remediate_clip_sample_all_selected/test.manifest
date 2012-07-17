@@ -1,0 +1,11 @@
+[requires]
+import_clip_sample
+
+[test]
+select_all
+audit_fail
+remediate
+audit_pass
+
+[verify]
+

@@ -1,0 +1,6 @@
+[requires]
+
+[test]
+no_args
+
+[verify]

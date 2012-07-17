@@ -1,0 +1,1 @@
+/usr/bin/secstate select sample-clip-secstate-integration -r

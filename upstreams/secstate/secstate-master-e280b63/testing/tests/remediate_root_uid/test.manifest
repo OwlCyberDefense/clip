@@ -1,0 +1,10 @@
+[requires]
+
+[test]
+import
+select_fix
+audit_fail
+remediate
+audit_pass
+
+[verify]

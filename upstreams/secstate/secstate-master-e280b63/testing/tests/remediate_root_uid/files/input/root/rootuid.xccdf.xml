@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Benchmark id="rootuid-req" resolved="0" xml:lang="en" style=""
+    xmlns="http://checklists.nist.gov/xccdf/1.1"
+    xmlns:cpe="http://cpe.mitre.org/language/2.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:htm="http://www.w3.org/1999/xhtml"
+    xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"
+    xsi:schemaLocation="http://checklists.nist.gov/xccdf/1.1 xccdf-1.1.4.xsd http://cpe.mitre.org/language/2.0 cpe-language_2.0.xsd">
+
+    <status date="2010-07-12">draft</status>
+    <title>Linux Root Zero UID XCCDF</title>
+    <description>
+        This document defines a check that verifies the existence of only one user with a uid of 0.
+        The check also verifies that the user with a uid of 0 is named root.
+    </description>
+
+    <notice id="terms-of-use" xml:lang="en">
+        This would be a sample Terms of Use
+    </notice>
+    <reference href="http://iase.disa.mil/stigs/stig/index.html">
+        DISA Security Technical Implementation Guides
+    </reference>
+
+    <version>0.0.1</version>
+
+    <Profile id="destroy-conflicts">
+        <title>Destroy Conflicts</title>
+        <description>
+            Upon enountering any conflicts, destroy them.
+        </description>
+        <select idref="root-zero-uid-check" selected="0"/>
+        <select idref="root-zero-uid-fix" selected="0"/>
+        <select idref="root-zero-uid-destroy" selected="1"/>
+    </Profile>
+
+    <Profile id="fix-conflicts">
+        <title>Attempt to fix conflicts encountered</title>
+        <description>
+            Upon encountering any conflicts, fix them.
+        </description>
+        <select idref="root-zero-uid-check" selected="0"/>
+        <select idref="root-zero-uid-fix" selected="1"/>
+        <select idref="root-zero-uid-destroy" selected="0"/>
+    </Profile>
+
+    <Group id="root-zero-uid-group" selected="1" weight="0">
+        <title>Linux User Home Directory Rules</title>
+        <description>
+            Requirement relating to the root user being the sole possessor of a uid of 0.
+        </description>
+
+        <Rule id="root-zero-uid-check" selected="1">
+            <title>GEN000880 - Root Zero UID</title>
+            <description>
+                Ensure the root user is the only user with a uid of 0.
+            </description>
+             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+                <check-content-ref href="rootuid.oval.xml" name="oval:com.tresys.oval.rhel:def:1000"/>
+            </check>
+        </Rule>
+
+        <Rule id="root-zero-uid-fix" extends="root-zero-uid-check" selected="0">
+            <title>GEN000880 - Root Zero Uid - Fix Conflicts</title>
+            <description>
+                Fix conflicts encountered upon checking the system.
+            </description>
+            <fixtext>
+                Verify within /etc/passwd that the root user is the only user with a uid of 0.
+                Fix any conflicts encountered.
+            </fixtext>
+            <!-- no parameters are needed because the class only does one thing -->
+            <fix system="urn:xccdf:fix:script:puppet">
+               manifest : rootuid.pp
+               class : rootuid
+            </fix>
+        </Rule>
+
+        <Rule id="root-zero-uid-destroy" extends="root-zero-uid-check" selected="0">
+            <title>GEN000880 - Root Zero Uid - Destroy Conflicts</title>
+            <description>
+                Destroy conflicts encountered upon checking the system.
+            </description>
+            <fixtext>
+                Verify within /etc/passwd that the root user is the only user with a uid of 0.
+                Destroy any conflicts encountered
+            </fixtext>
+            <!-- no parameters are needed because the class only does one thing -->
+            <fix system="urn:xccdf:fix:script:puppet">
+               manifest : rootuid.pp
+               class : rootuid-destroy
+            </fix>
+        </Rule>
+    </Group>
+</Benchmark>

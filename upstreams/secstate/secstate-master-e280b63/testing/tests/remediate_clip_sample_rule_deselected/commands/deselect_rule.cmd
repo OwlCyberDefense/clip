@@ -1,0 +1,1 @@
+/usr/bin/secstate deselect sample-clip-secstate-integration logon-attempts-logged

@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<oval_definitions xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix unix-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#linux linux-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#independent independent-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5 oval-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <generator>
+    <product_name xmlns="http://oval.mitre.org/XMLSchema/oval-common-5">squashed circle</product_name>
+    <product_version xmlns="http://oval.mitre.org/XMLSchema/oval-common-5">0.5</product_version>
+    <schema_version xmlns="http://oval.mitre.org/XMLSchema/oval-common-5">5.6</schema_version>
+    <timestamp xmlns="http://oval.mitre.org/XMLSchema/oval-common-5">2010-05-25T12:22:05</timestamp>
+  </generator>
+  
+  <!-- OVAL Definitions Section -->
+  <definitions>
+    <definition class="compliance" id="oval:com.tresys.com.passwd:def:1000" version="1">
+      <metadata>
+         <title>/etc/passwd owner</title>
+        <affected family="unix">
+          <platform>Red Hat Enterprise Linux 5</platform>
+        </affected>
+        <reference ref_id="PasswdOwner" source="UNIX STIG" />
+        <description>Password File owner</description>
+      </metadata>
+      <criteria operator="AND">
+        <criterion test_ref="oval:com.tresys.oval.passwd:tst:1000" />
+      </criteria>
+    </definition>
+    
+    <definition class="compliance" id="oval:com.tresys.com.passwd:def:1001" version="1">
+      <metadata>
+         <title>/etc/passwd group</title>
+        <affected family="unix">
+          <platform>Red Hat Enterprise Linux 5</platform>
+        </affected>
+        <reference ref_id="PasswdGroup" source="UNIX STIG" />
+        <description>Password File owner</description>
+      </metadata>
+      <criteria operator="AND">
+        <criterion test_ref="oval:com.tresys.oval.passwd:tst:1001" />
+      </criteria>
+    </definition>
+    
+    <definition class="compliance" id="oval:com.tresys.com.passwd:def:1002" version="1">
+      <metadata>
+         <title>/etc/passwd mode</title>
+        <affected family="unix">
+          <platform>Red Hat Enterprise Linux 5</platform>
+        </affected>
+        <reference ref_id="PasswdMode" source="UNIX STIG" />
+        <description>Password File owner</description>
+      </metadata>
+      <criteria operator="AND">
+        <criterion test_ref="oval:com.tresys.oval.passwd:tst:1002" />
+      </criteria>
+    </definition>  
+  </definitions>
+  
+  <!-- OVAL Tests Section -->
+  <tests>
+   <file_test check="all" comment="check owner of /etc/passwd" id="oval:com.tresys.oval.passwd:tst:1000" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+      <object object_ref="oval:com.tresys.oval.passwd:obj:1002" />
+      <state state_ref="oval:com.tresys.oval.passwd:ste:1000" />
+   </file_test>
+   
+   <file_test check="all" comment="check owner of /etc/passwd" id="oval:com.tresys.oval.passwd:tst:1001" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+      <object object_ref="oval:com.tresys.oval.passwd:obj:1002" />
+      <state state_ref="oval:com.tresys.oval.passwd:ste:1001" />
+   </file_test>
+   
+   <file_test check="all" comment="check owner of /etc/passwd" id="oval:com.tresys.oval.passwd:tst:1002" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+      <object object_ref="oval:com.tresys.oval.passwd:obj:1002" />
+      <state state_ref="oval:com.tresys.oval.passwd:ste:1002" />
+   </file_test>
+  </tests>
+  
+  <!-- OVAL Objects Section -->
+  <objects>
+    <file_object comment="/etc/passwd" id="oval:com.tresys.oval.passwd:obj:1002" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+       <path>/etc</path>
+       <filename>passwd</filename>
+    </file_object>
+  </objects>
+  
+  <!-- OVAL States Section -->
+  <states>
+    <file_state id="oval:com.tresys.oval.passwd:ste:1000" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+         <user_id operation="equals" datatype="int" var_ref="oval:com.tresys.oval.passwd:var:1004" />
+    </file_state>
+
+    <file_state id="oval:com.tresys.oval.passwd:ste:1001" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+         <group_id operation="equals" datatype="int" var_ref="oval:com.tresys.oval.passwd:var:1005" />
+    </file_state>
+    
+    <file_state id="oval:com.tresys.oval.passwd:ste:1002" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix">
+         <uexec operation="equals" datatype="boolean" var_ref="oval:com.tresys.oval.passwd:var:1006" />
+         <gwrite operation="equals" datatype="boolean" var_ref="oval:com.tresys.oval.passwd:var:1007" />
+         <gexec operation="equals" datatype="boolean" var_ref="oval:com.tresys.oval.passwd:var:1008" />
+         <owrite operation="equals" datatype="boolean" var_ref="oval:com.tresys.oval.passwd:var:1009" />
+         <oexec operation="equals" datatype="boolean" var_ref="oval:com.tresys.oval.passwd:var:1010" />
+    </file_state>
+  </states>
+  
+  <!-- Oval Variables Section -->
+  <variables>
+    <external_variable comment="owner" datatype="string" id="oval:com.tresys.oval.passwd:var:1004" version="1" />
+    <external_variable comment="group" datatype="string" id="oval:com.tresys.oval.passwd:var:1005" version="1" />
+    <external_variable comment="uexec" datatype="boolean" id="oval:com.tresys.oval.passwd:var:1006" version="1" />
+    <external_variable comment="gwrite" datatype="boolean" id="oval:com.tresys.oval.passwd:var:1007" version="1" />
+    <external_variable comment="gexec" datatype="boolean" id="oval:com.tresys.oval.passwd:var:1008" version="1" />
+    <external_variable comment="owrite" datatype="boolean" id="oval:com.tresys.oval.passwd:var:1009" version="1" />
+    <external_variable comment="oexec" datatype="boolean" id="oval:com.tresys.oval.passwd:var:1010" version="1" />
+  </variables>
+</oval_definitions>
