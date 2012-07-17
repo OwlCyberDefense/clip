@@ -12,7 +12,7 @@ VERSION := 1.0
 
 # Bump this if creating multiple releases from the same
 # version.
-RELEASE := svn.r246
+RELEASE := svn.r255
 
 # The name of the Vendor
 VENDOR := Aqueduct

@@ -29,5 +29,5 @@ FILE=/etc/rsyslog.conf
 for LOGFILE in `grep -E -o "(\s)*.*(\s+)(\-|\+)*(\/[^\/]*)+(\s)*$" $FILE`; do
 	LOGFILE=${LOGFILE#"-"}
 	LOGFILE=${LOGFILE#"+"}
-	[ -f $LOGFILE && chown -v root $LOGFILE
+	[ -f $LOGFILE ] && chown -v root $LOGFILE
 done

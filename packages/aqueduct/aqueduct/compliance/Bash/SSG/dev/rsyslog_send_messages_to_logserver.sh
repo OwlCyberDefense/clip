@@ -18,21 +18,22 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FILE=/etc/rsyslog.conf
+# TO BE DONE MANUALLY
+#FILE=/etc/rsyslog.conf
 
 # if no rsyslog, exit
-[ -f $FILE ] || exit 1
+#[ -f $FILE ] || exit 1
 
 # prompt for central logserver and put entry in rsyslog.conf
-echo ""
-echo "Enter the name of your central logserver (e.g. loghost.example.com)."
-read -p "logserver: " logserver
+#echo ""
+#echo "Enter the name of your central logserver (e.g. loghost.example.com)."
+#read -p "logserver: " logserver
 
-grep -i "\*\.\*\"" $FILE
-if [ $? -eq 0 ]
-then
-	sed -i -r -e "s/*.*\s+@.*/@$logserver/g" $FILE
-else
-	sed -i -r -e "/\#\sRemote\sLogging.*/ a\
-			\*.\*\t\t\t\t@$logserver" $FILE
-fi
+#grep -i "\*\.\*\"" $FILE
+#if [ $? -eq 0 ]
+#then
+#	sed -i -r -e "s/*.*\s+@.*/@$logserver/g" $FILE
+#else
+#	sed -i -r -e "/\#\sRemote\sLogging.*/ a\
+#			\*.\*\t\t\t\t@$logserver" $FILE
+#fi
