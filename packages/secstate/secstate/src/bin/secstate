@@ -255,7 +255,7 @@ def remediate(arguments):
                       help='Run puppet in noop mode')
     parser.add_option('-p', '--profile', action='store', type='string', dest='profile',
                       default=None, help="Specifies the profile to use when remediating the system")
-    parser.add_option('-v', '--verbose', action='store_false', dest='verbose', help="Prints out extra information during the remediate process")
+    parser.add_option('-v', '--verbose', action='store_true', dest='verbose', default=False, help="Prints out extra information during the remediate process")
     parser.add_option('-y', '--yes', action='store_true', dest='yes', help="Respond 'yes' to all prompts")
     options, args = parser.parse_args(arguments)
 

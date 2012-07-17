@@ -730,7 +730,7 @@ class Secstate:
                         ret = True
                         continue
 
-                # If benchmark
+                # If auditing an XCCDF benchmark
                 if scanned_content.__dict__.has_key('oval'):
                     if all or (rule != None):
                         if rule != None:
@@ -769,7 +769,8 @@ class Secstate:
                         audit_profile = profile
 
                     (res_benchmark, sessions) = evaluate_xccdf(scanned_content, scanned_content.id, s_profile=audit_profile, verbose=verbose)
-                
+
+                # If auditing OVAL content                
                 else:
                     if self.content.has_key(scanned_content.id):
                         oval_filename = self.content[scanned_content.id]
@@ -1150,6 +1151,8 @@ class Secstate:
                 if (bash_content != []):
                     for script_path in bash_content:
                         if os.path.exists(script_path):
+                            if verbose:
+                                self.log.info("Running bash remediation script: %s" % script_path)
                             subprocess.call(["/bin/bash", script_path])
                         else:
                             sys.stderr.write("Script: %s does not exist" % script_path)
