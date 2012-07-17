@@ -1,5 +1,3 @@
-
-
 <Group id="nfs_and_rpc">
 <title>NFS and RPC</title>
 <description>The Network File System is the most popular distributed filesystem for the Unix environment, and is very widely deployed. Unfortunately, NFS was not designed with security in mind, and has a number of weaknesses, both in terms of the protocol itself and because any NFS installation must expose several daemons, running on both servers and clients, to network attack.
@@ -72,7 +70,7 @@ If the command did not return any output then disable netfs.
 <title>Disable RPC Bind Service if Possible</title>
 <description>If:
 <ul>
-<li>NFSv3 or NFSv2 is not needed</li>
+<li>NFSv3 or NFSv2 is not needed (NFSv4 implementations do not require the use of the RPC Bind Service)</li>
 <li>The site does not rely on NIS for authentication information,
 and</li>
 <li>The machine does not run any other RPC-based service</li>
@@ -113,7 +111,7 @@ by NFS (specially NFSv3 and NFSv2), it is not a good idea for machines which act
 
 <Group id="nfs_restrict_access_rpcbind">
 <title>Restrict Access to rpcbind</title>
-<description>If using <tt>rpcbind</tt>, its access should be restricted by using TCP Wrappers. The <tt>/etc/hosts.allow</tt> and <tt>/etc/hosts.deny</tt> files are used by TCP Wrappers to determine whether specified remote hosts are allowed to access certain services. The default RPC Bind service shipped with RHEL6 has TCP Wrappers support built in, so this specification can be used to provide some protection against network attacks on <tt>rpcbind</tt>.
+<description>When using NFSv2 or NFSv3 which require <tt>rpcbind</tt>, access to the <tt>rpcbind</tt> service should be restricted by using TCP Wrappers. The <tt>/etc/hosts.allow</tt> and <tt>/etc/hosts.deny</tt> files are used by TCP Wrappers to determine whether specified remote hosts are allowed to access certain services. The default RPC Bind service shipped with RHEL6 has TCP Wrappers support built in, so this specification can be used to provide some protection against network attacks on <tt>rpcbind</tt>.
 <br /><br />
 Note: This step protects only the RPC Bind service itself. It is still possible for attackers to guess the port numbers of NFS services and attack those services directly, even if they are denied access to <tt>rpcbind</tt>.
 <br /><br />
@@ -133,7 +131,7 @@ where each <tt>IPADDR</tt> is the IP address of a server or client with which th
 <br /><br />
 Therefore, restrict each service to always use a given port, so that firewalling can be done effectively. Note that, because of the way RPC is implemented, it is not possible to disable the RPC Bind service even if ports are assigned statically to all RPC services.
 <br /><br />
-Ports for mountd, statd, and lockd are not required in a pure NFSv4 environment.
+In NFSv4, the mounting and locking protocols have been incorporated into the protocol, and the server listens on the the well-known TCP port 2049. As such, NFSv4 does not need to interact with the <tt>rpcbind, lockd, and rpc.statd</tt> daemons, which can and should be disabled in a pure NFSv4 environment. The <tt>rpc.mountd</tt> daemon is still required on the NFS server to setup exports, but is not involved in any over-the-wire operations.
 </description>
 
 <Rule id="nfs_fixed_lockd_tcp_port">
@@ -223,7 +221,7 @@ There is no need to run the NFS server daemons <tt>nfs</tt> and <tt>rpcsvcgssd</
 <title>Mount Remote Filesystems with Restrictive Options</title>
 <description>Edit the file <tt>/etc/fstab</tt>. For each filesystem whose type (column 3) is <tt>nfs</tt> or <tt>nfs4</tt>, add the text <tt>,nodev,nosuid</tt> to the list of mount options in column 4. If appropriate, also add <tt>,noexec</tt>.
 <br /><br />
-See Section 2.2.1.2 for a description of the effects of these options. In general, execution of files mounted via NFS should be considered risky because of the possibility that an adversary could intercept the request and substitute a malicious file. Allowing setuid files to be executed from remote servers is particularly risky, both for this reason and because it requires the clients to extend root-level trust to the NFS server.</description>
+See the section titled "Restrict Partition Mount Options" for a description of the effects of these options. In general, execution of files mounted via NFS should be considered risky because of the possibility that an adversary could intercept the request and substitute a malicious file. Allowing setuid files to be executed from remote servers is particularly risky, both for this reason and because it requires the clients to extend root-level trust to the NFS server.</description>
 
 <Rule id="use_nodev_option_on_nfs_mounts">
 <title>Mount Remote Filesystems with nodev</title>
@@ -243,7 +241,101 @@ should be installed to their default location on the local filesystem.</rational
 <oval id="mount_option_nosuid_remote_filesystems" />
 </Rule>
 
-</Group>
-</Group>
-</Group>
+<Group id="nfs_configuring_servers">
+<title>Configure NFS Servers</title>
+<description>The steps in this section are appropriate for machines which operate as NFS servers.</description>
 
+<Group id="configure_exports_restrictively">
+<title>Configure the Exports File Restrictively</title>
+<description>Linux’s NFS implementation uses the file <tt>/etc/exports</tt> to control what filesystems
+and directories may be accessed via NFS. (See the <tt>exports(5)</tt> manpage for more information about the
+format of this file.)
+<br /><br />
+The syntax of the <tt>exports</tt> file is not necessarily checked fully on reload, and syntax errors
+can leave your NFS configuration more open than intended. Therefore, exercise caution when modifying
+the file.
+<br /><br />
+The syntax of each line in <tt>/etc/exports</tt> is
+<pre>/DIR	host1(opt1,opt2) host2(opt3)</pre>
+where <tt>/DIR</tt> is a directory or filesystem to export, <tt>hostN</tt> is an IP address, netblock,
+hostname, domain, or netgroup to which to export, and <tt>optN</tt> is an option.
+</description>
+</Group> <!-- configure_exports_restrictively -->
+
+<Group id="use_acl_enforce_auth_restrictions">
+<title>Use Access Lists to Enforce Authorization Restrictions</title>
+<description>When configuring NFS exports, ensure that each export line in <tt>/etc/exports</tt> contains
+a list of hosts which are allowed to access that export. If no hosts are specified on an export line,
+then that export is available to any remote host which requests it. All lines of the exports file should
+specify the hosts (or subnets, if needed) which are allowed to access the exported directory, so that
+unknown or remote hosts will be denied.
+<br /><br />
+Authorized hosts can be specified in several different formats:
+<ul>
+<li>Name or alias that is recognized by the resolver</li>
+<li>Fully qualified domain name</li>
+<li>IP address</li>
+<li>IP subnets in the format <tt>address/netmask</tt></li>
+</ul>
+</description>
+</Group> <!-- use_acl_enforce_auth_restrictions -->
+
+<Group id="export_filesystems_read_only">
+<title>Export Filesystems Read-Only if Possible</title>
+<description>If a filesystem is being exported so that users can view the files in a convenient
+fashion, but there is no need for users to edit those files, exporting the filesystem read-only
+removes an attack vector against the server. The default filesystem export mode is <tt>ro</tt>,
+so do not specify <tt>rw</tt> without a good reason.
+</description>
+</Group> <!-- export_filesystems_read_only -->
+
+<Group id="specify_anonymous_uid_gid">
+<title>Specify UID and GID for Anonymous Connections</title>
+<description>When an NFS server is configured to deny remote <tt>root</tt> access, a selected UID and GID
+are used to handle requests from the remote <tt>root</tt> user. The UID and GID should be chosen from the
+system to provide the appropriate level of non-privileged access. By default, the NFS server will
+map remote <tt>root</tt> users to the <tt>nobody</tt> local account. Specifying the anonymous UID and GID
+as -1 ensures that the remote <tt>root</tt> user is mapped to a local account which has no permissions on the
+system.
+<br /><br />
+To specify the UID and GID for remote <tt>root</tt> users, edit the <tt>/etc/exports</tt> file and add
+<tt>anonuid=-1</tt> and <tt>anongid=-1</tt> to the options list for each export.
+</description>
+</Group> <!-- specify_anonymous_uid_gid -->
+
+<Rule id="use_root_squashing_all_exports">
+<title>Use Root-Squashing on All Exports</title>
+<description>If a filesystem is exported using root squashing, requests from root on the client
+are considered to be unprivileged (mapped to a user such as nobody). This provides some mild
+protection against remote abuse of an NFS server. Root squashing is enabled by default, and
+should not be disabled.
+<br /><br />
+Ensure that no line in <tt>/etc/exports</tt> contains the option <tt>no_root_squash</tt>.
+</description>
+<rationale>If the NFS server allows root access to local file systems from remote hosts, this
+access could be used to compromise the system.</rationale>
+<ident cce="4544-3" />
+<oval id="TO:DO" />
+</Rule>
+
+<Rule id="restrict_nfs_clients_to_privileged_ports">
+<title>Restrict NFS Clients to Privileged Ports</title>
+<description>By default, Linux’s NFS implementation requires that all client requests be made
+from ports less than 1024. If your organization has control over machines connected to its
+network, and if NFS requests are prohibited at the border firewall, this offers some protection
+against malicious requests from unprivileged users. Therefore, the default should not be changed.
+<br /><br />
+Ensure that no line in <tt>/etc/exports</tt> contains the option <tt>insecure</tt>.
+</description>
+<rationale>Allowing client requests to be made from ports higher than 1024 could allow a unprivileged
+user to initiate an NFS connection. If the unprivileged user account has been compromised, an
+attacker could gain access to data on the NFS server.</rationale>
+<ident cce="4465-1" />
+<oval id="TO:DO" />
+</Rule>
+
+</Group> <!-- nfs_configuring_servers -->
+
+</Group>
+</Group>
+</Group>
