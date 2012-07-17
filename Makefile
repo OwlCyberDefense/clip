@@ -23,7 +23,7 @@ endif
 # So we will roll it ourselves inside of mock :)
 HOST_REQD_PKGS := pungi
 
-HOST_RPM_DEPS := createrepo rpm-build createrepo livecd-tools mock
+HOST_RPM_DEPS := createrepo rpm-build createrepo livecd-tools mock repoview
 
 export ROOT_DIR ?= $(CURDIR)
 export OUTPUT_DIR ?= $(ROOT_DIR)
