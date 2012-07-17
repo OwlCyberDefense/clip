@@ -1,43 +1,0 @@
-10
-
-dir
-256
-http://svn.fedorahosted.org/svn/aqueduct/trunk/compliance/Puppet/STIG/rhel5/RHEL-5-Unix-Checklist/base/dev/rhel5
-http://svn.fedorahosted.org/svn/aqueduct
-
-
-
-2012-02-18T21:09:05.305498Z
-102
-vpassaro
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-222a7096-7963-498e-82ae-632bd6af5a1a
-
-kickstart
-dir
-
-oval
-dir
-
-scripts
-dir
-
-puppet
-dir
-
-rpm
-dir
-

@@ -1,37 +1,0 @@
-10
-
-dir
-256
-http://svn.fedorahosted.org/svn/aqueduct/trunk/compliance/Bash/PCI/rhel6
-http://svn.fedorahosted.org/svn/aqueduct
-
-
-
-2012-05-03T22:26:11.852320Z
-191
-vpassaro
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-222a7096-7963-498e-82ae-632bd6af5a1a
-
-test
-dir
-
-prod
-dir
-
-dev
-dir
-
