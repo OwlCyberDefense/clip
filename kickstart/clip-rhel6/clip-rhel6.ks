@@ -21,6 +21,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # FIXME: This *must* be changed by the end-user prior to generating a build!!
+# rootpw correctbatteryhorsestaple
 rootpw neutronbass
 
 lang en_US.UTF-8
