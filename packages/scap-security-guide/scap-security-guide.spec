@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-root
 BuildArch: noarch
 
 BuildRequires:  /bin/rm, /bin/mkdir, /bin/cp
-Requires:       /bin/bash, /bin/date, /usr/bin/oscap
+Requires:       /bin/bash, /bin/date, /usr/bin/oscap, aqueduct-SSG
 
 %description
 Today the SSG project provides guidance against U.S. Government requirements, 
@@ -49,7 +49,6 @@ mkdir -p $RPM_BUILD_ROOT/usr/local/%{name}/USGCB-submission
 
 cp -r * $RPM_BUILD_ROOT/usr/local/%{name}/
 
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -60,7 +59,17 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(0750,root,root)/usr/local/scap-security-guide/
 
+%post
+cp packages/aqueduct/aqueduct/compliance/Bash/SSG/tools/manual.xml $RPM_BUILD_ROOT/usr/local/${name}/RHEL6/input/profiles/
+$RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools/fix_mapper.py
+
+cd $RPM_BUILD_ROOT/usr/local/scap-security-guide/RHEL6
+make clean && make all
+
 %changelog
+* Tue Jul 17 2012 Mike Palmiotto <mpalmiotto@tresys.com> 1.0-4
+- Add aqueduct-SSG to Requires and get fixes into SSG in %post
+
 * Mon Jun 11 2012 Spencer Shimko <sshimko@tresys.com> 1.0-3
 - Pull into the CLIP build system w/ modifications to make it compliant with expectations.
 

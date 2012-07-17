@@ -235,17 +235,11 @@ chkconfig --add iptables
 chkconfig --add ip6tables
 chkconfig --level 0123456 netfs off
 
-# Get fix tags into SSG
-cp /usr/libexec/aqueduct/SSG/tools/manual.xml /usr/local/scap-security-guide/RHEL6/input/profiles/
-/usr/libexec/aqueduct/SSG/tools/fix_mapper.py
-cd /usr/local/scap-security-guide/RHEL6
-make clean && make all
-
 # secstate remediate
-cd /var/lib/secstate
-secstate import /usr/local/scap-security-guide/RHEL6/output/rhel6-xccdf-scap-security-guide.xml
-secstate select -r RHEL-6
-secstate remediate
+#cd /var/lib/secstate
+#secstate import /usr/local/scap-security-guide/RHEL6/output/rhel6-xccdf-scap-security-guide.xml
+#secstate select -r RHEL-6
+#secstate remediate -y
 	
 # scap-security-guide setup
 #cat > /root/oscap.sh << EOF

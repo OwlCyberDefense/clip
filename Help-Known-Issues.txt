@@ -16,4 +16,43 @@ blocker.
 - We have not updated the oss.tresys.com/projects/clip website (aside adding
   links to the new releases).  This will be done for beta and final releases.
 
+- Secstate is only able to audit certain sub-groups of scap-security-guide.
+  OpenSCAP segfaults when attempting to audit the entire XCCDF.  The groups
+with x's below are the ones which can be audited with a `secstate select -r
+RHEL-6 [group-name]; secstate audit`:
+[x] services
+[ ] system
+    [x] software
+    [ ] permissions
+        [ ] partitions
+        [x] mounting
+        [x] files
+        [x] restrictions
+    [x] selinux
+    [ ] accounts
+        [x] accounts-restricitons
+        [x] accounts-pam
+        [x] accounts-session
+        [x] accounts-physical
+        [ ] accounts-banners
+    [ ] network
+        [x] network_disable_unused_interfaces
+        [x] network_disable_zeroconf
+        [x] network_sniffer_disabled
+        [x] network-kernel
+        [ ] network-wireless
+        [x] network-ipv6
+        [x] network-iptables
+        [x] network-ssl
+        [x] network-uncommon
+        [x] networking-ipsec
+    [x] logging
+
+- `secstate remediate` still needs to be able to work for audits, using
+  `secstate remediate -x [audit-results.xml].  This issue will hopefully be
+addressed by the beta release.
+
+- scap-security-guide uses a hard coded /usr/local for the install directory.
+  This needs to be shifted to use `${DESTDIR}`, which defaults to /usr/local
+if no usr exists.
 =============================================================================
