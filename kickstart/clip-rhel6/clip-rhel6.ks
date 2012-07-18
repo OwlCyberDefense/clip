@@ -269,7 +269,7 @@ secstate remediate -y
 # FIXME: Right now the SELinux policy (alpha release) will cause a kernel panic in enforcing mode.
 # The interesting part is that the Aqueduct remediation is causing this as it "remediates" permissive mode.
 # So for now "unremediate"
-sed -e 's/^SELINUX\s*=.*/SELINUX=permissive/' /etc/selinux/config
+sed -i -e 's/^SELINUX\s*=.*/SELINUX=permissive/' /etc/selinux/config
 
 # relabel with refpol on reboot
 touch /.autorelabel
