@@ -39,7 +39,10 @@ def map_fixes():
 				
 				if inclusion and line not in exclusions:
 					inclusion = re.sub("(idref\=\"|\")", "", inclusion.group(0))
-					fixes.write("<fix rule=\"%s\">/usr/libexec/aqueduct/SSG/scripts/%s.sh</fix>\n" %(inclusion, inclusion))
+					inclusion += ".sh"
+					
+					if os.access("/usr/libexec/aqueduct/SSG/scripts/%s"%inclusion, os.X_OK):
+						fixes.write("<fix rule=\"%s\">/usr/libexec/aqueduct/SSG/scripts/%s</fix>\n" %(inclusion, inclusion))
 
 		fixes.write("</fix-group>")
 
