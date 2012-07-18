@@ -241,31 +241,6 @@ secstate import /usr/local/scap-security-guide/RHEL6/output/rhel6-xccdf-scap-sec
 secstate select -r RHEL-6
 secstate remediate -y
 	
-# scap-security-guide setup
-#cat > /root/oscap.sh << EOF
-#!/bin/bash
-#oscap xccdf eval --profile server --results results.xml --report report.html /usr/local/scap-security-guide/content/rhel6-xccdf-scap-security-guide.xml
-#EOF
-#chmod u+x /root/oscap.sh
-
-#cat > /root/oscap2.sh << EOF
-#!/bin/bash
-#oscap xccdf eval --profile server /usr/local/scap-security-guide/content/rhel6-xccdf-scap-security-guide.xml | sed -e "s/^M//" | grep "^R" | awk '
-#/Rule ID:/, /Result:/ { printf "%s ", \$0 }
-#/Result:/ { print "" }' | sed -e "s/Rule ID:[[:space:]]\+//" -e "s/ Result:[[:space:]]\+/: /"
-#EOF
-#chmod u+x /root/oscap2.sh
-
-# aqueduct remediation scripts
-#sysctl -p /etc/sysctl.conf
-#SCRIPTDIR=/usr/local/bin/aqueduct-ssg-bash
-#SCRIPTZ=$( ls $SCRIPTDIR/*.sh )
-#for script in $SCRIPTZ; do
-#   [ "$script" == "$SCRIPTDIR/selinux_policytype_targeted.sh" ] && continue
-#   echo $script
-#   $script
-#done
-
 # FIXME: Right now the SELinux policy (alpha release) will cause a kernel panic in enforcing mode.
 # The interesting part is that the Aqueduct remediation is causing this as it "remediates" permissive mode.
 # So for now "unremediate"
