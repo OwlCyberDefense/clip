@@ -235,12 +235,79 @@ chkconfig --add iptables
 chkconfig --add ip6tables
 chkconfig --level 0123456 netfs off
 
-# secstate remediate
-cd /var/lib/secstate
+# Import SSG into secstate.
+# Running this command again, even after install, will result in a harmless error
+# as you are effectively importing the same IDs again.
+echo "Importing SSG content into secstate..."
 secstate import /usr/local/scap-security-guide/RHEL6/output/rhel6-xccdf-scap-security-guide.xml
+
+# FIXME: libopenscap has bugs and some audit content causes segfaults.
+# Until this is fixed only use a subset of the audit content.
+echo "Cherry picking SSG content using secstate to avoid openscap seg faults..."
+secstate deselect -r RHEL-6
+secstate select -r RHEL-6 intro
+secstate select -r RHEL-6 software
+secstate select -r RHEL-6 mounting
+secstate select -r RHEL-6 files
+secstate select -r RHEL-6 restrictions
+secstate select -r RHEL-6 selinux
+secstate select -r RHEL-6 accounts-restrictions
+secstate select -r RHEL-6 accounts-pam
+secstate select -r RHEL-6 accounts-session
+secstate select -r RHEL-6 accounts-physical
+secstate select -r RHEL-6 network_disable_unused_interfaces
+secstate select -r RHEL-6 network_disable_zeroconf
+secstate select -r RHEL-6 network_sniffer_disabled
+secstate select -r RHEL-6 network-kernel
+secstate select -r RHEL-6 network-ipv6
+secstate select -r RHEL-6 network-iptables
+secstate select -r RHEL-6 network_ssl
+secstate select -r RHEL-6 network-uncommon
+secstate select -r RHEL-6 network-ipsec
+secstate select -r RHEL-6 logging
+secstate select -r RHEL-6 services
+
+cd /root
+echo "About to use secstate to do a pre-remediation audit using SSG content..."
+secstate audit 
+
+# Remediate w/ secstate using aqueduct content
+# Now here is the interesting part - since it is only the audit content causing problems
+# We can re-select all for remediation.
 secstate select -r RHEL-6
 secstate remediate -y
-	
+
+# FIXME: Same deal here - since we are going to audit a second time, post remediation, 
+# we have to selectively select our content again.
+echo "Cherry picking SSG content using secstate to avoid openscap seg faults..."
+secstate deselect -r RHEL-6
+secstate select -r RHEL-6 intro
+secstate select -r RHEL-6 software
+secstate select -r RHEL-6 mounting
+secstate select -r RHEL-6 files
+secstate select -r RHEL-6 restrictions
+secstate select -r RHEL-6 selinux
+secstate select -r RHEL-6 accounts-restrictions
+secstate select -r RHEL-6 accounts-pam
+secstate select -r RHEL-6 accounts-session
+secstate select -r RHEL-6 accounts-physical
+secstate select -r RHEL-6 network_disable_unused_interfaces
+secstate select -r RHEL-6 network_disable_zeroconf
+secstate select -r RHEL-6 network_sniffer_disabled
+secstate select -r RHEL-6 network-kernel
+secstate select -r RHEL-6 network-ipv6
+secstate select -r RHEL-6 network-iptables
+secstate select -r RHEL-6 network_ssl
+secstate select -r RHEL-6 network-uncommon
+secstate select -r RHEL-6 network-ipsec
+secstate select -r RHEL-6 logging
+secstate select -r RHEL-6 services
+
+echo "About to use secstate to do a post-remediation audit using SSG content..."
+secstate audit
+
+echo "All done with secstate :)  Now go play with your freshly remediated system!"
+
 # FIXME: Right now the SELinux policy (alpha release) will cause a kernel panic in enforcing mode.
 # The interesting part is that the Aqueduct remediation is causing this as it "remediates" permissive mode.
 # So for now "unremediate"
