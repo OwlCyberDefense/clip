@@ -203,7 +203,16 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/aqueduct/SSG/scripts
 /usr/libexec/aqueduct/SSG/tools
 
-%post
+%post SSG
+# FIXME: this is a hack to mark the content as manual
+chmod 640 /usr/libexec/aqueduct/SSG/scripts/bootloader_password.sh
+chmod 640 /usr/libexec/aqueduct/SSG/scripts/install_aide.sh
+chmod 640 /usr/libexec/aqueduct/SSG/scripts/install_openswan.sh
+chmod 640 /usr/libexec/aqueduct/SSG/scripts/install_vlock_package.sh
+chmod 640 /usr/libexec/aqueduct/SSG/scripts/install_vsftpd.sh
+chmod 640 /usr/libexec/aqueduct/SSG/scripts/postfix_create_cert.sh
+chmod 640 /usr/libexec/aqueduct/SSG/scripts/postfix_install_ssl_cert.sh
+chmod 640 /usr/libexec/aqueduct/SSG/scripts/rsyslog_send_messages_to_logserver.sh
 
 %changelog
 * Fri Jul 13 2012 Mike Palmiotto <mpalmiotto@tresys.com>
