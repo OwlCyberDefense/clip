@@ -44,7 +44,7 @@ reboot
 zerombr
 bootloader --location=mbr --timeout=5 --append="audit=1" --driveorder=sda --password=neutronbass
 clearpart --drives=sda --all --initlabel
-part /boot --size=200 --fstype ext4 --asprimary --ondisk=sda
+part /boot --size=250 --fstype ext4 --asprimary --ondisk=sda
 part pv.os --size=1   --grow        --asprimary --ondisk=sda
 
 volgroup vg00 --pesize=65536 pv.os
