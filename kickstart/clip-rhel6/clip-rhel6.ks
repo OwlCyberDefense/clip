@@ -42,10 +42,10 @@ reboot
 #REPO-REPLACEMENT-PLACEHOLDER
 
 zerombr
-bootloader --location=mbr --timeout=5 --append="audit=1" --driveorder=sda --password=neutronbass
-clearpart --drives=sda --all --initlabel
-part /boot --size=250 --fstype ext4 --asprimary --ondisk=sda
-part pv.os --size=1   --grow        --asprimary --ondisk=sda
+bootloader --location=mbr --timeout=5 --append="audit=1" --password=neutronbass
+clearpart --all --initlabel
+part /boot --size=200 --fstype ext4 --asprimary
+part pv.os --size=1   --grow        --asprimary
 
 volgroup vg00 --pesize=65536 pv.os
 logvol /              --vgname=vg00 --name=root  --fstype=ext4 --size 5500 --maxsize 21000 --grow
