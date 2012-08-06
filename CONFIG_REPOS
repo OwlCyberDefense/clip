@@ -21,15 +21,17 @@
 # because we lose the benefit of rigorously versioning the packages used.
 # Anywho, we're thinking about it, but no timeline yet ;)
 
-# A RHEL repo must be available. Must be a local path (we use NFS mounts).
-rhel = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-6/getPackage
+# A RHEL/CentOS repo must be available. Must be a local path (we use NFS mounts).
+#rhel = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-6/getPackage
+centos = /mnt/centos-6.2-x86_64/Packages
+
+# NOTE: If using RHEL, *not CentOS*, you must provide the Optional repo. 
+# An RHEL Optional repo must be available. Must be a local path (we use NFS 
+# mounts).
+#opt = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackage
 
 # An EPEL repo must be available. Must be a local path (we use NFS mounts).
 epel = /mnt/repos/epel-pinned-revisions
-
-# An RHEL Optional repo must be available. Must be a local path (we use NFS 
-# mounts).
-opt = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackage
 
 # NOTE: <= RHEL 5 requires BUILDGROUPS repo.  RHEL 6 has the BUILDGROUPS stuff built-in.
 # A groups repo must be available. Can be a local path or an http/ftp location.

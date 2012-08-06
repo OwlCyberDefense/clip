@@ -1,0 +1,8 @@
+If you are using CentOS here is what I recommend:
+
+1. Mount a CentOS ISO. 
+2. Copy the contents of Packages/* to a location you put in CONFIG_REPOS.
+3. Repeat steps 1 & 2 for each ISO image (eg 2 for the DVD images).
+4. Change into the directory you copied the packages to.
+5. Run "createrepo -d ."
+6. You are ready to roll your installable image.
