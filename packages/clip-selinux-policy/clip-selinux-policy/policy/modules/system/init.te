@@ -100,7 +100,9 @@ allow init_t self:fifo_file rw_fifo_file_perms;
 # Re-exec itself
 can_exec(init_t, init_exec_t)
 
-allow init_t initrc_t:unix_stream_socket connectto;
+allow init_t initrc_t:unix_stream_socket { connectto rw_stream_socket_perms };
+allow initrc_t init_t:unix_stream_socket { connectto rw_stream_socket_perms };
+allow initrc_t init_t:fifo_file rw_fifo_file_perms;
 
 # For /var/run/shutdown.pid.
 allow init_t init_var_run_t:file manage_file_perms;
@@ -119,6 +121,8 @@ corecmd_exec_chroot(init_t)
 corecmd_exec_bin(init_t)
 
 dev_read_sysfs(init_t)
+dev_read_urand(init_t)
+
 # Early devtmpfs
 dev_rw_generic_chr_files(init_t)
 
@@ -168,6 +172,8 @@ seutil_read_config(init_t)
 
 miscfiles_read_localization(init_t)
 
+allow init_t self:process setsched;
+
 ifdef(`distro_gentoo',`
 	allow init_t self:process { getcap setcap };
 ')
@@ -191,6 +197,11 @@ optional_policy(`
 ')
 
 optional_policy(`
+	consolekit_manage_log(init_t)
+')
+
+optional_policy(`
+	dbus_connect_system_bus(init_t)
 	dbus_system_bus_client(init_t)
 ')
 
@@ -259,8 +270,13 @@ kernel_clear_ring_buffer(initrc_t)
 kernel_get_sysvipc_info(initrc_t)
 kernel_read_all_sysctls(initrc_t)
 kernel_rw_all_sysctls(initrc_t)
+kernel_request_load_module(initrc_t)
 # for lsof which is used by alsa shutdown:
 kernel_dontaudit_getattr_message_if(initrc_t)
+files_read_kernel_modules(initrc_t)
+files_read_config_files(initrc_t)
+files_read_var_lib_symlinks(initrc_t)
+files_setattr_pid_dirs(initrc_t)
 
 files_read_kernel_symbol_table(initrc_t)
 

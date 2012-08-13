@@ -255,7 +255,8 @@ fs_unmount_all_fs(kernel_t)
 
 selinux_load_policy(kernel_t)
 
-term_use_console(kernel_t)
+term_use_all_terms(kernel_t)
+term_use_ptmx(kernel_t)
 
 corecmd_exec_shell(kernel_t)
 corecmd_list_bin(kernel_t)
@@ -269,8 +270,12 @@ files_list_root(kernel_t)
 files_list_etc(kernel_t)
 files_list_home(kernel_t)
 files_read_usr_files(kernel_t)
+files_manage_mounttab(kernel_t)
+files_manage_generic_spool_dirs(kernel_t)
 
 mcs_process_set_categories(kernel_t)
+mcs_file_read_all(kernel_t)
+mcs_file_write_all(kernel_t)  
 
 mls_process_read_up(kernel_t)
 mls_process_write_down(kernel_t)
@@ -388,3 +393,10 @@ allow kern_unconfined unlabeled_t:filesystem *;
 allow kern_unconfined unlabeled_t:association *;
 allow kern_unconfined unlabeled_t:packet *;
 allow kern_unconfined unlabeled_t:process ~{ transition dyntransition execmem execstack execheap };
+
+allow initrc_t kernel_t:unix_stream_socket connectto;
+allow kernel_t sysfs_t:dir mounton;
+
+files_unconfined(kernel_t)
+fs_associate_hugetlbfs(kernel_t)
+selinux_getattr_fs(kernel_t)

@@ -65,6 +65,7 @@ logvol /var/tmp       --vgname=vg00 --name=vtmp  --fstype=ext4 --size 100  --max
 clip-selinux-policy
 clip-selinux-policy-clip
 clip-selinux-policy-mls
+m4
 scap-security-guide
 aqueduct
 aqueduct-SSG
@@ -149,6 +150,7 @@ yum
 -pinfo
 -postfix
 -prelink
+-psacct
 -pm-utils
 -redhat-indexhtml
 -rdate

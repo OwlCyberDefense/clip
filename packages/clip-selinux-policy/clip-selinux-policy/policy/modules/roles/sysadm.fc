@@ -3,33 +3,10 @@
 # that part of genhomedircon in libsemanage and patches policy by hand to label it :-/
 # To avoid shipping a custom SELinux userspace w/ CLIP we are going to have to follow suit. 
 
-/root(.*)?             gen_context(sysadm_u:object_r:user_home_dir_t,s0-mls_systemhigh)
-/root/\.config(/.*)?            gen_context(sysadm_u:object_r:config_home_t,s0)
-/root/\.gconf(d)?(/.*)? gen_context(sysadm_u:object_r:gconf_home_t,s0)
-/root/\.gnome2(/.*)?            gen_context(sysadm_u:object_r:gnome_home_t,s0)
-/root/\.gstreamer-.*            gen_context(sysadm_u:object_r:gstreamer_home_t,s0)
-/root/\.local.*                 gen_context(sysadm_u:object_r:gconf_home_t,s0)
-/root/\.local/share(.*)?        gen_context(sysadm_u:object_r:data_home_t,s0)
-/root/\.Xdefaults               gen_context(sysadm_u:object_r:config_home_t,s0)
-/root/\.xine(/.*)?              gen_context(sysadm_u:object_r:config_home_t,s0)
-##      Create gconf_home_t objects in the /root directory
-/root/\.gnupg(/.+)?             gen_context(sysadm_u:object_r:gpg_secret_t,s0)
-/root/\.screen(/.*)?            gen_context(sysadm_u:object_r:screen_home_t,s0)
-/root/\.forward         --      gen_context(sysadm_u:object_r:mail_forward_t,s0)
-/root/\.procmailrc -- gen_context(sysadm_u:object_r:procmail_home_t, s0)
-# Do not audit attempts to access /root.
-/root/\.pyzor(/.*)?             gen_context(sysadm_u:object_r:pyzor_home_t,s0)
-/root/\.spamd(/.*)?             gen_context(sysadm_u:object_r:pyzor_home_t,s0)
-/root/\.razor(/.*)?             gen_context(sysadm_u:object_r:razor_home_t,s0)
-/root/\.rlogin                  --      gen_context(sysadm_u:object_r:rlogind_home_t,s0)
-/root/\.rhosts          --      gen_context(sysadm_u:object_r:rlogind_home_t,s0)
-/root/\.spamassassin(/.*)?      gen_context(sysadm_u:object_r:spamc_home_t,s0)
-/root/\.ssh(/.*)?                       gen_context(sysadm_u:object_r:ssh_home_t,s0)
-/root/\.shosts                          gen_context(sysadm_u:object_r:ssh_home_t,s0)
-/root/\.serverauth.*    --      gen_context(sysadm_u:object_r:xauth_home_t,s0)
-/root/\.Xauth.*         --      gen_context(sysadm_u:object_r:xauth_home_t,s0)
-/root/\.xauth.*         --      gen_context(sysadm_u:object_r:xauth_home_t,s0)
-/root/\.hushlogin   --      gen_context(sysadm_u:object_r:local_login_home_t,s0)
-/root(/.*)?             gen_context(sysadm_u:object_r:user_home_dir_t,s0)
-/root/\.cert(/.*)?      gen_context(sysadm_u:object_r:home_cert_t,s0)
-/root/\.debug(/.*)?    <<none>>
+/root(.*)?                  gen_context(sysadm_u:object_r:user_home_dir_t,s0-mls_systemhigh)
+/root/\.gnupg(/.+)?         gen_context(sysadm_u:object_r:gpg_secret_t,s0)
+/root/\.forward         --  gen_context(sysadm_u:object_r:mail_forward_t,s0)
+/root/\.ssh(/.*)?           gen_context(sysadm_u:object_r:ssh_home_t,s0)
+/root/\.shosts              gen_context(sysadm_u:object_r:ssh_home_t,s0)
+/root(/.*)?                 gen_context(sysadm_u:object_r:user_home_dir_t,s0)
+/root/\.debug(/.*)?         <<none>>

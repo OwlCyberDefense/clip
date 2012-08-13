@@ -261,7 +261,7 @@ if [ $1 -eq 1 ]; then
    %loadpolicy clip $packages
    restorecon -R /root /var/log /var/run 2> /dev/null
 else
-   semodule -n -s clip 2>/dev/null
+#   semodule -n -s clip 2>/dev/null
    %loadpolicy clip $packages
    %relabel clip
 fi
