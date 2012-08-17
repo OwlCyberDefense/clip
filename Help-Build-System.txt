@@ -69,6 +69,9 @@ ISO.
 First, a directory is created in packages/<PACKAGE NAME>.  The contents of
 this directory will vary depending on the type of package.  
 
+If you want to include a package and you have a src.rpm that needs *no*
+modifications refer to packages/examples/srcrpm.
+
 If it is merely wrapping an existing project's sources, eg the intent is to
 take an existing released tarball of a library and package it in in RPM, than
 you will provide a Makefile, spec file, package tarball, and any custom
