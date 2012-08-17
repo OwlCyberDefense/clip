@@ -20,7 +20,11 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# FIXME: This *must* be changed by the end-user prior to generating a build!!
+# NOTE: In CLIP you login as an unpriv user and sudo.  We lock the root account
+# in %post so no one can login as root.
+# FIXME:
+# The default password for "clipuser" is neutronbass.  Go to the beginning of %post
+# to change that password.
 # rootpw correctbatteryhorsestaple
 rootpw neutronbass
 
@@ -218,6 +222,14 @@ semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  root
 semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  staff_u
 semanage user -m                      -Rsystem_r  system_u
 
+useradd -m clipuser -G wheel
+# FIXME: Change this password!
+passwd --stdin clipuser <<< neutronbass
+passwd -e clipuser
+echo "%wheel        ALL=(ALL)       ALL" >> /etc/sudoers
+# Lock the root acct to prevent direct logins
+usermod -L root
+
 # iptables setup
 cat >/etc/sysconfig/iptables <<EOF
 *filter
@@ -317,5 +329,6 @@ sed -i -e 's/^SELINUX\s*=.*/SELINUX=permissive/' /etc/selinux/config
 
 # relabel with refpol on reboot
 touch /.autorelabel
+
 
 %end
