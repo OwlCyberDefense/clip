@@ -1,0 +1,258 @@
+openscap-0.8.4							07-08-2012
+- added OVAL schemas 5.9, 5.10.1
+- alloc.h is no more public api
+- bug fixes
+
+openscap-0.8.3 							30-07-2012
+- added XCCDF 1.2 schemas
+- changed XCCDF report format
+- updated schemas for OVAL 5.10
+- added additional OVAL schemas - 5.3, 5.4, 5.5, 5.6, 5.7
+- multi version support for XCCDF and OVAL
+- a schema version of an imported and exported content is same
+- added rpmverifyfile probe
+- results are validated only if an OSCAP_FULL_VALIDATION variable is set
+- bug fixes
+
+openscap-0.8.2							28-03-2012
+- XCCDF check-import support
+- XSLT transformation for XCCDF 1.1 to 1.2 migration
+- SCE reports now optionally use the new check-import functionality
+  and don't need separate SCE result files
+- bug fixes
+
+openscap-0.8.1							15-02-2012
+- introduce Script Check Engine
+
+openscap-0.8.0							11-10-2011
+- Added an OVAL Directives schema to allow for a tool
+  to supply a set of directives to more easily specify
+  desired results content.
+- Enhanced OVAL Results directives to allow for more flexibility
+  in allowed results content
+- added new OVAL objects(all OVAL 5.8 objects are covered now)
+- update dpkgprobe
+- all issues reported by coverity are fixed
+- add capability to export OVAL Variables from XCCDF
+- added cvss score calculator from vector
+
+openscap-0.7.4							25-07-2011
+- support set operations on Set Objects
+- add support for an unbounded filter element in all objects
+- fix various datatype changes in object items
+- SOLARIS integration(get existing probes working, dist files)
+- support new OVAL objects: environmentvariable58, filehash58, selinuxboolean
+- extend oscap tool(validate all imports and exports)
+- bug fixes (make check in test/mitre)
+
+openscap-0.7.3							24-06-2011
+- start migration to OVAL 5.8
+- new probes and schemas from OVAL 5.8
+- RHEL6 SCAP content is in good shape
+- SOLARIS integration(make and make check work)
+- use gnulib (better portability)
+- add "analyse" mode to oscap tool
+- fixes
+
+openscap-0.7.2							13-04-2011
+- OVAL 5.7 is supported
+- "--skip-valid" option in oscap tool
+- bugfixes
+
+openscap-0.7.1							08-03-2011
+- improve library selfcheck mechanism
+- substitution support in XCCDF
+- mostly bug-fixes and cleanups
+
+openscap-0.7.0							10-02-2011
+- OVAL 5.6 is supported
+- async stop of evaluation by signal
+- bugfixes
+
+openscap-0.6.8							31-01-2011
+- support more than one state inside OVAL tests
+- initial implementation of filepath element
+- add 'mask' attribute support
+- support PCRE in object-state comparison
+- support unstructured 'metadata' elements in OVAL definitions
+- interface probe support 'type' entity
+- support for new 'behaviors' attributes
+- add OVAL schemas version 5.6
+- improved XCCDF reporting (include OVAL result items)
+- bugfixes and clean ups
+
+openscap-0.6.7							14-01-2011
+- new CPE dict. match functionality in oscap
+- bugxifes
+
+openscap-0.6.6							09-12-2010
+- better atomic functions support check
+
+openscap-0.6.5							01-12-2010
+- propagate probe communication errors upwards
+- functions for handling OVAL "generator"
+- implement oval_probe_session_abort
+- RHEL5 related fixes
+- libtool versioning
+
+openscap-0.6.4                                                  20-10-2010
+- perl regular expression is on by default
+- OVAL float type support
+- fix non-compliant handling of empty variables in OVAL
+- directory traversal algorithm made-over, avoid loops
+- add RHEL5 spec file and related fixes
+- XSL transformation improvements + Dublin Core support
+- fixing XCCDF export functionality
+
+openscap-0.6.3                                                  14-09-2010
+- support filters inside objects
+- optimizing memory consumption
+- proper result for unsupported OVAL objects
+- many improvements in XSLT transformations
+- supporting  OVAL incomplete objects 
+- fixes in directories traversal (findfiles)
+- python API improvements
+- Fedora SCAP content improvements
+
+openscap-0.6.2                                                  25-08-2010
+- provide draft of fedora14 XCCDF and OVAL content
+- XSL transformations for generating report and guidance
+- memory optimalizations for  file probe
+- add probes: sql and xinetd
+- new modular design of oscap tool
+- OVAL API refactor and clean up
+- debug mechanism clean up
+- improved python bindings
+- many many fixes
+
+openscap-0.6.0							14-07-2010
+- finished OVAL variables support
+- fixed swig version requirement
+- xccdf_policy API tuned up
+- simplified reporting mechanism
+- provided OVAL and XCCDF schemas in tarball
+- improved interface for validation
+- added validation and cvss support to oscap tool
+- oscap tool fixes
+
+openscap-0.5.12                                                 30-06-2010
+- OVAL high level API
+- OVAL split system querying and evaluation
+- OVAL variables rebind functionality 
+- XCCDF_POLICY - OVAL integration
+- XCCDF_POLICY - scanner implementation
+- XCCDF - implementation resolve(),
+- XCCDF - fixes in clone()
+- XCCDF - fixes and test for export()
+- XCCDF - value handling
+- probes - documentation
+- probes - reset()
+- probes - leaks
+- bindings  - callback interface
+- transform oscap-scan to oscap toolkit
+
+openscap-0.5.11							26-05-2010
+* leak fixes on side of probes
+* variables support almost in all probes
+* new probes: environment variable, variable
+* semantic validation of variable model
+* library selftests for new probes
+* xccdf export and clone functions
+* xccdf_policy python/perl wrappers
+* bugfixes
+
+openscap-0.5.10							07-05-2010
+- fixing many many leaks
+- variables support in: findfiles and process, password probes
+- new probes: textfilecontent
+- semantic validation available for: syschar model, result model
+- library selftests: two new tests, skiping missing probes
+- documentation: better coverege of  "common" part
+- xccdf_policy: new variables support
+
+openscap-0.5.9							16-04-2010
+- built on windows (without probe support)
+- better support on RHEL5
+- OVAL model validation functionality
+- OVAL, XCCDF xml file validation functionality
+- update XCDDF model manipulation functions
+- introduction of XCCDF_POLICY tailoring interface
+- new probes: filemd5, filehash
+- removed libnl dependency
+- extended and improved library selfcheck
+- alternative solution to atomic functions based on mutex
+- many many fixes
+
+openscap-0.5.8							24-03-2010
+- new s-expr parser
+- new probes from unix schema
+- file probe optimization
+- xccdf test_results implementation
+- extended OVAL API
+- documentaion update for OVAL + probes
+- tuned fedora content
+- initscript, cron job, oscap-scan (improved)
+- XCCDF_POLICY API specification
+- fixes(make distcheck pass)
+
+openscap-0.5.7							21-02-2010
+- Debian dpkginfo probe is available now
+- RHEL5 support
+- new command line tool - OVAL scanner 
+- Fedora 12 OVAL content available
+- documentation is heavy updated (with class diagrams)
+- new tests in make check
+- minor API changes
+- C++ reserved names cleanup
+
+openscap-0.5.6							04-01-2010
+- OVAL API has been extended
+- OVAL doxygen documentation is available
+- migration to new checking mechanism is completed
+- new logging and error propagating mechanism
+- many many bugfixes + defensive code 
+
+openscap-0.5.5							12-11-2009
+- many fixes in OVAL
+- new system_info probe in OVAL
+- CVE is re-implemented
+- migration to improved testing mechanism has begun (see CPE)
+- bindings are merged into single module called openscap
+
+openscap-0.5.4							23-10-2009
+- new CPE model
+- evaluation of set objects and system characteristic output
+- bindings clean up
+- probes tune up, memory leaks fixes 
+
+openscap-0.5.3							29-09-2009
+- OVAL results part is code complete
+- improved memory management of definition and system characteristic model (OVAL)
+- improved memory management of S-expressions
+- new probe API
+- refactoring 
+
+openscap-0.5.2							19-08-2009
+- new family probe
+- simple objects in OVAL content can be processed
+- initial implementation of conversion of S-Expressions to System Characteristic
+- bugfixes 
+
+openscap-0.5.1							03-08-2009
+- all code except oval is after refactoring
+- populating of system-characteristics model from xml is available
+- implementation of probes: rpminfo, runlevel, textfilecontent54,xmlfilecontent is done
+- perl and python bindings are up2date 
+
+openscap-0.3.2							24-04-2009
+- perl bindings are available
+
+openscap-0.3.1							09-04-2009
+- python bindings for CPE, CCE, CVE and CVSS
+- OVAL can load definitions
+
+
+openscap-0.1.4							29-03-2009
+- first official release
+- CPE, CCE, CVE and CVSS are implmented
+
