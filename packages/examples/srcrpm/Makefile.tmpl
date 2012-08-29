@@ -58,7 +58,7 @@ srpm: $(PKGNAME)-srpm
 
 $(PKGNAME)-rpm: $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
 
-$(PKGNAME)-srpm: $(SRPM)
+$(PKGNAME)-srpm: $(SRPM_OUTPUT_DIR)/$(SRPM)
 
 $(OUTPUT_DIR)/$(RPM): $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 	@echo "Building $(PKGNAME) RPM..."
