@@ -25,7 +25,7 @@ chroots)
 default password!  It is "neutronbass".  DO NOT LEAVE THIS PASSWORD LINE
 INTACT!
 
-8. Go back and re-read #6.
+8. Go back and re-read #7.
 
 9. Roll an ISO by running "$ make clip-rhel6-installation-iso".
 Note: for a complete list of targets available please run "$ make help".
