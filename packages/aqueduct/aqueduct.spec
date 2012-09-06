@@ -95,7 +95,7 @@ install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/rhel-5-beta/scripts
 # install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/CIS/firefox
 # install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/firefox/scripts
 # install -m 0640 etc/aqueduct/profiles/CIS/firefox/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/CIS/firefox/default.profile
-install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/rhel-5-beta/scripts compliance/Bash/CIS/rhel5/prod/CIS*
+#install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/rhel-5-beta/scripts compliance/Bash/CIS/rhel5/prod/CIS*
 
 # Files involved in the DISA STIG
 install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/DISA/rhel-5-beta
@@ -203,16 +203,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/aqueduct/SSG/scripts
 /usr/libexec/aqueduct/SSG/tools
 
-%post SSG
-# FIXME: this is a hack to mark the content as manual
-chmod 640 /usr/libexec/aqueduct/SSG/scripts/bootloader_password.sh
-chmod 640 /usr/libexec/aqueduct/SSG/scripts/install_aide.sh
-chmod 640 /usr/libexec/aqueduct/SSG/scripts/install_openswan.sh
-chmod 640 /usr/libexec/aqueduct/SSG/scripts/install_vlock_package.sh
-chmod 640 /usr/libexec/aqueduct/SSG/scripts/install_vsftpd.sh
-chmod 640 /usr/libexec/aqueduct/SSG/scripts/postfix_create_cert.sh
-chmod 640 /usr/libexec/aqueduct/SSG/scripts/postfix_install_ssl_cert.sh
-chmod 640 /usr/libexec/aqueduct/SSG/scripts/rsyslog_send_messages_to_logserver.sh
+%post
 
 %changelog
 * Fri Jul 13 2012 Mike Palmiotto <mpalmiotto@tresys.com>

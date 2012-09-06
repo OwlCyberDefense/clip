@@ -22,10 +22,4 @@ FILE=/etc/sysconfig/network
 
 [ -f $FILE ] || exit 1
 
-grep -Pq "^(\s*)(\#*)(\s*FORWARD_IPV4(\s*)\=)" $FILE
-if [ $? -eq 0 ]
-then
-	sed -i -r -e "s/^(\s*)(\#*)(\s*FORWARD_IPV4(\s*)\=).*/\3no/g" $FILE
-else
-	echo "FORWARD_IPv4=no" >> $FILE
-fi
+safe_add_field "(FORWARD_IPV4=).*" "no" $FILE
