@@ -41,7 +41,6 @@ interface(`auth_role',`
 ## </param>
 #
 interface(`auth_use_pam',`
-
 	# for SSP/ProPolice
 	dev_read_urand($1)
 	# for encrypted homedir
@@ -111,6 +110,7 @@ interface(`auth_login_pgm_domain',`
 	allow $1 self:capability ipc_lock;
 	allow $1 self:process setkeycreate;
 	allow $1 self:key manage_key_perms;
+	userdom_manage_all_users_keys($1)
 
 	files_list_var_lib($1)
 	manage_files_pattern($1, var_auth_t, var_auth_t)
@@ -144,6 +144,9 @@ interface(`auth_login_pgm_domain',`
 	mls_file_downgrade($1)
 	mls_process_set_level($1)
 	mls_fd_share_all_levels($1)
+
+        auth_manage_faillog($1)
+        auth_manage_pam_pid($1)
 
 	auth_use_pam($1)
 
@@ -769,6 +772,27 @@ interface(`auth_rw_faillog',`
 	logging_search_logs($1)
 	allow $1 faillog_t:file rw_file_perms;
 ')
+
+#######################################
+## <summary>
+##  Manage the login failure log.
+## </summary>
+## <param name="domain">
+##  <summary>
+##  Domain allowed access.
+##  </summary>
+## </param>
+#
+interface(`auth_manage_faillog',`
+    gen_require(`
+        type faillog_t;
+    ')
+
+    files_search_pids($1)
+       logging_search_logs($1)
+    allow $1 faillog_t:dir manage_dir_perms;
+    allow $1 faillog_t:file manage_file_perms;
+ ')
 
 #######################################
 ## <summary>

@@ -223,7 +223,7 @@ optional_policy(`
 #
 
 allow initrc_t self:process { getpgid setsched setpgid setrlimit getsched };
-allow initrc_t self:capability ~{ sys_admin sys_module };
+allow initrc_t self:capability ~{ audit_control audit_write sys_admin sys_module };
 dontaudit initrc_t self:capability sys_module; # sysctl is triggering this
 allow initrc_t self:passwd rootok;
 allow initrc_t self:key manage_key_perms;
@@ -277,6 +277,11 @@ files_read_kernel_modules(initrc_t)
 files_read_config_files(initrc_t)
 files_read_var_lib_symlinks(initrc_t)
 files_setattr_pid_dirs(initrc_t)
+
+files_manage_generic_pids_symlinks(initrc_t)
+kernel_stream_connect(initrc_t)
+files_exec_etc_files(initrc_t)
+files_manage_etc_symlinks(initrc_t)
 
 files_read_kernel_symbol_table(initrc_t)
 
@@ -339,7 +344,12 @@ files_getattr_all_symlinks(initrc_t)
 files_getattr_all_pipes(initrc_t)
 files_getattr_all_sockets(initrc_t)
 files_purge_tmp(initrc_t)
-files_delete_all_locks(initrc_t)
+files_manage_all_locks(initrc_t)
+files_manage_boot_files(initrc_t)
+files_delete_root_files(initrc_t)
+files_manage_mnt_dirs(initrc_t)
+files_manage_mnt_files(initrc_t)
+fs_search_all(initrc_t)
 files_read_all_pids(initrc_t)
 files_delete_all_pids(initrc_t)
 files_delete_all_pid_dirs(initrc_t)
@@ -822,6 +832,7 @@ optional_policy(`
 
 optional_policy(`
 	udev_rw_db(initrc_t)
+	udev_delete_db(initrc_t)
 	udev_manage_pid_files(initrc_t)
 	udev_manage_rules_files(initrc_t)
 ')

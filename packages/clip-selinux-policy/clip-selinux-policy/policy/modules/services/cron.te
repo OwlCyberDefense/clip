@@ -304,6 +304,8 @@ allow system_cronjob_t self:passwd rootok;
 allow system_cronjob_t cron_log_t:file manage_file_perms;
 logging_log_filetrans(system_cronjob_t, cron_log_t, file)
 
+manage_files_pattern(system_cronjob_t, system_cron_spool_t, system_cron_spool_t)
+
 # This is to handle /var/lib/misc directory.  Used currently
 # by prelink var/lib files for cron 
 allow system_cronjob_t cron_var_lib_t:file manage_file_perms;
@@ -329,6 +331,8 @@ allow crond_t system_cronjob_t:fd use;
 allow system_cronjob_t crond_t:fd use;
 allow system_cronjob_t crond_t:fifo_file rw_file_perms;
 allow system_cronjob_t crond_t:process sigchld;
+
+allow crond_t system_cronjob_t:key manage_key_perms;
 
 # Write /var/lock/makewhatis.lock.
 allow system_cronjob_t system_cronjob_lock_t:file manage_file_perms;

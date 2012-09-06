@@ -833,6 +833,9 @@ template(`userdom_restricted_user_template',`
 
 	typeattribute $1_t unpriv_userdomain;
 	domain_interactive_fd($1_t)
+        allow $1_t self:netlink_kobject_uevent_socket create_socket_perms;
+        dontaudit $1_t self:netlink_audit_socket create_socket_perms; 
+
 
 	##############################
 	#
@@ -3195,3 +3198,22 @@ interface(`userdom_dbus_send_all_users',`
 
 	allow $1 userdomain:dbus send_msg;
 ')
+
+########################################
+## <summary>
+##     Manage keys for all user domains.
+## </summary>
+## <param name="domain">
+##     <summary>
+##     Domain allowed access.
+##     </summary>
+## </param>
+#
+interface(`userdom_manage_all_users_keys',`
+       gen_require(`
+               attribute userdomain;
+       ')
+
+       allow $1 userdomain:key manage_key_perms;
+')
+

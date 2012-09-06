@@ -5585,6 +5585,26 @@ interface(`files_dontaudit_getattr_pid_dirs',`
 
 ########################################
 ## <summary>
+##     manage generic symbolic links
+##     in the /var/run directory.
+## </summary>
+## <param name="domain">
+##     <summary>
+##     Domain allowed access.
+##     </summary>
+## </param>
+#
+interface(`files_manage_generic_pids_symlinks',`
+       gen_require(`
+               type var_run_t;
+       ')
+
+       manage_lnk_files_pattern($1,var_run_t,var_run_t)
+')
+
+
+########################################
+## <summary>
 ##	Set the attributes of the /var/run directory.
 ## </summary>
 ## <param name="domain">
