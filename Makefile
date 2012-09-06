@@ -132,6 +132,12 @@ define REPO_ADD_FILE
 	$(VERBOSE)[ -h $(3)/$(1) ] || $(REPO_LINK) $(2)/$(1) $(3)/$(1)
 endef
 
+define CHECK_RPM_DEPS
+	@echo "Checking for required packages..."
+	@rpm -q $(HOST_RPM_DEPS) 2>&1 >/dev/null || echo "Please ensure the following RPMs are installed: $(HOST_RPM_DEPS)." || exit 1
+	@rpm -q $(HOST_REQD_PKGS) 2>&1 >/dev/null || echo "Pungi must be installed.  Please read Help-Getting-Started.txt." || exit 1
+endef
+
 ######################################################
 # BEGIN RPM GENERATION RULES (BEWARE OF DRAGONS)
 # This define directive is used to generate build rules.
@@ -139,20 +145,25 @@ endef
 # target name->dependency name munging, eg not being able to convert foo.<random arch>.rpm into foo.src.rpm.
 define RPM_RULE_template
 $(info Generating rules for rolling package $(1).)
-$(1): checkrpmdeps  $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
+$(1): $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
+	$(call CHECK_RPM_DEPS)
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)$(MOCK) $(MOCK_ARGS) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
 ifeq ($(ENABLE_SIGNING),y)
 	$(RPM) --addsign $(MY_REPO_DIR)/*
 endif
-$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-rpm: checkrpmdeps $(1)
-$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-nomock-rpm: checkrpmdeps $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
+$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-rpm:  $(1)
+	$(call CHECK_RPM_DEPS)
+$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-nomock-rpm:  $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
+	$(call CHECK_RPM_DEPS)
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)OUTPUT_DIR=$(MY_REPO_DIR) $(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $(1))) rpm
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
-$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-srpm: checkrpmdeps $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
-$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-clean: checkrpmdeps
+$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-srpm:  $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
+	$(call CHECK_RPM_DEPS)
+$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-clean: 
+	$(call CHECK_RPM_DEPS)
 	$(RM) $(1)
 	$(RM) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 endef
@@ -187,7 +198,8 @@ $(eval REPO_LINES := $(REPO_LINES)repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl
 $(eval MY_REPO_DIRS += "$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo")
 $(eval PKG_LISTS += "./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)$(RHEL_VER)")
 
-setup-$(REPO_ID)$(RHEL_VER)-repo: checkrpmdeps $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated $(CONFIG_BUILD_DEPS)
+setup-$(REPO_ID)$(RHEL_VER)-repo:  $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated $(CONFIG_BUILD_DEPS)
+	$(call CHECK_RPM_DEPS)
 
 # This is the key target for managing yum repos.  If the pkg list for the repo
 # is more recent then our private repo regen the repo by symlink'ing the packages into our repo.
@@ -220,7 +232,8 @@ endef
 ######################################################
 # BEGIN RULES
 
-help: checkrpmdeps
+help:
+	$(call CHECK_RPM_DEPS)
 	@echo -e "\n\n################################################################################"
 	@echo "The following make targets are available for generating installable ISOs:"
 	@echo "	all (roll all packages and generate all installation ISOs)"
@@ -254,12 +267,8 @@ help: checkrpmdeps
 	@echo "	bare (deletes everything except ISOs)"
 	@echo -e "\n\n################################################################################"
 
-all: checkrpmdeps create-repos $(INSTISOS)
-
-checkrpmdeps:
-	@echo "Checking for required packages..."
-	@rpm -q $(HOST_RPM_DEPS) 2>&1 >/dev/null || echo "Please ensure the following RPMs are installed: $(HOST_RPM_DEPS)." || exit 1
-	@rpm -q $(HOST_REQD_PKGS) 2>&1 >/dev/null || echo "Pungi must be installed.  Please read Help-Getting-Started.txt." || exit 1
+all: create-repos $(INSTISOS)
+	$(call CHECK_RPM_DEPS)
 
 # Generate custom targets for managing the yum repos.  We have to generate the rules since the user provides the set of repos.
 $(foreach REPO,$(strip $(shell cat CONFIG_REPOS|grep -E '^[a-zA-Z].*=.*'|sed -e 's/ \?= \?/=/')),$(eval $(call REPO_RULE_template,$(REPO))))
@@ -273,9 +282,11 @@ HOST_RPMS := $(addprefix $(MY_REPO_DIR)/,$(foreach PKG,$(HOST_REQD_PKGS),$(call 
 SRPMS := $(addprefix $(SRPM_OUTPUT_DIR)/,$(foreach RPM,$(HOST_RPMS),$(call SRPM_FROM_RPM,$(notdir $(RPM)))))
 $(foreach RPM, $(HOST_RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 
-create-repos: checkrpmdeps $(setup_all_repos)
+create-repos: $(setup_all_repos)
+	$(call CHECK_RPM_DEPS)
 
-setup-my-repo: checkrpmdeps $(RPMS)
+setup-my-repo: $(RPMS)
+	$(call CHECK_RPM_DEPS)
 	@echo "Generating yum repo metadata, this could take a few minutes..."
 	$(VERBOSE)cd $(MY_REPO_DIR) && $(REPO_CREATE) -g $(COMPS_FILE) .
 
@@ -283,19 +294,23 @@ rpms: $(RPMS)
 
 srpms: $(SRPMS)
 
-%.src.rpm: checkrpmdeps FORCE
+%.src.rpm:  FORCE
+	$(call CHECK_RPM_DEPS)
 	$(call MKDIR,$(SRPM_OUTPUT_DIR))
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
-$(LIVECDS): checkrpmdeps $(BUILD_CONF_DEPS) create-repos $(RPMS)
+$(LIVECDS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
+	$(call CHECK_RPM_DEPS)
 	@if [ x"$(RHEL_VER)" == "x6" ]; then echo "Sorry but at this time RHEL 6 LiveCDs won't boot due to dracut issues.";\
 echo "Press enter to continue anyway or ctrl-c to exit."; read; fi
 	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-livecd/\1/'`" livecd
 
-$(INSTISOS): checkrpmdeps $(BUILD_CONF_DEPS) create-repos $(RPMS)
+$(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
+	$(call CHECK_RPM_DEPS)
 	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-installation-iso/\1/'`" installation-iso
 
-$(MOCK_CONF_DIR)/$(MOCK_REL).cfg: checkrpmdeps $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
+$(MOCK_CONF_DIR)/$(MOCK_REL).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
+	$(call CHECK_RPM_DEPS)
 	$(VERBOSE)cat $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl > $@
 	$(VERBOSE)echo -e $(MOCK_YUM_CONF) >> $@
 	$(VERBOSE)echo '"""' >> $@
@@ -337,7 +352,7 @@ FORCE:
 # Unfortunately mock isn't exactly "parallel" friendly which sucks since we could roll a bunch of packages in parallel.
 .NOTPARALLEL:
 
-.PHONY: checkrpmdeps all all-vm create-repos $(setup_all_repos) srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE
+.PHONY:  all all-vm create-repos $(setup_all_repos) srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE
 
 
 # END RULES
