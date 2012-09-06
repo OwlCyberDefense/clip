@@ -3,9 +3,9 @@ release, rather a git revision) this is the general workflow:
 
 1. Create a dir for the upstream.
 2. Go into that dir.
-3. Create a subdir w/ the revision name include, eg aqueduct-trunk-r222.
-4. cd aqueduct-trunk-r222/
-5. svn co -r 222 http://svn.fedorahosted.org/svn/aqueduct/trunk .
-6. find ./ -type d -name .svn| xargs rm -rf
-7. git add .
+3. Create a subdir with the revision name included, eg aqueduct-trunk-r222.
+4. $ cd aqueduct-trunk-r222/
+5. $ svn co -r 222 http://svn.fedorahosted.org/svn/aqueduct/trunk .
+6. $ find ./ -type d -name .svn| xargs rm -rf
+7. $ git add .
 8. Commit when you're ready.

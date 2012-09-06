@@ -6,20 +6,20 @@ CLIP for RHEL 6.2 Alpha Release - July 17ish, 2012:
 
 - SELinux policy needs more work to boot in enforcing mode.  This is a blocker
   for our beta release thus the beta will include a policy that supports a
-default CLIP configuration in enforcing mode.
+  default CLIP configuration in enforcing mode.
 
 - We have the ability to roll LiveCDs which are great for stateless solutions.
   While the system works for RHEL 5, we are having issues with dracut in RHEL
-6.  I hope to have these addressed by the beta release but this is not a
-blocker.
+  6. I hope to have these addressed by the beta release but this is not a
+  blocker.
 
 - We have not updated the oss.tresys.com/projects/clip website (aside adding
   links to the new releases).  This will be done for beta and final releases.
 
 - Secstate is only able to audit certain sub-groups of scap-security-guide.
   OpenSCAP segfaults when attempting to audit the entire XCCDF.  The groups
-with x's below are the ones which can be audited with a `secstate select -r
-RHEL-6 [group-name]; secstate audit`:
+  with x's below are the ones which can be audited with a
+  `secstate select -r RHEL-6 [group-name]; secstate audit`:
 [x] services
 [ ] system
     [x] software
@@ -48,7 +48,7 @@ RHEL-6 [group-name]; secstate audit`:
         [x] networking-ipsec
     [x] logging
 
-Instead of selecting the content by hand you can alternatively place execute
+Instead of selecting the content by hand you can alternatively execute
 these commands:
 ## START COMMANDS ##
 secstate deselect -r RHEL-6
@@ -78,9 +78,9 @@ secstate select -r RHEL-6 services
 
 - `secstate remediate` still needs to be able to work for audits, using
   `secstate remediate -x [audit-results.xml].  This issue will hopefully be
-addressed by the beta release.
+  addressed by the beta release.
 
 - scap-security-guide uses a hard coded /usr/local for the install directory.
   This needs to be shifted to use `${DESTDIR}`, which defaults to /usr/local
-if no usr exists.
+  if no usr exists.
 =============================================================================

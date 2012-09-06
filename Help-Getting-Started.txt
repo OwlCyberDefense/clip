@@ -1,13 +1,14 @@
 Here is a quick list of the things you need to do to get started.
 
-1. Your build host most be able to pull packages from RHEL, Opt, and EPEL yum repos.  The details of doing this are discussed in detail elsewhere but here is a list of packages you will need to install:
+1. Your build host most be able to pull packages from RHEL, Opt, and EPEL yum repos.
+The details of doing this are discussed in detail elsewhere but here is a list of packages you will need to install:
 - rpm-build
 - mock
 - createrepo
 - repoview
 - livecd-tools
 
-Note: you may have to install other packages as well.  We don't know what you
+Note: you may have to install other packages as well.  We don't know what your
 installation base contains ;)
 
 2. Modify CONFIG_REPOS to point to your *local* RHEL, Opt, and EPEL repos.
@@ -19,7 +20,7 @@ chroots)
 
 5. Roll a Pungi RPM to install on the build host by running "make pungi-rpm".
 
-6. Install the generated pungi rpm "# yum localinstall repos/my-repo/pungi*.noarch.rpm".
+6. Install the generated pungi rpm by running "# yum localinstall repos/my-repo/pungi*.noarch.rpm".
 
 7. CHANGE THE DEFAULT PASSWORD IN YOUR KICKSTART!  CLIP intentionally ships with an unencrypted
 default password!  It is "neutronbass".  DO NOT LEAVE THIS PASSWORD LINE
