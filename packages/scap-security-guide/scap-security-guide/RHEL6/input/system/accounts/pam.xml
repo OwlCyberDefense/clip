@@ -42,6 +42,20 @@ file syntax can be found at
 http://www.kernel.org/pub/linux/libs/pam/Linux-PAM-html/sag-configuration-file.html.</warning>
 <ref disa="1391,1392" />
 
+<Value id="password_history_retain_number" type="number"
+operator="equals" interactive="0">
+<title>remember</title>
+<description>The last n passwords for each user are saved in
+<tt>/etc/security/opasswd</tt> in order to force password change history and
+keep the user from alternating between the same password too
+frequently.</description>
+<value selector="">5</value>
+<value selector="0">0</value>
+<value selector="5">5</value>
+<value selector="10">10</value>
+<value selector="24">24</value>
+</Value>
+
 <Group id="password_quality">
 <title>Set Password Quality Requirements</title>
 <description>The default <tt>pam_cracklib</tt> PAM module provides strength
@@ -149,6 +163,15 @@ passwords</warning>
 <value selector="3">3</value>
 <value selector="4">4</value>
 <value selector="5">5</value>
+</Value>
+<Value id="var_accounts_passwords_pam_faillock_deny" type="number"
+operator="equals" interactive="0">
+<title>fail_deny</title>
+<description>Number of failed login attempts before account lockout</description>
+<value selector="">5</value>
+<value selector="3">3</value>
+<value selector="5">5</value>
+<value selector="10">10</value>
 </Value>
 
 <Rule id="password_retry">
@@ -284,27 +307,29 @@ attempts using
 <tt>pam_faillock.so</tt>,
 <br /><br />
 Find the following line in <tt>/etc/pam.d/system-auth</tt> and <tt>/etc/pam.d/password-auth</tt>:
-<pre>auth sufficient pam_unix.so nullok try_first_pass</pre>
+<pre>auth sufficient pam_unix.so try_first_pass</pre>
 and then change it so that it reads as follows:
-<pre>auth required pam_unix.so nullok try_first_pass</pre>
+<pre>auth required pam_unix.so try_first_pass</pre>
 In the same file, comment out or delete the lines:
 <pre>auth requisite pam_succeed_if.so uid &gt;= 500 quiet
 auth required pam_deny.so</pre>
 To enforce password
 lockout, add the following to <tt>/etc/pam.d/system-auth</tt> and <tt>/etc/pam.d/password-auth</tt>.
 First, add the following just before the pam_unix.so auth line:
-<pre>auth required pam_faillock.so preauth audit silent deny=5 unlock_time=900</pre>
-<!-- TOOD: this implies we need to create a Value and associated refine-value -->
+<pre>auth required pam_faillock.so preauth audit silent deny=<sub idref="var_accounts_passwords_pam_faillock_deny" /> unlock_time=900</pre>
 Second, add the following two lines just after the pam_unix.so auth line:
-<pre>auth     [default=die]  pam_faillock.so authfail audit deny=5 unlock_time=900
-auth     sufficient     pam_faillock.so authsucc audit deny=5 unlock_time=900</pre>
+<pre>auth     [default=die]  pam_faillock.so authfail audit deny=<sub idref="var_accounts_passwords_pam_faillock_deny" /> unlock_time=900
+auth     sufficient     pam_faillock.so authsucc audit deny=<sub idref="var_accounts_passwords_pam_faillock_deny" /> unlock_time=900</pre>
+<ul><li>NOTE: The DoD requires accounts be locked out after 3 failed login attempts,
+accomplished by changing the value of the <tt>deny</tt> option to <i>3</i> in the example
+above.</li></ul>
 </description>
 <rationale>
 Locking out user accounts after a number of incorrect attempts
 prevents direct password guessing attacks.
 </rationale>
 <ident cce="3410-8" />
-<oval id="accounts_passwords_pam_faillock_deny" />
+<oval id="accounts_passwords_pam_faillock_deny" value="var_accounts_passwords_pam_faillock_deny"/>
 <ref nist="AC-7, CM-6" disa="1452,44,47" />
 </Rule>
 
@@ -337,41 +362,23 @@ Using a stronger hashing algorithm makes password cracking attacks more difficul
 <ref nist="IA-5" />
 </Rule>
 
-<Group id="limiting_password_reuse">
+<Rule id="limiting_password_reuse">
 <title>Limit Password Reuse</title>
 <description>Do not allow users to reuse recent passwords. This can
-be accomplished by using the remember option for the <tt>pam_unix</tt> PAM
-module. For example, in order to prevent a user from re-using any of his or her
-last 5 passwords, append <tt>remember=5</tt> to the password line which uses
-the <tt>pam_unix</tt> module in the file <tt>/etc/pam.d/system-auth</tt>, as shown:
-<pre>password sufficient pam_unix.so existing_options remember=5</pre>
+be accomplished by using the <tt>remember</tt> option for the <tt>pam_unix</tt> PAM
+module. In order to prevent a user from re-using any of their
+last <sub idref="password_history_retain_number" /> passwords, 
+append <tt>remember=<sub idref="password_history_retain_number" /></tt> to
+the password line which uses the <tt>pam_unix</tt> module in the file
+<tt>/etc/pam.d/system-auth</tt>, as shown:
+<pre>password sufficient pam_unix.so existing_options remember=<sub idref="password_history_retain_number" /></pre>
 Old (and thus no longer valid) passwords are stored in the
-file <tt>/etc/security/opasswd</tt>.</description>
-
-<Value id="password_history_retain_number" type="number"
-operator="equals" interactive="0">
-<title>remember</title>
-<description>The last n passwords for each user are saved in
-<tt>/etc/security/opasswd</tt> in order to force password change history and
-keep the user from alternating between the same password too
-frequently.</description>
-<value selector="">5</value>
-<value selector="0">0</value>
-<value selector="5">5</value>
-<value selector="10">10</value>
-</Value>
-
-<Rule id="limit_password_reuse">
-<title>Limit Password Reuse</title>
-<description>The passwords to remember should be set to:
-<sub idref="password_history_retain_number" /></description>
+file <tt>/etc/security/opasswd</tt>.  The DoD requirement is currently 24 passwords.</description>
 <rationale>
-Allowing users to reuse passwords means that a password which was once
-compromised could be used yet again by an attacker.
+Preventing re-use of previous passwords helps ensure that a compromised password is not re-used by a user.
 </rationale>
 <ident cce="14939-3" />
-<oval id="accounts_password_reuse_limit" value="password_history_retain_number"/>
-<ref nist="IA-5" disa="200"/>
+<oval id="accounts_password_reuse_limit" value="password_history_retain_number" />
+<ref nist="IA-5" disa="200" />
 </Rule>
-</Group>
 </Group>

@@ -5,57 +5,80 @@ for recording system activities. By default, the service audits about
 SELinux AVC denials and certain types of security-relevant events
 such as system logins, account modifications, and authentication
 events performed by programs such as sudo.
-<br /><br />
 Under its default configuration, <tt>auditd</tt> has modest disk space
 requirements, and should not noticeably impact system performance.
 <br /><br />
 Government networks often have substantial auditing
 requirements and <tt>auditd</tt> can be configured to meet these
 requirements.
-<br /><br />
-Example requirements include:
-<br /><br />
+Examining some example audit records demonstrates how the Linux audit system
+satisfies common requirements.  
+The following example from Fedora Documentation available at 
+<tt>http://docs.fedoraproject.org/en-US/Fedora/13/html/Security-Enhanced_Linux/sect-Security-Enhanced_Linux-Fixing_Problems-Raw_Audit_Messages.html</tt>
+shows the substantial amount of information captured in a
+two typical "raw" audit messages, followed by a breakdown of the most important
+fields. In this example the message is SELinux-related and reports an AVC
+denial (and the associated system call) that occurred when the Apache HTTP
+Server attempted to access the <tt>/var/www/html/file1</tt> file (labeled with
+the <tt>samba_share_t</tt> type):
+<pre>type=AVC msg=audit(1226874073.147:96): avc:  denied  { getattr } for pid=2465 comm="httpd"
+path="/var/www/html/file1" dev=dm-0 ino=284133 scontext=unconfined_u:system_r:httpd_t:s0 
+tcontext=unconfined_u:object_r:samba_share_t:s0 tclass=file
 
-<ul><li>
-Ensure Auditing is Configured to Collect Certain System Events
+type=SYSCALL msg=audit(1226874073.147:96): arch=40000003 syscall=196 success=no exit=-13 
+a0=b98df198 a1=bfec85dc a2=54dff4 a3=2008171 items=0 ppid=2463 pid=2465 auid=502 uid=48
+gid=48 euid=48 suid=48 fsuid=48 egid=48 sgid=48 fsgid=48 tty=(none) ses=6 comm="httpd"
+exe="/usr/sbin/httpd" subj=unconfined_u:system_r:httpd_t:s0 key=(null)
+</pre>
 <ul>
-<li>Information on the Use of Print Command (unsuccessful and successful)</li>
-<li>Startup and Shutdown Events (unsuccessful and successful)</li>
-<li>System Administrator Actions</li>
-</ul>
+<li><tt>msg=audit(1226874073.147:96)</tt>
+<ul><li>The number in parentheses is the unformatted time stamp (Epoch time)
+for the event, which can be converted to standard time by using the
+<tt>date</tt> command.
 </li></ul>
-
-<ul><li>
-Ensure the auditing software can record the following for each
-audit event:
-<ul>
-<li>Date and time of the event</li>
-<li>Userid that initiated the event</li>
-<li>Type of event</li>
-<li>Success or failure of the event</li>
-<li>For I&amp;A events, the origin of the request (e.g., terminal ID)</li>
-<li>For events that introduce an object into a user’s address space, and
-for object deletion events, the name of the object, and in MLS systems,
-the objects security level.</li>
-</ul></li>
+</li>
+<li><tt>{ getattr }</tt>
+<ul><li>The item in braces indicates the permission that was denied. <tt>getattr</tt>
+indicates the source process was trying to read the target file's status information.
+This occurs before reading files. This action is denied due to the file being
+accessed having the wrong label. Commonly seen permissions include <tt>getattr</tt>,
+<tt>read</tt>, and <tt>write</tt>.</li></ul>
+</li>
+<li><tt>comm="httpd"</tt>
+<ul><li>The executable that launched the process. The full path of the executable is
+found in the <tt>exe=</tt> section of the system call (<tt>SYSCALL</tt>) message,
+which in this case, is <tt>exe="/usr/sbin/httpd"</tt>.
+</li></ul>
+</li>
+<li><tt>path="/var/www/html/file1"</tt>
+<ul><li>The path to the object (target) the process attempted to access.
+</li></ul>
+</li>
+<li><tt>scontext="unconfined_u:system_r:httpd_t:s0"</tt>
+<ul><li>The SELinux context of the process that attempted the denied action. In
+this case, it is the SELinux context of the Apache HTTP Server, which is running
+in the <tt>httpd_t</tt> domain.
+</li></ul>
+</li>
+<li><tt>tcontext="unconfined_u:object_r:samba_share_t:s0"</tt>
+<ul><li>The SELinux context of the object (target) the process attempted to access.
+In this case, it is the SELinux context of <tt>file1</tt>. Note: the <tt>samba_share_t</tt>
+type is not accessible to processes running in the <tt>httpd_t</tt> domain.</li>
 </ul>
-
-<br /><br />
-By default, <tt>auditd</tt> logs only SELinux denials, which are
-helpful for debugging SELinux and discovering intrusion attempts,
-and certain types of security events, such as modifications to user
-accounts (<tt>useradd</tt>, <tt>passwd</tt>, etc), login events, and
-calls to <tt>sudo</tt>.
-<br /><br />
-The audit system stores data in <tt>/var/log/audit/audit.log</tt>. By default,
-<tt>auditd</tt> rotates 5 logs by size (6MB), retaining a maximum of 30MB of
-data in total, and refuses to write entries when the disk is too
-full. This minimizes the risk of audit data filling its partition
-and impacting other services. This also minimizes the risk of the audit
-daemon temporarily disabling the system if it cannot write audit log (which
-it can be configured to do). 
+</li>
+<li> From the system call (<tt>SYSCALL</tt>) message, two items are of interest:
+<ul><li><tt>success=no</tt>: indicates whether the denial (AVC) was enforced or not.
+<tt>success=no</tt> indicates the system call was not successful (SELinux denied
+access). <tt>success=yes</tt> indicates the system call was successful - this can
+be seen for permissive domains or unconfined domains, such as <tt>initrc_t</tt>
+and <tt>kernel_t</tt>.
+</li>
+<li><tt>exe="/usr/sbin/httpd"</tt>: the full path to the executable that launched
+the process, which in this case, is <tt>exe="/usr/sbin/httpd"</tt>.
+</li></ul>
+</li></ul>
 </description>
-<ref disa="120,135,136,166,1338,1339,157" />
+<ref disa="120,135,166,1338,1339,157" />
 
 <Rule id="enable_auditd_service">
 <title>Enable auditd Service</title>
@@ -70,7 +93,7 @@ actions will be taken if other obstacles exist.
 </rationale>
 <ident cce="4292-9" />
 <oval id="service_auditd_enabled" />
-<ref nist="CM-6, CM-7" disa="169,172,174,1353,1462,1487,1115,1454,154,067,158,831,1123,1190,1312,1263" />
+<ref nist="CM-6, CM-7" disa="169,172,174,1353,1462,1487,1115,1454,067,158,831,1123,1190,1312,1263,130" />
 </Rule>
 
 <Rule id="enable_auditd_bootloader">
@@ -89,19 +112,28 @@ process during boot.
 </rationale>
 <ident cce="15026-8" />
 <oval id="bootloader_audit_argument" />
-<ref nist="AU-2" disa="1464" />
+<ref nist="AU-2" disa="1464,130" />
 </Rule>
 
 <Group id="configure_auditd_data_retention">
-<title> Configure <tt>auditd</tt> Data Retention</title>
+<title>Configure <tt>auditd</tt> Data Retention</title>
 <description>
-By default, <tt>auditd</tt> retains 5 log files of size 6MB apiece. For a busy
-system or a system which is thoroughly auditing system activity, this may be
+The audit system writes data to <tt>/var/log/audit/audit.log</tt>. By default,
+<tt>auditd</tt> rotates 5 logs by size (6MB), retaining a maximum of 30MB of
+data in total, and refuses to write entries when the disk is too
+full. This minimizes the risk of audit data filling its partition
+and impacting other services. This also minimizes the risk of the audit
+daemon temporarily disabling the system if it cannot write audit log (which
+it can be configured to do).
+
+For a busy
+system or a system which is thoroughly auditing system activity, the default settings
+for data retention may be
  insuffcient. The log file size needed will depend heavily on what types
 of events are being audited. First configure auditing to log all the events of
 interest. Then monitor the log size manually for awhile to determine what file
 size will allow you to keep the required data for the correct time period.
-
+<br/><br/>
 Using a dedicated partition for <tt>/var/log/audit</tt> prevents the
 <tt>auditd</tt> logs from disrupting system functionality if they fill, and,
 more importantly, prevents other activity in <tt>/var</tt> from filling the
@@ -274,7 +306,7 @@ Setting this to <tt>email</tt> is recommended over the default
 <rationale>Notifying administrators of an impending disk space problem may
 allow them to take corrective action prior to any disruption.</rationale>
 <oval id="auditd_data_retention_space_left_action" value="var_auditd_space_left_action"/>
-<ref disa="140,144" />
+<ref disa="140,143,144" />
 </Rule>
 
 
@@ -298,7 +330,7 @@ audit records. If a separate partition or logical volume of adequate size
 is used, running low on space for audit records should never occur.
 </rationale>
 <oval id="auditd_data_retention_admin_space_left_action" value="var_auditd_admin_space_left_action" />
-<ref disa="140,144" />
+<ref disa="140,143,144,1343" />
 </Rule>
 
 
@@ -356,7 +388,7 @@ After reviewing all the rules, reading the following sections, and
 editing as needed, the new rules can be activated as follows:
 <pre># service auditd restart</pre>
 </description>
-<ref disa="171,172,1115,1454,1487,1571,1589,880,347,85,1274,1356,374" />
+<ref disa="171,172,1115,1454,1487,1571,1589,880,347,85,1274,1356,374,130" />
 
 <Group id="audit_time_rules">
 <title>Records Events that Modify Date and Time Information</title>
@@ -416,7 +448,7 @@ to the system time should be audited.</rationale>
 </Rule>
 
 <Rule id="audit_rules_time_stime">
-<title>Record attempts to alter time through stime</title>
+<title>Record Attempts to Alter Time Through stime</title>
 <description>On a 32-bit system, add the following to <tt>/etc/audit/audit.rules</tt>:
 <pre># audit_time_rules
 -a always,exit -F arch=b32 -S stime -k audit_time_rules</pre>
@@ -439,7 +471,7 @@ to the system time should be audited.</rationale>
 </Rule>
 
 <Rule id="audit_rules_time_clock_settime">
-<title>Record attempts to alter time through clock_settime</title>
+<title>Record Attempts to Alter Time Through clock_settime</title>
 <description>On a 32-bit system, add the following to <tt>/etc/audit/audit.rules</tt>:
 <pre># audit_time_rules
 -a always,exit -F arch=b32 -S clock_settime -k audit_time_rules</pre>
@@ -464,7 +496,7 @@ to the system time should be audited.</rationale>
 </Rule>
 
 <Rule id="audit_rules_time_watch_localtime">
-<title>Record attempts to alter the localtime file</title>
+<title>Record Attempts to Alter the localtime File</title>
 <description>Add the following to <tt>/etc/audit/audit.rules</tt>:
 <pre>-w /etc/localtime -p wa -k audit_time_rules</pre>
 The -k option allows for the specification of a key in string form that can 
@@ -503,7 +535,7 @@ legitimacy.</rationale>
 </Rule>
 
 <Rule id="audit_network_modifications">
-<title>Record Events that Modify the System’s Network Environment</title>
+<title>Record Events that Modify the System's Network Environment</title>
 <description>Add the following to <tt>/etc/audit/audit.rules</tt>, setting
 ARCH to either b32 or b64 as appropriate for your system:
 <pre># audit_network_modifications
@@ -523,7 +555,7 @@ audited.</rationale>
 
 
 <Rule id="audit_mac_changes">
-<title>Record Events that Modify the System’s Mandatory Access
+<title>Record Events that Modify the System's Mandatory Access
 Controls</title>
 <description>Add the following to <tt>/etc/audit/audit.rules</tt>:
 <pre>-w /etc/selinux/ -p wa -k MAC-policy</pre>
@@ -537,29 +569,378 @@ MAC policy should be audited.</rationale>
 <ref nist="AU-2" />
 </Rule>
 
-<Rule id="audit_dac_actions">
+<Group id="audit_dac_actions">
 <title>Record Events that Modify the System's Discretionary
 Access Controls</title>
-<description>At a minimum the audit system should collect file
-permission changes for all users and root. Add the following to
-<tt>/etc/audit/audit.rules</tt>, setting ARCH to either b32 or b64 as
-appropriate for your system:
-<pre>-a always,exit -F arch=ARCH -S chmod -S fchmod -S fchmodat \
+<description>At a minimum the audit system should collect file permission 
+changes for all users and root.  Note that the "-F arch=b32" lines should be 
+present even on a 64 bit system.  These commands identify system calls for 
+auditing.  Even if the system is 64 bit it can still execute 32 bit system 
+calls.  Additionally, these rules can be configured in a number of ways while 
+still acheiving the desired effect.  An example of this is that the "-S" calls 
+could be split up and placed on seperate lines, however, this is less efficient.
+Add the following to <tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat \
     -F auid&gt;=500 -F auid!=4294967295 -k perm_mod
-    -a always,exit -F arch=ARCH -S chown -S fchown -S fchownat \
+    -a always,exit -F arch=b32 -S chown -S fchown -S fchownat \
     -S lchown -F auid&gt;=500 -F auid!=4294967295 -k perm_mod
-    -a always,exit -F arch=ARCH -S setxattr -S lsetxattr \
+    -a always,exit -F arch=b32 -S setxattr -S lsetxattr \
     -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr \
     -F auid&gt;=500 -F auid!=4294967295 -k perm_mod</pre>
+If your system is 64 bit then these lines should be duplicated and the 
+arch=b32 replaced with arch=b64 as follows:
+<pre>-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat \
+    -F auid&gt;=500 -F auid!=4294967295 -k perm_mod
+    -a always,exit -F arch=b64 -S chown -S fchown -S fchownat \
+    -S lchown -F auid&gt;=500 -F auid!=4294967295 -k perm_mod
+    -a always,exit -F arch=b64 -S setxattr -S lsetxattr \
+    -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr \
+    -F auid&gt;=500 -F auid!=4294967295 -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is 
+attempting to gain access to information that would otherwise be disallowed. 
+Auditing DAC modifications can facilitate the identification of patterns of 
+abuse amoung both authorized and unauthorized users.</rationale>
+
+<Rule id="audit_rules_dac_modification_chmod">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - chmod</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S chmod -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S chmod  -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
 </description>
 <rationale>The changing of file permissions could indicate that a user is attempting to
 gain access to information that would otherwise be disallowed. Auditing DAC modifications
 can facilitate the identification of patterns of abuse amoung both authorized and
 unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a 
+number of ways while still acheiving the desired effect.  Here the system calls 
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
 <ident cce="14058-2" />
-<oval id="audit_rules_dac_modification" />
+<oval id="audit_rules_dac_modification_chmod" />
 <ref nist="AU-2" disa="126"/>
 </Rule>
+
+<Rule id="audit_rules_dac_modification_chown">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - chown</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S chown -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S chown -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a 
+number of ways while still acheiving the desired effect.  Here the system calls 
+have been placed independant of other system calls.  Grouping these system 
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_chown" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+<Rule id="audit_rules_dac_modification_fchmod">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - fchmod</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S fchmod -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S fchmod -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a
+number of ways while still acheiving the desired effect.  Here the system calls
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_fchmod" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+<Rule id="audit_rules_dac_modification_fchmodat">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - fchmodat</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S fchmodat -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S fchmodat -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a
+number of ways while still acheiving the desired effect.  Here the system calls
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_fchmodat" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+<Rule id="audit_rules_dac_modification_fchown">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - fchown</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S fchown -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S fchown -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a
+number of ways while still acheiving the desired effect.  Here the system calls
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_fchown" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+<Rule id="audit_rules_dac_modification_fchownat">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - fchownat</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S fchownat -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S fchownat -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a
+number of ways while still acheiving the desired effect.  Here the system calls
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_fchownat" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+<Rule id="audit_rules_dac_modification_fremovexattr">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - fremovexattr</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S fremovexattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S fremovexattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a
+number of ways while still acheiving the desired effect.  Here the system calls
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_fremovexattr" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+<Rule id="audit_rules_dac_modification_fsetxattr">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - fsetxattr</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S fsetxattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S fsetxattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a
+number of ways while still acheiving the desired effect.  Here the system calls
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_fsetxattr" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+<Rule id="audit_rules_dac_modification_lchown">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - lchown</title>
+<description>At a minimum the audit system should collect file 
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S lchown -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S lchown -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a
+number of ways while still acheiving the desired effect.  Here the system calls
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_lchown" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+<Rule id="audit_rules_dac_modification_lremovexattr">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - lremovexattr</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S lremovexattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S lremovexattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a
+number of ways while still acheiving the desired effect.  Here the system calls
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_lremovexattr" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+<Rule id="audit_rules_dac_modification_lsetxattr">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - lsetxattr</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S lsetxattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S lsetxattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a
+number of ways while still acheiving the desired effect.  Here the system calls
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_lsetxattr" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+<Rule id="audit_rules_dac_modification_removexattr">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - removexattr</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S removexattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S removexattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a
+number of ways while still acheiving the desired effect.  Here the system calls
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_removexattr" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+<Rule id="audit_rules_dac_modification_setxattr">
+<title>Record Events that Modify the System's Discretionary
+Access Controls - setxattr</title>
+<description>At a minimum the audit system should collect file
+permission changes for all users and root. Add the following to
+<tt>/etc/audit/audit.rules</tt>:
+<pre>-a always,exit -F arch=b32 -S setxattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+If the system is 64 bit then also add the following:
+<pre>-a always,exit -F arch=b64 -S setxattr -F auid&gt;=500 -F auid!=4294967295 \
+    -k perm_mod</pre>
+</description>
+<rationale>The changing of file permissions could indicate that a user is attempting to
+gain access to information that would otherwise be disallowed. Auditing DAC modifications
+can facilitate the identification of patterns of abuse amoung both authorized and
+unauthorized users.</rationale>
+<warning category="general">Note that these rules can be configured in a
+number of ways while still acheiving the desired effect.  Here the system calls
+have been placed independant of other system calls.  Grouping these system
+calls with others as identifying earlier in this guide is more efficient.
+</warning>
+<ident cce="14058-2" />
+<oval id="audit_rules_dac_modification_setxattr" />
+<ref nist="AU-2" disa="126"/>
+</Rule>
+
+</Group> <!-- <Group id="audit_dac_actions"> -->
 
 <Rule id="audit_manual_logon_edits">
 <title> Record Attempts to Alter Logon and Logout Events</title>
@@ -633,8 +1014,7 @@ unusual activity.
 </Rule>
 
 <Rule id="audit_media_exports">
-<title>Ensure <tt>auditd</tt> Collects Information on Exporting to Media
-(successful)</title>
+<title>Ensure <tt>auditd</tt> Collects Information on Exporting to Media (successful)</title>
 <description>At a minimum the audit system should collect media
 exportation events for all users and root. Add the following to
 <tt>/etc/audit/audit.rules</tt>, setting ARCH to either b32 or b64 as
@@ -651,7 +1031,7 @@ loss.</rationale>
 </Rule>
 
 <Rule id="audit_file_deletions">
-<title>Ensure <tt>auditd</tt> Collects Files Deletion Events by User</title>
+<title>Ensure <tt>auditd</tt> Collects File Deletion Events by User</title>
 <description>At a minimum the audit system should collect file
 deletion events for all users and root. Add the following to
 <tt>/etc/audit/audit.rules</tt>, setting ARCH to either b32 or b64 as

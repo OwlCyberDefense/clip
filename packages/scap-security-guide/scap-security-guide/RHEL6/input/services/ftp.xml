@@ -71,7 +71,8 @@ and for consistency with future Red Hat releases, the use of vsftpd is recommend
 <Rule id="ftp_log_transactions">
 <title>Enable Logging of All FTP Transactions</title>
 <description>Edit the vsftpd configuration file. Add or correct the following configuration options:
-<pre>xferlog_std_format=NO
+<pre>xferlog_enable=YES
+xferlog_std_format=NO
 log_ftp_protocol=YES</pre>
 </description>
 <rationale>The modifications above ensure that all commands sent to the ftp server are logged using the verbose vsftpd log
@@ -89,6 +90,7 @@ format. The default vsftpd log file is /var/log/vsftpd.log.</rationale>
 </description>
 <rationale>This setting will cause the system greeting banner to be used for FTP connections as well.</rationale>
 <ident cce="4554-2" />
+<ref disa="48" />
 <!--<oval id="ftp_present_banner" />-->
 <!--<ref nist="CM-6, CM-7" /> -->
 </Rule>
