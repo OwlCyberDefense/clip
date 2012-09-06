@@ -96,6 +96,9 @@ allow ssh_t self:msgq create_msgq_perms;
 allow ssh_t self:msg { send receive };
 allow ssh_t self:tcp_socket create_stream_socket_perms;
 
+# Query fips mode.
+kernel_read_crypto_sysctls(ssh_t)
+
 # Read the ssh key file.
 allow ssh_t sshd_key_t:file read_file_perms;
 
@@ -241,6 +244,8 @@ files_tmp_filetrans(sshd_t, sshd_tmp_t, { dir file sock_file })
 kernel_search_key(sshd_t)
 kernel_link_key(sshd_t)
 
+kernel_read_crypto_sysctls(sshd_t)
+
 term_use_all_ptys(sshd_t)
 term_setattr_all_ptys(sshd_t)
 term_relabelto_all_ptys(sshd_t)
@@ -329,6 +334,9 @@ allow ssh_keygen_t self:unix_stream_socket create_stream_socket_perms;
 
 allow ssh_keygen_t sshd_key_t:file manage_file_perms;
 files_etc_filetrans(ssh_keygen_t, sshd_key_t, file)
+ 
+# Query fips mode.
+kernel_read_crypto_sysctls(ssh_t)
 
 kernel_read_kernel_sysctls(ssh_keygen_t)
 

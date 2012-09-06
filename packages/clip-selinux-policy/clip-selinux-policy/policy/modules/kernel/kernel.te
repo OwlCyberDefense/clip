@@ -285,6 +285,12 @@ mls_file_read_all_levels(kernel_t)
 ifdef(`distro_redhat',`
 	# Bugzilla 222337
 	fs_rw_tmpfs_chr_files(kernel_t)
+
+	# SRS: Dracut loads policy then runs restorecon /dev.
+	# Problem is that the script is still running in kernel_t at that point, not init_t.
+	# This didn't use to occur since init was exec'd before restorecon thus is was *not* in kernel_t.
+	# So transition from kernel into setfiles.
+	seutil_domtrans_setfiles(kernel_t)
 ')
 
 optional_policy(`

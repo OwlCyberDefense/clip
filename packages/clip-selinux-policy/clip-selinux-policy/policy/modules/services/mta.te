@@ -43,6 +43,7 @@ typealias user_mail_tmp_t alias { auditadm_mail_tmp_t secadm_mail_tmp_t };
 ubac_constrained(user_mail_t)
 ubac_constrained(user_mail_tmp_t)
 
+
 ########################################
 #
 # System mail local policy
@@ -207,6 +208,13 @@ optional_policy(`
 		cron_read_system_job_tmp_files(mta_user_agent)
 	')
 ')
+
+########################################
+#
+# MTA policy that applies to all variants of mail servers
+#
+# All MTAs can query FIPS mode.
+kernel_read_crypto_sysctls({ mailserver_domain mailserver_sender mailserver_delivery mta_user_agent user_mail_domain })
 
 ########################################
 #
