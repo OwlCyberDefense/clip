@@ -53,6 +53,7 @@ logging_log_filetrans(fsadm_t, fsadm_log_t, file)
 # Enable swapping to files
 allow fsadm_t swapfile_t:file { rw_file_perms swapon };
 
+kernel_use_fds(fsadm_t)
 kernel_read_system_state(fsadm_t)
 kernel_read_kernel_sysctls(fsadm_t)
 kernel_request_load_module(fsadm_t)
@@ -148,6 +149,7 @@ miscfiles_read_localization(fsadm_t)
 seutil_read_config(fsadm_t)
 
 userdom_use_user_terminals(fsadm_t)
+term_use_all_ptys(fsadm_t)
 
 ifdef(`distro_redhat',`
 	optional_policy(`
