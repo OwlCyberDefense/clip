@@ -17,7 +17,7 @@ RELEASE := 1
 # snag the architecture, hard code an arch if cross-compiling or going noarch
 ARCH ?= $(shell uname -i)
 
-# spec file name
+# srpm file name
 SRPM := $(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 RPM := $(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
 
@@ -27,8 +27,9 @@ ROOT_DIR ?= $(CURDIR)
 OUTPUT_DIR ?= $(ROOT_DIR)
 SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
 
-# exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
-RPM_DEPS := $(SRPM) Makefile
+# Exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
+# The filter-out function is called to drop a circular dep when doing non-mock builds (ie SRPM_OUTPUT_DIR = CURDIR)
+RPM_DEPS :=  Makefile $(filter-out $(SRPM_OUTPUT_DIR)/$(SRPM), $(shell /bin/readlink -f $(SRPM)))
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
 RPM_TOPDIR ?= $(RPM_TMPDIR)/src/redhat
@@ -39,11 +40,11 @@ MKDIR = test -d $(1) || mkdir -p $(1)
 RPMBUILD_ARGS := --define '_topdir $(RPM_TOPDIR)'  --define '_tmppath $(RPM_TMPDIR)' --buildroot $(RPM_BUILDROOT)
 
 define rpm-prep
-	$(call MKDIR,$(RPM_TOPDIR)/SOURCES)
-	$(call MKDIR,$(RPM_TOPDIR)/SPECS)
-	$(call MKDIR,$(RPM_TOPDIR)/BUILD)
-	$(call MKDIR,$(RPM_TOPDIR)/RPMS/$(ARCH))
-	$(call MKDIR,$(RPM_TOPDIR)/SRPMS)
+	$(call MKDIR,$(RPM_TOPDIR)/SOURCES);\
+$(call MKDIR,$(RPM_TOPDIR)/SPECS);\
+$(call MKDIR,$(RPM_TOPDIR)/BUILD);\
+$(call MKDIR,$(RPM_TOPDIR)/RPMS/$(ARCH));\
+$(call MKDIR,$(RPM_TOPDIR)/SRPMS);
 endef
 
 all: $(PKGNAME)-rpm $(PKGNAME)-srpm
@@ -67,9 +68,12 @@ $(OUTPUT_DIR)/$(RPM): $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rp
 	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/$(PKGNAME)-$(VERSION)-$(RELEASE)*.rpm $(OUTPUT_DIR)
 
 $(SRPM_OUTPUT_DIR)/$(SRPM): $(RPM_DEPS)
-	@echo "Copying SRPM into place..."
-	$(call rpm-prep)
-	cp  $(SRPM) $(SRPM_OUTPUT_DIR) 2>&1 1>/dev/null || true
+	echo "DEBUG: $@ $^"
+	@if [ ! "$@" -ef "$(SRPM)" ]; then\
+		@echo "Copying SRPM into place...";\
+		$(call rpm-prep)\
+		cp  $(SRPM) $(SRPM_OUTPUT_DIR) 2>&1 1>/dev/null;\
+	fi
 
 clean:
 	$(RM) -r $(RPM_TMPDIR)
