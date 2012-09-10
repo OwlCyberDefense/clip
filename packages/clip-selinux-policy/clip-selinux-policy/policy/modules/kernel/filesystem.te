@@ -96,6 +96,9 @@ type hugetlbfs_t;
 fs_type(hugetlbfs_t)
 files_mountpoint(hugetlbfs_t)
 fs_use_trans hugetlbfs gen_context(system_u:object_r:hugetlbfs_t,s0);
+# This appears to be coming from dracut where /dev/hugepages is device_t
+# and needs to be relabeled during restorecon.
+dev_node(hugetlbfs_t)
 
 type ibmasmfs_t;
 fs_type(ibmasmfs_t)
