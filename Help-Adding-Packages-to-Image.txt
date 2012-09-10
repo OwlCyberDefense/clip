@@ -9,5 +9,5 @@ or
 6. Run "make create-repos".
 7. Add the packages you want to include in the ISO to the appropriate
 kickstart.
-7. Build your image.
+8. Build your image.
 

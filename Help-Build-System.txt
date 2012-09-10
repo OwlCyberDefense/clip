@@ -73,13 +73,13 @@ If you want to include a package and you have a src.rpm that needs *no*
 modifications refer to packages/examples/srcrpm.
 
 If it is merely wrapping an existing project's sources, eg the intent is to
-take an existing released tarball of a library and package it in in RPM, than
+take an existing released tarball of a library and package it in an RPM, then
 you will provide a Makefile, spec file, package tarball, and any custom
 patches.  Refer to packages/examples/tarball for more information on the
 Makefile and spec file for this scenario.
 
 If the intent is to contain custom source code, eg an internally developed
-application or library, than packages/<PACKAGE NAME> will still contain a
+application or library, then packages/<PACKAGE NAME> will still contain a
 Makefile and spec file, and packages/<PACKAGE NAME>/<PACKAGE NAME> will
 contain the sources and application-specific build system (eg the one that
 typically has a "make all" and "make install" target).  For more information
@@ -99,10 +99,10 @@ The kickstart/ directory contains the files needed to configure an ISO.  The
 Makefiles in this directory call out to tools in the support/ directory and
 pass in a kickstart.  This kickstart is used to generate an ISO.
 
-To add a new ISO first add an appropriate kickstart to the
+To add a new ISO, first add an appropriate kickstart to the
 kickstart/<productname> directory.  Since this build system generates and
 manages yum repos we must "muck around" with the kickstart so ensure it has
-the "#REPO-REPLACEMENT-PLACEHOLDER" line somewhere near the top.  
+the "#REPO-REPLACEMENT-PLACEHOLDER" line somewhere near the top.
 
 NOTE: the string #REPO-REPLACEDMENT-PLACEHOLDER *must* appear in the
 kickstart for this to work appropriately.

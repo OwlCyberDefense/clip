@@ -37,7 +37,6 @@ and will move modifying kickstarts and rolling ISOs.
 ===================================================
 3. A developer who only wants the remediation and audit content.
 
-
 This developer already has packages and yum repositories.  They can already
 roll ISOs.  They only want to use these features: 
 leverage the following features:
@@ -47,7 +46,7 @@ leverage the following features:
 NOTE: Tresys recommends moving to the CLIP build system.  This build system
 was developed based on our experiences developing cross-domain solutions.  One
 of the problems we constantly see is the lack of reproducability of builds.
-This build system allows you to roll RPMs in mock eliminating build host
+This build system allows you to roll RPMs in mock, eliminating build host
 dependencies.  It allows you to version the packages used to roll an RPM.  It
 manages yum repositories and carries patched versions of ISO generation tools
 to address a number of problems in those tools.  
