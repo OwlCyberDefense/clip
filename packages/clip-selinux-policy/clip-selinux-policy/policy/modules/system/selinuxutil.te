@@ -550,6 +550,9 @@ term_use_all_ptys(setfiles_t)
 term_use_generic_ptys(setfiles_t)
 term_use_unallocated_ttys(setfiles_t)
 
+# During dracut /dev/console is still device_t
+dev_dontaudit_rw_generic_dev_nodes(setfiles_t)
+
 # this is to satisfy the assertion:
 auth_relabelto_shadow(setfiles_t)
 
