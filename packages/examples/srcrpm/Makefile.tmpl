@@ -17,7 +17,7 @@ RELEASE := 1
 # snag the architecture, hard code an arch if cross-compiling or going noarch
 ARCH ?= $(shell uname -i)
 
-# spec file name
+# srpm file name
 SRPM := $(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 RPM := $(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
 
