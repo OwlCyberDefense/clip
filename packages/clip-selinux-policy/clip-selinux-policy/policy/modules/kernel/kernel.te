@@ -194,6 +194,9 @@ allow kernel_t self:unix_stream_socket connectto;
 allow kernel_t self:fifo_file rw_fifo_file_perms;
 allow kernel_t self:sock_file read_sock_file_perms;
 allow kernel_t self:fd use;
+# In dracut plymouthd is is running as kernel_t
+allow kernel_t self:system syslog_console;
+
 
 allow kernel_t debugfs_t:dir search_dir_perms;
 
