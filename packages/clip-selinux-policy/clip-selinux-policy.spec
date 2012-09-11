@@ -265,6 +265,7 @@ else
    %loadpolicy clip $packages
    %relabel clip
 fi
+touch /.autorelabel
 exit 0
 
 %files clip
