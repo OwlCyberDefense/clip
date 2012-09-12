@@ -18,6 +18,9 @@ BuildRequires:  libacl-devel
 BuildRequires:  libselinux-devel libcap-devel
 BuildRequires:  libblkid-devel
 BuildRequires:  libnl-devel
+%if %{?_with_check:1}%{!?_with_check:0}
+BuildRequires:  perl-XML-XPath
+%endif
 Requires(post):   /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -73,6 +76,7 @@ The %{name}-utils package contains various utilities based on %{name} library.
 Summary:        SCAP content
 Group:          Applications/System
 Requires:       %{name} = %{version}-%{release}
+BuildArch:      noarch
 
 %description    content
 Example of SCAP content for Red Hat Enterprise Linux. Please note
@@ -179,6 +183,7 @@ fi
 %{_libexecdir}/openscap/probe_rpminfo
 %{_libexecdir}/openscap/probe_rpmverify
 %{_libexecdir}/openscap/probe_rpmverifyfile
+%{_libexecdir}/openscap/probe_rpmverifypackage
 %{_libexecdir}/openscap/probe_runlevel
 %{_libexecdir}/openscap/probe_selinuxboolean
 %{_libexecdir}/openscap/probe_selinuxsecuritycontext
