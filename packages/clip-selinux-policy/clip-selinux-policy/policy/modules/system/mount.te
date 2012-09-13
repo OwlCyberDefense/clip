@@ -57,6 +57,11 @@ kernel_request_load_module(mount_t)
 # required for mount.smbfs
 corecmd_exec_bin(mount_t)
 
+# SRS: required for mount.tmpfs
+corecmd_exec_shell(mount_t)
+kernel_setsched(mount_t)
+allow mount_t self:fifo_file rw_fifo_file_perms;
+
 dev_getattr_all_blk_files(mount_t)
 dev_list_all_dev_nodes(mount_t)
 dev_read_sysfs(mount_t)
