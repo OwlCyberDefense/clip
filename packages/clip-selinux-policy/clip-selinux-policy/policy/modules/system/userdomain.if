@@ -833,9 +833,9 @@ template(`userdom_restricted_user_template',`
 
 	typeattribute $1_t unpriv_userdomain;
 	domain_interactive_fd($1_t)
-        allow $1_t self:netlink_kobject_uevent_socket create_socket_perms;
-        dontaudit $1_t self:netlink_audit_socket create_socket_perms; 
 
+        allow $1_t self:netlink_kobject_uevent_socket create_socket_perms;
+        dontaudit $1_t self:netlink_audit_socket create_socket_perms;
 
 	##############################
 	#
