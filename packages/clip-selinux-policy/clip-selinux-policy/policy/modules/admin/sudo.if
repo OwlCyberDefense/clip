@@ -129,6 +129,11 @@ template(`sudo_role_template',`
 	seutil_search_default_contexts($1_sudo_t)
 	seutil_libselinux_linked($1_sudo_t)
 
+        userdom_search_user_home_content($1_sudo_t)
+        userdom_manage_all_users_keys($1_sudo_t)
+ 
+        mta_role($2, $1_sudo_t)
+
 	userdom_spec_domtrans_all_users($1_sudo_t)
 	userdom_manage_user_home_content_files($1_sudo_t)
 	userdom_manage_user_home_content_symlinks($1_sudo_t)
