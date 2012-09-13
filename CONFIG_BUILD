@@ -23,6 +23,9 @@ PACKAGES := aqueduct scap-security-guide secstate clip-selinux-policy openscap
 # This variable can be leveraged by sub-makes (eg in the packages/foo/Makefile) if files at this top-level should trigger a rebuild
 ADDTL_DEPS := $(CURDIR)/CONFIG_REPOS $(CURDIR)/CONFIG_BUILD
 
+# This variable sets the SELinux enforcing mode.  The options are "enforcing" or "permissive."
+ENFORCING_MODE := enforcing
+
 # Enable signing of packages (must have RPM macros properly configured, see man page of RPM)
 ENABLE_SIGNING := n
 
@@ -30,4 +33,4 @@ ENABLE_SIGNING := n
 # Quiet down the build output a bit.
 QUIET := n
 
-export VERSION RELEASE RHEL_VER ARCH PACKAGES ADDTL_DEPS ENABLE_SIGNING QUIET
+export VERSION RELEASE RHEL_VER ARCH PACKAGES ADDTL_DEPS ENABLE_SIGNING ENFORCING_MODE QUIET

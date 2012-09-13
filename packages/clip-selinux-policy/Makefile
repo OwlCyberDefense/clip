@@ -6,7 +6,7 @@
 # The name of the package
 PKGNAME := clip-selinux-policy
 
-ENFORCING_MODE := permissive
+ENFORCING_MODE ?= enforcing
 
 # This is the version number of the RPM that will be
 # generated.  Typically you bump this for delivery.
