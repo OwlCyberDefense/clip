@@ -251,6 +251,9 @@ dev_create_generic_chr_files(kernel_t)
 dev_delete_generic_chr_files(kernel_t)
 dev_mounton(kernel_t)
 
+# SRS: in dracut init opens kmsg as kernel_t
+dev_write_kmsg(kernel_t)
+
 # Mount root file system. Used when loading a policy
 # from initrd, then mounting the root filesystem
 fs_mount_all_fs(kernel_t)
