@@ -216,7 +216,7 @@ allow newrole_t self:msgq create_msgq_perms;
 allow newrole_t self:msg { send receive };
 allow newrole_t self:unix_dgram_socket sendto;
 allow newrole_t self:unix_stream_socket { create_stream_socket_perms connectto };
-allow newrole_t self:netlink_audit_socket { create_netlink_socket_perms nlmsg_relay };
+logging_send_audit_msgs(newrole_t)
 
 read_files_pattern(newrole_t, default_context_t, default_context_t)
 read_lnk_files_pattern(newrole_t, default_context_t, default_context_t)
