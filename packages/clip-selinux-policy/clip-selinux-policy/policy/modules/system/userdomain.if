@@ -1078,6 +1078,9 @@ template(`userdom_admin_user_template',`
 	# Skip authentication when pam_rootok is specified.
 	allow $1_t self:passwd rootok;
 
+        allow $1_t self:netlink_kobject_uevent_socket create_socket_perms;
+        dontaudit $1_t self:netlink_audit_socket create_socket_perms;
+
 	kernel_read_software_raid_state($1_t)
 	kernel_getattr_core_if($1_t)
 	kernel_getattr_message_if($1_t)
