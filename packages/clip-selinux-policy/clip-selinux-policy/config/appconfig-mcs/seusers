@@ -1,4 +1,3 @@
 system_u:system_u:s0-mcs_systemhigh
 root:root:s0-mcs_systemhigh
-clipuser:root:s0-mcs_systemhigh
-__default__:user_u:s0
+clipuser:staff_u:s0-mcs_systemhigh

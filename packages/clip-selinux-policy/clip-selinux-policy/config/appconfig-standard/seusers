@@ -1,4 +1,3 @@
 system_u:system_u
 root:root
-clipuser:root
-__default__:user_u
+clipuser:staff_u

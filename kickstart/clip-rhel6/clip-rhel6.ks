@@ -214,14 +214,6 @@ export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
 chkconfig --del postfix
 chkconfig ntpd on
 
-# install clip refpol, there has to be a better way
-semanage login -a -s user_u   __default__
-semanage login -a -s sysadm_u root
-
-semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  root
-semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  staff_u
-semanage user -m                      -Rsystem_r  system_u
-
 useradd -m clipuser -G wheel
 # FIXME: Change this password!
 passwd --stdin clipuser <<< neutronbass
@@ -229,6 +221,13 @@ passwd -e clipuser
 echo "%wheel        ALL=(ALL)       ALL" >> /etc/sudoers
 # Lock the root acct to prevent direct logins
 usermod -L root
+
+semanage login -a -s sysadm_u root
+semanage login -a -s staff_u clipuser
+
+semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  root
+semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  staff_u
+semanage user -m                      -Rsystem_r  system_u
 
 # iptables setup
 cat >/etc/sysconfig/iptables <<EOF
