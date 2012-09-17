@@ -162,7 +162,7 @@ $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-nomock-rpm:  $(SRPM_OUTPUT_DIR)/$(call 
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-srpm:  $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	$(call CHECK_RPM_DEPS)
-$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-clean: 
+$(call PKG_NAME_FROM_RPM,$(notdir $(1)))-clean:
 	$(call CHECK_RPM_DEPS)
 	$(RM) $(1)
 	$(RM) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
@@ -285,9 +285,18 @@ $(foreach RPM, $(HOST_RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 create-repos: $(setup_all_repos)
 	$(call CHECK_RPM_DEPS)
 
-setup-my-repo: $(RPMS)
+setup-my-repo: setup-pre-rolled-packages $(RPMS)
 	$(call CHECK_RPM_DEPS)
 	@echo "Generating yum repo metadata, this could take a few minutes..."
+	$(VERBOSE)cd $(MY_REPO_DIR) && $(REPO_CREATE) -g $(COMPS_FILE) .
+
+setup-pre-rolled-packages:
+	@set -e; for pkg in $(PRE_ROLLED_PACKAGES); do \
+           [ -f "$$pkg" ] || ( echo "Failed to find pre-rolled package: $$pkg" && exit 1 );\
+           [ -h $(MY_REPO_DIR)/`basename $$pkg` ] && rm -f $(MY_REPO_DIR)/`basename $$pkg`;\
+              $(REPO_LINK) $$pkg $(MY_REPO_DIR)|| \
+	      ( echo "Failed to find pre-rolled package $$pkg - check CONFIG_BUILD and make sure you use quotes around paths with spaces." && exit 1 );\
+        done
 	$(VERBOSE)cd $(MY_REPO_DIR) && $(REPO_CREATE) -g $(COMPS_FILE) .
 
 rpms: $(RPMS)
