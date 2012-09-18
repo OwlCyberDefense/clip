@@ -1,4 +1,0 @@
-In benchmark password-req:
-OVAL Definition oval:com.tresys.oval.rhel:def:1000 is used by password-change-time
-In benchmark PassComp:
-OVAL Definition oval:com.tresys.oval.rhel:def:1000 is used by PassComp-R-2-1
