@@ -1,0 +1,23 @@
+There are two ways to add an existing binary package to this build system.
+Once one of these methods has been followed you can reference the package in
+the kickstart and it will be installed during the installation process.
+
+Method 1:
+1. Add the fully qualified path to the package to the PRE_ROLLED_PACKAGES
+variable in the CONFIG_BUILD file.
+2. Reference the package from your kickstart.
+
+Method 2 (this method is easier for those who have existing yum repositories
+they want to use, skips steps 1 & 2 if you already have a yum repo created): 
+1. Copy the package to the appropriate repo directory (eg, /mnt/repos/custom-yum-repo).
+2. Run "createrepo -d <repodir>".
+3. Add the repo to CONFIG_REPOS
+4a. Add the package filename to the pkglist.<reponame> file in conf/.
+or
+4b. Run "make conf/pkglist.<reponame>"
+5. Run "make bare-repos".
+6. Run "make create-repos".
+7. Add the packages you want to include in the ISO to the appropriate
+kickstart.
+8. Build your image.
+
