@@ -291,6 +291,8 @@ setup-my-repo: setup-pre-rolled-packages $(RPMS)
 	$(VERBOSE)cd $(MY_REPO_DIR) && $(REPO_CREATE) -g $(COMPS_FILE) .
 
 setup-pre-rolled-packages:
+	$(call CHECK_RPM_DEPS)
+	$(call MKDIR,$(MY_REPO_DIR))
 	@set -e; for pkg in $(PRE_ROLLED_PACKAGES); do \
            [ -f "$$pkg" ] || ( echo "Failed to find pre-rolled package: $$pkg" && exit 1 );\
            [ -h $(MY_REPO_DIR)/`basename $$pkg` ] && rm -f $(MY_REPO_DIR)/`basename $$pkg`;\
