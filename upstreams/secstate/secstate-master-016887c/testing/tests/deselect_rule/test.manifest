@@ -1,9 +1,0 @@
-[requires]
-select_rule
-
-[test]
-deselect
-
-[verify]
-list
-
