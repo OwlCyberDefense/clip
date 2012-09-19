@@ -16,10 +16,19 @@
 
 SYSTEM_AUTH=/etc/pam.d/system-auth
 
-set_pam_cracklib_option() {
-	OPTION=$1
-	DESIRED=$2
+. $(dirname $0)/set_general_entry
 
+set_pam_cracklib_option() {
+# Sets the specified pam cracklib option to the desired value.
+#
+#  arguments:
+#    set_pam_cracklib_option(OPTION,DESIRED)
+#      OPTION  - pam cracklib option to be changed.
+#      DESIRED - Desired value of pam cracklib option
+#
+
+	OPTION=$1, DESIRED=$2
+	
 	if `grep -Pq "^password\s+requisite\s+pam_cracklib.so\s+.*$OPTION=$DESIRED\b" $SYSTEM_AUTH`; then
 		exit 0
 	else
@@ -30,8 +39,15 @@ set_pam_cracklib_option() {
 }
 
 set_pam_unix_option() {
-	OPTION=$1
-	DESIRED=$2
+# Sets the specified pam unix option to the desired value.
+#
+#  arguments:
+#    set_pam_unix_option(OPTION,DESIRED)
+#      OPTION  - pam unix option to be changed.
+#      DESIRED - Desired value of pam unix option
+#
+
+	OPTION=$1, DESIRED=$2
 
 	if `grep -Pq "^password\s+(?:sufficient|required)\s+pam_unix\.so\s+.*$OPTION=$DESIRED\b" $SYSTEM_AUTH`; then
 		exit 0
@@ -43,6 +59,13 @@ set_pam_unix_option() {
 }
 
 set_pam_unix_flag() {
+# Adds the desired pam unix flag if it does not already exist.
+#
+#  arguments:
+#    set_pam_unix_flag(OPTION)
+#      OPTION  - pam unix flag to add.
+#
+
 	OPTION=$1
 
 	if `grep -Pq "^password\s+(?:sufficient|required)\s+pam_unix\.so\s+.*$OPTION\b" $SYSTEM_AUTH`; then

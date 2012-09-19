@@ -20,6 +20,7 @@ set -e
 
 CONFIG_FILE=/etc/gconf/gconf.xml.mandatory
 
+[ -f /usr/bin/gconftool-2 ] || exit 0
 [ -f $FILE ] || exit 1
 
 # Disable automount
@@ -29,17 +30,17 @@ CONFIG_FILE=/etc/gconf/gconf.xml.mandatory
         --set /apps/nautilus/preferences/media_automount false || exit 1
 
 # Disable autorun
-gconftool-2 --direct \
+/usr/bin/gconftool-2 --direct \
         --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
         --type bool \
         --set /apps/nautilus/preferences/media_autorun_never true || exit 1
 
 # Verify automount disabled
-gconftool-2 --direct \
+/usr/bin/gconftool-2 --direct \
         --config-source xml:read:/etc/gconf/gconf.xml.mandatory \
         --get /apps/nautilus/preferences/media_automount || exit 1
 
 # Verify autorun disabled
-gconftool-2 --direct \
+/usr/bin/gconftool-2 --direct \
         --config-source xml:read:/etc/gconf/gconf.xml.mandatory \
         --get /apps/nautilus/preferences/media_autorun_never || exit 1

@@ -15,14 +15,15 @@
 # # limitations under the License.
 # #
 
+function add_entry {
 # Adds an entry or uncomments it if it exists.
 #
 # arguments:
 # add_entry (ENTRY, FILEDIR)
-# #	ENTRY 	- ENTRY to check for and add
-# #	FILEDIR - File to which the entry should be added
-function add_entry {
-        ENTRY=$1
+#     ENTRY   - ENTRY to check for and add
+#     FILEDIR - File to which the entry should be added
+# 
+       ENTRY=$1
         FILEDIR=$2
 
         F=` echo $FILEDIR|grep -Po "[^\/]*$" `
@@ -38,52 +39,54 @@ function add_entry {
         return
 }
 
+function add_entry_before {
 # Adds an entry before an existing entry
 #
 # arguments:
 # add_entry_before ($1, $2, $3)
-# #	$1	- Entry to add
-# #	$2	- Existing entry
-# #	$3	- File to edit
-function add_entry_before {
+#     $1      - Entry to add
+#     $2      - Existing entry
+#     $3      - File to edit	
 	FILE=$3
         grep -qPzo -- "$2\n$1" $FILE && return
         sed -i -r -e "/^$(echo -n $1 | tr "/" ".")$/d" $FILE
         sed -i -r -e "/$2/a$1" $FILE
 }
 
-# Adds an entry after an existing entry
-# 
-# arguments: 
-# add_entry_after ($1, $2, $3)
-# #	$1	- Existing Entry
-# #	$2	- Entry to add
-# #	$3	- File to edit
 function add_entry_after {
+# Adds an entry after an existing entry
+#
+# arguments:
+# add_entry_after ($1, $2, $3)
+#     $1      - Existing Entry
+#     $2      - Entry to add
+#     $3      - File to edit
+
         FILE=$3
 	grep -qPzo -- "$1\n$2" $FILE && return
         sed -i -r -e "/^$(echo -n $1 | tr "/" ".")$/d" $FILE
         sed -i -r -e "/$1/a$2" $FILE
 }
 
+function safe_add_field {
 # Searches for a regular expression and replaces anything outside of parentheses
 # with the specified replace string.
-# 	E.G. 
-# 	cat $FILE
-# 		# # HELLO WORLD
-# 	safe_add_field "(HELLO ).*" "MARS" $FILE
-#	cat $FILE 
-# 		HELLO MARS
-# 
+#       E.G.
+#       cat $FILE
+#               # # HELLO WORLD
+#       safe_add_field "(HELLO).*" " MARS" $FILE
+#       cat $FILE
+#               HELLO MARS
+#
 # If the string does not exist, the value inside parentheses and the new entry value
 # string are combined and appended to the file.
 #
 #  safe_add_field (SAFE_FIELD, VAL, FILEDIR)
-#  #       SAFE_FIELD - an entry to be modified, with the unchanged contents in parentheses
-#  #       VAL        - a new value to replace anything outside of SAFE_FIELD's parens
-#  #       FILEDIR    - the name of the file to be changed
+#       SAFE_FIELD - an entry to be modified, with the unchanged contents in parentheses
+#       VAL        - a new value to replace anything outside of SAFE_FIELD's parens
+#       FILEDIR    - the name of the file to be changed
 #
-function safe_add_field {
+
         SAFE_FIELD=$1
         VAL=$2
         FILEDIR=$3

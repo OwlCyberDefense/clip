@@ -21,4 +21,4 @@ set -e
  # If it's not installed, it's not running
 [ -f /etc/init.d/iptables ] || exit 1
 
-chkconfig iptables on
+chkconfig --level 0123456 iptables on

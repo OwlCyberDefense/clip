@@ -89,51 +89,59 @@ install -m 644 docs/man1/aqueduct.1 $RPM_BUILD_ROOT/usr/share/man/man1/aqueduct.
 gzip $RPM_BUILD_ROOT/usr/share/man/man1/aqueduct.1
 
 # Files involved in the CIS
-install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/CIS/rhel-5-beta
-install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/rhel-5-beta/scripts
-# install -m 0640 etc/aqueduct/profiles/CIS/rhel-5-beta/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/CIS/rhel-5-beta/default.profile
+install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/CIS/rhel-5
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/rhel-5/scripts
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/rhel-5/scripts/prod
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/rhel-5/scripts/manual
+# install -m 0640 etc/aqueduct/profiles/CIS/rhel-5-beta/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/CIS/rhel-5/default.profile
 # install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/CIS/firefox
 # install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/firefox/scripts
 # install -m 0640 etc/aqueduct/profiles/CIS/firefox/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/CIS/firefox/default.profile
-#install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/rhel-5-beta/scripts compliance/Bash/CIS/rhel5/prod/CIS*
+install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/rhel-5/scripts/prod compliance/Bash/CIS/rhel5/1.1.2/prod/CIS*
+install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/CIS/rhel-5/scripts/manual compliance/Bash/CIS/rhel5/1.1.2/manual-checks/CIS*
 
 # Files involved in the DISA STIG
 install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/DISA/rhel-5-beta
-install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/DISA/rhel-5-beta/scripts
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/DISA/rhel-5/scripts
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/DISA/rhel-5/scripts/prod
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/DISA/rhel-5/scripts/manual
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/DISA/rhel-5/scripts/firefox
 install -m 0640 etc/aqueduct/profiles/DISA/rhel-5-beta/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/DISA/rhel-5-beta/default.profile
 install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/DISA/firefox
 install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/DISA/firefox/scripts
 install -m 0640 etc/aqueduct/profiles/DISA/firefox/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/DISA/firefox/default.profile
-install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/DISA/rhel-5-beta/scripts compliance/Bash/STIG/rhel-5-beta/prod/GEN*
+install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/DISA/rhel-5/scripts/prod compliance/Bash/STIG/rhel-5/prod/GEN*
+install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/DISA/rhel-5/scripts/manual compliance/Bash/STIG/rhel-5/manual/GEN*
+install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/DISA/rhel-5/scripts/firefox compliance/Bash/STIG/firefox/*
 
 # Files involved in the DHS
-install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/DHS/rhel-6-beta
-install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/DHS/rhel-6-beta/scripts/basic
-install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/DHS/rhel-6-beta/scripts/enhanced
-# install -m 0640 etc/aqueduct/profiles/DHS/rhel-6-beta/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/DHS/rhel-5-beta/default.profile
+install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/DHS/rhel-6
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/DHS/rhel-6/scripts/basic
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/DHS/rhel-6/scripts/enhanced
+# install -m 0640 etc/aqueduct/profiles/DHS/rhel-6/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/DHS/rhel-5/default.profile
 # install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/DHS/firefox
 # install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/DHS/firefox/scripts
 # install -m 0640 etc/aqueduct/profiles/DHS/firefox/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/DHS/firefox/default.profile
-install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/DHS/rhel-6-beta/scripts/basic compliance/Bash/DHS/rhel6/basic/prod/DHS*
-install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/DHS/rhel-6-beta/scripts/enhanced compliance/Bash/DHS/rhel6/enhanced/prod/DHS*
+install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/DHS/rhel-6/scripts/basic compliance/Bash/DHS/rhel6/basic/prod/DHS*
+install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/DHS/rhel-6/scripts/enhanced compliance/Bash/DHS/rhel6/enhanced/prod/DHS*
 
 # Files involved in the NISPOM
-install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/NISPOM/rhel-6-beta
-install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/NISPOM/rhel-6-beta/scripts
+install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/NISPOM/rhel-6
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/NISPOM/rhel-6/scripts
 # install -m 0640 etc/aqueduct/profiles/NISPOM/rhel-6-beta/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/NISPOM/rhel-6-beta/default.profile
 # install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/NISPOM/firefox
 # install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/NISPOM/firefox/scripts
 # install -m 0640 etc/aqueduct/profiles/NISPOM/firefox/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/NISPOM/firefox/default.profile
-install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/NISPOM/rhel-6-beta/scripts compliance/Bash/NISPOM/rhel6/prod/NISPOM*
+install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/NISPOM/rhel-6/scripts compliance/Bash/NISPOM/rhel6/prod/NISPOM*
 
 # Files involved in the PCI
-install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/PCI/rhel-6-beta
-install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/PCI/rhel-6-beta/scripts
+install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/PCI/rhel-6
+install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/PCI/rhel-6/scripts
 # install -m 0640 etc/aqueduct/profiles/PCI/rhel-6-beta/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/PCI/rhel-6-beta/default.profile
 # install -m 0755 -d $RPM_BUILD_ROOT/etc/aqueduct/profiles/PCI/firefox
 install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/PCI/firefox/scripts
 # install -m 0640 etc/aqueduct/profiles/PCI/firefox/default.profile $RPM_BUILD_ROOT/etc/aqueduct/profiles/PCI/firefox/default.profile
-install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/PCI/rhel-6-beta/scripts compliance/Bash/PCI/rhel6/prod/pci*
+install -m 0750  -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/PCI/rhel-6/scripts compliance/Bash/PCI/rhel6/prod/pci*
 
 # Files involved in the SCAP Security Guide (SSG)
 install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/scripts
@@ -155,11 +163,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %files CIS
 %dir /etc/aqueduct/profiles/CIS
-%dir /etc/aqueduct/profiles/CIS/rhel-5-beta
+%dir /etc/aqueduct/profiles/CIS/rhel-5
 # %dir /etc/aqueduct/profiles/CIS/firefox
-# /etc/aqueduct/profiles/CIS/rhel-5-beta/default.profile
+# /etc/aqueduct/profiles/CIS/rhel-5/default.profile
 # /etc/aqueduct/profiles/CIS/firefox/default.profile
-/usr/libexec/aqueduct/CIS/rhel-5-beta/scripts
+/usr/libexec/aqueduct/CIS/rhel-5/scripts
+# /usr/libexec/aqueduct/CIS/rhel-5/scripts/prod
+# /usr/libexec/aqueduct/CIS/rhel-5/scripts/manual
 #/usr/libexec/aqueduct/CIS/firefox/scripts
 
 %files DISA
@@ -168,35 +178,37 @@ rm -rf $RPM_BUILD_ROOT
 %dir /etc/aqueduct/profiles/DISA/firefox
 /etc/aqueduct/profiles/DISA/rhel-5-beta/default.profile
 /etc/aqueduct/profiles/DISA/firefox/default.profile
-/usr/libexec/aqueduct/DISA/rhel-5-beta/scripts
+/usr/libexec/aqueduct/DISA/rhel-5/scripts
+# /usr/libexec/aqueduct/DISA/rhel-5/scripts/prod
+# /usr/libexec/aqueduct/DISA/rhel-5/scripts/manual
 /usr/libexec/aqueduct/DISA/firefox/scripts
 
 %files DHS
 %dir /etc/aqueduct/profiles/DHS
-%dir /etc/aqueduct/profiles/DHS/rhel-6-beta
+%dir /etc/aqueduct/profiles/DHS/rhel-6
 # %dir /etc/aqueduct/profiles/DHS/firefox
-# /etc/aqueduct/profiles/DHS/rhel-6-beta/default.profile
+# /etc/aqueduct/profiles/DHS/rhel-6/default.profile
 # /etc/aqueduct/profiles/DHS/firefox/default.profile
-/usr/libexec/aqueduct/DHS/rhel-6-beta/scripts/basic
-/usr/libexec/aqueduct/DHS/rhel-6-beta/scripts/enhanced
+/usr/libexec/aqueduct/DHS/rhel-6/scripts/basic
+/usr/libexec/aqueduct/DHS/rhel-6/scripts/enhanced
 # /usr/libexec/aqueduct/DHS/firefox/scripts
 
 %files NISPOM
 %dir /etc/aqueduct/profiles/NISPOM
-%dir /etc/aqueduct/profiles/NISPOM/rhel-6-beta
+%dir /etc/aqueduct/profiles/NISPOM/rhel-6
 # %dir /etc/aqueduct/profiles/NISPOM/firefox
-# /etc/aqueduct/profiles/NISPOM/rhel-6-beta/default.profile
+# /etc/aqueduct/profiles/NISPOM/rhel-6/default.profile
 # /etc/aqueduct/profiles/NISPOM/firefox/default.profile
-/usr/libexec/aqueduct/NISPOM/rhel-6-beta/scripts
+/usr/libexec/aqueduct/NISPOM/rhel-6/scripts
 # /usr/libexec/aqueduct/NISPOM/firefox/scripts
 
 %files PCI
 %dir /etc/aqueduct/profiles/PCI
-%dir /etc/aqueduct/profiles/PCI/rhel-6-beta
+%dir /etc/aqueduct/profiles/PCI/rhel-6
 # %dir /etc/aqueduct/profiles/PCI/firefox
-# /etc/aqueduct/profiles/PCI/rhel-6-beta/default.profile
+# /etc/aqueduct/profiles/PCI/rhel-6/default.profile
 # /etc/aqueduct/profiles/PCI/firefox/default.profile
-/usr/libexec/aqueduct/PCI/rhel-6-beta/scripts
+/usr/libexec/aqueduct/PCI/rhel-6/scripts
 /usr/libexec/aqueduct/PCI/firefox/scripts
 
 %files SSG
@@ -206,6 +218,8 @@ rm -rf $RPM_BUILD_ROOT
 %post
 
 %changelog
+* Mon Sep 10 2012 Ted Brunell <tbrunell@redhat.com>
+ - Fixed spec file to reflect recent changes in standard status
 * Fri Jul 13 2012 Mike Palmiotto <mpalmiotto@tresys.com>
  - Added SSG tools and require python, python-lxml
 * Thu Jun 28 2012 Joe Nall <joe@nall.com>

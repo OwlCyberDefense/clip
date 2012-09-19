@@ -26,5 +26,5 @@ FILE=/etc/login.defs
 
 [ -f $FILE ] || exit 0
 
-. $(dirname $0)/user_umask_common
-set_umask UMASK 077 $FILE
+. $(dirname $0)/set_general_entry
+safe_add_field "(UMASK).*" " 077" $FILE

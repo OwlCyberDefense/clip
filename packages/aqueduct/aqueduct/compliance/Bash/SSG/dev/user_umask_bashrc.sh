@@ -26,6 +26,6 @@ FILE=/etc/bashrc
 
 [ -f $FILE ] || exit 0
 
-. $(dirname $0)/user_umask_common
-set_umask umask 077 $FILE
+. $(dirname $0)/set_general_entry
+safe_add_field "(umask).* " 077" $FILE
 

@@ -16,6 +16,12 @@
 
 
 delete_nis_lines(){
+# Delete entries that begin with the +: nis entry.
+#
+#  arguments:
+#    delete_nis_lines(FILE)
+#      FILE  - File to check for nis lines.
+#
 	FILE=$1
 	
 	[ -f $FILE ] || exit 0

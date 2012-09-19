@@ -15,12 +15,19 @@
 # limitations under the License.
 
 set_sysctl_param() {
+# Adds the specified sysctl entry if the key already exists.
+#
+#  arguments:
+#    set_sysctl_param(PARAM,DESIRED)
+#      PARAM - Key to search for in sysctl entries.
+#      DESIRED - Value that gets assigned to a found sysctl entry.
+#
 	PARAM=$1
 	DESIRED=$2
 
 	MODULE=`echo $PARAM|sed -e "s/\./\//g"`
 	
-	if `echo $PARAM| grep -r "ipv6" && grep -r "options\s+ipv6\s+disable\=1" /etc/modprobe.d`; then
+	if `echo $PARAM| grep -r "ipv6" && grep -Pr "options\s+ipv6\s+disable\=1" /etc/modprobe.d`; then
 		return 0
 	fi
 
@@ -35,12 +42,10 @@ set_sysctl_param() {
 		echo "$PARAM = $DESIRED"                       >> /etc/sysctl.conf
 	fi
 
-	if `sysctl -q -w $PARAM=$DESIRED`; then
-		: # do nothing
-	else
+	if !`sysctl -q -w $PARAM=$DESIRED`; then
                 echo "sysctl -w $PARAM=$DESIRED failed"
         fi
 
 	. $(dirname $0)/set_general_entry
-	safe_add_field "($PARAM = ).*" "$DESIRED" /etc/sysctl.conf
+	safe_add_field "($PARAM =).*" " $DESIRED" /etc/sysctl.conf
 }
