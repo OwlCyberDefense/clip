@@ -1,4 +1,0 @@
-/etc,at.allow,0,0,0600,
-/etc,cron.allow,0,0,0600,
-/boot/grub,grub.conf,0,0,0600,
-/var/log,cron,0,0,0600,
