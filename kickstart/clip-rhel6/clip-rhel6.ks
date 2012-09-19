@@ -215,14 +215,22 @@ chkconfig --del postfix
 chkconfig ntpd on
 
 useradd -m clipuser -G wheel
+
 # FIXME: Change this password!
 passwd --stdin clipuser <<< neutronbass
 passwd -e clipuser
-echo "%wheel        ALL=(ALL)       ALL" >> /etc/sudoers
+
+# FIXME: You might not want the wheel group to have
+echo "%wheel        ALL=(ALL)	ALL" >> /etc/sudoers
+
+# FIXME: This allows clipuser to sudo and have their role change with running "newrole" separately.
+#  This might be want you want to happen for your admins as well.  Take this and run with it if you want :)
+echo "clipuser        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
+
 # Lock the root acct to prevent direct logins
 usermod -L root
 
-semanage login -a -s sysadm_u root
+#semanage login -a -s sysadm_u root
 semanage login -a -s staff_u clipuser
 
 semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  root
