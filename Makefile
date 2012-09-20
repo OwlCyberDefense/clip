@@ -154,14 +154,12 @@ ifeq ($(ENABLE_SIGNING),y)
 	$(RPM) --addsign $(MY_REPO_DIR)/*
 endif
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-rpm:  $(1)
-	$(call CHECK_RPM_DEPS)
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-nomock-rpm:  $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	$(call CHECK_RPM_DEPS)
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)OUTPUT_DIR=$(MY_REPO_DIR) $(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $(1))) rpm
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-srpm:  $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
-	$(call CHECK_RPM_DEPS)
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-clean:
 	$(call CHECK_RPM_DEPS)
 	$(RM) $(1)
@@ -199,7 +197,6 @@ $(eval MY_REPO_DIRS += "$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo")
 $(eval PKG_LISTS += "./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)$(RHEL_VER)")
 
 setup-$(REPO_ID)$(RHEL_VER)-repo:  $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated $(CONFIG_BUILD_DEPS)
-	$(call CHECK_RPM_DEPS)
 
 # This is the key target for managing yum repos.  If the pkg list for the repo
 # is more recent then our private repo regen the repo by symlink'ing the packages into our repo.
@@ -268,7 +265,6 @@ help:
 	@echo -e "\n\n################################################################################"
 
 all: create-repos $(INSTISOS)
-	$(call CHECK_RPM_DEPS)
 
 # Generate custom targets for managing the yum repos.  We have to generate the rules since the user provides the set of repos.
 $(foreach REPO,$(strip $(shell cat CONFIG_REPOS|grep -E '^[a-zA-Z].*=.*'|sed -e 's/ \?= \?/=/')),$(eval $(call REPO_RULE_template,$(REPO))))
@@ -283,7 +279,6 @@ SRPMS := $(addprefix $(SRPM_OUTPUT_DIR)/,$(foreach RPM,$(HOST_RPMS),$(call SRPM_
 $(foreach RPM, $(HOST_RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 
 create-repos: $(setup_all_repos)
-	$(call CHECK_RPM_DEPS)
 
 setup-my-repo: setup-pre-rolled-packages $(RPMS)
 	$(call CHECK_RPM_DEPS)
