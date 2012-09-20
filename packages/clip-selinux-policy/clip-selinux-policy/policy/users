@@ -35,4 +35,4 @@ gen_user(sysadm_u, user, sysadm_r, s0, s0 - mls_systemhigh, mcs_allcats)
 # role should use the staff_r role instead of the user_r role when
 # not in the sysadm_r.
 #
-gen_user(root, user, sysadm_r staff_r system_r, s0, s0 - mls_systemhigh, mcs_allcats)
+# gen_user(root, user, sysadm_r staff_r system_r, s0, s0 - mls_systemhigh, mcs_allcats)
