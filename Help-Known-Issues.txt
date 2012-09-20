@@ -2,6 +2,33 @@ Our journey towards perfection is still a WiP so here are the CLIP known
 issues:
 
 =============================================================================
+CLIP for RHEL 6.2 Beta Release - September 20ish, 2012:
+
+- The SELinux policy does not contain support for SecState yet.  It works in
+  the kickstart, but will not work in enforcing mode at run-time.  If you wish
+  to use it at run-time, prior to the final CLIP release, please put the system
+  in permissive mode temporarily:
+  `sudo /usr/sbin/setenforce 0`
+  `sudo /usr/bin/secstate audit`
+  `sudo /usr/bin/secstate remediate`
+  `sudo /usr/sbin/setenforce 1`
+
+- scap-security-guide uses a hard coded /usr/local for the install directory.
+  The CLIP team submitted a patch to fix this but it has not been accepted
+  upstream.  Since this is a minor issue, CLIP is *not* patching SSG to fix
+  it.
+
+- We have the ability to roll LiveCDs which are great for stateless solutions.
+  While the system works for RHEL 5, we are having issues with dracut in RHEL
+  6. I hope to have these addressed by the final release but this is not a
+  blocker.
+	
+- We have made minor updates to the oss.tresys.com/projects/clip website. A
+  needs some more work but has progressed since the beta release.
+=============================================================================
+
+
+=============================================================================
 CLIP for RHEL 6.2 Alpha Release - July 17ish, 2012:
 
 - SELinux policy needs more work to boot in enforcing mode.  This is a blocker
