@@ -217,9 +217,18 @@ yum
 %post --log=/root/clip_post_install.log
 export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
 
-# FIXME: Change the username and password.  If you like you can se 
+# FIXME: Change the username and password.
+#        If a hashed password is specified it will be used
+#        and the PASSWORD field will be ignored.
+#
+#        To generate a SHA512 hashed password try something like this:
+#           python -c "import crypt; print crypt.crypt('neutronbass', '\$6\$314159265358\$')"
+#        Note that the "\$6" indicates it is SHA512 and must remain in place.
+#        Further, make sure you specify a salt such as "314159265358."
+#        Finally, make sure the hashed password is in single quotes to prevent expansion of the dollar signs.
 USERNAME="clipuser"
 PASSWORD="neutronbass"
+HASHED_PASSWORD='$6$314159265358$ytgatj7CAZIRFMPbEanbdi.krIJs.mS9N2JEl0jkPsCvtwC15z07JLzFLSuqiCdionNZ1XNT3gPKkjIG0TTGy1'
 
 ######## START DEFAULT USER CONFIG ##########
 # NOTE: The root account is *locked*.  You must create an unprivileged user 
@@ -231,9 +240,14 @@ PASSWORD="neutronbass"
 
 useradd -m "$USERNAME" -G wheel
 
-# Yes we could have hashed this, but we want to be blatantly obvious regarding the 
-passwd --stdin "$USERNAME" <<< "$PASSWORD"
-passwd -e "$USERNAME"
+# Yes we could have hashed this, but you just entered it in plaintext above.
+if [ x"$HASHED_PASSWORD" == "x" ]; then
+	passwd --stdin "$USERNAME" <<< "$PASSWORD"
+else
+	usermod --pass="$HASHED_PASSWORD" "$USERNAME"
+fi
+
+chage -d 0 "$USERNAME"
 
 # Add the user to sudoers and setup an SELinux role/type transition.
 # This line enables a transition via sudo instead of requiring sudo and newrole.
