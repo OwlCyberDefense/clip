@@ -20,11 +20,19 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# NOTE: In CLIP you login as an unpriv user and sudo.  We lock the root account
-# in %post so no one can login as root.
-# FIXME:
-# The default password for "clipuser" is neutronbass.  Go to the beginning of %post
-# to change that password.
+#################### START CLIP CONFIGURATION ######################
+# SEARCH THIS FILE FOR "FIXME" AND YOU WILL FIND THE FIELDS YOU
+# NEED TO ADJUST.
+#
+
+# FIXME: Set your initial bootloader password below.
+bootloader --location=mbr --timeout=5 --append="audit=1" --password=neutronbass
+
+# FIXME: Change the root password.
+#        CLIP locks the root account in the post below so this password won't 
+#        work.  However, if the field is missing you will be prompted during 
+#        installation for a password so specify one to avoid install-time 
+#        questions.
 # rootpw correctbatteryhorsestaple
 rootpw neutronbass
 
@@ -36,7 +44,6 @@ cdrom
 install
 timezone --utc Etc/GMT
 auth --useshadow --passalgo=sha512
-#network --hostname=clip --noipv6 --bootproto=static --ip=172.16.32.5 --netmask=255.255.255.0 --onboot=yes
 
 selinux --enforcing
 firewall --enabled
@@ -46,7 +53,6 @@ reboot
 #REPO-REPLACEMENT-PLACEHOLDER
 
 zerombr
-bootloader --location=mbr --timeout=5 --append="audit=1" --password=neutronbass
 clearpart --all --initlabel
 part /boot --size=200 --fstype ext4 --asprimary
 part pv.os --size=1   --grow        --asprimary
@@ -208,34 +214,43 @@ yum
 
 %end
 
-%post --log=/root/post_install.log
+%post --log=/root/clip_post_install.log
 export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
 
 chkconfig --del postfix
 chkconfig ntpd on
 
-useradd -m clipuser -G wheel
+# FIXME: Change the username and password.  If you like you can se 
+USERNAME="clipuser"
+PASSWORD="neutronbass"
 
-# FIXME: Change this password!
-passwd --stdin clipuser <<< neutronbass
-passwd -e clipuser
+######## START DEFAULT USER CONFIG ##########
+# NOTE: The root account is *locked*.  You must create an unprivileged user 
+#       and grant that user administrator capabilities through sudo.
+#       An account will be created below.  This account will be allowed to 
+#       change to the SELinux system administrator role, and become root via 
+#       sudo.  The information used to create the account comes from the 
+#       USERNAME and PASSWORD values defined a few lines above.
 
-# FIXME: You might not want the wheel group to have
-echo "%wheel        ALL=(ALL)	ALL" >> /etc/sudoers
+useradd -m "$USERNAME" -G wheel
 
-# FIXME: This allows clipuser to sudo and have their role change with running "newrole" separately.
-#  This might be want you want to happen for your admins as well.  Take this and run with it if you want :)
-echo "clipuser        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
+passwd --stdin "$USERNAME" <<< neutronbass
+passwd -e "$USERNAME"
+
+echo "$USERNAME        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
+
+semanage login -a -s staff_u "$USERNAME"
+
+######## END DEFAULT USER CONFIG ##########
 
 # Lock the root acct to prevent direct logins
 usermod -L root
 
-#semanage login -a -s sysadm_u root
-semanage login -a -s staff_u clipuser
-
-semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  root
-semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  staff_u
-semanage user -m                      -Rsystem_r  system_u
+# TODO: Remove these next lines.
+# semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  root
+# Create the SELinux user/
+#semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  staff_u
+#semanage user -m                      -Rsystem_r  system_u
 
 # iptables setup
 cat >/etc/sysconfig/iptables <<EOF
