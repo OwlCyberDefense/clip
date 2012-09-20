@@ -217,9 +217,6 @@ yum
 %post --log=/root/clip_post_install.log
 export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
 
-chkconfig --del postfix
-chkconfig ntpd on
-
 # FIXME: Change the username and password.  If you like you can se 
 USERNAME="clipuser"
 PASSWORD="neutronbass"
@@ -234,11 +231,15 @@ PASSWORD="neutronbass"
 
 useradd -m "$USERNAME" -G wheel
 
-passwd --stdin "$USERNAME" <<< neutronbass
+# Yes we could have hashed this, but we want to be blatantly obvious regarding the 
+passwd --stdin "$USERNAME" <<< "$PASSWORD"
 passwd -e "$USERNAME"
 
+# Add the user to sudoers and setup an SELinux role/type transition.
+# This line enables a transition via sudo instead of requiring sudo and newrole.
 echo "$USERNAME        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
 
+# Map this user to the staff_u SELinux user ID.
 semanage login -a -s staff_u "$USERNAME"
 
 ######## END DEFAULT USER CONFIG ##########
@@ -246,30 +247,7 @@ semanage login -a -s staff_u "$USERNAME"
 # Lock the root acct to prevent direct logins
 usermod -L root
 
-# TODO: Remove these next lines.
-# semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  root
-# Create the SELinux user/
-#semanage user -m -Rstaff_r -Rsysadm_r -Rsystem_r  staff_u
-#semanage user -m                      -Rsystem_r  system_u
-
-# iptables setup
-cat >/etc/sysconfig/iptables <<EOF
-*filter
-:INPUT DROP [0:0]
-:FORWARD DROP [0:0]
-:OUTPUT ACCEPT [0:0]
--A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
--A INPUT -p icmp -j ACCEPT
--A INPUT -i lo -j ACCEPT
--A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
--A INPUT -j REJECT --reject-with icmp-host-prohibited
--A FORWARD -j REJECT --reject-with icmp-host-prohibited
-COMMIT
-EOF
-
-chkconfig --add iptables
-chkconfig --add ip6tables
-chkconfig --level 0123456 netfs off
+###### START SECSTATE AUDIT AND REMEDIATE ###########
 
 # Import SSG into secstate.
 # Running this command again, even after install, will result in a harmless error
@@ -289,5 +267,6 @@ echo "About to use secstate to do a post-remediation audit using SSG content..."
 secstate audit
 
 echo "All done with secstate :)  Now go play with your freshly remediated system!"
+###### END SECSTATE AUDIT AND REMEDIATE ###########
 
 %end
