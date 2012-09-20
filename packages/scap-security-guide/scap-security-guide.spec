@@ -8,6 +8,7 @@ License:        GPL
 URL:            https://fedorahosted.org/scap-security-guide/
 
 Source0:        %{name}-%{version}.tar.gz
+Patch:          ssg-fix-fixes-tags.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 
@@ -31,6 +32,7 @@ involved in the SCAP Security Guide community.
 
 %prep
 %setup -q -n %{pkgname}
+%patch -p1
 
 
 %build

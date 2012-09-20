@@ -26,6 +26,7 @@ ARCH := noarch
 
 # This file will be created by tar'ing up $(PKGNAME)/
 TARBALL = $(SRPM_OUTPUT_DIR)/scap-security-guide-$(VERSION).tar.gz
+PATCHES = ssg-fix-fixes-tags.patch
 # All sources for the package.
 
 # Spec file name
@@ -39,7 +40,7 @@ SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
 
 # exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
 TAR_DEPS := $(wildcard $(PKGNAME)/*)
-RPM_DEPS := $(TARBALL) $(RPM_SPEC) Makefile
+RPM_DEPS := $(TARBALL) $(RPM_SPEC) Makefile $(PATCHES)
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
 RPM_TOPDIR ?= $(RPM_TMPDIR)/src/redhat
@@ -80,6 +81,7 @@ $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm: $(RPM_DEPS)
 	@echo "Building $(PKGNAME) SRPM..."
 	$(call rpm-prep)
 	cp $(TARBALL) $(RPM_TOPDIR)/SOURCES/
+	cp $(PATCHES) $(RPM_TOPDIR)/SOURCES/
 	echo -e "%define pkgname $(PKGNAME)\n%define _sysconfdir /etc\n%define version $(VERSION)\n%define release $(RELEASE)\n%define vendor $(VENDOR)\n%define packager $(PACKAGER)" > $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cat $(RPM_SPEC) >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cd $(RPM_TOPDIR) && rpmbuild $(RPMBUILD_ARGS) -bs SPECS/$(notdir $(RPM_SPEC)) --nodeps
