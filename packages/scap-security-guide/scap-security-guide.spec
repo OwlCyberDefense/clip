@@ -60,7 +60,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0750,root,root)/usr/local/scap-security-guide/
 
 %post
-cp packages/aqueduct/aqueduct/compliance/Bash/SSG/tools/manual.xml $RPM_BUILD_ROOT/usr/local/${name}/RHEL6/input/profiles/
+cp %{_usr}/libexec/aqueduct/SSG/tools/manual.xml $RPM_BUILD_ROOT/usr/local/${name}/RHEL6/input/profiles/
 $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools/fix_mapper.py
 
 cd $RPM_BUILD_ROOT/usr/local/scap-security-guide/RHEL6
