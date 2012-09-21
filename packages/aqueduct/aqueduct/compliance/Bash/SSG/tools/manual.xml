@@ -43,4 +43,6 @@
 <select idref="ldap_server_config_directory_accounts" selected="true"/>
 <select idref="ldap_server_config_directory_groups" selected="true"/>
 <select idref="ldap_server_config_directory_admin_group" selected="true"/>
+<select idref="selinux_policytype_targeted" selected="true"/>
+<select idref="set_selinux_policy" selected="true"/>
 </Profile>
