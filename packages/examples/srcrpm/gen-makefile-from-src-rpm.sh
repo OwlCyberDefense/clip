@@ -14,4 +14,4 @@ echo "Name: $PKGNAME"
 echo "Version: $VERSION"
 echo "Release: $RELEASE"
 
-sed -e "s/SRPM :=.*/SRPM := $1/" -e "s/^PKGNAME :=.*/PKGNAME := $PKGNAME/" -e "s/^VERSION :=.*/VERSION := $VERSION/" -e "s/^RELEASE :=.*/RELEASE := $RELEASE/" Makefile.tmpl > Makefile 
+sed -e "s;SRPM :=.*;SRPM := $1;" -e "s;^PKGNAME :=.*;PKGNAME := $PKGNAME;" -e "s;^VERSION :=.*;VERSION := $VERSION;" -e "s;^RELEASE :=.*;RELEASE := $RELEASE;" Makefile.tmpl > Makefile 
