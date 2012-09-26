@@ -66,26 +66,35 @@ to update these variables to build for a different architecture.
 The most common task is adding you own packages to be included in a rolled
 ISO. 
 
-First, a directory is created in packages/<PACKAGE NAME>.  The contents of
-this directory will vary depending on the type of package.  
+1. First, a directory is created in packages/<PACKAGE NAME>.  The contents of
+this directory will vary depending on the type of package.  Now choose one of
+the three options below, 2a, 2b, or 2c.
 
-If you want to include a package and you have a src.rpm that needs *no*
-modifications refer to packages/examples/srcrpm.
+2a. If you want to include a package and you have a src.rpm that needs *no*
+modifications refer to packages/examples/srcrpm as a reference.  You will copy
+the Makefile.tmpl and the gen-makefile-from-src-rpm.sh to the newly create
+(#1) package directory.  Now enter that directory and run "$
+./gen-makefile-from-src-rpm.sh <package>.src.rpm".  This will generate a
+Makefile based on the src RPM.  Skip to step #3.
 
-If it is merely wrapping an existing project's sources, eg the intent is to
+or
+
+2b. If it is merely wrapping an existing project's sources, eg the intent is to
 take an existing released tarball of a library and package it in an RPM, then
 you will provide a Makefile, spec file, package tarball, and any custom
 patches.  Refer to packages/examples/tarball for more information on the
 Makefile and spec file for this scenario.
 
-If the intent is to contain custom source code, eg an internally developed
+or
+
+2c. If the intent is to contain custom source code, eg an internally developed
 application or library, then packages/<PACKAGE NAME> will still contain a
 Makefile and spec file, and packages/<PACKAGE NAME>/<PACKAGE NAME> will
 contain the sources and application-specific build system (eg the one that
 typically has a "make all" and "make install" target).  For more information
 on this type of package refer to packages/examples/sources.
 
-Once the package has been added to the packages/ directory you must update
+3. Once the package has been added to the packages/ directory you must update
 the PACKAGES variable in the top-level Makefile to ensure the package is 
 generated as part of any build. Once a package is generated it will appear
 in repos/my-repo.  To add the package to an ISO image update the
