@@ -1,7 +1,0 @@
-#%_topdir %(echo $HOME)/rpmbuild
-%_topdir %(echo $HOME)/redhat
-# %_gpg_name GPG-SPAWAR-KEY
-%_signature gpg
-%_gpg_path %(echo $HOME)/.gnupg
-%_gpg_name F4E9EBC0
-%_gpgbin /usr/bin/gpg
