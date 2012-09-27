@@ -25,9 +25,9 @@ keyid=`echo $(gpg --throw-keyids < /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release )
 [ "$keyid" == "fd431d51" ] || exit 1
 
 # if not installed, install it
-if `rpm -qi gpg-pubkey-$keyid | grep "release key 2" >/dev/null`; then
+if rpm -qi "gpg-pubkey-$keyid" | grep -q "release key 2"; then
 	rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 fi
 
 # return status of key check
-rpm -qi gpg-pubkey-$keyid | grep "release key 2" >/dev/null
+rpm -qi "gpg-pubkey-$keyid" | grep -q "release key 2"

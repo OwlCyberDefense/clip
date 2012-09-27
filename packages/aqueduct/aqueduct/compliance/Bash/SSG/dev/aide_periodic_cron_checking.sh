@@ -24,7 +24,7 @@ FILE=/etc/crontab
 
 PATTERN="((\d*|\*)\s+)*\s+root\s+\/usr\/sbin\/aide\s+\-\-check"
 
-if `grep -Pq "${PATTERN}" $FILE`; then
+if grep -Pq "${PATTERN}" $FILE; then
 	sed -i -r -e "s/${PATTERN}/05 4 * * * root\/usr\/sbin\/aide --check/g" $FILE 
 else
 	echo "05 4 * * * root /usr/sbin/aide --check" >> $FILE

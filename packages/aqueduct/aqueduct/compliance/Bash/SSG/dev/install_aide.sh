@@ -21,7 +21,7 @@ set -e
 
 # Copied from GEN006575 script
 
-if `rpm -qi aide > /dev/null`; then
+if rpm -qi aide > /dev/null; then
 	yum install aide -y
 	[ $? -eq 0 ] || exit 1
 fi

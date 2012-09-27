@@ -21,6 +21,6 @@ set -e
 . $(dirname $0)/audit_rules_common
 
 add_rule '-a always,exit -F arch=b32 -S lsetxattr -F auid&gt;=500 -F auid!=4294967295 -k perm_mod'
-if `uname -m|grep 64`; then
+if uname -m|grep -q 64; then
 	add_rule '-a always,exit -F arch=b64 -S lsetxattr -F auid&gt;=500 -F auid!=4294967295 -k perm_mod'
 fi

@@ -25,16 +25,16 @@ set_sysctl_param() {
 	PARAM=$1
 	DESIRED=$2
 
-	MODULE=`echo $PARAM|sed -e "s/\./\//g"`
+	MODULE=`echo "$PARAM"|sed -e "s/\./\//g"`
 	
-	if `echo $PARAM| grep -r "ipv6" /etc/modprobe.d && grep -Pr "options\s+ipv6\s+disable\=1" /etc/modprobe.d`; then
+	if echo "$PARAM"| grep -qr "ipv6" /etc/modprobe.d && grep -qPr "options\s+ipv6\s+disable\=1" /etc/modprobe.d; then
 		return 0
 	fi
 
-	[ -f /proc/sys/$MODULE ] || return 0
+	[ -f "/proc/sys/$MODULE" ] || return 0
 	[ -f /etc/sysctl.conf ] || return 1
 
-	if `grep -q "${PARAM}" /etc/sysctl.conf`; then
+	if grep -q "${PARAM}" /etc/sysctl.conf; then
 		sysctl -q -p
 	else
 		echo ""                                 >> /etc/sysctl.conf &&

@@ -21,8 +21,8 @@ set -e
 FILE=/etc/xinetd.d/tftp
 
 [ -f /etc/init.d/tftp ] || exit 0
-[ -f $FILE ] || exit 1
+[ -f "$FILE" ] || exit 1
 
-if `grep -Pq "server_args\s+\=\s+\-s\s+\/var\/lib\/tftpboot" $FILE`; then
-    sed -i -r -e "s/server_args\s+\=.*\/var\/lib\/tftpboot/server_args = -s \/var\/lib\/tftpboot/g" $FILE
+if grep -Pq "server_args\s+\=\s+\-s\s+\/var\/lib\/tftpboot" "$FILE"; then
+    sed -i -r -e "s/server_args\s+\=.*\/var\/lib\/tftpboot/server_args = -s \/var\/lib\/tftpboot/g" "$FILE"
 fi

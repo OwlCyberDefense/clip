@@ -26,7 +26,7 @@ CONFIG=/etc/ssh/sshd_config
 # Banner is set - exit
 grep -qi "^Banner" $CONFIG && exit 0
 
-if `grep -qi "^#\s*Banner" $CONFIG`; then
+if grep -qi "^#\s*Banner" $CONFIG; then
 	sed -i -e "s:no default banner path:Use /etc/issue as banner:" $CONFIG
 	sed -i -e "s:^#\s*Banner.*:Banner /etc/issue:" $CONFIG
 else

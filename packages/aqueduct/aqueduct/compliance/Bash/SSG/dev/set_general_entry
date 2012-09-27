@@ -29,11 +29,11 @@ function add_entry {
         F=` echo $FILEDIR|grep -Po "[^\/]*$" `
         FILEDIR=${FILEDIR%"/$F"}
 
-        if `grep -Pq "^(\s*)(\#*)(\s*)$ENTRY" $FILEDIR/$F`; then
-                ENTRY=` echo $ENTRY|sed 's!\([]\*\$\/&[]\)!\\\1!g' `
-                sed -i -r -e "s!(\s*)(\#*)(\s*)$ENTRY!\3\4!g" $FILEDIR/$F
+        if grep -Pq "^(\s*)(\#*)(\s*)$ENTRY" "$FILEDIR/$F"; then
+                ENTRY=` echo "$ENTRY"|sed 's!\([]\*\$\/&[]\)!\\\1!g' `
+                sed -i -r -e "s!(\s*)(\#*)(\s*)$ENTRY!\3\4!g" "$FILEDIR/$F"
         else
-                echo $ENTRY >> $FILEDIR/$F
+                echo "$ENTRY" >> "$FILEDIR/$F"
         fi
 
         return
@@ -94,8 +94,8 @@ function safe_add_field {
         F=` echo $FILEDIR|grep -Po "[^\/]*$" `
         FILEDIR=${FILEDIR%"/$F"}
 
-        if grep -Pq "^(\s*)(\#*)(\s*)($SAFE_FIELD)" $FILEDIR/$F; then
-                sed -i -r -e "s!(\s*)(\#*)(\s*)$SAFE_FIELD!\3\4$VAL!g" $FILEDIR/$F
+        if grep -Pq "^(\s*)(\#*)(\s*)($SAFE_FIELD)" "$FILEDIR/$F"; then
+                sed -i -r -e "s!(\s*)(\#*)(\s*)$SAFE_FIELD!\3\4$VAL!g" "$FILEDIR/$F"
         else
                 OUT=` echo $SAFE_FIELD|grep -Po "\([^\(|^\)]*\)" `
                 OUT=` echo $OUT | grep -Po "[^\(|^\)]*"`$VAL
@@ -104,7 +104,7 @@ function safe_add_field {
 		OUT=` echo $OUT| sed -r -e "s!\\\\\s! !g" `
 		OUT=` echo $OUT| grep -Po '[^\\\\]*'`
 		
-                echo $OUT >> $FILEDIR/$F
+                echo $OUT >> "$FILEDIR/$F"
         fi
 
         return

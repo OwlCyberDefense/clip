@@ -19,4 +19,4 @@ set -e
 # limitations under the License.
 
 . $(dirname $0)/set_pam_common
-set_pam_cracklib_option retry 3
+set_pam_passwdqc

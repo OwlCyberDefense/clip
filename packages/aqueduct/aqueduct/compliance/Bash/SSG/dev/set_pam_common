@@ -18,24 +18,25 @@ SYSTEM_AUTH=/etc/pam.d/system-auth
 
 . $(dirname $0)/set_general_entry
 
-set_pam_cracklib_option() {
-# Sets the specified pam cracklib option to the desired value.
-#
-#  arguments:
-#    set_pam_cracklib_option(OPTION,DESIRED)
-#      OPTION  - pam cracklib option to be changed.
-#      DESIRED - Desired value of pam cracklib option
-#
+set_pam_passwdqc() {
+# FIXME:
+# This function used to manipulate individual arguments to pam_cracklib but with pam_passwdqc things are very different.
+# Every time this is called it will do the same thing.  It sets passwdqc to meet the *all requirements*.  The problem with this
+# is that someone can't run a single pam remediation script to only remediate one thing (such as only requiring digits or something).
 
-	OPTION=$1 DESIRED=$2
+	# by default pam_cracklib is used so drop that in favor of pam_passwdqc
+	sed -i -e 's/.*pam_cracklib.*/password    requisite     pam_passwdqc.so enforce=everyone retry=3 min=disabled,disabled,disabled,14,14/' "$SYSTEM_AUTH"
+	grep -q pam_cracklib "$SYSTEM_AUTH" && exit 1
+
+#	OPTION=$1 DESIRED=$2
 	
-	if `grep -Pq "^password\s+requisite\s+pam_cracklib.so\s+.*$OPTION=$DESIRED\b" $SYSTEM_AUTH`; then
-		exit 0
-	else
-		sed -i -r -e "s/^(password\s+requisite\s+pam_cracklib\.so.*)\s+$OPTION=[^\s]*\s*(.*$)/\1 \2/" $SYSTEM_AUTH
-		sed -i -r -e "s/^(password\s+requisite\s+pam_cracklib\.so.*)\s+$/\1/" $SYSTEM_AUTH
-		sed -i -r -e "s/^(password\s+requisite\s+pam_cracklib\.so\s+.*)/\1 $OPTION=$DESIRED/" $SYSTEM_AUTH
-	fi
+#	if grep -Pq "^password\s+requisite\s+pam_passwdqc.so\s+.*$OPTION=$DESIRED\b" "$SYSTEM_AUTH"; then
+#		exit 0
+#	else
+#		sed -i -r -e "s/^(password\s+requisite\s+pam_passwdqc\.so.*)\s+$OPTION=[^\s]*\s*(.*$)/\1 \2/" "$SYSTEM_AUTH"
+#		sed -i -r -e "s/^(password\s+requisite\s+pam_passwdqc\.so.*)\s+$/\1/" "$SYSTEM_AUTH"
+#		sed -i -r -e "s/^(password\s+requisite\s+pam_passwdqc\.so\s+.*)/\1 $OPTION=$DESIRED/" "$SYSTEM_AUTH"
+#	fi
 }
 
 set_pam_unix_option() {
@@ -49,12 +50,12 @@ set_pam_unix_option() {
 
 	OPTION=$1 DESIRED=$2
 
-	if `grep -Pq "^password\s+(?:sufficient|required)\s+pam_unix\.so\s+.*$OPTION=$DESIRED\b" $SYSTEM_AUTH`; then
+	if grep -Pq "^password\s+(?:sufficient|required)\s+pam_unix\.so\s+.*$OPTION=$DESIRED\b" "$SYSTEM_AUTH"; then
 		exit 0
 	else
-		sed -i -r -e "s/^(password\s+(sufficient|required)\s+pam_unix\.so.*)\s+$OPTION=[^\s]*\s*(.*$)/\1 \3/" $SYSTEM_AUTH
-		sed -i -r -e "s/^(password\s+(sufficient|required)\s+pam_unix\.so.*)\s+$/\1/" $SYSTEM_AUTH
-		sed -i -r -e "s/^(password\s+(sufficient|required)\s+pam_unix\.so\s+.*)/\1 $OPTION=$DESIRED/" $SYSTEM_AUTH
+		sed -i -r -e "s/^(password\s+(sufficient|required)\s+pam_unix\.so.*)\s+$OPTION=[^\s]*\s*(.*$)/\1 \3/" "$SYSTEM_AUTH"
+		sed -i -r -e "s/^(password\s+(sufficient|required)\s+pam_unix\.so.*)\s+$/\1/" "$SYSTEM_AUTH"
+		sed -i -r -e "s/^(password\s+(sufficient|required)\s+pam_unix\.so\s+.*)/\1 $OPTION=$DESIRED/" "$SYSTEM_AUTH"
 	fi
 }
 
@@ -68,9 +69,9 @@ set_pam_unix_flag() {
 
 	OPTION=$1
 
-	if `grep -Pq "^password\s+(?:sufficient|required)\s+pam_unix\.so\s+.*$OPTION\b" $SYSTEM_AUTH`; then
+	if grep -Pq "^password\s+(?:sufficient|required)\s+pam_unix\.so\s+.*$OPTION\b" "$SYSTEM_AUTH"; then
 		exit 0
 	else
-		sed -i -r -e "s/^(password\s+(sufficient|required)\s+pam_unix\.so\s+.*)/\1 $OPTION/" $SYSTEM_AUTH
+		sed -i -r -e "s/^(password\s+(sufficient|required)\s+pam_unix\.so\s+.*)/\1 $OPTION/" "$SYSTEM_AUTH"
 	fi
 }

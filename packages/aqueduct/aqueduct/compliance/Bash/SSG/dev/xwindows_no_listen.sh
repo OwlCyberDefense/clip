@@ -19,9 +19,9 @@ set -e
 # limitations under the License.
 
 FILE=/etc/X11/xinit/xserverrc
-if `grep -q 'exec X :0 -nolisten tcp $@' $FILE`; then
+if grep -q 'exec X :0 -nolisten tcp $@' "$FILE"; then
  	exit 0
 else
 	mkdir -p -m 755 /etc/X11/xinit
-	echo 'exec X :0 -nolisten tcp $@' > $FILE
+	echo 'exec X :0 -nolisten tcp $@' > "$FILE"
 fi

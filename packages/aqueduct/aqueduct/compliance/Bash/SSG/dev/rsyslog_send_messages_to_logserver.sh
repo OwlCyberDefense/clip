@@ -29,9 +29,9 @@ echo ""
 echo "Enter the name of your central logserver (e.g. loghost.example.com)."
 read -p "logserver: " logserver
 
-if `grep -i "\*\.\*\""` $FILE; then
-	sed -i -r -e "s/*.*\s+@.*/@$logserver/g" $FILE
+if grep -qi "\*\.\*\"" "$FILE"; then
+	sed -i -r -e "s/*.*\s+@.*/@$logserver/g" "$FILE"
 else
 	sed -i -r -e "/\#\sRemote\sLogging.*/ a\
-			\*.\*\t\t\t\t@$logserver" $FILE
+			\*.\*\t\t\t\t@$logserver" "$FILE"
 fi

@@ -21,21 +21,21 @@ set -e
 FILE="/etc/rsyslog.conf"
 LOGROT="/etc/logrotate.d/syslog"
 
-[ -f $FILE ] || exit 1
+[ -f "$FILE" ] || exit 1
 
 PATTERN="(mail\.\*)(\s+)(.*)(\/var\/log\/maillog)"
 
 . $(dirname $0)/set_general_entry
-safe_add_field "$PATTERN" "\t\t\t\-/var/log/maillog" $FILE
+safe_add_field "$PATTERN" "\t\t\t\-/var/log/maillog" "$FILE"
 
 [ -f /var/log/maillog ] || exit 1
 
 chown root:root /var/log/maillog
 chmod 600 /var/log/maillog
 
-if `grep -Eq "\/var\/log\/maillog" $LOGROT`; then
+if grep -Eq "\/var\/log\/maillog" "$LOGROT"; then
 	exit 0
 else
 	sed -i -r -e "/1/i\
-			\/var\/log\/maillog" $LOGROT
+			\/var\/log\/maillog" "$LOGROT"
 fi
