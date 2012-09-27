@@ -24,11 +24,13 @@ add_modprobe_entries() {
 #		does not exist, the file should be created with the entry as
 #		it's only contents.
 #
-	entry=$1, FILE=$2
+	entry=$1 FILE=$2
 	
 	. $(dirname $0)/set_general_entry
 	
-	if `grep -r "$entry" /etc/modprobe.d`; then exit 0 fi
+	if `grep -r "$entry" /etc/modprobe.d`; then
+		exit 0
+	fi
 
 	if [ -f $FILE ]; then
 		safe_add_field "($entry)" "" $FILE

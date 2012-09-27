@@ -26,4 +26,4 @@ FILE=/etc/ssh/sshd_config
 
 . $(dirname $0)/set_general_entry
 
-safe_add_field "(Protocol).*" " 2" $FILE
+safe_add_field "(Protocol\s+).*" "2" $FILE

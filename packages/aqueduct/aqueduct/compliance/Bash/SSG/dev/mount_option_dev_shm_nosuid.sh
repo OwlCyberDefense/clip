@@ -22,6 +22,6 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
 
-if !`grep -Pq "^\s*([\/dev\/shm])\s+.*,?nosuid,?.*$" $FILE`; then
+if ! `grep -Pq "^\s*([\/dev\/shm])\s+.*,?nosuid,?.*$" $FILE`; then
 	mount -o remount,nosuid /dev/shm
 fi

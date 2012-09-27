@@ -18,12 +18,9 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FILE=/etc/rsyslog.conf
+. $(dirname $0)/audit_rules_common
 
-# Can't edit this file if it doesn't exist
-[ -f $FILE ] || exit 1
-
-. $(dirname $0)/set_general_entry
-
-safe_add_field '(\$ModLoad imtcp.so).*' "" $FILE
-safe_add_field '(\$InputTCPServerRun\s+).*' "514" $FILE
+add_rule '-a always,exit -F arch=b32 -S setxattr -F auid&gt;=500 -F auid!=4294967295 -k perm_mod'
+if `uname -m|grep 64`; then
+	add_rule '-a always,exit -F arch=b64 -S setxattr -F auid&gt;=500 -F auid!=4294967295 -k perm_mod'
+fi

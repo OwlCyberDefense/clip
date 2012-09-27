@@ -24,4 +24,4 @@ PARAM=PASS_MAX_DAYS
 [ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry
-safe_add_field "($PARAM).*" "	60" $FILE
+safe_add_field "($PARAM\s+).*" "60" $FILE

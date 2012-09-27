@@ -23,5 +23,5 @@ FILE=/etc/security/console.perms
 [ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry
-safe_add_field "(<console>).*" "=tty[0-9][0-9]* vc/[0-9][0-9]* :0\\\\.[0-9] :0" $FILE
-safe_add_field "(<xconsole>).*" "=:0\\\\.[0-9] :0" $FILE
+safe_add_field "(<console>\s*=).*" "tty[0-9][0-9]* vc/[0-9][0-9]* :0\\\\.[0-9] :0" $FILE
+safe_add_field "(<xconsole>\s*=).*" ":0\\\\.[0-9] :0" $FILE

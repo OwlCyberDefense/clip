@@ -27,5 +27,5 @@ FILE=/etc/csh.cshrc
 [ -f $FILE ] || exit 0
 
 . $(dirname $0)/set_general_entry
-safe_add_field "(umask).*" " 077" $FILE
+safe_add_field "(umask\s+).*" "077" $FILE
 

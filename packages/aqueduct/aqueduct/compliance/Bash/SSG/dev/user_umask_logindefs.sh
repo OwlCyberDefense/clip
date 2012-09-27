@@ -27,4 +27,4 @@ FILE=/etc/login.defs
 [ -f $FILE ] || exit 0
 
 . $(dirname $0)/set_general_entry
-safe_add_field "(UMASK).*" " 077" $FILE
+safe_add_field "(UMASK\s+).*" "077" $FILE

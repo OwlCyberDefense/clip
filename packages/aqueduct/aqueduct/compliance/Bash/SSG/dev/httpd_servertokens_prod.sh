@@ -24,4 +24,4 @@ service --status-all | grep httpd || exit 0
 [ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry
-safe_add_field "(ServerTokens ).*" "Prod" *
+safe_add_field "(ServerTokens\s+).*" "Prod" *

@@ -27,6 +27,6 @@ var=$( grub-crypt --sha-512 ) || exit 1
 var=$var' --encrypted password-hash'
 
 . $(dirname $0)/set_general_entry
-safe_add_field "(timeout\=).*" "5" $FILE
-safe_add_field "(timeout\=5).*" "\n$var" $FILE
+safe_add_field "(timeout=).*" "5" $FILE
+safe_add_field "(timeout=5).*" "\n$var" $FILE
 

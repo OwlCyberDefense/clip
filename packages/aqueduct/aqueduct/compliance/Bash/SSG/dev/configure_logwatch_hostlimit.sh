@@ -24,4 +24,4 @@ CONFIG=/etc/logwatch/conf/logwatch.conf
 
 # ClientAliveCountMax is set - exit
 . $(dirname $0)/set_general_entry
-safe_add_field "(HostLimit).*" " no" $CONFIG
+safe_add_field "(HostLimit\s+).*" "no" $CONFIG

@@ -27,7 +27,7 @@ set_pam_cracklib_option() {
 #      DESIRED - Desired value of pam cracklib option
 #
 
-	OPTION=$1, DESIRED=$2
+	OPTION=$1 DESIRED=$2
 	
 	if `grep -Pq "^password\s+requisite\s+pam_cracklib.so\s+.*$OPTION=$DESIRED\b" $SYSTEM_AUTH`; then
 		exit 0
@@ -47,7 +47,7 @@ set_pam_unix_option() {
 #      DESIRED - Desired value of pam unix option
 #
 
-	OPTION=$1, DESIRED=$2
+	OPTION=$1 DESIRED=$2
 
 	if `grep -Pq "^password\s+(?:sufficient|required)\s+pam_unix\.so\s+.*$OPTION=$DESIRED\b" $SYSTEM_AUTH`; then
 		exit 0

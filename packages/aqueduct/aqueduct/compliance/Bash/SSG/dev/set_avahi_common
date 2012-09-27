@@ -24,7 +24,7 @@ function add_section_entry() {
 #    OPTION  - A yes/no value that ENTRY should be set to
 #    SECTION - The section in which this ENTRY=OPTION line should appear
 #
-	ENTRY=$1, OPTION=$2, SECTION=$3
+	ENTRY=$1 OPTION=$2 SECTION=$3
 
 	[ -f $FILE ] || exit 1
 

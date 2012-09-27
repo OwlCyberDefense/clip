@@ -24,4 +24,4 @@ FILE=/etc/modprobe.d/disable_ipv6_module_loading.conf
 [ -f $FILE ] || echo "options ipv6 disable=1"  > $FILE
 
 . $(dirname $0)/set_general_entry
-safe_add_field "(options ipv6 disable=).*" "1" $FILE
+safe_add_field "(option\s+ipv6\s+disable=).*" "1" $FILE

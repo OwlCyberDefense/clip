@@ -25,4 +25,4 @@ CONFIG=/etc/ssh/sshd_config
 
 # ClientAliveCountMax is set - exit
 . $(dirname $0)/set_general_entry
-safe_add_field "(ClientAliveCountMax ).*" " 0" $CONFIG
+safe_add_field "(ClientAliveCountMax\s+).*" "0" $CONFIG

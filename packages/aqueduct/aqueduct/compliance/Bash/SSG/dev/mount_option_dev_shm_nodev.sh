@@ -22,6 +22,6 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 0
 
-if !`grep -Pq "^\s*([\/dev\/shm])\s+.*,?nodev,?.*$" $FILE`; then
+if ! `grep -Pq "^\s*([\/dev\/shm])\s+.*,?nodev,?.*$" $FILE`; then
 	mount -o remount,nodev /dev/shm
 fi

@@ -26,4 +26,4 @@ FILE=/etc/rsyslog.conf
 . $(dirname $0)/set_general_entry
 
 safe_add_field '(\$ModLoad imudp.so).*' "" $FILE
-safe_add_field '(\$InputUDPServerRun ).*' "514" $FILE
+safe_add_field '(\$InputUDPServerRun\s+).*' "514" $FILE

@@ -19,4 +19,8 @@ set -e
 # limitations under the License.
 
 . $(dirname $0)/set_pam_common
+
+sed -i -r -e 's/(^.*pam_cracklib.so.*$)/password        requisite       pam_passwdqc.so enforce=everyone\
+\1/' /etc/pam.d/system-auth
+
 set_pam_cracklib_option lcredit -2

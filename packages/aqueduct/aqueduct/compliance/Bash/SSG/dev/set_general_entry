@@ -44,8 +44,8 @@ function add_entry_before {
 #
 # arguments:
 # add_entry_before ($1, $2, $3)
-#     $1      - Entry to add
-#     $2      - Existing entry
+#     $1      - Existing entry
+#     $2      - Entry to add
 #     $3      - File to edit	
 	FILE=$3
         grep -qPzo -- "$2\n$1" $FILE && return
@@ -99,7 +99,11 @@ function safe_add_field {
         else
                 OUT=` echo $SAFE_FIELD|grep -Po "\([^\(|^\)]*\)" `
                 OUT=` echo $OUT | grep -Po "[^\(|^\)]*"`$VAL
-		OUT=` echo $OUT|grep -Po '[^\\\\]*'`
+		OUT=` echo $OUT| sed -r -e "s!\\\\\s\+! !g" `
+		OUT=` echo $OUT| sed -r -e "s!\\\\\s\*!!g" `
+		OUT=` echo $OUT| sed -r -e "s!\\\\\s! !g" `
+		OUT=` echo $OUT| grep -Po '[^\\\\]*'`
+		
                 echo $OUT >> $FILEDIR/$F
         fi
 

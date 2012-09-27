@@ -25,4 +25,4 @@ CONFIG=/etc/ssh/sshd_config
 
 # PermitUserEnvironment is no - exit
 . $(dirname $0)/set_general_entry
-safe_add_field "(PermitUserEnvironment).*" " no" $CONFIG
+safe_add_field "(PermitUserEnvironment\s+).*" "no" $CONFIG

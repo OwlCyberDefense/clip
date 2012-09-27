@@ -22,10 +22,10 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
 
-if !`grep -Pq "^\s*([^.\/chroot])\/*\s+.*,?nodev,?.*$" $FILE`; then
+if ! `grep -Pq "^\s*([^.\/chroot])\/*\s+.*,?nodev,?.*$" $FILE`; then
 	mount -o remount,nodev /chroot
 fi
 
-if !`grep -Pq "^\s*([^.\/dev])\/*\s+.*,?nodev,?.*$" $FILE`; then
+if ! `grep -Pq "^\s*([^.\/dev])\/*\s+.*,?nodev,?.*$" $FILE`; then
 	mount -o remount,nodev /dev
 fi

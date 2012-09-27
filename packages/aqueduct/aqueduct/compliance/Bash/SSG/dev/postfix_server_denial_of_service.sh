@@ -23,10 +23,10 @@ FILE="/etc/postfix/main.cf"
 [ -f /etc/init.d/postfix ] || exit 0
 
 . ($dirname $0)/set_general_entry
-safe_add_field "(default_process_limit = ).*" 100 $FILE
-safe_add_field "(smptd_client_connection_count_limit = ).*" 10 $FILE
-safe_add_field "(smptd_client_connection_rate_limit = ).*" 30 $FILE
-safe_add_field "(queue_minfree = ).*" 20971520 $FILE
-safe_add_field "(header_size_limit = ).*" 51200 $FILE
-safe_add_field "(message_size_limit = ).*" 10485760 $FILE
-safe_add_field "(smptd_recipient_limit = ).*" 100 $FILE
+safe_add_field "(default_process_limit\s+=\s+).*" 100 $FILE
+safe_add_field "(smptd_client_connection_count_limit\s+=\s+).*" 10 $FILE
+safe_add_field "(smptd_client_connection_rate_limit\s+=\s+).*" 30 $FILE
+safe_add_field "(queue_minfree\s+=\s+).*" 20971520 $FILE
+safe_add_field "(header_size_limit\s+=\s+).*" 51200 $FILE
+safe_add_field "(message_size_limit\s+=\s+).*" 10485760 $FILE
+safe_add_field "(smptd_recipient_limit\s+=\s+).*" 100 $FILE
