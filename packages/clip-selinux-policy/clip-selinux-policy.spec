@@ -17,7 +17,7 @@ Release: %{release}
 Summary: Certifiable Linux Integration Platform Policy configuration
 License: GPLv2+
 Group: System Environment/Base
-Source: %{pkgname}-%{version}.tar.bz2
+Source: %{pkgname}-%{version}.tar.gz
 
 Url: http://oss.tresys.com/repos/refpolicy/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)

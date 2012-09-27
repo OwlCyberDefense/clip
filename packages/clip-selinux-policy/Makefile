@@ -23,13 +23,13 @@ VENDOR := Tresys Technology, LLC
 PACKAGER ?= Tresys Technology, LLC
 
 # snag the architecture, hard code an arch if cross-compiling or going noarch
-ARCH ?= $(shell uname -i)
+ARCH ?= noarch
 
 # the filename of the tarball
-TARBALL = $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION).tar.bz2
+TARBALL = $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION).tar.gz
 
 # spec file name
-RPM_SPEC := $(PKGNAME).spec
+RPM_SPEC = $(CURDIR)/$(PKGNAME).spec
 
 ####################################################
 ## things below this line should rarely change
@@ -39,7 +39,7 @@ SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
 
 # exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
 TAR_DEPS := $(shell find $(PKGNAME)/)
-RPM_DEPS := $(TARBALL) $(RPM_SPEC) Makefile
+RPM_DEPS := $(TARBALL) $(RPM_SPEC) $(CURDIR)/Makefile
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
 RPM_TOPDIR ?= $(RPM_TMPDIR)/src/redhat
@@ -55,12 +55,9 @@ define rpm-prep
 	$(call MKDIR,$(RPM_TOPDIR)/BUILD)
 	$(call MKDIR,$(RPM_TOPDIR)/RPMS/$(ARCH))
 	$(call MKDIR,$(RPM_TOPDIR)/SRPMS)
-	cp $(TARBALL) $(RPM_TOPDIR)/SOURCES/
 endef
 
 all: $(PKGNAME)-rpm $(PKGNAME)-srpm
-
-tarball: $(TARBALL)
 
 rpm: $(PKGNAME)-rpm
 
@@ -72,17 +69,18 @@ $(PKGNAME)-srpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 
 $(TARBALL): $(TAR_DEPS)
 	@echo "Building $(PKGNAME) source tarball..."
-	tar -cjf $@ $(PKGNAME)/
+	tar -czf $@ $(PKGNAME)/
 
 $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 	@echo "Building $(PKGNAME) RPM..."
 	$(call rpm-prep)
-	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild $(RPMBUILD_ARGS) -bb $<
+	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild --target=$(ARCH) $(RPMBUILD_ARGS) --buildroot $(RPM_BUILDROOT) -bb $<
 	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/$(PKGNAME)-$(VERSION)-$(RELEASE)*.rpm $(OUTPUT_DIR)
 
 $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm: $(RPM_DEPS)
 	@echo "Building $(PKGNAME) SRPM..."
 	$(call rpm-prep)
+	cp $(TARBALL) $(RPM_TOPDIR)/SOURCES/
 	echo -e "%define enforcing_mode $(ENFORCING_MODE)\n%define pkgname $(PKGNAME)\n%define _sysconfdir /etc\n%define version $(VERSION)\n%define release $(RELEASE)\n%define vendor $(VENDOR)\n%define packager $(PACKAGER)\nBuildArch: $(ARCH)\n"> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cat $(RPM_SPEC) >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cd $(RPM_TOPDIR) && rpmbuild $(RPMBUILD_ARGS) -bs SPECS/$(notdir $(RPM_SPEC)) --nodeps
@@ -92,7 +90,6 @@ clean:
 	$(RM) -r $(RPM_TMPDIR)
 
 bare: clean
-	$(RM) $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
-	$(RM) $(OUTPUT_DIR)/$(TARBALL)
+	$(RM) $(TARBALL) $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
 
-.PHONY: all $(PKGNAME)-rpm $(PKGNAME)-srpm clean bare
+.PHONY: all rpm srpm $(PKGNAME)-rpm $(PKGNAME)-srpm clean bare
