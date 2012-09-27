@@ -29,7 +29,7 @@ TARBALL = $(SRPM_OUTPUT_DIR)/aqueduct-$(VERSION).tar.gz
 # All sources for the package.
 
 # Spec file name
-RPM_SPEC := $(PKGNAME).spec
+RPM_SPEC = $(CURDIR)/$(PKGNAME).spec
 
 ####################################################
 ## things below this line should rarely change
@@ -39,7 +39,7 @@ SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
 
 # exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
 TAR_DEPS := $(shell find $(PKGNAME)/*)
-RPM_DEPS := $(TARBALL) $(RPM_SPEC) Makefile
+RPM_DEPS := $(TARBALL) $(RPM_SPEC) $(CURDIR)/Makefile
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
 RPM_TOPDIR ?= $(RPM_TMPDIR)/src/redhat
