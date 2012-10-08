@@ -36,7 +36,7 @@ interface(`oscap_probe_domtrans',`
 	')
 
 	corecmd_search_bin($1)
-	domtrans_pattern(oscap_t, oscap_probe_exec_t, oscap_probe_t)
+	domtrans_pattern($1, oscap_probe_exec_t, oscap_probe_t)
 ')
 
 ########################################

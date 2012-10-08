@@ -38,6 +38,7 @@ files_read_usr_symlinks(oscap_t)
 
 #userdom_use_inherited_user_ptys(oscap_t)
 #userdom_use_inherited_user_ptys(oscap_probe_t)
+userdom_use_user_ttys(oscap_probe_t)
 
 miscfiles_read_localization(oscap_t)
 
@@ -47,13 +48,18 @@ miscfiles_read_localization(oscap_t)
 #
 
 allow oscap_probe_t self:capability { net_admin sys_nice dac_override };
-allow oscap_probe_t self:process { setsched signal };   
+allow oscap_probe_t self:process { setsched signal signull getcap getsched };   
 
 allow oscap_probe_t self:netlink_route_socket r_netlink_socket_perms;
 allow oscap_probe_t self:udp_socket create_socket_perms;;
 
+
 # probe_system_info
 allow oscap_probe_t oscap_t:unix_stream_socket create_stream_socket_perms;
+
+# probe_selinuxsecuritycontext
+allow oscap_probe_t devlog_t:sock_file getattr;
+allow oscap_probe_t proc_kcore_t:file getattr;
 
 # probe_file, probe_textfilecontent
 files_read_all_files(oscap_probe_t)
@@ -65,27 +71,28 @@ files_read_all_blk_files(oscap_probe_t)
 fs_list_all(oscap_probe_t)
 
 # probe_textfilecontent54
-kernel_read_hotplug_sysctls(oscap_probe_t)
-kernel_read_kernel_sysctls(oscap_probe_t)
-kernel_read_modprobe_sysctls(oscap_probe_t)
-kernel_read_net_sysctls(oscap_probe_t)
+kernel_read_all_sysctls(oscap_probe_t)
 kernel_read_network_state(oscap_probe_t)
 
 dev_getattr_all_blk_files(oscap_probe_t)
 dev_getattr_all_chr_files(oscap_probe_t)
 
+# probe_partition
+fs_getattr_all_fs(oscap_probe_t)
+
 # optional policy is needed
 # probe_rpminfo
+dev_read_urand(oscap_probe_t)
 optional_policy(`
 	rpm_dontaudit_manage_db(oscap_probe_t)
 	rpm_read_db(oscap_probe_t)
 ')
 
-require {
-    type secadm_t;
-    role secadm_r;
- };
+#require {
+#    type secadm_t;
+#    role secadm_r;
+# };
 
 # needs to be part of secadmuser
-oscap_run(secadm_t, secadm_r)
-oscap_probe_run(secadm_t, secadm_r)
+#oscap_run(secadm_t, secadm_r)
+#oscap_probe_run(secadm_t, secadm_r)

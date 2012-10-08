@@ -1,0 +1,46 @@
+## <summary>System secstate scripts</summary>
+
+########################################
+## <summary>
+##	Execute secstate in the secstate_t domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed to transition.
+##	</summary>
+## </param>
+#
+interface(`secstate_domtrans',`
+	gen_require(`
+		type secstate_t, secstate_exec_t;
+	')
+
+	domtrans_pattern($1, secstate_exec_t, secstate_t)
+')
+
+########################################
+## <summary>
+##	Execute secstate in the secstate domain, and
+##	allow the specified role the secstate domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed to transition.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`secstate_run',`
+	gen_require(`
+		type secstate_t;
+		type openscap_probe_t;
+	')
+	secstate_domtrans($1)
+	role $2 types secstate_t;
+	role $2 types oscap_probe_t;
+')

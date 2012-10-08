@@ -404,6 +404,9 @@ optional_policy(`
 	yam_run(sysadm_t, sysadm_r)
 ')
 
+secstate_run(sysadm_t, sysadm_r)
+oscap_run(sysadm_t, sysadm_r)
+
 ifndef(`distro_redhat',`
 	optional_policy(`
 		auth_role(sysadm_r, sysadm_t)
