@@ -8,7 +8,7 @@ PKGNAME := secstate
 
 # This is the version number of the RPM that will be
 # generated.  Typically you bump this for delivery.
-VERSION := 0.5.2
+VERSION := 0.5.9999
 
 # Bump this if creating multiple releases from the same
 # version.
