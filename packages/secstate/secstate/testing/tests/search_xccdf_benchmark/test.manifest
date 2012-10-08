@@ -1,0 +1,8 @@
+[requires]
+list_multiple_xccdf
+
+[test]
+search
+
+[verify]
+

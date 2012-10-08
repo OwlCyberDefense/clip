@@ -1,0 +1,11 @@
+[requires]
+usage
+bash_import_passreqs
+
+[test]
+audit_fail
+remediate_log_verbose
+audit_pass
+
+[verify]
+

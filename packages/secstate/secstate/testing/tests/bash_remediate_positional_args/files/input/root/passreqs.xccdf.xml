@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Benchmark id="password-req" resolved="0" xml:lang="en" style=""
+    xmlns="http://checklists.nist.gov/xccdf/1.1"
+    xmlns:cpe="http://cpe.mitre.org/language/2.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:htm="http://www.w3.org/1999/xhtml"
+    xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"
+    xsi:schemaLocation="http://checklists.nist.gov/xccdf/1.1 xccdf-1.1.4.xsd http://cpe.mitre.org/language/2.0 cpe-language_2.0.xsd">
+
+    <status date="2010-07-12">draft</status>
+    <title>Linux Password Requirements XCCDF</title>
+    <description>
+        This document defines a small set of rules used to strengthen the security of a system through the passwords created on the system.
+    </description>
+
+    <notice id="terms-of-use" xml:lang="en">
+        This would be a sample Terms of Use
+    </notice>
+    <reference href="http://iase.disa.mil/stigs/stig/index.html">
+        DISA Security Technical Implementation Guides
+    </reference>
+
+    <version>0.0.1</version>
+
+    <Profile id="profile-test">
+        <title>Profile Test</title>
+    </Profile>
+
+    <Group id="pass-reqs" selected="1" weight="0">
+        <title>Linux Password Requirement Rules</title>
+        <description>
+            Requirements relating to the length, content, age and reuse of passwords on a Linux system.
+        </description>
+
+        <Value id="pass-min-length-var" type="number" operator="greater than or equal">
+            <title>Password Minimum Length</title>
+            <description>
+                Contains the specified minimum length of passwords for the system.
+            </description>
+            <value>8</value>
+        </Value>
+
+        <Value id="pass-min-alpha-var" type="number" operator="greater than or equal">
+            <title>Password Minimum Characters</title>
+            <description>
+                Contains the specified minimum amount of characters within a password for the system.
+            </description>
+            <value>2</value>
+        </Value>
+
+        <Value id="pass-min-upper-alpha-var" type="number" operator="greater than or equal">
+            <title>Password Minimum Uppercase Characters</title>
+            <description>
+                Contains the specified minimum amount of uppercase characters with a password for the system.
+            </description>
+            <value>1</value>
+        </Value>
+
+        <Value id="pass-min-lower-alpha-var" type="number" operator="greater than or equal">
+            <title>Password Minimum Lowercase Characters</title>
+            <description>
+                Contains the specified minimum amount of lowercase characters with a password for the system.
+            </description>
+            <value>1</value>
+        </Value>
+
+        <Value id="pass-min-num-var" type="number" operator="greater than or equal">
+            <title>Password Minimum Numbers</title>
+            <description>
+                Contains the specified minimum amount of numbers within a password for the system.
+            </description>
+            <value>1</value>
+        </Value>
+
+         <Value id="pass-min-special-var" type="number" operator="greater than or equal">
+            <title>Password Minimum Special</title>
+            <description>
+                Contains the specified minimum amount of special characters within a password for the system.
+            </description>
+            <value>1</value>
+        </Value>
+
+         <Value id="pass-max-age-var" type="number" operator="greater than or equal">
+            <title>Password Minimum Days Valid</title>
+            <description>
+                Contains the specified minimum amount of days a password is valid for the system.
+            </description>
+            <value>90</value>
+        </Value>
+
+         <Value id="pass-min-remember-var" type="number" operator="greater than or equal">
+            <title>Password Minimum Remembered</title>
+            <description>
+                Contains the specified minimum amount of password changes that are remembered before a repeat is allowed.
+            </description>
+            <value>9</value>
+        </Value>
+        
+        <Value id="pass-min-age-var" type="number" operator="greater than or equal">
+           <title>Password Minimum Age</title>
+            <description>
+               Minimum Age of the password.
+            </description>
+            <value>1</value>
+        </Value>
+
+        <Rule id="password-change-time" selected="1">
+            <title>GEN0000540 - Password Change Time</title>
+            <description>
+                Before changing a password, it is required to wait 1 or more days after changing the password.
+            </description>
+            <fixtext>
+                PASS_MIN_DAYS 1 exists within /etc/login.defs
+            </fixtext>
+               <fix system="urn:xccdf:fix:script:bash">
+				{
+					"script" : "/root/passreqs.sh",
+					"environment-variables" : {	"shadow_min_days" : <sub idref="pass-min-age-var" />,
+												"login_defs_min_days" : <sub idref="pass-min-age-var" /> },
+                    "positional-args" : [ "password-change-time", "second" ]
+				}
+               </fix>
+            <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+                <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1000"/>
+            </check>
+        </Rule>
+
+        <Rule id="pass-min-length" selected="1">
+            <title>GEN0000580 - Password Minimum Length</title>
+            <description>
+                A password minimum length must be specified.
+            </description>
+            <fixtext>
+                PASS_MIN_LEN must exist within /etc/login.defs and must be provided a valid number.  Value is specified externally.
+            </fixtext>
+            <fix system="urn:xccdf:fix:script:bash">
+				{
+					"script" : "/root/passreqs.sh",
+					"environment-variables" : { "login_defs_min_len" : "<sub idref="pass-min-length-var" />" },
+                    "positional-args" : [ "pass-min-length", "second arg" ]
+				}
+            </fix>
+            <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+                <check-export value-id="pass-min-length-var" export-name="oval:com.tresys.oval.rhel:var:1017"/>
+                <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1019"/>
+            </check>
+        </Rule>
+
+        <Rule id="pam-pass-min-length" selected="1">
+            <title>GEN0000580 - (PAM) Password Minimum Length</title>
+            <description>
+                Utilizing PAM, a password minimum length must be specified.
+            </description>
+            <fixtext>
+                minlen must be specified within /etc/pam.d/system-auth and provided a valid number.  Value is specified externally.
+            </fixtext>
+            <fix system="urn:xccdf:fix:script:bash">
+				{
+					"script" : "/root/passreqs.sh",
+					"environment-variables" : { "cracklib_args" : "minlen=<sub idref="pass-min-length-var" />" },
+                    "positional-args" : [ "pam-pass-min-length", "/etc/root/passreqs.sh" ]
+				}
+            </fix>
+            <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+                <check-export value-id="pass-min-length-var" export-name="oval:com.tresys.oval.rhel:var:1017"/>
+                <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1014"/>
+            </check>
+        </Rule>
+
+        <Rule id="pass-min-alpha-upper" selected="1">
+            <title>GEN0000600 - (PAM) Password Minimum Uppercase Characters</title>
+            <description>
+                Utilizing PAM, a password must contain a minimum number of uppercause characters.
+            </description>
+            <fixtext>
+                ucredit must be specified within /etc/pam.d/system-auth and provided a valid number. Value is specified externally.
+            </fixtext>
+            <fix system="urn:xccdf:fix:script:bash">
+				{
+					"script" : "/root/passreqs.sh",
+					"environment-variables" :	{ "cracklib_args" :
+														"ucredit=<sub idref="pass-min-upper-alpha-var" /> lcredit=<sub idref="pass-min-lower-alpha-var" />"
+												},
+                    "positional-args" : [ "pass-min-alpha-upper" , "VARIABLE=\"WHATEVER\"" ]
+				}
+            </fix>
+            <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+                <check-export value-id="pass-min-upper-alpha-var" export-name="oval:com.tresys.oval.rhel:var:1031"/>
+                <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1029"/>
+            </check>
+        </Rule>
+		
+        <Rule id="pass-min-special" selected="1">
+            <title>GEN0000640 - (PAM) Password Minimum Special Characters</title>
+            <description>
+                Utilizing PAM, a password must contain a minimum number of special characters.
+            </description>
+            <fixtext>
+                ocredit must be specified within /etc/pam.d/system-auth and provided a valid number.  Value is specified externally.
+            </fixtext>
+            <fix system="urn:xccdf:fix:script:bash">
+				{
+					"script" : "/root/passreqs.sh",
+               		"environment-variables" : { "cracklib_args" : "ocredit=<sub idref="pass-min-special-var" />" },
+                    "positional-args" : [ "you should use", "bash remediation" ]
+			   	}
+            </fix>
+            <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+                <check-export value-id="pass-min-special-var" export-name="oval:com.tresys.oval.rhel:var:1039"/>
+                <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1036"/>
+            </check>
+        </Rule>
+
+        <Rule id="pass-no-repeat" selected="1">
+            <title>GEN0000680 - (PAM) Passwords Cannot Repeat Characters</title>
+            <description>
+                Utilizing PAM, a password cannot repeat characters.
+            </description>
+            <fixtext>
+                maxrepeat=1 must be specified within /etc/pam.d/system-auth.
+            </fixtext>
+            <fix system="urn:xccdf:fix:script:bash">
+				{
+					"script" : "/root/passreqs.sh",
+					"environment-variables" : { "cracklib_args" : "maxrepeat=1" }
+				}
+            </fix>
+            <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+                <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1040"/>
+            </check>
+        </Rule>
+
+        <Rule id="login-defs-pass-max-age" selected="1">
+            <title>GEN0000700-720 - (Login.defs) Passwords Are Changed Every N Days</title>
+            <description>
+                Verify within the /etc/login.defs file that the variable PASS_MAX_DAYS is set and less than or equal to the specified value.
+            </description>
+            <fixtext>
+                Within /etc/login.defs PASS_MAX_DAYS must be set and set to a value less than or equal to the externally supplied value.
+            </fixtext>
+            <fix system="urn:xccdf:fix:script:bash">
+				{
+					"script" : "/root/passreqs.sh",
+					"environment-variables" : { "login_defs_max_days" : "<sub idref="pass-max-age-var" />" }
+				}
+            </fix>
+            <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+                <check-export value-id="pass-max-age-var" export-name="oval:com.tresys.oval.rhel:var:1045"/>
+                <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1042"/>
+            </check>
+        </Rule>
+
+        <Rule id="pass-max-age" selected="1">
+            <title>GEN0000700-720 - Passwords Are Changed Every N Days</title>
+            <description>
+                Verify within the /etc/shadow file that all users with passwords are required to change their password in a specified number of days.
+            </description>
+            <fixtext>
+                Each user within /etc/shadow that is specified a password must have a value within the field representing the maximum allowed age of a passwordthat is less than or equal to the externally supplied value.
+            </fixtext>
+            <fix system="urn:xccdf:fix:script:bash">
+				{
+					"script" : "/root/passreqs.sh",
+					"environment-variables" : { "shadow_max_days" : "<sub idref="pass-max-age-var" />" }
+				}
+            </fix>
+            <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+                <check-export value-id="pass-max-age-var" export-name="oval:com.tresys.oval.rhel:var:1045"/>
+                <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1047"/>
+            </check>
+        </Rule>
+
+        <Rule id="pass-min-reuse" selected="1">
+            <title>GEN0000800 - (PAM) Passwords Cannot Be Reused Within N Days</title>
+            <description>
+                Utilizing PAM, a password cannot be reused within a specified N days or more.
+            </description>
+            <fixtext>
+                remember must be specified within /etc/pam.d/system-auth and provided a valid number.  Value is specified externally.
+            </fixtext>
+            <fix system="urn:xccdf:fix:script:bash">
+				{
+					"script" : "/root/passreqs.sh",
+					"environment-variables" : { "pam_unix_args" : "remember=<sub idref="pass-min-remember-var" />" }
+				}
+            </fix>
+            <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+                <check-export value-id="pass-min-remember-var" export-name="oval:com.tresys.oval.rhel:var:1052"/>
+                <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1049"/>
+            </check>
+        </Rule>
+    </Group>
+</Benchmark>

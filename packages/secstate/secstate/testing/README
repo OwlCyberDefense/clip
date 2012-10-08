@@ -1,0 +1,7 @@
+To run all of the tests, go to the secstate/testing directory and call
+tests.py with no arguments. This calls every test listed in active-tests.list:
+./tests.py
+
+To run a list of tests from the command line, provide a white space separated 
+list to the script in the secstate/testing directory:
+./tests.py <test1> <test2> ...

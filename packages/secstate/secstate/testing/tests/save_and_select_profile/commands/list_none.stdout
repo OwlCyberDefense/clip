@@ -1,0 +1,13 @@
+[ ]benchmark - id: password-req, title: 'linux password requirements xccdf', profile: none
+	[x]group - id: pass-reqs, title: 'linux password requirement rules'
+		[x]rule - id: password-change-time, title: 'gen0000540 - password change time'
+		[x]rule - id: passwd-accts-password, title: 'gen0000560 - passwd accounts have passwords'
+		[x]rule - id: pass-min-length, title: 'gen0000580 - password minimum length'
+		[x]rule - id: pam-pass-min-length, title: 'gen0000580 - (pam) password minimum length'
+		[x]rule - id: pass-min-alpha-upper, title: 'gen0000600 - (pam) password minimum uppercase characters'
+		[x]rule - id: pass-min-num, title: 'gen0000620 - (pam) password minimum numerics'
+		[x]rule - id: pass-min-special, title: 'gen0000640 - (pam) password minimum special characters'
+		[x]rule - id: pass-no-repeat, title: 'gen0000680 - (pam) passwords cannot repeat characters'
+		[x]rule - id: login-defs-pass-max-age, title: 'gen0000700-720 - (login.defs) passwords are changed every n days'
+		[x]rule - id: pass-max-age, title: 'gen0000700-720 - passwords are changed every n days'
+		[x]rule - id: pass-min-reuse, title: 'gen0000800 - (pam) passwords cannot be reused within n days'

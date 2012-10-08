@@ -1,0 +1,8 @@
+[requires]
+import_xccdf_benchmark
+
+[test]
+remove
+
+[verify]
+show

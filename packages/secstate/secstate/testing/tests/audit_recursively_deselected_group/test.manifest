@@ -1,0 +1,8 @@
+[requires]
+deselect_group_recursive
+
+[test]
+audit
+
+[verify]
+
