@@ -26,7 +26,7 @@ ARCH := noarch
 
 # This file will be created by tar'ing up $(PKGNAME)/
 TARBALL = $(SRPM_OUTPUT_DIR)/scap-security-guide-$(VERSION).tar.gz
-PATCHES = ssg-fix-fixes-tags.patch
+PATCHES = ssg-fix-fixes-tags.patch replace-pam-cracklib-with-pam-passwdqc.patch
 # All sources for the package.
 
 # Spec file name
