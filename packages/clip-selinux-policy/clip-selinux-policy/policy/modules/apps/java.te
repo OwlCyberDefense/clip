@@ -32,8 +32,9 @@ files_tmpfs_file(java_tmpfs_t)
 typealias java_tmpfs_t alias { staff_javaplugin_tmpfs_t user_javaplugin_tmpfs_t sysadm_javaplugin_tmpfs_t };
 typealias java_tmpfs_t alias { auditadm_tmpfs_javaplugin_t secadm_tmpfs_javaplugin_t };
 
-type unconfined_java_t;
-init_system_domain(unconfined_java_t, java_exec_t)
+# SRS: removed for CLIP for RHEL 6.2.
+#type unconfined_java_t;
+#domain_type(unconfined_java_t)
 
 ########################################
 #
@@ -140,6 +141,13 @@ optional_policy(`
 #
 
 optional_policy(`
+
+	# SRS: work-around to allow people to enable the type decl above without having to visit this section to fix the resulting errors
+	gen_require(`
+		type unconfined_java_t;
+	')
+	
+	init_system_domain(unconfined_java_t, java_exec_t)
 	# execheap is needed for itanium/BEA jrocket
 	allow unconfined_java_t self:process { execstack execmem execheap };
 
