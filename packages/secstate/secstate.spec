@@ -4,25 +4,25 @@
 %endif
 
 
+Name:           %{pkgname}
+Version:        %{version}
+Release:        %{release}
 Summary: Security State Configuration Tool
-Name: secstate
 URL: https://fedorahosted.org/secstate/
-Version: %{version}
-Release: 1%{?dist}
 License: GPLv2+ and LGPLv2+ and BSD
-Vendor: %{_vendor}
-Packager: %{_packager}
+Vendor: %{packager}
+Packager: %{packager}
 Group: System Environment/Base
-Source0: http://fedorahosted.org/secstate/raw-attachment/wiki/Download/secstate-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
-BuildArch: noarch
-BuildRequires: redhat-rpm-config python2-devel
-Requires: openscap-python >= 0.8.5
+Source0: %{pkgname}-%{version}.tar.gz
+Requires: openscap-python
 Requires: python
 Requires: libxml2-python
 Requires: libxslt-python
 Requires: puppet
 Requires: python-simplejson
+BuildArch: noarch
+BuildRequires: python2-devel
+BuildRoot: %{_tmppath}/%{name}-buildroot
 
 %description
 SecState is a Security Configuration tool that utilizes openscap and puppet
@@ -31,7 +31,7 @@ system.  SecState targets U.S. federal regulations and guidance, but can be
 used with any SCAP compliant content.
 
 %prep
-%setup -q -c
+%setup -q -n %{pkgname}
 
 %build
 
@@ -78,6 +78,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/puppet/modules/ifdefined/*
 
 %changelog
+* Mon Jun 18 2012 Spencer Shimko <sshimko@tresys.com> 0.5-git.016887c
+- Pulled into CLIP build system. 
+
 * Mon Sep 13 2010 Marshall Miller <mmiller@tresys.com> 0.4.1-1
 - Updates to man page
 - Updated the human-readable output transform

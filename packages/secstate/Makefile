@@ -12,22 +12,20 @@ VERSION := 0.5.2
 
 # Bump this if creating multiple releases from the same
 # version.
-RELEASE := 1
+RELEASE := git.6fd7a70
 
 # The name of the Vendor
-VENDOR := Fedora
+VENDOR := SecState
 
 # The name of the Packager
 PACKAGER ?= Tresys Technology, LLC
 
-DIST ?= $(shell /bin/rpm --eval '%dist')
-
 # Snag the architecture.  Assume host arch.
 # Hard code an arch if cross-compiling or going noarch.
-ARCH := x86_64
+ARCH := noarch
 
 # This file will be created by tar'ing up $(PKGNAME)/
-TARBALL = $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION).tar.gz
+TARBALL = $(SRPM_OUTPUT_DIR)/secstate-$(VERSION).tar.gz
 # All sources for the package.
 
 # Spec file name
@@ -40,6 +38,7 @@ OUTPUT_DIR ?= $(ROOT_DIR)
 SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
 
 # exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
+TAR_DEPS := $(shell find $(PKGNAME)/*)
 RPM_DEPS := $(TARBALL) $(RPM_SPEC) Makefile
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
@@ -60,8 +59,8 @@ endef
 
 all: $(PKGNAME)-rpm $(PKGNAME)-srpm
 
-$(TARBALL):
-	$(VERBOSE)cp $(notdir $(TARBALL)) $(TARBALL)
+$(TARBALL): $(TAR_DEPS)
+	tar -czf $@ $(PKGNAME)
 
 rpm: $(PKGNAME)-rpm
 
@@ -81,7 +80,7 @@ $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm: $(RPM_DEPS)
 	@echo "Building $(PKGNAME) SRPM..."
 	$(call rpm-prep)
 	cp $(TARBALL) $(RPM_TOPDIR)/SOURCES/
-	echo -e "%define dist %{nil}\n%define pkgname $(PKGNAME)\n%define _sysconfdir /etc\n%define version $(VERSION)\n%define release $(RELEASE)\n%define vendor $(VENDOR)\n%define packager $(PACKAGER)" > $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo -e "%define pkgname $(PKGNAME)\n%define _sysconfdir /etc\n%define version $(VERSION)\n%define release $(RELEASE)\n%define vendor $(VENDOR)\n%define packager $(PACKAGER)" > $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cat $(RPM_SPEC) >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cd $(RPM_TOPDIR) && rpmbuild $(RPMBUILD_ARGS) -bs SPECS/$(notdir $(RPM_SPEC)) --nodeps
 	mv  $(RPM_TOPDIR)/SRPMS/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(SRPM_OUTPUT_DIR)
@@ -90,6 +89,6 @@ clean:
 	$(RM) -r $(RPM_TMPDIR)
 
 bare: clean
-	$(RM) $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
+	$(RM) $(TARBALL) $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
 
 .PHONY: all rpm srpm $(PKGNAME)-rpm $(PKGNAME)-srpm clean bare
