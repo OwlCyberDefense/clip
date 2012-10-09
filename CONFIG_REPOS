@@ -31,7 +31,7 @@ centos = /mnt/centos-6.2-x86_64/Packages
 #opt = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackage
 
 # An EPEL repo must be available. Must be a local path (we use NFS mounts).
-epel = /mnt/repos/epel-pinned-revisions
+#epel = /mnt/repos/epel-pinned-revisions
 
 # NOTE: <= RHEL 5 requires BUILDGROUPS repo.  RHEL 6 has the BUILDGROUPS stuff built-in.
 # A groups repo must be available. Can be a local path or an http/ftp location.
