@@ -237,8 +237,8 @@ HASHED_PASSWORD='$6$314159265358$ytgatj7CAZIRFMPbEanbdi.krIJs.mS9N2JEl0jkPsCvtwC
 #       change to the SELinux system administrator role, and become root via 
 #       sudo.  The information used to create the account comes from the 
 #       USERNAME and PASSWORD values defined a few lines above.
-
-useradd -m "$USERNAME" -G wheel
+semanage user -a -R staff_r -R sysadm_r "${USERNAME}_u"
+useradd -m "$USERNAME" -G wheel -Z "${USERNAME}_u"
 
 # Yes we could have hashed this, but you just entered it in plaintext above.
 if [ x"$HASHED_PASSWORD" == "x" ]; then
