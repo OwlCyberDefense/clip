@@ -22,4 +22,4 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
 
-grep -Pq "^\s*([/\w]*)\s+.*,?nodev,?.*$" $FILE
+/bin/grep -Pq "^\s*([/\w]*)\s+.*,?nodev,?.*$" $FILE

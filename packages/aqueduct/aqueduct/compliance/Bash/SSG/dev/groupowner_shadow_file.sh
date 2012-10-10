@@ -25,4 +25,4 @@ FILE=/etc/shadow
 
 [ -f $FILE ] || exit 1
 
-chown root $FILE
+/bin/chown root $FILE

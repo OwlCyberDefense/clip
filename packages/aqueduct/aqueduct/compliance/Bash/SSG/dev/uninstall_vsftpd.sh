@@ -18,4 +18,4 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-rpm -qi vsftpd && yum erase -q -y vsftpd
+/bin/rpm -qi vsftpd && /usr/bin/yum erase -q -y vsftpd

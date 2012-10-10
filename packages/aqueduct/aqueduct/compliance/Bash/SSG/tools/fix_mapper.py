@@ -21,7 +21,6 @@ import sys, re, os
 def map_fixes():
 	FIXDIR = "scap-security-guide/RHEL6/input/fixes/"
 	PROFILES = "scap-security-guide/RHEL6/input/profiles/"
-
 	MANUAL="/usr/libexec/aqueduct/SSG/tools/manual.xml"
 
 	if len(sys.argv) != 2:
@@ -35,12 +34,16 @@ def map_fixes():
 
 	FIX_FILE = FIXDIR+"bash-ks.xml"
 	exclusions=""
+	
+	legit_scripts = os.listdir("/usr/libexec/aqueduct/SSG/scripts/")
+
 	if os.path.exists(MANUAL):
 		with open(MANUAL, "r") as manual_file:
 			exclusions = manual_file.read()
 
 	with open(FIX_FILE, "w") as fixes:
 		fixes.write('<fix-group id="bash" system="urn:xccdf:fix:script:bash" xmlns="http://checklists.nist.gov/xccdf/1.1">\n')
+		fixes.write('<!-- TODO: Add environment variables to each script. -->\n')
 
 		with open(COMMON_PROFILE, "r") as profile:
 			for line in profile:
@@ -48,7 +51,9 @@ def map_fixes():
 				
 				if inclusion and (str.find(exclusions, line) < 0):
 					inclusion = re.sub("(idref\=\"|\")", "", inclusion.group(0))
-					fixes.write("<fix rule=\"%s\">/usr/libexec/aqueduct/SSG/scripts/%s.sh</fix>\n" %(inclusion, inclusion))
+					
+					if (inclusion+".sh" in legit_scripts):
+						fixes.write("<fix rule=\"%s\"> {\"script\" : \"/usr/libexec/aqueduct/SSG/scripts/%s.sh\"} </fix>\n" %(inclusion, inclusion))
 
 		fixes.write("</fix-group>")
 

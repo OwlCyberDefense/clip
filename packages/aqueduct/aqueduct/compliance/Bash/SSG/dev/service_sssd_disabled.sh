@@ -18,4 +18,4 @@ set -e
 [ -f /etc/init.d/sssd  ] || exit 0
 
 
-chkconfig --level 0123456 sssd off
+/sbin/chkconfig --level 0123456 sssd off

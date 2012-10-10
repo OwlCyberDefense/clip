@@ -21,7 +21,7 @@ set -e
 # bail if already done
 FILE=/etc/modprobe.d/disable_ipv6_module_loading.conf
 
-[ -f $FILE ] || echo "options ipv6 disable=1"  > $FILE
+[ -f $FILE ] || /bin/echo "options ipv6 disable=1"  > $FILE
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(option\s+ipv6\s+disable=).*" "1" $FILE

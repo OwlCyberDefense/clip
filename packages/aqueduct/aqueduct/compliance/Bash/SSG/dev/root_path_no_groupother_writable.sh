@@ -18,5 +18,5 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-chmod -R g-w /root
-chmod -R o-w /root
+/bin/chmod -R g-w /root
+/bin/chmod -R o-w /root

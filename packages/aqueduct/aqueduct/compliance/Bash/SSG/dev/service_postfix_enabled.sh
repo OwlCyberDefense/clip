@@ -18,4 +18,4 @@ set -e
 
 [ -f /etc/init.d/postfix  ] || exit 1
 
-chkconfig --level 0123456 postfix on
+/sbin/chkconfig --level 0123456 postfix on

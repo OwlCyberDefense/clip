@@ -25,25 +25,25 @@ set_sysctl_param() {
 	PARAM=$1
 	DESIRED=$2
 
-	MODULE=`echo "$PARAM"|sed -e "s/\./\//g"`
+	MODULE=`/bin/echo "$PARAM"|/bin/sed -e "s/\./\//g"`
 	
-	if echo "$PARAM"| grep -qr "ipv6" /etc/modprobe.d && grep -qPr "options\s+ipv6\s+disable\=1" /etc/modprobe.d; then
+	if /bin/echo "$PARAM"| /bin/grep -qr "ipv6" /etc/modprobe.d && /bin/grep -qPr "options\s+ipv6\s+disable\=1" /etc/modprobe.d; then
 		return 0
 	fi
 
 	[ -f "/proc/sys/$MODULE" ] || return 0
 	[ -f /etc/sysctl.conf ] || return 1
 
-	if grep -q "${PARAM}" /etc/sysctl.conf; then
-		sysctl -q -p
+	if /bin/grep -q "${PARAM}" /etc/sysctl.conf; then
+		/sbin/sysctl -q -p
 	else
-		echo ""                                 >> /etc/sysctl.conf &&
-		echo "# Added by $(basename $0) on $(date -u)" >> /etc/sysctl.conf &&
-		echo "$PARAM = $DESIRED"                       >> /etc/sysctl.conf
+		/bin/echo ""                                 >> /etc/sysctl.conf &&
+		/bin/echo "# Added by $(/bin/basename $0) on $(/bin/date -u)" >> /etc/sysctl.conf &&
+		/bin/echo "$PARAM = $DESIRED"                       >> /etc/sysctl.conf
 	fi
 
 	if ! `sysctl -q -w $PARAM=$DESIRED`; then
-                echo "sysctl -w $PARAM=$DESIRED failed"
+                /bin/echo "sysctl -w $PARAM=$DESIRED failed"
         fi
 
 	. $(dirname $0)/set_general_entry

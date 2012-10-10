@@ -25,13 +25,13 @@ FILE=/etc/rsyslog.conf
 [ -f $FILE ] || exit 1
 
 # prompt for central logserver and put entry in rsyslog.conf
-echo ""
-echo "Enter the name of your central logserver (e.g. loghost.example.com)."
+/bin/echo ""
+/bin/echo "Enter the name of your central logserver (e.g. loghost.example.com)."
 read -p "logserver: " logserver
 
-if grep -qi "\*\.\*\"" "$FILE"; then
-	sed -i -r -e "s/*.*\s+@.*/@$logserver/g" "$FILE"
+if /bin/grep -qi "\*\.\*\"" "$FILE"; then
+	/bin/sed -i -r -e "s/*.*\s+@.*/@$logserver/g" "$FILE"
 else
-	sed -i -r -e "/\#\sRemote\sLogging.*/ a\
+	/bin/sed -i -r -e "/\#\sRemote\sLogging.*/ a\
 			\*.\*\t\t\t\t@$logserver" "$FILE"
 fi

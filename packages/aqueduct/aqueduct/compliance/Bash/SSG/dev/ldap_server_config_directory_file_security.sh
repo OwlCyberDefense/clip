@@ -19,5 +19,5 @@ set -e
 # limitations under the License.
 
 [ -f /etc/init.d/slapd ] || exit 0
-id ldap || mkuser ldap
-chown ldap:root /var/lib/ldap/* || exit 1
+/usr/bin/id ldap || /usr/sbin/useradd ldap
+/bin/chown ldap:root /var/lib/ldap/* || exit 1

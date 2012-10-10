@@ -64,7 +64,7 @@ set -e
 #
 #Fix Text: Create if needed and set the contents of /etc/securetty 
 #to "tty1".
-# echo tty1 > /etc/securetty 
+# /bin/echo tty1 > /etc/securetty 
 #######################DISA INFORMATION###############################
 
 #Global Variables#
@@ -73,16 +73,16 @@ PDI=GEN001000
 #Start-Lockdown
 
 # If multiple lines exist default to console
-TTYCOUNT=`cat /etc/securetty | wc -l`
+TTYCOUNT=`/bin/cat /etc/securetty | /usr/bin/wc -l`
 if [ $TTYCOUNT -gt 1 ]
 then
-  echo tty1 > /etc/securetty
+  /bin/echo tty1 > /etc/securetty
 else
   # Check the value of the single entry and if its not console or tty1 then fix
-  CURTTY=`cat /etc/securetty`
+  CURTTY=`/bin/cat /etc/securetty`
   if [ "$CURTTY" != "console" -a "$CURTTY" != "tty1" ]
   then
-    echo tty1 > /etc/securetty
+    /bin/echo tty1 > /etc/securetty
   fi
 fi
 

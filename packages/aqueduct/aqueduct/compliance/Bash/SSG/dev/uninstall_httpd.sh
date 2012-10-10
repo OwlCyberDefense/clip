@@ -18,4 +18,4 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-rpm -qi httpd && yum erase -q -y httpd
+/bin/rpm -qi httpd && /usr/bin/yum erase -q -y httpd

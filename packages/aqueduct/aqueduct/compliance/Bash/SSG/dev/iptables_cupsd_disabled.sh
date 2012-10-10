@@ -28,5 +28,5 @@ P1="-A RH-Firewall-1-INPUT -p udp -m udp --dport 631 -j ACCEPT"
 
 P2="-A RH-Firewall-1-INPUT -p tcp -m tcp --dport 631 -j ACCEPT"
 
-sed -i -r -e "/($P1|$P2)/d" $IP
-sed -i -r -e "/($P1|$P2)/d" $IP6
+/bin/sed -i -r -e "/($P1|$P2)/d" $IP
+/bin/sed -i -r -e "/($P1|$P2)/d" $IP6

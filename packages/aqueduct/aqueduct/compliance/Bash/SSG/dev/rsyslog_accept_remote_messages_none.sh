@@ -23,10 +23,10 @@ FILE=/etc/rsyslog.conf
 # Can't set ownership of this file if it doesn't exist
 [ -f $FILE ] || exit 1
 
-sed -i -r -e "/ModLoad imtcp.so/d" $FILE
-sed -i -r -e "/InputTCPServerRun.*/d" $FILE
-sed -i -r -e "/ModLoad imudp.so/d" $FILE
-sed -i -r -e "/InputUDPServerRun.*/d" $FILE
-sed -i -r -e "/ModLoad imrelp.so/d" $FILE
-sed -i -r -e "/InputRELPServerRun.*/d" $FILE
+/bin/sed -i -r -e "/ModLoad imtcp.so/d" $FILE
+/bin/sed -i -r -e "/InputTCPServerRun.*/d" $FILE
+/bin/sed -i -r -e "/ModLoad imudp.so/d" $FILE
+/bin/sed -i -r -e "/InputUDPServerRun.*/d" $FILE
+/bin/sed -i -r -e "/ModLoad imrelp.so/d" $FILE
+/bin/sed -i -r -e "/InputRELPServerRun.*/d" $FILE
 

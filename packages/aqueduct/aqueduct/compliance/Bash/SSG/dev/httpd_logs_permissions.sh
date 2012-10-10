@@ -20,7 +20,7 @@ set -e
 
 HTTPD_DIR=/var/log/httpd/
 
-service --status-all | grep httpd || exit 0
+/sbin/service --status-all | /bin/grep httpd || exit 0
 [ -d $HTTPD_DIR ] || exit 1
 
-chmod 750 $HTTPD_DIR
+/bin/chmod 750 $HTTPD_DIR

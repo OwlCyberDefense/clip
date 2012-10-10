@@ -18,4 +18,4 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-rpm -qi dhcpd && yum erase -q -y dhcpd
+/bin/rpm -qi dhcpd && /usr/bin/yum erase -q -y dhcpd

@@ -24,5 +24,5 @@ FILE=/etc/audit/audit.rules
 
 # -e 2 needs to be the last line in the file
 
-sed -i -r -e "/^-e\s+2\s*$/d" $FILE
-echo "-e 2" >> $FILE
+/bin/sed -i -r -e "/^-e\s+2\s*$/d" $FILE
+/bin/echo "-e 2" >> $FILE

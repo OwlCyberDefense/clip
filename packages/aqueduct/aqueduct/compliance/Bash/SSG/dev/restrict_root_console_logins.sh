@@ -23,4 +23,4 @@ FILE=/etc/securetty
 # If /etc/securetty doesn't exist, we can't check for virtual console entries.
 [ -f $FILE ] || exit 1
 
-sed -i -r -e '/^(\s*)vc\/[0-9]+/d' $FILE
+/bin/sed -i -r -e '/^(\s*)vc\/[0-9]+/d' $FILE

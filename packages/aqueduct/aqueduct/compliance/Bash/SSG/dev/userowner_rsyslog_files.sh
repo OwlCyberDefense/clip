@@ -26,8 +26,8 @@ FILE=/etc/rsyslog.conf
 [ -f $FILE ] || exit 1
 
 # For every LOGFILE entry in rsyslog.conf, change the userowner
-for LOGFILE in `grep -E -o "(\s)*.*(\s+)(\-|\+)*(\/[^\/]*)+(\s)*$" $FILE`; do
+for LOGFILE in `/bin/grep -E -o "(\s)*.*(\s+)(\-|\+)*(\/[^\/]*)+(\s)*$" $FILE`; do
 	LOGFILE=${LOGFILE#"-"}
 	LOGFILE=${LOGFILE#"+"}
-	[ -f $LOGFILE ] && chown -v root $LOGFILE
+	[ -f $LOGFILE ] && /bin/chown -v root $LOGFILE
 done

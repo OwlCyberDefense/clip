@@ -20,7 +20,7 @@ set -e
 
 HTTPD_DIR=/etc/httpd/conf/
 
-service --status-all | grep httpd || exit 0
+/sbin/service --status-all | /bin/grep httpd || exit 0
 [ -f $FILE ] || exit 1
 
-chmod 750 $HTTPD_DIR
+/bin/chmod 750 $HTTPD_DIR

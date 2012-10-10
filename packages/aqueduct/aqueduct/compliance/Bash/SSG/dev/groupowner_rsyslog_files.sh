@@ -24,8 +24,8 @@ set -e
 FILE=/etc/rsyslog.conf
 
 # For every LOGFILE entry in rsyslog.conf, change the groupowner
-for LOGFILE in `grep -E -o "(\s)*.*(\s+)(\-|\+)*(\/[^\/]*)+(\s)*$" $FILE`; do
+for LOGFILE in `/bin/grep -E -o "(\s)*.*(\s+)(\-|\+)*(\/[^\/]*)+(\s)*$" $FILE`; do
 	LOGFILE=${LOGFILE#"-"}
  	LOGFILE=${LOGFILE#"+"}
-	[ -f $LOGFILE ] && chown -v :root $LOGFILE
+	[ -f $LOGFILE ] && /bin/chown -v :root $LOGFILE
 done

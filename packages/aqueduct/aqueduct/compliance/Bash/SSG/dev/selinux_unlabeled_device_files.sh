@@ -20,5 +20,5 @@ set -e
 
 # I'm not sure that this the right thing to do since it doesn't fix
 # the problem after a reboot
-find /dev -type d -context \*unlabeled_t\* -exec restorecon -F {} \;
-find /dev -type c -context \*unlabeled_t\* -exec restorecon -F {} \;
+/bin/find /dev -type d -context \*unlabeled_t\* -exec restorecon -F {} \;
+/bin/find /dev -type c -context \*unlabeled_t\* -exec restorecon -F {} \;

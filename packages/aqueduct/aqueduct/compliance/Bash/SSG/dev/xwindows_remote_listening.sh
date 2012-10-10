@@ -20,6 +20,8 @@ set -e
 
 FILE=/etc/X11/xinit/xserverrc
 
+[ -f $FILE ] || exit 0
+
 . $(dirname $0)/set_general_entry
 
 safe_add_field "(exec\s+X\s+:0\s+-nolisten\s+).*" "tcp" $FILE

@@ -49,13 +49,13 @@ P6="auth\s+sufficient\s+pam\_faillock\.so\s+authsucc\s+audit\s+deny\=5\s+unlock\
 R6="auth        sufficient    pam_faillock.so authsucc audit deny=5 unlock_time=900"
 
 . $(dirname $0)/set_general_entry
-safe_add_field $P1 $R1 /etc/pam.d/system-auth
-safe_add_field $P1 $R1 /etc/pam.d/password-auth
+safe_add_field "$P1" "$R1" /etc/pam.d/system-auth
+safe_add_field "$P1" "$R1" /etc/pam.d/password-auth
 
-add_entry_before $R3 $R1 /etc/pam.d/system-auth
-add_entry_before $R3 $R1 /etc/pam.d/password-auth
+add_entry_before "$R3" "$R1" /etc/pam.d/system-auth
+add_entry_before "$R3" "$R1" /etc/pam.d/password-auth
 
-add_entry_before $R4 $R1 /etc/pam.d/system-auth
-add_entry_after $R1 $R5 /etc/pam.d/password-auth
+add_entry_before "$R4" "$R1" /etc/pam.d/system-auth
+add_entry_after "$R1" "$R5" /etc/pam.d/password-auth
 
-add_entry_before $R5 $R6 /etc/pam.d/system-auth
+add_entry_before "$R5" "$R6" /etc/pam.d/system-auth

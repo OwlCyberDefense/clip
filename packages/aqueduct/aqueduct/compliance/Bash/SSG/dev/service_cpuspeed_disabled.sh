@@ -17,4 +17,4 @@ set -e
 # limitations under the License.
 [ -f /etc/init.d/cpuspeed  ] || exit 0
 
-chkconfig --level 0123456 cpuspeed off
+/sbin/chkconfig --level 0123456 cpuspeed off

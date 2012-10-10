@@ -18,8 +18,8 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Check file hashes against rpm database
-rpm -Va | grep '^..5' || exit 0
+# Check file hashes against /bin/rpm database
+/bin/rpm -Va | /bin/grep '^..5' || exit 0
 
 # Otherwise, fail for verification
 exit 1

@@ -18,11 +18,11 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-LINES=$( cat /etc/issue | wc -l )
+LINES=$( /bin/cat /etc/issue | /usr/bin/wc -l )
 
 # Assume if <= 5 line the lawyers can't be happy
 if [ $LINES -le 5 ]; then
-	cat <<EOF >/etc/issue
+	/bin/cat <<EOF >/etc/issue
 -- WARNING --
 This system is for the use of authorized users only. Individuals
 using this computer system without authority or in excess of their

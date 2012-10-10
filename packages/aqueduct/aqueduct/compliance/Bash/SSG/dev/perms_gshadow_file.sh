@@ -25,4 +25,4 @@ FILE=/etc/gshadow
 # Can't set ownership of this file if it doesn't exist
 [ -f $FILE ] || exit 1
 
-chmod 775 $FILE
+/bin/chmod 775 $FILE

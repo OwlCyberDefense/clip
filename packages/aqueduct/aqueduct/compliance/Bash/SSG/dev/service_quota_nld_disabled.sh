@@ -17,4 +17,4 @@ set -e
 # limitations under the License.
 [ -f /etc/init.d/quota_nld  ] || exit 0
 
-chkconfig --level 0123456 quota_nld off
+/sbin/chkconfig --level 0123456 quota_nld off

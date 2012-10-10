@@ -21,5 +21,5 @@ set -e
 # If it isn't installed, it can't be running
 [ -f /etc/init.d/rhnsd ] || exit 0
 
-# Return status of chkconfig
-chkconfig --level 0123456 rhnsd off
+# Return status of /sbin/chkconfig
+/sbin/chkconfig --level 0123456 rhnsd off

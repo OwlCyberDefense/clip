@@ -26,4 +26,4 @@ FILE=/etc/grub.conf
 # If it doesn't exist, no user owner can be specified.
 [ -f $FILE ] || exit 1
 
-chown root $FILE
+/bin/chown root $FILE

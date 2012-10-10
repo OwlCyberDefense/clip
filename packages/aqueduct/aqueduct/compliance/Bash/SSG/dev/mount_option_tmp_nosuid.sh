@@ -22,6 +22,6 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
 
-if ! `grep -Pq "^\s*([\/tmp])\s+.*,?nosuid,?.*$" $FILE`; then
-	mount -o remount, nosuid /tmp
+if ! `/bin/grep -Pq "^\s*([\/tmp])\s+.*,?nosuid,?.*$" $FILE`; then
+	/bin/mount -o remount, nosuid /tmp
 fi

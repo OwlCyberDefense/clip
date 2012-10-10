@@ -25,9 +25,9 @@ RSYS=/etc/rsyslog.conf
 . $(dirname $0)/set_general_entry
 add_entry "local4.*" $RSYS
 
-touch /var/log/ldap.log
-chown root:root /var/log/ldap.log
-chmod 0600 /var/log/ldap.log
+/bin/touch /var/log/ldap.log
+/bin/chown root:root /var/log/ldap.log
+/bin/chmod 0600 /var/log/ldap.log
 
 add_entry "/var/log/ldap.log" /var/log/ldap.log
 

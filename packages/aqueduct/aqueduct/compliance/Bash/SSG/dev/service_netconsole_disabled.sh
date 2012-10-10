@@ -17,4 +17,4 @@ set -e
 # limitations under the License.
 [ -f /etc/init.d/netconsole ] || exit 0
 
-chkconfig --level 0123456 netconsole off
+/sbin/chkconfig --level 0123456 netconsole off

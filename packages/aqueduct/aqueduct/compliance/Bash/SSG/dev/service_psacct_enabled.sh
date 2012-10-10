@@ -18,4 +18,4 @@ set -e
 
 [ -f /etc/init.d/psacct  ] || exit 1
 
-chkconfig --level 0123456 psacct on
+/sbin/chkconfig --level 0123456 psacct on

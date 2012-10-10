@@ -24,4 +24,4 @@ FILE=/etc/grub.conf
 
 [ -f $FILE ] || exit 1
 
-grubby --update-kernel=ALL --args=audit=1
+/sbin/grubby --update-kernel=ALL --args=audit=1

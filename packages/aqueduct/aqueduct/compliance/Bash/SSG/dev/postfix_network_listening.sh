@@ -18,6 +18,6 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$(dirname $0)/set_postfix_common
+. $(dirname $0)/set_postfix_common
 
 add_postfix_entry inet_interfaces localhost

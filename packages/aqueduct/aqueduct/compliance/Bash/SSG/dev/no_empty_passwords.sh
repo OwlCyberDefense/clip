@@ -20,4 +20,4 @@ set -e
 
 FILE=/etc/pam.d/system-auth
 
-sed -i -r -e "/nullok/d" $FILE
+/bin/sed -i -r -e "/nullok/d" $FILE

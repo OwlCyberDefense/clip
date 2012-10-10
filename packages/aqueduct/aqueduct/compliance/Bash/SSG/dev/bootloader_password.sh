@@ -23,7 +23,7 @@ FILE=/etc/grub.conf
 # Can't set the password in grub.conf if it doesn't exist
 [ -f $FILE ] || exit 1
 
-var=$( grub-crypt --sha-512 ) || exit 1
+var=$( /sbin/grub-crypt --sha-512 ) || exit 1
 var=$var' --encrypted password-hash'
 
 . $(dirname $0)/set_general_entry

@@ -23,13 +23,13 @@ FILE=/etc/passwd
 # If /etc/passwd doesn't exist we can't identify system accounts from this listing.
 [ -f $FILE ] || exit 1
 
-echo '	If any of the following entries with UID==0 are unauthorized logins,'
-echo '	remove using "usermod -s /sbin/nologin ACCOUNT_NAME":'
+/bin/echo '	If any of the following entries with UID==0 are unauthorized logins,'
+/bin/echo '	remove using "/usr/sbin/usermod -s /sbin/nologin ACCOUNT_NAME":'
 
 # Find all system accounts and disable their login shells. 
-awk -F: '{
+/bin/awk -F: '{
 if ($3 == 0)
-	if (test $7)
+	if (/usr/bin/test $7)
 		print $1 ":" $3 ":" $7
 }' $FILE
 

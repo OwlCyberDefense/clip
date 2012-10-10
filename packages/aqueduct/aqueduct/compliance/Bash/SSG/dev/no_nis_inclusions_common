@@ -26,5 +26,5 @@ delete_nis_lines(){
 	
 	[ -f $FILE ] || exit 0
 
-	sed -i -e "/^\+\:.*/d" $FILE
+	/bin/sed -i -e "/^\+\:.*/d" $FILE
 }

@@ -18,4 +18,4 @@ set -e
 
 [ -f /etc/init.d/network  ] || exit 1
 
-chkconfig --level 0123456 network on
+/sbin/chkconfig --level 0123456 network on

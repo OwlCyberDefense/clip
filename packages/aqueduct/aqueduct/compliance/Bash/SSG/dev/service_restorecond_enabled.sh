@@ -18,4 +18,4 @@ set -e
 
 [ -f /etc/init.d/restorecond ] || exit 1
 
-chkconfig --level 0123456 restorecond on
+/sbin/chkconfig --level 0123456 restorecond on

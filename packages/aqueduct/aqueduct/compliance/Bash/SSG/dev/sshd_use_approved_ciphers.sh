@@ -20,13 +20,14 @@ set -e
 
 CONFIG=/etc/ssh/sshd_config
 
+[ -f $CONFIG ] || exit 1
+
 # bail if already done
-[ -f $CONFIG ] && \
- grep -q "Ciphers aes128-ctr,aes192-ctr,aes256-ctr" $CONFIG && \
- grep -q "MACs hmac-sha1" $CONFIG && \
+ /bin/grep -q "Ciphers aes128-ctr,aes192-ctr,aes256-ctr" $CONFIG && \
+ /bin/grep -q "MACs hmac-sha1" $CONFIG && \
  exit 0
 
-cat <<EOF >> $CONFIG
+/bin/cat <<EOF >> $CONFIG
 
 # Added by $(basename $0) on $(date -u)
 Ciphers aes128-ctr,aes192-ctr,aes256-ctr

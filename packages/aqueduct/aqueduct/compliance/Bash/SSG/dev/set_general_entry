@@ -26,14 +26,14 @@ function add_entry {
        ENTRY=$1
         FILEDIR=$2
 
-        F=` echo $FILEDIR|grep -Po "[^\/]*$" `
+        F=` /bin/echo $FILEDIR|/bin/grep -Po "[^\/]*$" `
         FILEDIR=${FILEDIR%"/$F"}
 
-        if grep -Pq "^(\s*)(\#*)(\s*)$ENTRY" "$FILEDIR/$F"; then
-                ENTRY=` echo "$ENTRY"|sed 's!\([]\*\$\/&[]\)!\\\1!g' `
-                sed -i -r -e "s!(\s*)(\#*)(\s*)$ENTRY!\3\4!g" "$FILEDIR/$F"
+        if /bin/grep -Pq "^(\s*)(\#*)(\s*)$ENTRY" "$FILEDIR/$F"; then
+                ENTRY=` /bin/echo "$ENTRY"|/bin/sed 's!\([]\*\$\/&[]\)!\\\1!g' `
+                /bin/sed -i -r -e "s!(\s*)(\#*)(\s*)$ENTRY!\3\4!g" "$FILEDIR/$F"
         else
-                echo "$ENTRY" >> "$FILEDIR/$F"
+                /bin/echo "$ENTRY" >> "$FILEDIR/$F"
         fi
 
         return
@@ -48,9 +48,9 @@ function add_entry_before {
 #     $2      - Entry to add
 #     $3      - File to edit	
 	FILE=$3
-        grep -qPzo -- "$2\n$1" $FILE && return
-        sed -i -r -e "/^$(echo -n $1 | tr "/" ".")$/d" $FILE
-        sed -i -r -e "/$2/a$1" $FILE
+        /bin/grep -qPzo -- "$2\n$1" $FILE && return
+        /bin/sed -i -r -e "/^$(/bin/echo -n $1 | /usr/bin/tr "/" ".")$/d" $FILE
+        /bin/sed -i -r -e "/$2/a$1" $FILE
 }
 
 function add_entry_after {
@@ -63,19 +63,19 @@ function add_entry_after {
 #     $3      - File to edit
 
         FILE=$3
-	grep -qPzo -- "$1\n$2" $FILE && return
-        sed -i -r -e "/^$(echo -n $1 | tr "/" ".")$/d" $FILE
-        sed -i -r -e "/$1/a$2" $FILE
+	/bin/grep -qPzo -- "$1\n$2" $FILE && return
+        /bin/sed -i -r -e "/^$(/bin/echo -n $1 | /usr/bin/tr "/" ".")$/d" $FILE
+        /bin/sed -i -r -e "/$1/a$2" $FILE
 }
 
 function safe_add_field {
 # Searches for a regular expression and replaces anything outside of parentheses
 # with the specified replace string.
 #       E.G.
-#       cat $FILE
+#       /bin/cat $FILE
 #               # # HELLO WORLD
 #       safe_add_field "(HELLO).*" " MARS" $FILE
-#       cat $FILE
+#       /bin/cat $FILE
 #               HELLO MARS
 #
 # If the string does not exist, the value inside parentheses and the new entry value
@@ -91,20 +91,20 @@ function safe_add_field {
         VAL=$2
         FILEDIR=$3
 
-        F=` echo $FILEDIR|grep -Po "[^\/]*$" `
+        F=` /bin/echo $FILEDIR|/bin/grep -Po "[^\/]*$" `
         FILEDIR=${FILEDIR%"/$F"}
 
-        if grep -Pq "^(\s*)(\#*)(\s*)($SAFE_FIELD)" "$FILEDIR/$F"; then
-                sed -i -r -e "s!(\s*)(\#*)(\s*)$SAFE_FIELD!\3\4$VAL!g" "$FILEDIR/$F"
+        if /bin/grep -Pq "^(\s*)(\#*)(\s*)($SAFE_FIELD)" "$FILEDIR/$F"; then
+                /bin/sed -i -r -e "s!(\s*)(\#*)(\s*)$SAFE_FIELD!\3\4$VAL!g" "$FILEDIR/$F"
         else
-                OUT=` echo $SAFE_FIELD|grep -Po "\([^\(|^\)]*\)" `
-                OUT=` echo $OUT | grep -Po "[^\(|^\)]*"`$VAL
-		OUT=` echo $OUT| sed -r -e "s!\\\\\s\+! !g" `
-		OUT=` echo $OUT| sed -r -e "s!\\\\\s\*!!g" `
-		OUT=` echo $OUT| sed -r -e "s!\\\\\s! !g" `
-		OUT=` echo $OUT| grep -Po '[^\\\\]*'`
+                OUT=` /bin/echo $SAFE_FIELD|/bin/grep -Po "\([^\(|^\)]*\)" `
+                OUT=` /bin/echo $OUT | /bin/grep -Po "[^\(|^\)]*"`$VAL
+		OUT=` /bin/echo $OUT| /bin/sed -r -e "s!\\\\\s\+! !g" `
+		OUT=` /bin/echo $OUT| /bin/sed -r -e "s!\\\\\s\*!!g" `
+		OUT=` /bin/echo $OUT| /bin/sed -r -e "s!\\\\\s! !g" `
+		OUT=` /bin/echo $OUT| /bin/grep -Po '[^\\\\]*'`
 		
-                echo $OUT >> "$FILEDIR/$F"
+                /bin/echo $OUT >> "$FILEDIR/$F"
         fi
 
         return

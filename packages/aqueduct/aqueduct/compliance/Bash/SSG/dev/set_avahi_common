@@ -28,15 +28,15 @@ function add_section_entry() {
 
 	[ -f $FILE ] || exit 1
 
-	sed -i -r -e "s/(\s*)(\#*)(\s*)($ENTRY)(=.*)/\3\4=$OPTION/g" $FILE
-	echo $LINE
-	COUNT=$( grep -Ec "$ENTRY\=.*" $FILE )
+	/bin/sed -i -r -e "s/(\s*)(\#*)(\s*)($ENTRY)(=.*)/\3\4=$OPTION/g" $FILE
+	/bin/echo $LINE
+	COUNT=$( /bin/grep -Ec "$ENTRY\=.*" $FILE )
 
 	if [ $COUNT -eq 0 ]; then
-		SECTIONLINE=$( grep -n "^\[$SECTION\]" $FILE )
+		SECTIONLINE=$( /bin/grep -n "^\[$SECTION\]" $FILE )
 		SECTIONLINE=${SECTIONLINE%":[$SECTION]"}
 		
-		sed -i -r -e "${SECTIONLINE}a\
+		/bin/sed -i -r -e "${SECTIONLINE}a\
 		$ENTRY=$OPTION" $FILE
 	fi
 }

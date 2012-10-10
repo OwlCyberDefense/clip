@@ -28,13 +28,13 @@ add_modprobe_entries() {
 	
 	. $(dirname $0)/set_general_entry
 	
-	if grep -r "$entry" /etc/modprobe.d; then
+	if /bin/grep -r "$entry" /etc/modprobe.d; then
 		exit 0
 	fi
 
 	if [ -f $FILE ]; then
 		safe_add_field "($entry)" "" $FILE
 	else
-		echo "${entry}" > $FILE
+		/bin/echo "${entry}" > $FILE
 	fi
 }

@@ -26,4 +26,4 @@ FILE=/etc/group
 # Can't set ownership of this file if it doesn't exist
 [ -f $FILE ] || exit 1
 
-chown -v :root $FILE
+/bin/chown -v :root $FILE

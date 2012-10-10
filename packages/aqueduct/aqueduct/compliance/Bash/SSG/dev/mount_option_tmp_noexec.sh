@@ -22,6 +22,6 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
 
-if ! `grep -Pq "^\s*([\/tmp])\s+.*,?noexec,?.*$" $FILE`; then
-	mount -o remount,noexec /tmp
+if ! `/bin/grep -Pq "^\s*([\/tmp])\s+.*,?noexec,?.*$" $FILE`; then
+	/bin/mount -o remount,noexec /tmp
 fi

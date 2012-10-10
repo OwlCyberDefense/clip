@@ -18,4 +18,4 @@ set -e
 [ -f /etc/init.d/sysstat  ] || exit 0
 
 
-chkconfig --level 0123456 sysstat off
+/sbin/chkconfig --level 0123456 sysstat off

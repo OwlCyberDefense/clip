@@ -21,6 +21,8 @@ set -e
 # set_screensaver_inactivity_timeout
 #
 
+[ -f $FILE ] || exit 0
+
 /usr/bin/gconftool-2 \
 	 --direct \
 	 --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \

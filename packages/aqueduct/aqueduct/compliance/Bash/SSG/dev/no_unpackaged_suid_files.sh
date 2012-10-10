@@ -21,4 +21,4 @@ set -e
 #no_unpackaged_suid_files
 # the sgid bit should not be set for all files
 
-find / -type f -perm /u+s || exit 1
+/usr/find / -type f -perm /u+s || exit 1

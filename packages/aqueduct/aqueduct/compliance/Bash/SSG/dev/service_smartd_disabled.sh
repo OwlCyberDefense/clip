@@ -18,4 +18,4 @@ set -e
 [ -f /etc/init.d/smartd  ] || exit 0
 
 
-chkconfig --level 0123456 smartd off
+/sbin/chkconfig --level 0123456 smartd off

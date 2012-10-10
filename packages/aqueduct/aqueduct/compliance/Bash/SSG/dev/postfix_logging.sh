@@ -30,12 +30,12 @@ safe_add_field "$PATTERN" "\t\t\t\-/var/log/maillog" "$FILE"
 
 [ -f /var/log/maillog ] || exit 1
 
-chown root:root /var/log/maillog
-chmod 600 /var/log/maillog
+/bin/chown root:root /var/log/maillog
+/bin/chmod 600 /var/log/maillog
 
-if grep -Eq "\/var\/log\/maillog" "$LOGROT"; then
+if /bin/grep -Eq "\/var\/log\/maillog" "$LOGROT"; then
 	exit 0
 else
-	sed -i -r -e "/1/i\
+	/bin/sed -i -r -e "/1/i\
 			\/var\/log\/maillog" "$LOGROT"
 fi

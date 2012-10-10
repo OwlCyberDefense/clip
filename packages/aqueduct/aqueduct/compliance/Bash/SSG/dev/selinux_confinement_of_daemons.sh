@@ -19,7 +19,7 @@ set -e
 # limitations under the License.
 
 #Check for unconfined daemons and exit with error code if found.
-ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{print $NF}' || exit 0
+/bin/ps -eZ | /bin/egrep "initrc" | /bin/egrep -vw "tr|ps|grep|bash|awk" | /usr/bin/tr ':' ' ' | /bin/awk '{print $NF}' || exit 0
 
 exit 1
 

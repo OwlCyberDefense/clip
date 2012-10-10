@@ -20,7 +20,7 @@ set -e
 
 . $(dirname $0)/audit_rules_common
 
-add_rule '-a always,exit -F arch=b32 -S fchown -F auid&gt;=500 -F auid!=4294967295 -k perm_mod'
-if uname -m|grep -q 64; then
-	add_rule '-a always,exit -F arch=b64 -S fchown -F auid&gt;=500 -F auid!=4294967295 -k perm_mod'
+add_rule '-a always,exit -F arch=b32 -S f/bin/chown -F auid&gt;=500 -F auid!=4294967295 -k perm_mod'
+if /bin/uname -m|/bin/grep -q 64; then
+	add_after '-a always,exit -F arch=b64 -S f/bin/chown -F auid&gt;=500 -F auid!=4294967295 -k perm_mod' '-a always,exit -F arch=b32 -S f/bin/chown -F auid&gt;=500 -F auid!=4294967295 -k perm_mod'
 fi

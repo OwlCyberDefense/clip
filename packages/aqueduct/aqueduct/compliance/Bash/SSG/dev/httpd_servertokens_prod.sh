@@ -20,7 +20,7 @@ set -e
 
 FILE=/etc/httpd/conf/httpd.conf
 
-service --status-all | grep httpd || exit 0
+/sbin/service --status-all | /bin/grep httpd || exit 0
 [ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry

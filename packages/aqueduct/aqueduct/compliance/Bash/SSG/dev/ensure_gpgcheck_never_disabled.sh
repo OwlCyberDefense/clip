@@ -18,7 +18,7 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# If it isn't installed, it can't be configured
+# If there is no yum repos directory, the configuration files can't be set
 [ -d /etc/yum.repos.d ] || exit 1
 
 . $(dirname $0)/set_general_entry

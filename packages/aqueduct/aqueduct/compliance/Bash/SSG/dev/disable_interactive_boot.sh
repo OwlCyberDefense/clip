@@ -22,13 +22,13 @@ FILE=/etc/sysconfig/init
 STRING='PROMPT=no'
 
 # bail if already done
-grep -q "^$STRING$" $FILE && exit 0
+/bin/grep -q "^$STRING$" $FILE && exit 0
 
 # fix if wrong
-sed -i -e "s#^PROMPT=.*#$STRING#" $FILE
+/bin/sed -i -e "s#^PROMPT=.*#$STRING#" $FILE
 
 # bail if now done
-grep -q "^$STRING$" $FILE && exit 0
+/bin/grep -q "^$STRING$" $FILE && exit 0
 
 # add if missing
-echo $STRING >> $FILE
+/bin/echo $STRING >> $FILE

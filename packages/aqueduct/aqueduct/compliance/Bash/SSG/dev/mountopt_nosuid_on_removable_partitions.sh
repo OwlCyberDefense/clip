@@ -22,4 +22,4 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
 
-grep -Pq "^\s*([/\w]*)\s+.*,?nosuid,?.*$" $FILE || exit 1
+/bin/grep -Pq "^\s*([/\w]*)\s+.*,?nosuid,?.*$" $FILE || exit 1

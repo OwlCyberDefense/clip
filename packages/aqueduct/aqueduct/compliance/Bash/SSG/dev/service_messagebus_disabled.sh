@@ -17,4 +17,4 @@ set -e
 # limitations under the License.
 [ -f /etc/init.d/messagebus  ] || exit 0
 
-chkconfig --level 0123456 messagebus off
+/sbin/chkconfig --level 0123456 messagebus off

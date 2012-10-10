@@ -24,4 +24,4 @@ FILE=/etc/grub.conf
 
 [ -f $FILE ] || exit 1
 
-grubby --update-kernel=ALL --args=nousb
+/sbin/grubby --update-kernel=ALL --args=nousb

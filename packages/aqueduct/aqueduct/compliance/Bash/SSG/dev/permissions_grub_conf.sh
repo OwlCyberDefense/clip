@@ -26,4 +26,4 @@ FILE=/boot/grub/grub.conf
 # If the file doesn't exist, it's permissions can't be set
 [ -f $FILE ] || exit 1
 
-chmod 0600 $FILE
+/bin/chmod 0600 $FILE

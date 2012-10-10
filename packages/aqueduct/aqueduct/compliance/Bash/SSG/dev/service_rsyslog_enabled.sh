@@ -17,4 +17,4 @@ set -e
 # limitations under the License.
 [ -f /etc/init.d/rsyslog  ] || exit 1
 
-chkconfig --level 0123456 rsyslog on
+/sbin/chkconfig --level 0123456 rsyslog on

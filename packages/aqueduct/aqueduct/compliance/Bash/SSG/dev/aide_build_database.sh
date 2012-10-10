@@ -20,4 +20,4 @@ set -e
 
 /usr/sbin/aide --init || exit 1
 
-cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz || exit 1
+/bin/cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz || exit 1

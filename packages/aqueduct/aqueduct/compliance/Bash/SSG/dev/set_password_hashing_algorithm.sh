@@ -23,19 +23,19 @@ PARAM=MD5_CRYPT_ENAB
 DESIRED=no
 
 # delete if multiple, add if missing
-COUNT=$( egrep "^$PARAM\s+" $FILE | wc -l )
+COUNT=$( /bin/egrep "^$PARAM\s+" $FILE | /usr/bin/wc -l )
 if [ $COUNT -ne 1 ]; then
-	sed -i -r -e "/^$PARAM\s+/d" $FILE
-	echo "$PARAM	$DESIRED" >>$FILE
+	/bin/sed -i -r -e "/^$PARAM\s+/d" $FILE
+ 	/bin/echo "$PARAM	$DESIRED" >>$FILE
 	exit
 fi
 
 # get value
 ACTION='{print $2}'
-VAL=$(awk "/^$PARAM/$ACTION" $FILE )
+VAL=$(/bin/awk "/^$PARAM/$ACTION" $FILE )
 
 # fix if wrong
-[ "x$VAL" != "x$DESIRED" ] && sed -i -r -e "s/^$PARAM\s+.*/$PARAM	$DESIRED/" $FILE
+[ "x$VAL" != "x$DESIRED" ] && /bin/sed -i -r -e "s/^$PARAM\s+.*/$PARAM	$DESIRED/" $FILE
 
 # - - - - - - - - 
 
@@ -43,19 +43,19 @@ PARAM=ENCRYPT_METHOD
 DESIRED=SHA512
 
 # delete if multiple, add if missing
-COUNT=$( egrep "^$PARAM\s+" $FILE | wc -l )
+COUNT=$( /bin/egrep "^$PARAM\s+" $FILE | /usr/bin/wc -l )
 if [ $COUNT -ne 1 ]; then
-	sed -i -r -e "/^$PARAM\s+/d" $FILE
-	echo "$PARAM	$DESIRED" >>$FILE
+	/bin/sed -i -r -e "/^$PARAM\s+/d" $FILE
+	/bin/echo "$PARAM	$DESIRED" >>$FILE
 	exit
 fi
 
 # get value
 ACTION='{print $2}'
-VAL=$(awk "/^$PARAM/$ACTION" $FILE )
+VAL=$(/bin/awk "/^$PARAM/$ACTION" $FILE )
 
 # fix if wrong
-[ "x$VAL" != "x$DESIRED" ] && sed -i -r -e "s/^$PARAM\s+.*/$PARAM	$DESIRED/" $FILE
+[ "x$VAL" != "x$DESIRED" ] && /bin/sed -i -r -e "s/^$PARAM\s+.*/$PARAM	$DESIRED/" $FILE
 
 # - - - - - - - - 
 

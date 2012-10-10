@@ -37,5 +37,5 @@ for interfaces in ${IFCFG_INTERFACES}; do
         fi
 done
 
-chkconfig --level 0123456 network off
+/sbin/chkconfig --level 0123456 network off
 

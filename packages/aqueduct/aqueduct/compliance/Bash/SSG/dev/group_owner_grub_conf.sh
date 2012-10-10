@@ -26,4 +26,4 @@ FILE=/boot/grub/grub.conf
 # If it doesn't exist, no group can be defined
 [ -f $FILE ] || exit 1
 
-chown :root $FILE
+/bin/chown :root $FILE

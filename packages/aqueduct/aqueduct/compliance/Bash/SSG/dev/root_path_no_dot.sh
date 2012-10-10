@@ -19,4 +19,4 @@ set -e
 # limitations under the License.
 
 cd /root
-PATH=`echo $PATH | sed -i -r -e "s/(:)+(\.)*(:)*/\1/g"`
+PATH=`/bin/echo $PATH | /bin/sed -i -r -e "s/(:)+(\.)*(:)*/\1/g"`

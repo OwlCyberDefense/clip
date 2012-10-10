@@ -21,4 +21,4 @@ set -e
  # If it's not installed, it's not running
 [ -f /etc/init.d/auditd ] || exit 1
 
-chkconfig --level 0123456 auditd on
+/sbin/chkconfig --level 0123456 auditd on
