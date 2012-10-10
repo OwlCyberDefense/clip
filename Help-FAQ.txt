@@ -1,0 +1,59 @@
+CLIP for RHEL 6 Frequently Asked Questions
+
+1. How do I roll an installation ISO?
+   Run "make clip-rhel6-installation-iso"
+
+2. What other things can I make?
+   Run "make help"
+
+3. What is the default username and password for CLIP?
+   The username is "clipuser" and the password is "neutronbass".
+
+4. How do I clone yum repos?
+   Setup a machine that has all the appropriate yum repos in /etc/yum/repos.d.
+   Ensure the yum-utils package is installed.  If it is a RHEL machine you must
+   visit RHN and ensure the system is associated with the channel you wish to 
+   clone.  Now run these commands changing the paths and repoids as
+   appropriate.
+
+   # reposync --norepopath -m -p /opt/rhel-6-2-x86_64/rhel-x86_64-server-6 --repoid=rhel-x86_64-server-6.2.z -l
+   # createrepo -d -g /opt/rhel-6-2-x86_64/rhel-x86_64-server-6/comps.xml /opt/rhel-6-2-x86_64/rhel-x86_64-server-6/getPackage
+   # reposync --norepopath -m -p /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6 --repoid=rhel-x86_64-server-optional-6 -l
+   # createrepo -d -g /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackages/repodata/comps.xml /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackage
+
+4. Why do I get prompted for so many passwords the first time I login?
+   The default user's password is immediately expired when the account is 
+   created.  This means you have to login and choose a new password.
+
+5a. How do I add a user?
+   Use these commands (change <USERNAME> to the appropriate username): 
+     # semanage user -a -R staff_r -R sysadm_r <USERNAME>_u
+     # useradd -Z <USERNAME>_u -m <USERNAME> -G wheel
+     # passwd foo
+     # chage -d 0
+   Note: The first command will have to be adjusted as appropriate to match the 
+         defined SELinux roles.
+
+5b. Walk me through 5a again?
+   CLIP for RHEL 6 uses user-based access controls in SELinux.  The first 
+   command, semanage, adds an SELinux user facilitating this separation and
+   provides a set of roles that user is authorized to assume.  The second 
+   command, useradd, actually creates the account and binds the Linux user 
+   ID to the SELinux user ID.  The third command is used to set the user's 
+   password.  The fourth command causes the password to immediately expire 
+   thus forcing the user to set a new password on their first login.
+
+6. How do I become a privileged user?
+   Use "sudo -s".  Make the user has a line in sudoers like this:
+    echo "<USERNAME>        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
+   Note: You will have to adjust the ROLE and TYPE fields as appropriate. For
+         example, ROLE=auditadm_r TYPE=auditadm_t. 
+
+6. An EXCEPTION was thrown during the build.  What do I do?
+   The likely culprit is an RPM that failed to roll properly. Open 
+   ./repos/my-repo/build.log.  A good option for debugging the issue
+   is to roll the RPM outside of mock.  Go into packages/<PACKAGENAME>
+   and run "make rpm".  It should fail to build again.  This time go into
+   ./tmp/src/redhat/BUILD/<PACKAGENAME>-<PACKAGEVERSION>.  This is where the 
+   build occurred.  You can now poke around in this directory to see what 
+   went wrong.
