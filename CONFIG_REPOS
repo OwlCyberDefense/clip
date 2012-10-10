@@ -35,4 +35,6 @@ centos = /mnt/centos-6.2-x86_64/Packages
 
 # NOTE: <= RHEL 5 requires BUILDGROUPS repo.  RHEL 6 has the BUILDGROUPS stuff built-in.
 # A groups repo must be available. Can be a local path or an http/ftp location.
+# WARNING: The CLIP team is no longer testing or supporting RHEL 5 builds from this tree.  
+#          It might work, but probably will not.  
 #buildgroups = /mnt/repos/buildgroups
