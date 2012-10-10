@@ -29,9 +29,10 @@ corecmd_exec_shell(sysadm_t)
 
 mls_process_read_up(sysadm_t)
 
-ubac_process_exempt(sysadm_t)
-ubac_file_exempt(sysadm_t)
-ubac_fd_exempt(sysadm_t)
+# SRS: removed for CLIP for RHEL 6.2 since we want ubac on sysadm too.
+#ubac_process_exempt(sysadm_t)
+#ubac_file_exempt(sysadm_t)
+#ubac_fd_exempt(sysadm_t)
 
 init_exec(sysadm_t)
 
