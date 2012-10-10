@@ -253,13 +253,16 @@ chage -d 0 "$USERNAME"
 # This line enables a transition via sudo instead of requiring sudo and newrole.
 echo "$USERNAME        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
 
-# Map this user to the staff_u SELinux user ID.
-semanage login -a -s staff_u "$USERNAME"
-
 ######## END DEFAULT USER CONFIG ##########
 
 # Lock the root acct to prevent direct logins
 usermod -L root
+
+# The first users of a CLIP system will be devs. Lets make things a little easier on them.
+grubby --update-kernel=ALL --remove-args=quiet --remove-args=quiet
+sed -i -e 's/^\(splashimage.*\)/#\1/' -e 's/^\(hiddenmenu.*\)/#\1/' /boot/grub/menu.lst
+plymouth-set-default-theme details --rebuild-initrd
+
 
 ###### START SECSTATE AUDIT AND REMEDIATE ###########
 
