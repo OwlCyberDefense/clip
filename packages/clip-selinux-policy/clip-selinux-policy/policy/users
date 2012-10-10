@@ -24,7 +24,9 @@ gen_user(system_u,, system_r, s0, s0 - mls_systemhigh, mcs_allcats)
 # SELinux user identity for a Linux user.  If you do not want to
 # permit any access to such users, then remove this entry.
 #
-#gen_user(user_u, user, user_r, s0, s0)
+# SRS: Due to an unforuntate bug in useradd we have to retain user_u.
+#      But we're going to use constraints to strip all access from this user ID.
+gen_user(user_u, user, user_r, s0, s0)
 #gen_user(staff_u, user, staff_r system_r sysadm_r, s0, s0 - mls_systemhigh, mcs_allcats)
 #gen_user(sysadm_u, user, sysadm_r, s0, s0 - mls_systemhigh, mcs_allcats)
 
