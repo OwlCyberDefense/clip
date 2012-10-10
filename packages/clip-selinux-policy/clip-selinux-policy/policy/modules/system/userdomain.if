@@ -961,8 +961,9 @@ template(`userdom_unpriv_user_template', `
 
 	# port access is audited even if dac would not have allowed it, so dontaudit it here
 	corenet_dontaudit_tcp_bind_all_reserved_ports($1_t)
+	# SRS: removed for CLIP
 	# Need the following rule to allow users to run vpnc
-	corenet_tcp_bind_xserver_port($1_t)
+	#corenet_tcp_bind_xserver_port($1_t)
 
 	files_exec_usr_files($1_t)
 	# cjp: why?
@@ -1096,9 +1097,10 @@ template(`userdom_admin_user_template',`
 	kernel_signull_unlabeled($1_t)
 	kernel_sigchld_unlabeled($1_t)
 
-	corenet_tcp_bind_generic_port($1_t)
+	# SRS: removed for CLIP
+	#corenet_tcp_bind_generic_port($1_t)
 	# allow setting up tunnels
-	corenet_rw_tun_tap_dev($1_t)
+	#corenet_rw_tun_tap_dev($1_t)
 
 	dev_getattr_generic_blk_files($1_t)
 	dev_getattr_generic_chr_files($1_t)
@@ -1140,9 +1142,9 @@ template(`userdom_admin_user_template',`
 
 	auth_getattr_shadow($1_t)
 	# Manage almost all files
-	auth_manage_all_files_except_auth_files($1_t)
+	# auth_manage_all_files_except_auth_files($1_t)
 	# Relabel almost all files
-	auth_relabel_all_files_except_auth_files($1_t)
+	# auth_relabel_all_files_except_auth_files($1_t)
 
 	init_telinit($1_t)
 
@@ -1214,7 +1216,8 @@ template(`userdom_security_admin_template',`
 
 	domain_obj_id_change_exemption($1)
 
-	dev_relabel_all_dev_nodes($1)
+	# SRS: removed for CLIP
+	#dev_relabel_all_dev_nodes($1)
 
 	files_create_boot_flag($1)
 
@@ -1230,15 +1233,17 @@ template(`userdom_security_admin_template',`
 	selinux_set_all_booleans($1)
 	selinux_set_parameters($1)
 
-	auth_relabel_all_files_except_auth_files($1)
-	auth_relabel_shadow($1)
+	# SRS: removed for CLIP
+	#auth_relabel_all_files_except_auth_files($1)
+	#auth_relabel_shadow($1)
 
 	init_exec($1)
 
 	logging_send_syslog_msg($1)
-	logging_read_audit_log($1)
-	logging_read_generic_logs($1)
-	logging_read_audit_config($1)
+	# SRS: removed for CLIP since only audadm should be able to read logs
+	#logging_read_audit_log($1)
+	#logging_read_audit_config($1)
+	#logging_read_generic_logs($1)
 
 	seutil_manage_bin_policy($1)
 	seutil_run_checkpolicy($1, $2)
