@@ -6,8 +6,14 @@ CLIP for RHEL 6 Frequently Asked Questions
 2. What other things can I make?
    Run "make help"
 
-3. What is the default username and password for CLIP?
-   The username is "clipuser" and the password is "neutronbass".
+3a. What is the default username and password for CLIP?
+    The username is "clipuser" and the password is "neutronbass".  You can 
+    change this in the %post of the kickstart
+    (./kickstarts/ciip-rhel6/clip-rhel6.ks).
+
+3b. What is the default bootloader password for GRUB?
+    The default password for GRUB is "neutronbass".  You can change this in 
+    the kickstart (./kickstarts/ciip-rhel6/clip-rhel6.ks).
 
 4. How do I clone yum repos?
    Setup a machine that has all the appropriate yum repos in /etc/yum/repos.d.
@@ -21,20 +27,23 @@ CLIP for RHEL 6 Frequently Asked Questions
    # reposync --norepopath -m -p /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6 --repoid=rhel-x86_64-server-optional-6 -l
    # createrepo -d -g /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackages/repodata/comps.xml /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackage
 
-4. Why do I get prompted for so many passwords the first time I login?
+5. Why do I get prompted for so many passwords the first time I login?
    The default user's password is immediately expired when the account is 
    created.  This means you have to login and choose a new password.
 
-5a. How do I add a user?
+6a. How do I add a user?
    Use these commands (change <USERNAME> to the appropriate username): 
      # semanage user -a -R staff_r -R sysadm_r <USERNAME>_u
      # useradd -Z <USERNAME>_u -m <USERNAME> -G wheel
+     # restorecon -RF /home/<USERNAME>
      # passwd foo
      # chage -d 0
    Note: The first command will have to be adjusted as appropriate to match the 
-         defined SELinux roles.
+         defined SELinux roles. The restorecon is required due to a bug in
+         useradd where it doesn't honor login mappings when creating and
+         populating user home directories.
 
-5b. Walk me through 5a again?
+7b. Walk me through 5a again?
    CLIP for RHEL 6 uses user-based access controls in SELinux.  The first 
    command, semanage, adds an SELinux user facilitating this separation and
    provides a set of roles that user is authorized to assume.  The second 
@@ -43,13 +52,19 @@ CLIP for RHEL 6 Frequently Asked Questions
    password.  The fourth command causes the password to immediately expire 
    thus forcing the user to set a new password on their first login.
 
-6. How do I become a privileged user?
+8. How do I become a privileged user?
    Use "sudo -s".  Make the user has a line in sudoers like this:
     echo "<USERNAME>        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
    Note: You will have to adjust the ROLE and TYPE fields as appropriate. For
          example, ROLE=auditadm_r TYPE=auditadm_t. 
 
-6. An EXCEPTION was thrown during the build.  What do I do?
+9. Why am I getting "permission denied" when adding a user?
+   You probably removed user_u from your SELinux policy.  Due to a bug in
+   useradd this SELinux user *must* be present.  CLIP uses SELinux constraints 
+   to strip all access from that user ID so leaving it present isn't a real
+   issue.
+
+9. An EXCEPTION was thrown during the build.  What do I do?
    The likely culprit is an RPM that failed to roll properly. Open 
    ./repos/my-repo/build.log.  A good option for debugging the issue
    is to roll the RPM outside of mock.  Go into packages/<PACKAGENAME>
