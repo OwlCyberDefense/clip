@@ -72,3 +72,28 @@ CLIP for RHEL 6 Frequently Asked Questions
    ./tmp/src/redhat/BUILD/<PACKAGENAME>-<PACKAGEVERSION>.  This is where the 
    build occurred.  You can now poke around in this directory to see what 
    went wrong.
+
+10. Why do I have to have local yum repos?
+    One of the reasons we wrote this new build and integration system is to
+    ensure consistency across builds.  That is, we wanted to ensure that an ISO
+    generated in 2012 could be re-generated in 2014 without any functional
+    differences.  Pointing to a remote repo makes this difficult to ensure.
+    mock would roll RPMs using the packages available when mock was run.  
+    However, the ISOs would be built using packages available when the ISO was 
+    rolled.  This is exacerbated if you refer to HTTP/FTP yum repos from the
+    kickstart may lead to inconsistencies between the RPMs and the ISO.  Could
+    we solve this by "wget'ing" RPMs from an HTTP/FTP repo?  Sure.  But why not
+    just use SMB/NFS mounts to get access to your central yum repo server.  At
+    Tresys we have dedicated repo servers for each distro variant.  They share
+    those repos via NFS.  Each build system NFS mounts those servers.  It is a
+    relatively painless process that has proven to lead to consistency across
+    builds.  All of this said, we're open to accepting patches from the
+    community that implement support for remote repos but do so in a way to still
+    meets the goal of reproducable builds.
+
+11. Why do I see a series of question marks in the output of "ls -l"?
+    This is SELinux enforcing a mandatory access control security policy that
+    prevents a given subject (eg sysadm) from querying the security attributes of
+    a file or directory.  Assuming you have search and read permissions on the
+    directory you will be able to view the filename, but that is it.
+
