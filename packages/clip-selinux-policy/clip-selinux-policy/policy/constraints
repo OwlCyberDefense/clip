@@ -63,15 +63,7 @@ define(`constrain_user_u',`
 		);
 	')
 ')
-define(`basic_ubac_constraint',`
-	ifdef(`enable_ubac',`
-		constrain $1 all_$1_perms
-		(
-			basic_ubac_conditions
-		);
-	')
-')
-
+#
 ########################################
 #
 # File rules
