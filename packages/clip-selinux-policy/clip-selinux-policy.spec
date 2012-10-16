@@ -175,12 +175,14 @@ make clean
 %if %{BUILD_TARGETED}
 # Build clip policy
 #%makeCmds clip mcs n y allow
+# %installCmds NAME TYPE DIRECT_INITRC POLY UNKNOWN
 %installCmds clip mcs n y allow
 %endif
 
 %if %{BUILD_MLS}
 # Build mls policy
 #%makeCmds mls mls n y deny
+# %installCmds NAME TYPE DIRECT_INITRC POLY UNKNOWN
 %installCmds mls mls n y deny
 %endif
 
