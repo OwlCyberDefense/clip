@@ -1,15 +1,14 @@
-system_r:crond_t:s0		user_r:cronjob_t:s0 staff_r:cronjob_t:s0 sysadm_r:cronjob_t:s0 system_r:system_cronjob_t:s0 unconfined_r:unconfined_cronjob_t:s0
-system_r:local_login_t:s0	user_r:user_t:s0 staff_r:staff_t:s0 sysadm_r:sysadm_t:s0 unconfined_r:unconfined_t:s0
-system_r:remote_login_t:s0	user_r:user_t:s0 staff_r:staff_t:s0 unconfined_r:unconfined_t:s0
-system_r:sshd_t:s0		user_r:user_t:s0 staff_r:staff_t:s0 sysadm_r:sysadm_t:s0 unconfined_r:unconfined_t:s0
-system_r:sulogin_t:s0		sysadm_r:sysadm_t:s0
-system_r:xdm_t:s0		user_r:user_t:s0 staff_r:staff_t:s0 sysadm_r:sysadm_t:s0 unconfined_r:unconfined_t:s0
+# SRS: CLIP config only permits users to login as staff.  Then they must su/sudo to become privileged.  This file illustrates that concept.
+system_r:crond_t:s0		staff_r:cronjob_t:s0 sysadm_r:cronjob_t:s0 system_r:system_cronjob_t:s0 
+system_r:local_login_t:s0	staff_r:staff_t:s0
+system_r:remote_login_t:s0	staff_r:staff_t:s0
+system_r:sshd_t:s0		staff_r:staff_t:s0
+system_r:sulogin_t:s0		staff_r:staff_t:s0
+system_r:xdm_t:s0		staff_r:staff_t:s0
 
-staff_r:staff_su_t:s0		user_r:user_t:s0 staff_r:staff_t:s0 sysadm_r:sysadm_t:s0
-staff_r:staff_sudo_t:s0		sysadm_r:sysadm_t:s0 staff_r:staff_t:s0
+staff_r:staff_su_t:s0		sysadm_r:sysadm_t:s0 auditadm_r:auditadm_t:s0 secadm_r:secadm_t:s0 superadm_r:superadm_t:s0sysadm_r:sysadm_t:s0 staff_r:staff_t:s0
+staff_r:staff_sudo_t:s0		sysadm_r:sysadm_t:s0 auditadm_r:auditadm_t:s0 secadm_r:secadm_t:s0 superadm_r:superadm_t:s0sysadm_r:sysadm_t:s0 staff_r:staff_t:s0
 
-sysadm_r:sysadm_su_t:s0		user_r:user_t:s0 staff_r:staff_t:s0 sysadm_r:sysadm_t:s0
+sysadm_r:sysadm_su_t:s0		staff_r:staff_t:s0 sysadm_r:sysadm_t:s0
 sysadm_r:sysadm_sudo_t:s0	sysadm_r:sysadm_t:s0
 
-user_r:user_su_t:s0		user_r:user_t:s0 staff_r:staff_t:s0 sysadm_r:sysadm_t:s0
-user_r:user_sudo_t:s0		sysadm_r:sysadm_t:s0 user_r:user_t:s0
