@@ -132,10 +132,10 @@ define REPO_ADD_FILE
 	$(VERBOSE)[ -h $(3)/$(1) ] || $(REPO_LINK) $(2)/$(1) $(3)/$(1)
 endef
 
-define CHECK_RPM_DEPS
-	@echo "Checking for required packages..."
+define CHECK_DEPS
 	@rpm -q $(HOST_RPM_DEPS) 2>&1 >/dev/null || echo "Please ensure the following RPMs are installed: $(HOST_RPM_DEPS)." || exit 1
 	@rpm -q $(HOST_REQD_PKGS) 2>&1 >/dev/null || echo "Pungi must be installed.  Please read Help-Getting-Started.txt." || exit 1
+	@if [ x"`cat /selinux/enforce`" == "x1" ]; then echo -e "This is embarassing but due to a bug in yum (bz #861281) you must do builds in permissive.\nThere is power in numbers so please help us get the bug fixed by commenting in the bug thus encouraging Red Hat to fix the problem.\nThanks!\nhttps://bugzilla.redhat.com/show_bug.cgi?id=861281" && exit 1; fi
 endef
 
 ######################################################
@@ -146,7 +146,7 @@ endef
 define RPM_RULE_template
 $(info Generating rules for rolling package $(1).)
 $(1): $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
-	$(call CHECK_RPM_DEPS)
+	$(call CHECK_DEPS)
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)$(MOCK) $(MOCK_ARGS) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
@@ -155,13 +155,13 @@ ifeq ($(ENABLE_SIGNING),y)
 endif
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-rpm:  $(1)
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-nomock-rpm:  $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
-	$(call CHECK_RPM_DEPS)
+	$(call CHECK_DEPS)
 	$(call MKDIR,$(MY_REPO_DIR))
 	$(VERBOSE)OUTPUT_DIR=$(MY_REPO_DIR) $(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $(1))) rpm
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-srpm:  $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 $(call PKG_NAME_FROM_RPM,$(notdir $(1)))-clean:
-	$(call CHECK_RPM_DEPS)
+	$(call CHECK_DEPS)
 	$(RM) $(1)
 	$(RM) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 endef
@@ -230,7 +230,7 @@ endef
 # BEGIN RULES
 
 help:
-	$(call CHECK_RPM_DEPS)
+	$(call CHECK_DEPS)
 	@echo -e "\n\n################################################################################"
 	@echo "The following make targets are available for generating installable ISOs:"
 	@echo "	all (roll all packages and generate all installation ISOs)"
@@ -281,12 +281,12 @@ $(foreach RPM, $(HOST_RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 create-repos: $(setup_all_repos)
 
 setup-my-repo: setup-pre-rolled-packages $(RPMS)
-	$(call CHECK_RPM_DEPS)
+	$(call CHECK_DEPS)
 	@echo "Generating yum repo metadata, this could take a few minutes..."
 	$(VERBOSE)cd $(MY_REPO_DIR) && $(REPO_CREATE) -g $(COMPS_FILE) .
 
 setup-pre-rolled-packages:
-	$(call CHECK_RPM_DEPS)
+	$(call CHECK_DEPS)
 	$(call MKDIR,$(MY_REPO_DIR))
 	@set -e; for pkg in $(PRE_ROLLED_PACKAGES); do \
            [ -f "$$pkg" ] || ( echo "Failed to find pre-rolled package: $$pkg" && exit 1 );\
@@ -301,22 +301,22 @@ rpms: $(RPMS)
 srpms: $(SRPMS)
 
 %.src.rpm:  FORCE
-	$(call CHECK_RPM_DEPS)
+	$(call CHECK_DEPS)
 	$(call MKDIR,$(SRPM_OUTPUT_DIR))
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
 $(LIVECDS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
-	$(call CHECK_RPM_DEPS)
+	$(call CHECK_DEPS)
 	@if [ x"$(RHEL_VER)" == "x6" ]; then echo "Sorry but at this time RHEL 6 LiveCDs won't boot due to dracut issues.";\
 echo "Press enter to continue anyway or ctrl-c to exit."; read; fi
 	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-livecd/\1/'`" livecd
 
 $(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
-	$(call CHECK_RPM_DEPS)
+	$(call CHECK_DEPS)
 	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-installation-iso/\1/'`" installation-iso
 
 $(MOCK_CONF_DIR)/$(MOCK_REL).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
-	$(call CHECK_RPM_DEPS)
+	$(call CHECK_DEPS)
 	$(VERBOSE)cat $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl > $@
 	$(VERBOSE)echo -e $(MOCK_YUM_CONF) >> $@
 	$(VERBOSE)echo '"""' >> $@
