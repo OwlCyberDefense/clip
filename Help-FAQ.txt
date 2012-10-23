@@ -97,3 +97,18 @@ CLIP for RHEL 6 Frequently Asked Questions
     a file or directory.  Assuming you have search and read permissions on the
     directory you will be able to view the filename, but that is it.
 
+12. I get errors running semodule and/or semanage.  What is going on here?
+    The likely culprit is libsemanage being configured to validate fc entries
+    prior to rolling a transaction forward.  The following is the error
+    message emitted when this occurs:
+        /etc/selinux/clip/contexts/files/file_contexts: Multiple same specifications ...
+        libsemanage.semanage_install_active: setfiles returned error code 1.
+	semodule:  Failed!
+
+    The fix for this is to disable the setfiles check in samange.conf:
+        echo -e "module-store = direct\n[setfiles]\npath=/bin/true\n[end]\n" > /etc/selinux/semanage.conf
+     
+    If you're using a CLIP kickstart the ks handles this in response to the
+    CONFIG_BUILD_ENFORCING_MODE flag.  In permissive mode this check is disabled.
+    Note: I would recommend doing this only when doing development.  Errors
+    like this are a sign of a policy problem that needs to be fixed.
