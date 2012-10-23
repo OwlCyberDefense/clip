@@ -22,13 +22,13 @@
 # Anywho, we're thinking about it, but no timeline yet ;)
 
 # A RHEL/CentOS repo must be available. Must be a local path (we use NFS mounts).
-#rhel = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-6/getPackage
-centos = /mnt/centos-6.2-x86_64/Packages
+rhel = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-6/getPackage
+#centos = /mnt/centos-6.2-x86_64/Packages
 
 # NOTE: If using RHEL, *not CentOS*, you must provide the Optional repo. 
 # An RHEL Optional repo must be available. Must be a local path (we use NFS 
 # mounts).
-#opt = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackage
+opt = /mnt/repos/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackage
 
 # An EPEL repo must be available. Must be a local path (we use NFS mounts).
 #epel = /mnt/repos/epel-pinned-revisions
