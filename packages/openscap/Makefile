@@ -8,7 +8,7 @@ PKGNAME := openscap
 
 # This is the version number of the RPM that will be
 # generated.  Typically you bump this for delivery.
-VERSION := 0.8.5
+VERSION := 0.9.1
 
 # Bump this if creating multiple releases from the same
 # version.
