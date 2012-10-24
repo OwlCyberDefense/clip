@@ -22,17 +22,18 @@ attribute proc_type;
 attribute sysctl_type;
 
 role system_r;
-role sysadm_r;
-role staff_r;
+#role sysadm_r;
+#role staff_r;
 role user_r;
 
 # here until order dependence is fixed:
-role unconfined_r;
+#role unconfined_r;
 
-ifdef(`enable_mls',`
-	role secadm_r;
-	role auditadm_r;
-')
+#ifdef(`enable_mls',`
+#	role secadm_r;
+#	role auditadm_r;
+#	role superadm_r;
+#')
 
 #
 # kernel_t is the domain of kernel threads.
