@@ -215,6 +215,8 @@ yum
 %end
 
 %post --log=/root/clip_post_install.log
+# DO NOT REMOVE THE FOLLOWING LINE. NON-EXISTENT WARRANTY VOID IF REMOVED.
+#CONFIG-BUILD-PLACEHOLDER
 export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
 
 # FIXME: Change the username and password.
@@ -237,7 +239,13 @@ HASHED_PASSWORD='$6$314159265358$ytgatj7CAZIRFMPbEanbdi.krIJs.mS9N2JEl0jkPsCvtwC
 #       change to the SELinux system administrator role, and become root via 
 #       sudo.  The information used to create the account comes from the 
 #       USERNAME and PASSWORD values defined a few lines above.
-semanage user -a -R staff_r -R sysadm_r "${USERNAME}_u"
+#
+# Don't get lost in the 'if' statement - basically map $USERNAME to superadm role if it is enabled.  
+if [ x"$CONFIG_BUILD_SUPERADM" == "xy" ]; then
+	semanage user -a -R superadm_r -R staff_r -R sysadm_r "${USERNAME}_u" 
+else
+	semanage user -a -R staff_r -R sysadm_r "${USERNAME}_u" || semanage user -a -R staff_r "${USERNAME}_u"
+fi
 useradd -m "$USERNAME" -G wheel -Z "${USERNAME}_u"
 
 # Yes we could have hashed this, but you just entered it in plaintext above.
@@ -251,18 +259,17 @@ chage -d 0 "$USERNAME"
 
 # Add the user to sudoers and setup an SELinux role/type transition.
 # This line enables a transition via sudo instead of requiring sudo and newrole.
-echo "$USERNAME        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
-
-######## END DEFAULT USER CONFIG ##########
+if [ x"$CONFIG_BUILD_SUPERADM" == "xy" ]; then
+	echo "$USERNAME        ALL=(ALL) ROLE=superadm_r TYPE=superadm_t      ALL" >> /etc/sudoers
+	echo "WARNING: This is a debug build with a super user present.  DO NOT USE IN PRODUCTION" > /etc/motd
+else
+	echo "$USERNAME        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
+fi
 
 # Lock the root acct to prevent direct logins
 usermod -L root
 
-# The first users of a CLIP system will be devs. Lets make things a little easier on them.
-grubby --update-kernel=ALL --remove-args=quiet --remove-args=quiet
-sed -i -e 's/^\(splashimage.*\)/#\1/' -e 's/^\(hiddenmenu.*\)/#\1/' /boot/grub/menu.lst
-plymouth-set-default-theme details --rebuild-initrd
-
+######## END DEFAULT USER CONFIG ##########
 
 ###### START SECSTATE AUDIT AND REMEDIATE ###########
 
@@ -285,5 +292,26 @@ secstate audit
 
 echo "All done with secstate :)  Now go play with your freshly remediated system!"
 ###### END SECSTATE AUDIT AND REMEDIATE ###########
+
+###### START CLIP-SPECIFIC CONFIGURATION ###########
+# The first users of a CLIP system will be devs. Lets make things a little easier on them.
+grubby --update-kernel=ALL --remove-args=quiet --remove-args=rhgb
+sed -i -e 's/^\(splashimage.*\)/#\1/' -e 's/^\(hiddenmenu.*\)/#\1/' /boot/grub/menu.lst
+plymouth-set-default-theme details --rebuild-initrd
+###### END CLIP-SPECIFIC CONFIGURATION ###########
+
+
+###### START - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
+###### (eg put it into permissive etc)
+export POLNAME=`sestatus |awk '/Policy from config file:/ { print $5; }'`
+if [ x"$CONFIG_BUILD_ENFORCING" != "xy" ] && [ x"$POLNAME" != "x" ]; then
+        echo -e "#THIS IS A DEBUG BUILD HENCE SELINUX IS IN PERMISSIVE MODE\nSELINUX=permissive\nSELINUXTYPE=$POLNAME\n" > /etc/selinux/config
+	echo "WARNING: This is a debug build in permissive mode.  DO NOT USE IN PRODUCTION" >> /etc/motd
+	# This line is used to make policy development easier.  It disables the "setfiles" check used by 
+	# semodule/semanage that prevents transactions containing invalid and dupe fc entries from rolling forward.
+	echo -e "module-store = direct\n[setfiles]\npath=/bin/true\n[end]\n" > /etc/selinux/semanage.conf
+	sed -ie 's/enforcing=1/enforcing=0/g' /boot/grub/menu.lst
+fi
+###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
 %end

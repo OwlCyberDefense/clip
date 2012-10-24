@@ -32,7 +32,6 @@ BUILD_DATE ?= $(shell date +%m-%d-%y)
 DEBUG ?= y
 
 PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(VER)" --name="$(NAME)" --nosource --force
-#PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="1" --name="clip" --nosource --force
 LIVECD_ARGS := --skip-compress --extra-space=104857600 --config="$(BUILD_DIR)/$(NAME).ks" --fslabel="$(NAME)"
 
 REPO_LINES ?= repo --name=centos --baseurl=http://mirror.centos.org/centos/6.2/os/$$basearch\nrepo --name=epel   --baseurl=http://download.fedora.redhat.com/pub/epel/$(VER)/$$basearch
@@ -46,10 +45,12 @@ installation-iso: $(DEPS) $(ADDTL_DEPS)
 	$(VERBOSE)test -d $(PUNGI_OS_DIR) || mkdir -p $(PUNGI_OS_DIR)
 	$(VERBOSE)cp --force $(NAME).ks $(BUILD_DIR)/$(KS)
 	$(VERBOSE)sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
+	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-PLACEHOLDER;$(CONFIG_BUILD_BASH_VARS);' $(BUILD_DIR)/$(KS) || true
 	@echo "Gathering things with pungi..."
 	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
-	sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(BUILD_DIR)/$(KS)"
-	sed -e 's/^repo/#repo/' $(BUILD_DIR)/$(KS) > $(PUNGI_OS_DIR)/$(KS)
+	@# Don't remove the "cd $(BUILD_DIR)" below b/c a bug in pungi ends up creating empty dirs in curdir.  This avoids confusion.
+	$(VERBOSE)cd $(BUILD_DIR); sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(BUILD_DIR)/$(KS)"
+	$(VERBOSE)sed -e 's/^repo/#repo/' $(BUILD_DIR)/$(KS) > $(PUNGI_OS_DIR)/$(KS)
 	@echo "Fixing the boot menu..."
 	$(VERBOSE)sudo sed -i -e "s/^label linux$$/label clip/" \
 	       -e "s/append initrd=initrd.img$$/append initrd=initrd.img ks=cdrom:$(KS)/" \
@@ -57,20 +58,22 @@ installation-iso: $(DEPS) $(ADDTL_DEPS)
 	$(PUNGI_OS_DIR)/isolinux/isolinux.cfg
 	@echo "Building ISO with pungi..."
 	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
-	sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(BUILD_DIR)/$(KS)
+	@# Don't remove the "cd $(BUILD_DIR)" below b/c a bug in pungi ends up creating empty dirs in curdir.  This avoids confusion.
+	$(VERBOSE)cd $(BUILD_DIR);sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(BUILD_DIR)/$(KS)
 	$(VERBOSE)sudo mv --force $(PUNGI_ISO_DIR)/$(NAME)-$(VER)-x86_64.iso $(OUTPUT_DIR)/
 
 
 livecd: $(DEPS) $(ADDTL_DEPS)
-	@test -d $(BUILD_DIR) || mkdir -p $(BUILD_DIR)
-	@cp --force $(KS) $(BUILD_DIR)/$(KS)
-	@cp --force $(MAYFLOWER) $(BUILD_DIR)/mayflower
-	@cp --force $(LIVECD_CREATOR) $(BUILD_DIR)/livecd-creator
-	@sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
-	@sed -i -e 's;CDLABEL;live:CDLABEL;g' $(BUILD_DIR)/livecd-creator
+	$(VERBOSE)test -d $(BUILD_DIR) || mkdir -p $(BUILD_DIR)
+	$(VERBOSE)cp --force $(KS) $(BUILD_DIR)/$(KS)
+	$(VERBOSE)cp --force $(MAYFLOWER) $(BUILD_DIR)/mayflower
+	$(VERBOSE)cp --force $(LIVECD_CREATOR) $(BUILD_DIR)/livecd-creator
+	$(VERBOSE)sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
+	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-PLACEHOLDER;$(CONFIG_BUILD_BASH_VARS);' $(BUILD_DIR)/$(KS) || true
+	$(VERBOSE)sed -i -e 's;CDLABEL;live:CDLABEL;g' $(BUILD_DIR)/livecd-creator
 	@echo "Live CD Creator needs root permissions - please enter your sudo password if prompted."
-	sudo $(BUILD_DIR)/livecd-creator  $(LIVECD_ARGS)
-	@mv --force $(NAME).iso $(OUTPUT_DIR)/
+	$(VERBOSE)sudo $(BUILD_DIR)/livecd-creator  $(LIVECD_ARGS)
+	$(VERBOSE)mv --force $(NAME).iso $(OUTPUT_DIR)/
 
 clean:
 	sudo rm -rf $(BUILD_DIR)
