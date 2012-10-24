@@ -18,6 +18,7 @@ Requires: openscap-python
 Requires: python
 Requires: libxml2-python
 Requires: libxslt-python
+Requires: puppet
 Requires: python-simplejson
 BuildArch: noarch
 BuildRequires: python2-devel
