@@ -34,16 +34,16 @@ CLIP for RHEL 6 Frequently Asked Questions
 6a. How do I add a user?
    Use these commands (change <USERNAME> to the appropriate username): 
      # semanage user -a -R staff_r -R sysadm_r <USERNAME>_u
-     # useradd -Z <USERNAME>_u -m <USERNAME> -G wheel
+     # useradd -Z <USERNAME>_u -m <USERNAME>
      # restorecon -RF /home/<USERNAME>
      # passwd foo
-     # chage -d 0
+     # chage -d 0 <USERNAME>
    Note: The first command will have to be adjusted as appropriate to match the 
          defined SELinux roles. The restorecon is required due to a bug in
          useradd where it doesn't honor login mappings when creating and
          populating user home directories.
 
-7b. Walk me through 5a again?
+6b. Walk me through 6a again?
    CLIP for RHEL 6 uses user-based access controls in SELinux.  The first 
    command, semanage, adds an SELinux user facilitating this separation and
    provides a set of roles that user is authorized to assume.  The second 
@@ -52,13 +52,13 @@ CLIP for RHEL 6 Frequently Asked Questions
    password.  The fourth command causes the password to immediately expire 
    thus forcing the user to set a new password on their first login.
 
-8. How do I become a privileged user?
+7. How do I become a privileged user?
    Use "sudo -s".  Make the user has a line in sudoers like this:
     echo "<USERNAME>        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
    Note: You will have to adjust the ROLE and TYPE fields as appropriate. For
          example, ROLE=auditadm_r TYPE=auditadm_t. 
 
-9. Why am I getting "permission denied" when adding a user?
+8. Why am I getting "permission denied" when adding a user?
    You probably removed user_u from your SELinux policy.  Due to a bug in
    useradd this SELinux user *must* be present.  CLIP uses SELinux constraints 
    to strip all access from that user ID so leaving it present isn't a real
@@ -112,3 +112,34 @@ CLIP for RHEL 6 Frequently Asked Questions
     CONFIG_BUILD_ENFORCING_MODE flag.  In permissive mode this check is disabled.
     Note: I would recommend doing this only when doing development.  Errors
     like this are a sign of a policy problem that needs to be fixed.
+
+13. What are some workflows I can use to source control my changes to CLIP and
+    keep in sync with updates?
+    You have several options here.  One option is to do your work in a branch in
+    a checkout of the CLIP git repo.  Then when a new CLIP release is made, or you
+    want to pull in a change we made in HEAD, just rebase on master.
+    Alternatively checkout our git repo to use as your own, make any changes you
+    want using any workflow you have WRT to git, then fetch from our upstream repo
+    when necessary.
+
+    If you're not using git for your own projects it becomes slightly more
+    cumbersome.  You could import a specific revision of CLIP into your SCM,
+    notate the last revision of CLIP you have in some way, and when a new CLIP
+    release comes out just apply the diff between that last revision and the new
+    revision to your tree.  I think this is the manual process you were referring
+    to above.
+
+    I recommend a slightly different workflow for Aqueduct/SecState.  Over the
+    years at Tresys we have learned that committing pre-patched upstream code
+    makes it very difficult to track.  What we now do is keep "untainted" upstream
+    code for these projects and create patches to apply on top of them.  You make
+    changes, generate a patch, stick the patch in
+    packages/aqueduct/fix-stuff.patch, and add that patch to the RPM spec file,
+    packages/aqueduct/aqueduct.spec.  This makes it easy to track changes and
+    keeps the upstream sources clean.  If appropriate you can submit these
+    packages to the upstream projects and hopefully it will get merged into the
+    project and you can stop carrying the patch in your tree.
+
+    One other workflow I want to mention is to simply point CLIP at a pre-rolled
+    RPM or yum repo.  In that way you can use your existing build system/SCM to
+    generate the package(s).
