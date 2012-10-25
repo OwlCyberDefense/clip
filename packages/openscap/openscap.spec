@@ -8,16 +8,15 @@ Summary:        Set of open source libraries enabling integration of the SCAP li
 Group:          System Environment/Libraries
 License:        LGPLv2+
 URL:            http://www.open-scap.org/
-Source0:        http://www.open-scap.org/download/%{name}-%{version}.tar.gz
+Source0:        http://fedorahosted.org/releases/o/p/openscap/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  swig libxml2-devel libxslt-devel m4 perl-XML-Parser libcurl-xml
+BuildRequires:  swig libxml2-devel libxslt-devel m4 perl-XML-Parser
 BuildRequires:  rpm-devel
 BuildRequires:  libgcrypt-devel
 BuildRequires:  pcre-devel
 BuildRequires:  libacl-devel
 BuildRequires:  libselinux-devel libcap-devel
 BuildRequires:  libblkid-devel
-BuildRequires:  libnl-devel
 %if %{?_with_check:1}%{!?_with_check:0}
 BuildRequires:  perl-XML-XPath
 %endif
@@ -25,9 +24,9 @@ Requires(post):   /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
 %description
-OpenSCAP is a set of open source libraries providing an easier path 
-for integration of the SCAP line of standards. SCAP is a line of standards 
-managed by NIST with the goal of providing a standard language 
+OpenSCAP is a set of open source libraries providing an easier path
+for integration of the SCAP line of standards. SCAP is a line of standards
+managed by NIST with the goal of providing a standard language
 for the expression of Computer Network Defense related information.
 
 %package        devel
@@ -45,29 +44,20 @@ developing applications that use %{name}.
 Summary:        Python bindings for %{name}
 Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
-BuildRequires:  python-devel 
+BuildRequires:  python-devel
 
 %description    python
 The %{name}-python package contains the bindings so that %{name}
 libraries can be used by python.
 
-%package        perl
-Summary:        Perl bindings for %{name}
-Group:          Development/Libraries
-Requires:       %{name} = %{version}-%{release}
-Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-BuildRequires:  perl-devel
-
-%description    perl
-The %{name}-perl package contains the bindings so that %{name}
-libraries can be used by perl.
-
 %package        utils
 Summary:        Openscap utilities
 Group:          Applications/System
 Requires:       %{name} = %{version}-%{release}
+Requires:       libcurl >= 7.12.0
 Requires(post):  chkconfig
 Requires(preun): chkconfig initscripts
+BuildRequires:  libcurl-devel >= 7.12.0
 
 %description    utils
 The %{name}-utils package contains various utilities based on %{name} library.
@@ -206,11 +196,6 @@ fi
 %defattr(-,root,root,-)
 %{python_sitearch}/*
 
-%files perl
-%defattr(-,root,root,-)
-%{perl_vendorarch}/*
-%{perl_vendorlib}/*
-
 %files devel
 %defattr(-,root,root,-)
 %doc docs/examples/
@@ -239,18 +224,6 @@ fi
 %{_libexecdir}/openscap/probe_gconf
 
 %changelog
-* Mon Aug 27 2012 Petr Lautrbach <plautrba@redhat.com> 0.8.5-1
-- upgrade
-
-* Tue Aug 07 2012 Petr Lautrbach <plautrba@redhat.com> 0.8.4-1
-- upgrade
-
-* Mon Jul 30 2012 Petr Lautrbach <plautrba@redhat.com> 0.8.3-1
-- upgrade
-
-* Wed Mar 28 2012 Petr Lautrbach <plautrba@redhat.com> 0.8.2-1
-- upgrade
-
-* Tue Oct 11 2011 Peter Vrabec <pvrabec@redhat.com> 0.8.0-1
+* Tue Sep 25 2012 Peter Vrabec <pvrabec@redhat.com> 0.9.0-1
 - upgrade
 
