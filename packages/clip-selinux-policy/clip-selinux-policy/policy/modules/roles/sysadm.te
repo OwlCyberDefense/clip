@@ -16,9 +16,10 @@ gen_tunable(allow_ptrace, false)
 
 userdom_admin_user_template(sysadm)
 
-ifndef(`enable_mls',`
-	userdom_security_admin_template(sysadm_t, sysadm_r)
-')
+# SRS: removed for CLIP
+#ifndef(`enable_mls',`
+#	userdom_security_admin_template(sysadm_t, sysadm_r)
+#')
 
 ########################################
 #
@@ -34,6 +35,7 @@ ubac_file_exempt(sysadm_t)
 ubac_fd_exempt(sysadm_t)
 
 init_exec(sysadm_t)
+init_stream_connect(sysadm_t)
 
 # Add/remove user home directories
 userdom_manage_user_home_dirs(sysadm_t)
@@ -51,30 +53,36 @@ ifdef(`direct_sysadm_daemon',`
 	')
 ')
 
+logging_read_generic_logs(sysadm_t)
+
 ifdef(`distro_gentoo',`
 	init_exec_rc(sysadm_t)
 ')
 
-ifndef(`enable_mls',`
-	logging_manage_audit_log(sysadm_t)
-	logging_manage_audit_config(sysadm_t)
-	logging_run_auditctl(sysadm_t, sysadm_r)
-')
+# SRS: removed for CLIP
+#ifndef(`enable_mls',`
+#	logging_manage_audit_log(sysadm_t)
+#	logging_manage_audit_config(sysadm_t)
+#	logging_run_auditctl(sysadm_t, sysadm_r)
+#')
 
-tunable_policy(`allow_ptrace',`
-	domain_ptrace_all_domains(sysadm_t)
-')
+# SRS: removed for CLIP
+#tunable_policy(`allow_ptrace',`
+#	domain_ptrace_all_domains(sysadm_t)
+#')
 
-optional_policy(`
-	amanda_run_recover(sysadm_t, sysadm_r)
-')
+# SRS: removed for CLIP
+#optional_policy(`
+#	amanda_run_recover(sysadm_t, sysadm_r)
+#')
 
-optional_policy(`
-	apache_run_helper(sysadm_t, sysadm_r)
-	#apache_run_all_scripts(sysadm_t, sysadm_r)
-	#apache_domtrans_sys_script(sysadm_t)
-	apache_role(sysadm_r, sysadm_t)
-')
+# SRS: removed for CLIP
+#optional_policy(`
+#	apache_run_helper(sysadm_t, sysadm_r)
+#	#apache_run_all_scripts(sysadm_t, sysadm_r)
+#	#apache_domtrans_sys_script(sysadm_t)
+#	apache_role(sysadm_r, sysadm_t)
+#')
 
 optional_policy(`
 	# cjp: why is this not apm_run_client
