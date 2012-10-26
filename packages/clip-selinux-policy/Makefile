@@ -6,7 +6,9 @@
 # The name of the package
 PKGNAME := clip-selinux-policy
 
-ENFORCING_MODE ?= enforcing
+# These two are typically set by the top-level CONFIG_BUILD file.
+BUILD_CONFIG_ENFORCING_MODE ?= y
+BUILD_CONFIG_SUPERADM ?= n
 
 # This is the version number of the RPM that will be
 # generated.  Typically you bump this for delivery.
@@ -57,6 +59,20 @@ define rpm-prep
 	$(call MKDIR,$(RPM_TOPDIR)/SRPMS)
 endef
 
+# Note: due to remediation content, overriding this may not work the way you expect.
+# Look at the bottom of the stock clip-rhel6--ks %post for an example.
+ifneq ($(CONFIG_BUILD_ENFORCING_MODE),n)
+	ENFORCING_MODE := enforcing
+else
+	ENFORCING_MODE := permissive
+endif
+ifneq ($(CONFIG_BUILD_SUPERADM),n)
+	ENABLE_MODULES := superadm
+else
+	ENABLE_MODULES := %{nil}
+endif
+ENABLE_MODULES := superadm
+
 all: $(PKGNAME)-rpm $(PKGNAME)-srpm
 
 rpm: $(PKGNAME)-rpm
@@ -81,7 +97,7 @@ $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm: $(RPM_DEPS)
 	@echo "Building $(PKGNAME) SRPM..."
 	$(call rpm-prep)
 	cp $(TARBALL) $(RPM_TOPDIR)/SOURCES/
-	echo -e "%define enforcing_mode $(ENFORCING_MODE)\n%define pkgname $(PKGNAME)\n%define _sysconfdir /etc\n%define version $(VERSION)\n%define release $(RELEASE)\n%define vendor $(VENDOR)\n%define packager $(PACKAGER)\nBuildArch: $(ARCH)\n"> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo -e "%define enable_modules $(ENABLE_MODULES)\n%define enforcing_mode $(ENFORCING_MODE)\n%define pkgname $(PKGNAME)\n%define _sysconfdir /etc\n%define version $(VERSION)\n%define release $(RELEASE)\n%define vendor $(VENDOR)\n%define packager $(PACKAGER)\nBuildArch: $(ARCH)\n"> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cat $(RPM_SPEC) >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cd $(RPM_TOPDIR) && rpmbuild $(RPMBUILD_ARGS) -bs SPECS/$(notdir $(RPM_SPEC)) --nodeps
 	mv  $(RPM_TOPDIR)/SRPMS/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(SRPM_OUTPUT_DIR)

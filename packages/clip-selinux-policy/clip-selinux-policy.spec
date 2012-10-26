@@ -1,12 +1,6 @@
 %define distro redhat 
 %define polyinstatiate n
 %define monolithic n
-%if %{?BUILD_TARGETED:0}%{!?BUILD_TARGETED:1}
-%define BUILD_TARGETED 1
-%endif
-%if %{?BUILD_MLS:0}%{!?BUILD_MLS:1}
-%define BUILD_MLS 1
-%endif
 %define POLICYVER 24
 %define libsepolver 2.0.41-1
 %define POLICYCOREUTILSVER 2.0.78-1
@@ -18,13 +12,11 @@ Summary: Certifiable Linux Integration Platform Policy configuration
 License: GPLv2+
 Group: System Environment/Base
 Source: %{pkgname}-%{version}.tar.gz
-
 Url: http://oss.tresys.com/repos/refpolicy/
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 
 %description 
-Certifiable Linux Integration Platform SELinux Base package
+Certifiable Linux Integration Platform SELinux core, non-policy components. 
 
 %files 
 %defattr(-,root,root,-)
@@ -68,10 +60,10 @@ fi
 #make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024  conf \
 
 %define installCmds() \
-make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 base.pp \
-make validate UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 modules \
-make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 install \
-make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 install-appconfig \
+make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" base.pp \
+make validate UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" modules \
+make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install \
+make UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install-appconfig \
 #%{__cp} *.pp %{buildroot}/%{_usr}/share/selinux/%1/ \
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/selinux/%1/policy \
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/selinux/%1/modules/active \
@@ -85,7 +77,8 @@ touch %{buildroot}%{_sysconfdir}/selinux/%1/contexts/files/file_contexts \
 touch %{buildroot}%{_sysconfdir}/selinux/%1/contexts/files/file_contexts.homedirs \
 install -m0644 config/setrans.conf %{buildroot}%{_sysconfdir}/selinux/%1/setrans.conf \
 bzip2 %{buildroot}/%{_usr}/share/selinux/%1/*.pp \
-awk '$1 !~ "/^#/" && $2 == "=" && $3 == "module" { printf "%%s.pp.bz2 ", $1 }' ./policy/modules.conf > %{buildroot}/%{_usr}/share/selinux/%1/modules.lst
+awk '$1 !~ "/^#/" && $2 == "=" && $3 == "module" { printf "%%s.pp.bz2 ", $1 }' ./policy/modules.conf > %{buildroot}/%{_usr}/share/selinux/%1/modules.lst \
+[ x""%{enable_modules}"" != "x" ] && for i in %{enable_modules}; do echo ${i}.pp.bz2 >> %{buildroot}/%{_usr}/share/selinux/%1/modules.lst; done
 %nil
 
 %define fileList() \
@@ -172,21 +165,16 @@ mkdir -p %{buildroot}%{_usr}/share/selinux/{clip,mls,modules}/
 
 # Install devel
 make clean
-%if %{BUILD_TARGETED}
 # Build clip policy
-#%makeCmds clip mcs n y allow
-# %installCmds NAME TYPE DIRECT_INITRC POLY UNKNOWN
-%installCmds clip mcs n y allow
-%endif
+# installCmds NAME TYPE DIRECT_INITRC POLY UNKNOWN
+%installCmds clip mcs n y deny
 
-%if %{BUILD_MLS}
 # Build mls policy
 #%makeCmds mls mls n y deny
-# %installCmds NAME TYPE DIRECT_INITRC POLY UNKNOWN
+#installCmds NAME TYPE DIRECT_INITRC POLY UNKNOWN
 %installCmds mls mls n y deny
-%endif
 
-make UNK_PERMS=deny NAME=clip TYPE=mcs DISTRO=%{distro} UBAC=y DIRECT_INITRC=n MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} PKGNAME=%{name}-%{version} POLY=y MLS_CATS=1024 MCS_CATS=1024 install-headers install-docs
+make UNK_PERMS=deny NAME=clip TYPE=mcs DISTRO=%{distro} UBAC=y DIRECT_INITRC=n MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} PKGNAME=%{name}-%{version} POLY=y MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install-headers install-docs
 mkdir %{buildroot}%{_usr}/share/selinux/devel/
 mkdir %{buildroot}%{_usr}/share/selinux/packages/
 mv %{buildroot}%{_usr}/share/selinux/clip/include %{buildroot}%{_usr}/share/selinux/devel/include
@@ -217,7 +205,7 @@ SELINUXTYPE=clip
 
 " > /etc/selinux/config
 
-     ln -sf ../selinux/config /etc/sysconfig/selinux 
+     ln -sf /etc/selinux/config /etc/sysconfig/selinux 
      restorecon /etc/selinux/config 2> /dev/null || :
 else
      . /etc/selinux/config
@@ -238,7 +226,6 @@ if [ $1 = 0 ]; then
 fi
 exit 0
 
-%if %{BUILD_TARGETED}
 %package clip
 Summary: Certifiable Linux Integration Platform SELinux clip base policy
 Provides: selinux-policy-base = %{version}-%{release}
@@ -251,7 +238,7 @@ Conflicts:  audispd-plugins <= 1.7.7-1
 Conflicts:  seedit
 
 %description clip
-Certifiable Linux Integration Platform policy clip base module.
+Certifiable Linux Integration Platform policy.
 Based off of reference policy refpolicy-2.20110726.tar.bz2
 
 %pre clip
@@ -274,9 +261,7 @@ exit 0
 %defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/selinux/clip/contexts/users/unconfined_u
 %fileList clip
-%endif
 
-%if %{BUILD_MLS}
 %package mls 
 Summary: Certifiable Linux Integration Platform SELinux mls base policy
 Group: System Environment/Base
@@ -312,6 +297,5 @@ exit 0
 %config(noreplace) %{_sysconfdir}/selinux/mls/contexts/users/unconfined_u
 %fileList mls
 
-%endif
 
 %changelog
