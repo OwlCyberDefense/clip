@@ -254,6 +254,9 @@ help:
 	@echo "The following make targets are available for updating the package lists used for mock and ISO generation:"
 	@for pkg in $(PKG_LISTS); do echo "	$$pkg"; done
 	@echo
+	@echo "The following make targets are available for generating yum repos used for mock and ISO generation:"
+	@for repo in $(setup_all_repos); do echo "	$$repo"; done
+	@echo
 	@echo "To burn a livecd image to a thumbdrive:"
 	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
 	@echo
