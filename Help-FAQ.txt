@@ -97,7 +97,7 @@ CLIP for RHEL 6 Frequently Asked Questions
     a file or directory.  Assuming you have search and read permissions on the
     directory you will be able to view the filename, but that is it.
 
-12. I get errors running semodule and/or semanage.  What is going on here?
+12. I get setfiles errors running semodule and/or semanage.  What is going on here?
     The likely culprit is libsemanage being configured to validate fc entries
     prior to rolling a transaction forward.  The following is the error
     message emitted when this occurs:
@@ -143,3 +143,22 @@ CLIP for RHEL 6 Frequently Asked Questions
     One other workflow I want to mention is to simply point CLIP at a pre-rolled
     RPM or yum repo.  In that way you can use your existing build system/SCM to
     generate the package(s).
+
+14. I get errors when running semanage to manipulate users and login mappings.
+    What is the deal?
+    The following error message is emitted when running:
+    # semanage login -a -s foo_u foo
+    libsemanage.dbase_llist_query: could not query record value
+    /usr/sbin/semanage: Could not query user for foo
+
+    It looks like a bug was introduced in:
+       policycoreutils-python-2.0.83-19.21.el6_2.x86_64.rpm
+
+    Please use:
+       policycoreutils-python-2.0.83-19.18.el6_2.x86_64.rpm
+
+    You can force this to be used by modifying conf/pkglist.<repo name>,
+    and running "make bare-repos setup-<repo name><ver>-repo".
+
+    A bug has already been filed with Red Hat.  When this issue is resolved
+    the FAQ will be updated.
