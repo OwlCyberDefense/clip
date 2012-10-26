@@ -2395,7 +2395,7 @@ The user domain associated with the role.
 </summary>
 </param>
 </template>
-<interface name="sudo_sigchld" lineno="173">
+<interface name="sudo_sigchld" lineno="178">
 <summary>
 Send a SIGCHLD signal to the sudo domain.
 </summary>
@@ -3928,6 +3928,76 @@ Allow mplayer executable stack
 </desc>
 </tunable>
 </module>
+<module name="oscap" filename="policy/modules/apps/oscap.if">
+<summary>policy for oscap</summary>
+<interface name="oscap_domtrans" lineno="13">
+<summary>
+Transition to oscap.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed to transition.
+</summary>
+</param>
+</interface>
+<interface name="oscap_probe_domtrans" lineno="32">
+<summary>
+Transition to oscap_probe_t.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed to transition.
+</summary>
+</param>
+</interface>
+<interface name="oscap_run" lineno="57">
+<summary>
+Execute oscap in the oscap domain, and
+allow the specified role the oscap domain.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed to transition
+</summary>
+</param>
+<param name="role">
+<summary>
+The role to be allowed the oscap domain.
+</summary>
+</param>
+</interface>
+<interface name="oscap_probe_run" lineno="82">
+<summary>
+Execute oscap probes in the oscap_probe domain, and
+allow the specified role the oscap_probe domain.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed to transition
+</summary>
+</param>
+<param name="role">
+<summary>
+The role to be allowed the oscap_probe domain.
+</summary>
+</param>
+</interface>
+<interface name="oscap_role" lineno="106">
+<summary>
+Role access for oscap
+</summary>
+<param name="role">
+<summary>
+Role allowed access
+</summary>
+</param>
+<param name="domain">
+<summary>
+User domain for the role
+</summary>
+</param>
+</interface>
+</module>
 <module name="podsleuth" filename="policy/modules/apps/podsleuth.if">
 <summary>Podsleuth is a tool to get information about an Apple (TM) iPod (TM)</summary>
 <interface name="podsleuth_domtrans" lineno="13">
@@ -4380,6 +4450,43 @@ The type of the user domain.
 </summary>
 </param>
 </template>
+</module>
+<module name="secstate" filename="policy/modules/apps/secstate.if">
+<summary>System secstate scripts</summary>
+<interface name="secstate_domtrans" lineno="13">
+<summary>
+Execute secstate in the secstate_t domain.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed to transition.
+</summary>
+</param>
+</interface>
+<interface name="secstate_run" lineno="38">
+<summary>
+Execute secstate in the secstate domain, and
+allow the specified role the secstate domain.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed to transition.
+</summary>
+</param>
+<param name="role">
+<summary>
+Role allowed access.
+</summary>
+</param>
+<rolecap/>
+</interface>
+<tunable name="secstate_remediate" dftval="false">
+<desc>
+<p>
+Allow secstate to remediate
+</p>
+</desc>
+</tunable>
 </module>
 <module name="seunshare" filename="policy/modules/apps/seunshare.if">
 <summary>Filesystem namespacing/polyinstantiation application.</summary>
@@ -56910,7 +57017,18 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="files_setattr_pid_dirs" lineno="5596">
+<interface name="files_manage_generic_pids_symlinks" lineno="5597">
+<summary>
+manage generic symbolic links
+in the /var/run directory.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="files_setattr_pid_dirs" lineno="5616">
 <summary>
 Set the attributes of the /var/run directory.
 </summary>
@@ -56920,7 +57038,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_search_pids" lineno="5616">
+<interface name="files_search_pids" lineno="5636">
 <summary>
 Search the contents of runtime process
 ID directories (/var/run).
@@ -56931,7 +57049,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_dontaudit_search_pids" lineno="5636">
+<interface name="files_dontaudit_search_pids" lineno="5656">
 <summary>
 Do not audit attempts to search
 the /var/run directory.
@@ -56942,7 +57060,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="files_list_pids" lineno="5656">
+<interface name="files_list_pids" lineno="5676">
 <summary>
 List the contents of the runtime process
 ID directories (/var/run).
@@ -56953,7 +57071,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_read_generic_pids" lineno="5675">
+<interface name="files_read_generic_pids" lineno="5695">
 <summary>
 Read generic process ID files.
 </summary>
@@ -56963,7 +57081,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_write_generic_pid_pipes" lineno="5695">
+<interface name="files_write_generic_pid_pipes" lineno="5715">
 <summary>
 Write named generic process ID pipes
 </summary>
@@ -56973,7 +57091,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_pid_filetrans" lineno="5751">
+<interface name="files_pid_filetrans" lineno="5771">
 <summary>
 Create an object in the process ID directory, with a private type.
 </summary>
@@ -57020,7 +57138,7 @@ The object class of the object being created.
 </param>
 <infoflow type="write" weight="10"/>
 </interface>
-<interface name="files_rw_generic_pids" lineno="5771">
+<interface name="files_rw_generic_pids" lineno="5791">
 <summary>
 Read and write generic process ID files.
 </summary>
@@ -57030,7 +57148,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_dontaudit_getattr_all_pids" lineno="5792">
+<interface name="files_dontaudit_getattr_all_pids" lineno="5812">
 <summary>
 Do not audit attempts to get the attributes of
 daemon runtime data files.
@@ -57041,7 +57159,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="files_dontaudit_write_all_pids" lineno="5812">
+<interface name="files_dontaudit_write_all_pids" lineno="5832">
 <summary>
 Do not audit attempts to write to daemon runtime data files.
 </summary>
@@ -57051,7 +57169,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="files_dontaudit_ioctl_all_pids" lineno="5831">
+<interface name="files_dontaudit_ioctl_all_pids" lineno="5851">
 <summary>
 Do not audit attempts to ioctl daemon runtime data files.
 </summary>
@@ -57061,7 +57179,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="files_read_all_pids" lineno="5852">
+<interface name="files_read_all_pids" lineno="5872">
 <summary>
 Read all process ID files.
 </summary>
@@ -57072,7 +57190,7 @@ Domain allowed access.
 </param>
 <rolecap/>
 </interface>
-<interface name="files_mounton_all_poly_members" lineno="5874">
+<interface name="files_mounton_all_poly_members" lineno="5894">
 <summary>
 Mount filesystems on all polyinstantiation
 member directories.
@@ -57083,7 +57201,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_delete_all_pids" lineno="5893">
+<interface name="files_delete_all_pids" lineno="5913">
 <summary>
 Delete all process IDs.
 </summary>
@@ -57094,7 +57212,7 @@ Domain allowed access.
 </param>
 <rolecap/>
 </interface>
-<interface name="files_delete_all_pid_dirs" lineno="5918">
+<interface name="files_delete_all_pid_dirs" lineno="5938">
 <summary>
 Delete all process ID directories.
 </summary>
@@ -57104,7 +57222,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_search_spool" lineno="5940">
+<interface name="files_search_spool" lineno="5960">
 <summary>
 Search the contents of generic spool
 directories (/var/spool).
@@ -57115,7 +57233,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_dontaudit_search_spool" lineno="5959">
+<interface name="files_dontaudit_search_spool" lineno="5979">
 <summary>
 Do not audit attempts to search generic
 spool directories.
@@ -57126,7 +57244,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="files_list_spool" lineno="5978">
+<interface name="files_list_spool" lineno="5998">
 <summary>
 List the contents of generic spool
 (/var/spool) directories.
@@ -57137,7 +57255,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_manage_generic_spool_dirs" lineno="5997">
+<interface name="files_manage_generic_spool_dirs" lineno="6017">
 <summary>
 Create, read, write, and delete generic
 spool directories (/var/spool).
@@ -57148,7 +57266,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_read_generic_spool" lineno="6016">
+<interface name="files_read_generic_spool" lineno="6036">
 <summary>
 Read generic spool files.
 </summary>
@@ -57158,7 +57276,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_manage_generic_spool" lineno="6036">
+<interface name="files_manage_generic_spool" lineno="6056">
 <summary>
 Create, read, write, and delete generic
 spool files.
@@ -57169,7 +57287,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_spool_filetrans" lineno="6067">
+<interface name="files_spool_filetrans" lineno="6087">
 <summary>
 Create objects in the spool directory
 with a private type with a type transition.
@@ -57191,7 +57309,7 @@ the transition will occur.
 </summary>
 </param>
 </interface>
-<interface name="files_polyinstantiate_all" lineno="6087">
+<interface name="files_polyinstantiate_all" lineno="6107">
 <summary>
 Allow access to manage all polyinstantiated
 directories on the system.
@@ -57202,7 +57320,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="files_unconfined" lineno="6141">
+<interface name="files_unconfined" lineno="6161">
 <summary>
 Unconfined access to files.
 </summary>
@@ -61731,6 +61849,17 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
+<interface name="kernel_stream_connect" lineno="2979">
+<summary>
+Allow the specified domain to connect to
+the kernel with a unix socket.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
 </module>
 <module name="mcs" filename="policy/modules/kernel/mcs.if">
 <summary>Multicategory security policy</summary>
@@ -64474,6 +64603,158 @@ Role allowed access.
 </param>
 <rolecap/>
 </interface>
+</module>
+<module name="superadm" filename="policy/modules/roles/superadm.if">
+<summary>Super user administration role (DEBUG ONLY - DONT USE IN PRODUCTION)</summary>
+<interface name="superadm_role_change" lineno="14">
+<summary>
+Change to the system administrator role.
+</summary>
+<param name="role">
+<summary>
+Role allowed access.
+</summary>
+</param>
+<rolecap/>
+</interface>
+<interface name="superadm_role_change_to" lineno="44">
+<summary>
+Change from the system administrator role.
+</summary>
+<desc>
+<p>
+Change from the system administrator role to
+the specified role.
+</p>
+<p>
+This is an interface to support third party modules
+and its use is not allowed in upstream reference
+policy.
+</p>
+</desc>
+<param name="role">
+<summary>
+Role allowed access.
+</summary>
+</param>
+<rolecap/>
+</interface>
+<interface name="superadm_shell_domtrans" lineno="62">
+<summary>
+Execute a shell in the superadm domain.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="superadm_bin_spec_domtrans" lineno="83">
+<summary>
+Execute a generic bin program in the superadm domain.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="superadm_entry_spec_domtrans" lineno="106">
+<summary>
+Execute all entrypoint files in the superadm domain. This
+is an explicit transition, requiring the
+caller to use setexeccon().
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="superadm_entry_spec_domtrans_to" lineno="141">
+<summary>
+Allow superadm to execute all entrypoint files in
+a specified domain.  This is an explicit transition,
+requiring the caller to use setexeccon().
+</summary>
+<desc>
+<p>
+Allow superadm to execute all entrypoint files in
+a specified domain.  This is an explicit transition,
+requiring the caller to use setexeccon().
+</p>
+<p>
+This is a interface to support third party modules
+and its use is not allowed in upstream reference
+policy.
+</p>
+</desc>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="superadm_bin_spec_domtrans_to" lineno="175">
+<summary>
+Allow superadm to execute a generic bin program in
+a specified domain.  This is an explicit transition,
+requiring the caller to use setexeccon().
+</summary>
+<desc>
+<p>
+Allow superadm to execute a generic bin program in
+a specified domain.
+</p>
+<p>
+This is a interface to support third party modules
+and its use is not allowed in upstream reference
+policy.
+</p>
+</desc>
+<param name="domain">
+<summary>
+Domain to execute in.
+</summary>
+</param>
+</interface>
+<interface name="superadm_sigchld" lineno="196">
+<summary>
+Send a SIGCHLD signal to superadm users.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="superadm_use_fds" lineno="214">
+<summary>
+Inherit and use superadm file descriptors
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="superadm_rw_pipes" lineno="232">
+<summary>
+Read and write superadm user unnamed pipes.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<tunable name="allow_ptrace" dftval="false">
+<desc>
+<p>
+Allow superadm to debug or ptrace all processes.
+</p>
+</desc>
+</tunable>
 </module>
 <module name="sysadm" filename="policy/modules/roles/sysadm.if">
 <summary>General system administration role</summary>
@@ -80637,7 +80918,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_login_pgm_domain" lineno="95">
+<interface name="auth_login_pgm_domain" lineno="94">
 <summary>
 Make the specified domain used for a login program.
 </summary>
@@ -80647,7 +80928,7 @@ Domain type used for a login program domain.
 </summary>
 </param>
 </interface>
-<interface name="auth_login_entry_type" lineno="173">
+<interface name="auth_login_entry_type" lineno="176">
 <summary>
 Use the login program as an entry point program.
 </summary>
@@ -80657,7 +80938,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_file" lineno="203">
+<interface name="auth_file" lineno="206">
 <summary>
 Make the specified type usable as a
 login file.
@@ -80679,7 +80960,7 @@ Type to be used as a login file.
 </param>
 <infoflow type="none"/>
 </interface>
-<interface name="auth_domtrans_login_program" lineno="227">
+<interface name="auth_domtrans_login_program" lineno="230">
 <summary>
 Execute a login_program in the target domain.
 </summary>
@@ -80694,7 +80975,7 @@ The type of the login_program process.
 </summary>
 </param>
 </interface>
-<interface name="auth_ranged_domtrans_login_program" lineno="257">
+<interface name="auth_ranged_domtrans_login_program" lineno="260">
 <summary>
 Execute a login_program in the target domain,
 with a range transition.
@@ -80715,7 +80996,7 @@ Range of the login program.
 </summary>
 </param>
 </interface>
-<interface name="auth_search_cache" lineno="283">
+<interface name="auth_search_cache" lineno="286">
 <summary>
 Search authentication cache
 </summary>
@@ -80725,7 +81006,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_read_cache" lineno="301">
+<interface name="auth_read_cache" lineno="304">
 <summary>
 Read authentication cache
 </summary>
@@ -80735,7 +81016,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_rw_cache" lineno="319">
+<interface name="auth_rw_cache" lineno="322">
 <summary>
 Read/Write authentication cache
 </summary>
@@ -80745,7 +81026,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_manage_cache" lineno="337">
+<interface name="auth_manage_cache" lineno="340">
 <summary>
 Manage authentication cache
 </summary>
@@ -80755,7 +81036,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_var_filetrans_cache" lineno="356">
+<interface name="auth_var_filetrans_cache" lineno="359">
 <summary>
 Automatic transition from cache_t to cache.
 </summary>
@@ -80765,7 +81046,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_domtrans_chk_passwd" lineno="374">
+<interface name="auth_domtrans_chk_passwd" lineno="377">
 <summary>
 Run unix_chkpwd to check a password.
 </summary>
@@ -80775,7 +81056,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="auth_domtrans_chkpwd" lineno="422">
+<interface name="auth_domtrans_chkpwd" lineno="425">
 <summary>
 Run unix_chkpwd to check a password.
 Stripped down version to be called within boolean
@@ -80786,7 +81067,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="auth_run_chk_passwd" lineno="448">
+<interface name="auth_run_chk_passwd" lineno="451">
 <summary>
 Execute chkpwd programs in the chkpwd domain.
 </summary>
@@ -80801,7 +81082,7 @@ The role to allow the chkpwd domain.
 </summary>
 </param>
 </interface>
-<interface name="auth_domtrans_upd_passwd" lineno="467">
+<interface name="auth_domtrans_upd_passwd" lineno="470">
 <summary>
 Execute a domain transition to run unix_update.
 </summary>
@@ -80811,7 +81092,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="auth_run_upd_passwd" lineno="492">
+<interface name="auth_run_upd_passwd" lineno="495">
 <summary>
 Execute updpwd programs in the updpwd domain.
 </summary>
@@ -80826,7 +81107,7 @@ The role to allow the updpwd domain.
 </summary>
 </param>
 </interface>
-<interface name="auth_getattr_shadow" lineno="511">
+<interface name="auth_getattr_shadow" lineno="514">
 <summary>
 Get the attributes of the shadow passwords file.
 </summary>
@@ -80836,7 +81117,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_dontaudit_getattr_shadow" lineno="531">
+<interface name="auth_dontaudit_getattr_shadow" lineno="534">
 <summary>
 Do not audit attempts to get the attributes
 of the shadow passwords file.
@@ -80847,7 +81128,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="auth_read_shadow" lineno="553">
+<interface name="auth_read_shadow" lineno="556">
 <summary>
 Read the shadow passwords file (/etc/shadow)
 </summary>
@@ -80857,7 +81138,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_can_read_shadow_passwords" lineno="577">
+<interface name="auth_can_read_shadow_passwords" lineno="580">
 <summary>
 Pass shadow assertion for reading.
 </summary>
@@ -80876,7 +81157,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_tunable_read_shadow" lineno="603">
+<interface name="auth_tunable_read_shadow" lineno="606">
 <summary>
 Read the shadow password file.
 </summary>
@@ -80894,7 +81175,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_dontaudit_read_shadow" lineno="623">
+<interface name="auth_dontaudit_read_shadow" lineno="626">
 <summary>
 Do not audit attempts to read the shadow
 password file (/etc/shadow).
@@ -80905,7 +81186,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="auth_rw_shadow" lineno="641">
+<interface name="auth_rw_shadow" lineno="644">
 <summary>
 Read and write the shadow password file (/etc/shadow).
 </summary>
@@ -80915,7 +81196,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_manage_shadow" lineno="663">
+<interface name="auth_manage_shadow" lineno="666">
 <summary>
 Create, read, write, and delete the shadow
 password file.
@@ -80926,7 +81207,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_etc_filetrans_shadow" lineno="683">
+<interface name="auth_etc_filetrans_shadow" lineno="686">
 <summary>
 Automatic transition from etc to shadow.
 </summary>
@@ -80936,7 +81217,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_relabelto_shadow" lineno="702">
+<interface name="auth_relabelto_shadow" lineno="705">
 <summary>
 Relabel to the shadow
 password file type.
@@ -80947,7 +81228,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_relabel_shadow" lineno="724">
+<interface name="auth_relabel_shadow" lineno="727">
 <summary>
 Relabel from and to the shadow
 password file type.
@@ -80958,7 +81239,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_append_faillog" lineno="745">
+<interface name="auth_append_faillog" lineno="748">
 <summary>
 Append to the login failure log.
 </summary>
@@ -80968,7 +81249,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_rw_faillog" lineno="764">
+<interface name="auth_rw_faillog" lineno="767">
 <summary>
 Read and write the login failure log.
 </summary>
@@ -80978,7 +81259,17 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_read_lastlog" lineno="784">
+<interface name="auth_manage_faillog" lineno="786">
+<summary>
+Manage the login failure log.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="auth_read_lastlog" lineno="808">
 <summary>
 Read the last logins log.
 </summary>
@@ -80989,7 +81280,7 @@ Domain allowed access.
 </param>
 <rolecap/>
 </interface>
-<interface name="auth_append_lastlog" lineno="803">
+<interface name="auth_append_lastlog" lineno="827">
 <summary>
 Append only to the last logins log.
 </summary>
@@ -80999,7 +81290,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_rw_lastlog" lineno="822">
+<interface name="auth_rw_lastlog" lineno="846">
 <summary>
 Read and write to the last logins log.
 </summary>
@@ -81009,7 +81300,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_domtrans_pam" lineno="841">
+<interface name="auth_domtrans_pam" lineno="865">
 <summary>
 Execute pam programs in the pam domain.
 </summary>
@@ -81019,7 +81310,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="auth_signal_pam" lineno="859">
+<interface name="auth_signal_pam" lineno="883">
 <summary>
 Send generic signals to pam processes.
 </summary>
@@ -81029,7 +81320,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_run_pam" lineno="882">
+<interface name="auth_run_pam" lineno="906">
 <summary>
 Execute pam programs in the PAM domain.
 </summary>
@@ -81044,7 +81335,7 @@ The role to allow the PAM domain.
 </summary>
 </param>
 </interface>
-<interface name="auth_exec_pam" lineno="901">
+<interface name="auth_exec_pam" lineno="925">
 <summary>
 Execute the pam program.
 </summary>
@@ -81054,7 +81345,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_read_var_auth" lineno="920">
+<interface name="auth_read_var_auth" lineno="944">
 <summary>
 Read var auth files. Used by various other applications
 and pam applets etc.
@@ -81065,7 +81356,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_rw_var_auth" lineno="940">
+<interface name="auth_rw_var_auth" lineno="964">
 <summary>
 Read and write var auth files. Used by various other applications
 and pam applets etc.
@@ -81076,7 +81367,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_manage_var_auth" lineno="960">
+<interface name="auth_manage_var_auth" lineno="984">
 <summary>
 Manage var auth files. Used by various other applications
 and pam applets etc.
@@ -81087,7 +81378,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_read_pam_pid" lineno="981">
+<interface name="auth_read_pam_pid" lineno="1005">
 <summary>
 Read PAM PID files.
 </summary>
@@ -81097,7 +81388,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_dontaudit_read_pam_pid" lineno="1001">
+<interface name="auth_dontaudit_read_pam_pid" lineno="1025">
 <summary>
 Do not audit attemps to read PAM PID files.
 </summary>
@@ -81107,7 +81398,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="auth_delete_pam_pid" lineno="1019">
+<interface name="auth_delete_pam_pid" lineno="1043">
 <summary>
 Delete pam PID files.
 </summary>
@@ -81117,7 +81408,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_manage_pam_pid" lineno="1039">
+<interface name="auth_manage_pam_pid" lineno="1063">
 <summary>
 Manage pam PID files.
 </summary>
@@ -81127,7 +81418,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_domtrans_pam_console" lineno="1059">
+<interface name="auth_domtrans_pam_console" lineno="1083">
 <summary>
 Execute pam_console with a domain transition.
 </summary>
@@ -81137,7 +81428,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="auth_search_pam_console_data" lineno="1078">
+<interface name="auth_search_pam_console_data" lineno="1102">
 <summary>
 Search the contents of the
 pam_console data directory.
@@ -81148,7 +81439,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_list_pam_console_data" lineno="1098">
+<interface name="auth_list_pam_console_data" lineno="1122">
 <summary>
 List the contents of the pam_console
 data directory.
@@ -81159,7 +81450,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_relabel_pam_console_data_dirs" lineno="1117">
+<interface name="auth_relabel_pam_console_data_dirs" lineno="1141">
 <summary>
 Relabel pam_console data directories.
 </summary>
@@ -81169,7 +81460,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_read_pam_console_data" lineno="1135">
+<interface name="auth_read_pam_console_data" lineno="1159">
 <summary>
 Read pam_console data files.
 </summary>
@@ -81179,7 +81470,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_manage_pam_console_data" lineno="1156">
+<interface name="auth_manage_pam_console_data" lineno="1180">
 <summary>
 Create, read, write, and delete
 pam_console data files.
@@ -81190,7 +81481,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_delete_pam_console_data" lineno="1176">
+<interface name="auth_delete_pam_console_data" lineno="1200">
 <summary>
 Delete pam_console data.
 </summary>
@@ -81200,7 +81491,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_read_all_dirs_except_auth_files" lineno="1203">
+<interface name="auth_read_all_dirs_except_auth_files" lineno="1227">
 <summary>
 Read all directories on the filesystem, except
 login files and listed exceptions.
@@ -81217,7 +81508,7 @@ must be negated by the caller.
 </summary>
 </param>
 </interface>
-<interface name="auth_read_all_dirs_except_shadow" lineno="1228">
+<interface name="auth_read_all_dirs_except_shadow" lineno="1252">
 <summary>
 Read all directories on the filesystem, except
 the shadow passwords and listed exceptions.
@@ -81234,7 +81525,7 @@ must be negated by the caller.
 </summary>
 </param>
 </interface>
-<interface name="auth_read_all_files_except_auth_files" lineno="1251">
+<interface name="auth_read_all_files_except_auth_files" lineno="1275">
 <summary>
 Read all files on the filesystem, except
 login files and listed exceptions.
@@ -81252,7 +81543,7 @@ must be negated by the caller.
 </param>
 <rolecap/>
 </interface>
-<interface name="auth_read_all_files_except_shadow" lineno="1277">
+<interface name="auth_read_all_files_except_shadow" lineno="1301">
 <summary>
 Read all files on the filesystem, except
 the shadow passwords and listed exceptions.
@@ -81270,7 +81561,7 @@ must be negated by the caller.
 </param>
 <rolecap/>
 </interface>
-<interface name="auth_read_all_symlinks_except_auth_files" lineno="1299">
+<interface name="auth_read_all_symlinks_except_auth_files" lineno="1323">
 <summary>
 Read all symbolic links on the filesystem, except
 login files and listed exceptions.
@@ -81287,7 +81578,7 @@ must be negated by the caller.
 </summary>
 </param>
 </interface>
-<interface name="auth_read_all_symlinks_except_shadow" lineno="1324">
+<interface name="auth_read_all_symlinks_except_shadow" lineno="1348">
 <summary>
 Read all symbolic links on the filesystem, except
 the shadow passwords and listed exceptions.
@@ -81304,7 +81595,7 @@ must be negated by the caller.
 </summary>
 </param>
 </interface>
-<interface name="auth_relabel_all_files_except_auth_files" lineno="1346">
+<interface name="auth_relabel_all_files_except_auth_files" lineno="1370">
 <summary>
 Relabel all files on the filesystem, except
 login files and listed exceptions.
@@ -81321,7 +81612,7 @@ must be negated by the caller.
 </summary>
 </param>
 </interface>
-<interface name="auth_relabel_all_files_except_shadow" lineno="1371">
+<interface name="auth_relabel_all_files_except_shadow" lineno="1395">
 <summary>
 Relabel all files on the filesystem, except
 the shadow passwords and listed exceptions.
@@ -81338,7 +81629,7 @@ must be negated by the caller.
 </summary>
 </param>
 </interface>
-<interface name="auth_rw_all_files_except_auth_files" lineno="1393">
+<interface name="auth_rw_all_files_except_auth_files" lineno="1417">
 <summary>
 Read and write all files on the filesystem, except
 login files and listed exceptions.
@@ -81355,7 +81646,7 @@ must be negated by the caller.
 </summary>
 </param>
 </interface>
-<interface name="auth_rw_all_files_except_shadow" lineno="1418">
+<interface name="auth_rw_all_files_except_shadow" lineno="1442">
 <summary>
 Read and write all files on the filesystem, except
 the shadow passwords and listed exceptions.
@@ -81372,7 +81663,7 @@ must be negated by the caller.
 </summary>
 </param>
 </interface>
-<interface name="auth_manage_all_files_except_auth_files" lineno="1440">
+<interface name="auth_manage_all_files_except_auth_files" lineno="1464">
 <summary>
 Manage all files on the filesystem, except
 login files passwords and listed exceptions.
@@ -81389,7 +81680,7 @@ must be negated by the caller.
 </summary>
 </param>
 </interface>
-<interface name="auth_manage_all_files_except_shadow" lineno="1465">
+<interface name="auth_manage_all_files_except_shadow" lineno="1489">
 <summary>
 Manage all files on the filesystem, except
 the shadow passwords and listed exceptions.
@@ -81406,7 +81697,7 @@ must be negated by the caller.
 </summary>
 </param>
 </interface>
-<interface name="auth_domtrans_utempter" lineno="1480">
+<interface name="auth_domtrans_utempter" lineno="1504">
 <summary>
 Execute utempter programs in the utempter domain.
 </summary>
@@ -81416,7 +81707,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="auth_run_utempter" lineno="1503">
+<interface name="auth_run_utempter" lineno="1527">
 <summary>
 Execute utempter programs in the utempter domain.
 </summary>
@@ -81431,7 +81722,7 @@ The role to allow the utempter domain.
 </summary>
 </param>
 </interface>
-<interface name="auth_dontaudit_exec_utempter" lineno="1522">
+<interface name="auth_dontaudit_exec_utempter" lineno="1546">
 <summary>
 Do not audit attemps to execute utempter executable.
 </summary>
@@ -81441,7 +81732,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="auth_setattr_login_records" lineno="1540">
+<interface name="auth_setattr_login_records" lineno="1564">
 <summary>
 Set the attributes of login record files.
 </summary>
@@ -81451,7 +81742,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_read_login_records" lineno="1560">
+<interface name="auth_read_login_records" lineno="1584">
 <summary>
 Read login records files (/var/log/wtmp).
 </summary>
@@ -81462,7 +81753,7 @@ Domain allowed access.
 </param>
 <rolecap/>
 </interface>
-<interface name="auth_dontaudit_read_login_records" lineno="1581">
+<interface name="auth_dontaudit_read_login_records" lineno="1605">
 <summary>
 Do not audit attempts to read login records
 files (/var/log/wtmp).
@@ -81474,7 +81765,7 @@ Domain to not audit.
 </param>
 <rolecap/>
 </interface>
-<interface name="auth_dontaudit_write_login_records" lineno="1600">
+<interface name="auth_dontaudit_write_login_records" lineno="1624">
 <summary>
 Do not audit attempts to write to
 login records files.
@@ -81485,7 +81776,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="auth_append_login_records" lineno="1618">
+<interface name="auth_append_login_records" lineno="1642">
 <summary>
 Append to login records (wtmp).
 </summary>
@@ -81495,7 +81786,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_write_login_records" lineno="1637">
+<interface name="auth_write_login_records" lineno="1661">
 <summary>
 Write to login records (wtmp).
 </summary>
@@ -81505,7 +81796,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_rw_login_records" lineno="1655">
+<interface name="auth_rw_login_records" lineno="1679">
 <summary>
 Read and write login records.
 </summary>
@@ -81515,7 +81806,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_log_filetrans_login_records" lineno="1675">
+<interface name="auth_log_filetrans_login_records" lineno="1699">
 <summary>
 Create a login records in the log directory
 using a type transition.
@@ -81526,7 +81817,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_manage_login_records" lineno="1694">
+<interface name="auth_manage_login_records" lineno="1718">
 <summary>
 Create, read, write, and delete login
 records files.
@@ -81537,7 +81828,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_relabel_login_records" lineno="1713">
+<interface name="auth_relabel_login_records" lineno="1737">
 <summary>
 Relabel login record files.
 </summary>
@@ -81547,7 +81838,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="auth_use_nsswitch" lineno="1741">
+<interface name="auth_use_nsswitch" lineno="1765">
 <summary>
 Use nsswitch to look up user, password, group, or
 host information.
@@ -81567,7 +81858,7 @@ Domain allowed access.
 </param>
 <infoflow type="both" weight="10"/>
 </interface>
-<interface name="auth_unconfined" lineno="1812">
+<interface name="auth_unconfined" lineno="1836">
 <summary>
 Unconfined access to the authlogin module.
 </summary>
@@ -86553,7 +86844,17 @@ Domain allowed access.
 </param>
 <infoflow type="read" weight="10"/>
 </interface>
-<interface name="udev_rw_db" lineno="206">
+<interface name="udev_delete_db" lineno="206">
+<summary>
+Allow process to delete list of devices.
+</summary>
+<param name="domain">
+<summary>
+The type of the process performing this action.
+</summary>
+</param>
+</interface>
+<interface name="udev_rw_db" lineno="225">
 <summary>
 Allow process to modify list of devices.
 </summary>
@@ -86563,7 +86864,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="udev_manage_pid_files" lineno="226">
+<interface name="udev_manage_pid_files" lineno="245">
 <summary>
 Create, read, write, and delete
 udev pid files.
@@ -87118,7 +87419,7 @@ is the prefix for user_t).
 </summary>
 </param>
 </template>
-<template name="userdom_restricted_xwindows_user_template" lineno="868">
+<template name="userdom_restricted_xwindows_user_template" lineno="871">
 <summary>
 The template for creating a unprivileged xwindows login user.
 </summary>
@@ -87139,7 +87440,7 @@ is the prefix for user_t).
 </summary>
 </param>
 </template>
-<template name="userdom_unpriv_user_template" lineno="943">
+<template name="userdom_unpriv_user_template" lineno="946">
 <summary>
 The template for creating a unprivileged user roughly
 equivalent to a regular linux user.
@@ -87162,7 +87463,7 @@ is the prefix for user_t).
 </summary>
 </param>
 </template>
-<template name="userdom_admin_user_template" lineno="1040">
+<template name="userdom_admin_user_template" lineno="1044">
 <summary>
 The template for creating an administrative user.
 </summary>
@@ -87191,7 +87492,7 @@ is the prefix for sysadm_t).
 </summary>
 </param>
 </template>
-<template name="userdom_security_admin_template" lineno="1204">
+<template name="userdom_security_admin_template" lineno="1223">
 <summary>
 Allow user to run as a secadm
 </summary>
@@ -87217,7 +87518,7 @@ The role  of the object to create.
 </summary>
 </param>
 </template>
-<interface name="userdom_user_home_content" lineno="1280">
+<interface name="userdom_user_home_content" lineno="1302">
 <summary>
 Make the specified type usable in a
 user home directory.
@@ -87229,7 +87530,7 @@ user home directory.
 </summary>
 </param>
 </interface>
-<interface name="userdom_attach_admin_tun_iface" lineno="1301">
+<interface name="userdom_attach_admin_tun_iface" lineno="1323">
 <summary>
 Allow domain to attach to TUN devices created by administrative users.
 </summary>
@@ -87239,7 +87540,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_setattr_user_ptys" lineno="1320">
+<interface name="userdom_setattr_user_ptys" lineno="1342">
 <summary>
 Set the attributes of a user pty.
 </summary>
@@ -87249,7 +87550,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_create_user_pty" lineno="1338">
+<interface name="userdom_create_user_pty" lineno="1360">
 <summary>
 Create a user pty.
 </summary>
@@ -87259,7 +87560,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_getattr_user_home_dirs" lineno="1356">
+<interface name="userdom_getattr_user_home_dirs" lineno="1378">
 <summary>
 Get the attributes of user home directories.
 </summary>
@@ -87269,7 +87570,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_getattr_user_home_dirs" lineno="1375">
+<interface name="userdom_dontaudit_getattr_user_home_dirs" lineno="1397">
 <summary>
 Do not audit attempts to get the attributes of user home directories.
 </summary>
@@ -87279,7 +87580,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_search_user_home_dirs" lineno="1393">
+<interface name="userdom_search_user_home_dirs" lineno="1415">
 <summary>
 Search user home directories.
 </summary>
@@ -87289,7 +87590,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_search_user_home_dirs" lineno="1420">
+<interface name="userdom_dontaudit_search_user_home_dirs" lineno="1442">
 <summary>
 Do not audit attempts to search user home directories.
 </summary>
@@ -87307,7 +87608,7 @@ Domain to not audit.
 </param>
 <infoflow type="none"/>
 </interface>
-<interface name="userdom_list_user_home_dirs" lineno="1438">
+<interface name="userdom_list_user_home_dirs" lineno="1460">
 <summary>
 List user home directories.
 </summary>
@@ -87317,7 +87618,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_list_user_home_dirs" lineno="1457">
+<interface name="userdom_dontaudit_list_user_home_dirs" lineno="1479">
 <summary>
 Do not audit attempts to list user home subdirectories.
 </summary>
@@ -87327,7 +87628,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_create_user_home_dirs" lineno="1475">
+<interface name="userdom_create_user_home_dirs" lineno="1497">
 <summary>
 Create user home directories.
 </summary>
@@ -87337,7 +87638,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_home_dirs" lineno="1493">
+<interface name="userdom_manage_user_home_dirs" lineno="1515">
 <summary>
 Create user home directories.
 </summary>
@@ -87347,7 +87648,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_relabelto_user_home_dirs" lineno="1511">
+<interface name="userdom_relabelto_user_home_dirs" lineno="1533">
 <summary>
 Relabel to user home directories.
 </summary>
@@ -87357,7 +87658,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_home_filetrans_user_home_dir" lineno="1530">
+<interface name="userdom_home_filetrans_user_home_dir" lineno="1552">
 <summary>
 Create directories in the home dir root with
 the user home directory type.
@@ -87368,7 +87669,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_user_home_domtrans" lineno="1567">
+<interface name="userdom_user_home_domtrans" lineno="1589">
 <summary>
 Do a domain transition to the specified
 domain when executing a program in the
@@ -87397,7 +87698,7 @@ Domain to transition to.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_search_user_home_content" lineno="1587">
+<interface name="userdom_dontaudit_search_user_home_content" lineno="1609">
 <summary>
 Do not audit attempts to search user home content directories.
 </summary>
@@ -87407,7 +87708,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_list_user_home_content" lineno="1605">
+<interface name="userdom_list_user_home_content" lineno="1627">
 <summary>
 List contents of users home directory.
 </summary>
@@ -87417,7 +87718,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_home_content_dirs" lineno="1624">
+<interface name="userdom_manage_user_home_content_dirs" lineno="1646">
 <summary>
 Create, read, write, and delete directories
 in a user home subdirectory.
@@ -87428,7 +87729,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_delete_user_home_content_dirs" lineno="1643">
+<interface name="userdom_delete_user_home_content_dirs" lineno="1665">
 <summary>
 Delete directories in a user home subdirectory.
 </summary>
@@ -87438,7 +87739,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_setattr_user_home_content_files" lineno="1662">
+<interface name="userdom_dontaudit_setattr_user_home_content_files" lineno="1684">
 <summary>
 Do not audit attempts to set the
 attributes of user home files.
@@ -87449,7 +87750,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_mmap_user_home_content_files" lineno="1680">
+<interface name="userdom_mmap_user_home_content_files" lineno="1702">
 <summary>
 Mmap user home files.
 </summary>
@@ -87459,7 +87760,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_read_user_home_content_files" lineno="1699">
+<interface name="userdom_read_user_home_content_files" lineno="1721">
 <summary>
 Read user home files.
 </summary>
@@ -87469,7 +87770,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_read_user_home_content_files" lineno="1718">
+<interface name="userdom_dontaudit_read_user_home_content_files" lineno="1740">
 <summary>
 Do not audit attempts to read user home files.
 </summary>
@@ -87479,7 +87780,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_append_user_home_content_files" lineno="1737">
+<interface name="userdom_dontaudit_append_user_home_content_files" lineno="1759">
 <summary>
 Do not audit attempts to append user home files.
 </summary>
@@ -87489,7 +87790,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_write_user_home_content_files" lineno="1755">
+<interface name="userdom_dontaudit_write_user_home_content_files" lineno="1777">
 <summary>
 Do not audit attempts to write user home files.
 </summary>
@@ -87499,7 +87800,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_delete_user_home_content_files" lineno="1773">
+<interface name="userdom_delete_user_home_content_files" lineno="1795">
 <summary>
 Delete files in a user home subdirectory.
 </summary>
@@ -87509,7 +87810,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_relabel_user_home_content_files" lineno="1791">
+<interface name="userdom_dontaudit_relabel_user_home_content_files" lineno="1813">
 <summary>
 Do not audit attempts to write user home files.
 </summary>
@@ -87519,7 +87820,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_read_user_home_content_symlinks" lineno="1809">
+<interface name="userdom_read_user_home_content_symlinks" lineno="1831">
 <summary>
 Read user home subdirectory symbolic links.
 </summary>
@@ -87529,7 +87830,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_exec_user_home_content_files" lineno="1829">
+<interface name="userdom_exec_user_home_content_files" lineno="1851">
 <summary>
 Execute user home files.
 </summary>
@@ -87540,7 +87841,7 @@ Domain allowed access.
 </param>
 <rolecap/>
 </interface>
-<interface name="userdom_dontaudit_exec_user_home_content_files" lineno="1856">
+<interface name="userdom_dontaudit_exec_user_home_content_files" lineno="1878">
 <summary>
 Do not audit attempts to execute user home files.
 </summary>
@@ -87550,7 +87851,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_home_content_files" lineno="1875">
+<interface name="userdom_manage_user_home_content_files" lineno="1897">
 <summary>
 Create, read, write, and delete files
 in a user home subdirectory.
@@ -87561,7 +87862,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_manage_user_home_content_dirs" lineno="1896">
+<interface name="userdom_dontaudit_manage_user_home_content_dirs" lineno="1918">
 <summary>
 Do not audit attempts to create, read, write, and delete directories
 in a user home subdirectory.
@@ -87572,7 +87873,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_home_content_symlinks" lineno="1915">
+<interface name="userdom_manage_user_home_content_symlinks" lineno="1937">
 <summary>
 Create, read, write, and delete symbolic links
 in a user home subdirectory.
@@ -87583,7 +87884,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_delete_user_home_content_symlinks" lineno="1935">
+<interface name="userdom_delete_user_home_content_symlinks" lineno="1957">
 <summary>
 Delete symbolic links in a user home directory.
 </summary>
@@ -87593,7 +87894,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_home_content_pipes" lineno="1954">
+<interface name="userdom_manage_user_home_content_pipes" lineno="1976">
 <summary>
 Create, read, write, and delete named pipes
 in a user home subdirectory.
@@ -87604,7 +87905,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_home_content_sockets" lineno="1975">
+<interface name="userdom_manage_user_home_content_sockets" lineno="1997">
 <summary>
 Create, read, write, and delete named sockets
 in a user home subdirectory.
@@ -87615,7 +87916,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_user_home_dir_filetrans" lineno="2007">
+<interface name="userdom_user_home_dir_filetrans" lineno="2029">
 <summary>
 Create objects in a user home directory
 with an automatic type transition to
@@ -87637,7 +87938,7 @@ The class of the object to be created.
 </summary>
 </param>
 </interface>
-<interface name="userdom_user_home_content_filetrans" lineno="2038">
+<interface name="userdom_user_home_content_filetrans" lineno="2060">
 <summary>
 Create objects in a user home directory
 with an automatic type transition to
@@ -87659,7 +87960,7 @@ The class of the object to be created.
 </summary>
 </param>
 </interface>
-<interface name="userdom_user_home_dir_filetrans_user_home_content" lineno="2065">
+<interface name="userdom_user_home_dir_filetrans_user_home_content" lineno="2087">
 <summary>
 Create objects in a user home directory
 with an automatic type transition to
@@ -87676,7 +87977,7 @@ The class of the object to be created.
 </summary>
 </param>
 </interface>
-<interface name="userdom_write_user_tmp_sockets" lineno="2084">
+<interface name="userdom_write_user_tmp_sockets" lineno="2106">
 <summary>
 Write to user temporary named sockets.
 </summary>
@@ -87686,7 +87987,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_list_user_tmp" lineno="2103">
+<interface name="userdom_list_user_tmp" lineno="2125">
 <summary>
 List user temporary directories.
 </summary>
@@ -87696,7 +87997,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_list_user_tmp" lineno="2123">
+<interface name="userdom_dontaudit_list_user_tmp" lineno="2145">
 <summary>
 Do not audit attempts to list user
 temporary directories.
@@ -87707,7 +88008,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_manage_user_tmp_dirs" lineno="2142">
+<interface name="userdom_dontaudit_manage_user_tmp_dirs" lineno="2164">
 <summary>
 Do not audit attempts to manage users
 temporary directories.
@@ -87718,7 +88019,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_read_user_tmp_files" lineno="2160">
+<interface name="userdom_read_user_tmp_files" lineno="2182">
 <summary>
 Read user temporary files.
 </summary>
@@ -87728,7 +88029,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_read_user_tmp_files" lineno="2181">
+<interface name="userdom_dontaudit_read_user_tmp_files" lineno="2203">
 <summary>
 Do not audit attempts to read users
 temporary files.
@@ -87739,7 +88040,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_append_user_tmp_files" lineno="2200">
+<interface name="userdom_dontaudit_append_user_tmp_files" lineno="2222">
 <summary>
 Do not audit attempts to append users
 temporary files.
@@ -87750,7 +88051,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_rw_user_tmp_files" lineno="2218">
+<interface name="userdom_rw_user_tmp_files" lineno="2240">
 <summary>
 Read and write user temporary files.
 </summary>
@@ -87760,7 +88061,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_manage_user_tmp_files" lineno="2239">
+<interface name="userdom_dontaudit_manage_user_tmp_files" lineno="2261">
 <summary>
 Do not audit attempts to manage users
 temporary files.
@@ -87771,7 +88072,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_read_user_tmp_symlinks" lineno="2257">
+<interface name="userdom_read_user_tmp_symlinks" lineno="2279">
 <summary>
 Read user temporary symbolic links.
 </summary>
@@ -87781,7 +88082,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_tmp_dirs" lineno="2278">
+<interface name="userdom_manage_user_tmp_dirs" lineno="2300">
 <summary>
 Create, read, write, and delete user
 temporary directories.
@@ -87792,7 +88093,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_tmp_files" lineno="2298">
+<interface name="userdom_manage_user_tmp_files" lineno="2320">
 <summary>
 Create, read, write, and delete user
 temporary files.
@@ -87803,7 +88104,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_tmp_symlinks" lineno="2318">
+<interface name="userdom_manage_user_tmp_symlinks" lineno="2340">
 <summary>
 Create, read, write, and delete user
 temporary symbolic links.
@@ -87814,7 +88115,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_tmp_pipes" lineno="2338">
+<interface name="userdom_manage_user_tmp_pipes" lineno="2360">
 <summary>
 Create, read, write, and delete user
 temporary named pipes.
@@ -87825,7 +88126,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_tmp_sockets" lineno="2358">
+<interface name="userdom_manage_user_tmp_sockets" lineno="2380">
 <summary>
 Create, read, write, and delete user
 temporary named sockets.
@@ -87836,7 +88137,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_user_tmp_filetrans" lineno="2389">
+<interface name="userdom_user_tmp_filetrans" lineno="2411">
 <summary>
 Create objects in a user temporary directory
 with an automatic type transition to
@@ -87858,7 +88159,7 @@ The class of the object to be created.
 </summary>
 </param>
 </interface>
-<interface name="userdom_tmp_filetrans_user_tmp" lineno="2415">
+<interface name="userdom_tmp_filetrans_user_tmp" lineno="2437">
 <summary>
 Create objects in the temporary directory
 with an automatic type transition to
@@ -87875,7 +88176,7 @@ The class of the object to be created.
 </summary>
 </param>
 </interface>
-<interface name="userdom_read_user_tmpfs_files" lineno="2433">
+<interface name="userdom_read_user_tmpfs_files" lineno="2455">
 <summary>
 Read user tmpfs files.
 </summary>
@@ -87885,7 +88186,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_rw_user_tmpfs_files" lineno="2453">
+<interface name="userdom_rw_user_tmpfs_files" lineno="2475">
 <summary>
 Read user tmpfs files.
 </summary>
@@ -87895,7 +88196,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_user_tmpfs_files" lineno="2474">
+<interface name="userdom_manage_user_tmpfs_files" lineno="2496">
 <summary>
 Create, read, write, and delete user tmpfs files.
 </summary>
@@ -87905,7 +88206,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_getattr_user_ttys" lineno="2494">
+<interface name="userdom_getattr_user_ttys" lineno="2516">
 <summary>
 Get the attributes of a user domain tty.
 </summary>
@@ -87915,7 +88216,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_getattr_user_ttys" lineno="2512">
+<interface name="userdom_dontaudit_getattr_user_ttys" lineno="2534">
 <summary>
 Do not audit attempts to get the attributes of a user domain tty.
 </summary>
@@ -87925,7 +88226,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_setattr_user_ttys" lineno="2530">
+<interface name="userdom_setattr_user_ttys" lineno="2552">
 <summary>
 Set the attributes of a user domain tty.
 </summary>
@@ -87935,7 +88236,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_setattr_user_ttys" lineno="2548">
+<interface name="userdom_dontaudit_setattr_user_ttys" lineno="2570">
 <summary>
 Do not audit attempts to set the attributes of a user domain tty.
 </summary>
@@ -87945,7 +88246,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_use_user_ttys" lineno="2566">
+<interface name="userdom_use_user_ttys" lineno="2588">
 <summary>
 Read and write a user domain tty.
 </summary>
@@ -87955,7 +88256,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_use_user_ptys" lineno="2584">
+<interface name="userdom_use_user_ptys" lineno="2606">
 <summary>
 Read and write a user domain pty.
 </summary>
@@ -87965,7 +88266,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_use_user_terminals" lineno="2618">
+<interface name="userdom_use_user_terminals" lineno="2640">
 <summary>
 Read and write a user TTYs and PTYs.
 </summary>
@@ -87991,7 +88292,7 @@ Domain allowed access.
 </param>
 <infoflow type="both" weight="10"/>
 </interface>
-<interface name="userdom_dontaudit_use_user_terminals" lineno="2639">
+<interface name="userdom_dontaudit_use_user_terminals" lineno="2661">
 <summary>
 Do not audit attempts to read and write
 a user domain tty and pty.
@@ -88002,7 +88303,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_spec_domtrans_all_users" lineno="2660">
+<interface name="userdom_spec_domtrans_all_users" lineno="2682">
 <summary>
 Execute a shell in all user domains.  This
 is an explicit transition, requiring the
@@ -88014,7 +88315,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="userdom_xsession_spec_domtrans_all_users" lineno="2683">
+<interface name="userdom_xsession_spec_domtrans_all_users" lineno="2705">
 <summary>
 Execute an Xserver session in all unprivileged user domains.  This
 is an explicit transition, requiring the
@@ -88026,7 +88327,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="userdom_spec_domtrans_unpriv_users" lineno="2706">
+<interface name="userdom_spec_domtrans_unpriv_users" lineno="2728">
 <summary>
 Execute a shell in all unprivileged user domains.  This
 is an explicit transition, requiring the
@@ -88038,7 +88339,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="userdom_xsession_spec_domtrans_unpriv_users" lineno="2729">
+<interface name="userdom_xsession_spec_domtrans_unpriv_users" lineno="2751">
 <summary>
 Execute an Xserver session in all unprivileged user domains.  This
 is an explicit transition, requiring the
@@ -88050,7 +88351,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="userdom_rw_unpriv_user_semaphores" lineno="2750">
+<interface name="userdom_rw_unpriv_user_semaphores" lineno="2772">
 <summary>
 Read and write unpriviledged user SysV sempaphores.
 </summary>
@@ -88060,7 +88361,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_unpriv_user_semaphores" lineno="2768">
+<interface name="userdom_manage_unpriv_user_semaphores" lineno="2790">
 <summary>
 Manage unpriviledged user SysV sempaphores.
 </summary>
@@ -88070,7 +88371,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_rw_unpriv_user_shared_mem" lineno="2787">
+<interface name="userdom_rw_unpriv_user_shared_mem" lineno="2809">
 <summary>
 Read and write unpriviledged user SysV shared
 memory segments.
@@ -88081,7 +88382,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_manage_unpriv_user_shared_mem" lineno="2806">
+<interface name="userdom_manage_unpriv_user_shared_mem" lineno="2828">
 <summary>
 Manage unpriviledged user SysV shared
 memory segments.
@@ -88092,7 +88393,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_bin_spec_domtrans_unpriv_users" lineno="2826">
+<interface name="userdom_bin_spec_domtrans_unpriv_users" lineno="2848">
 <summary>
 Execute bin_t in the unprivileged user domains. This
 is an explicit transition, requiring the
@@ -88104,7 +88405,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="userdom_entry_spec_domtrans_unpriv_users" lineno="2849">
+<interface name="userdom_entry_spec_domtrans_unpriv_users" lineno="2871">
 <summary>
 Execute all entrypoint files in unprivileged user
 domains. This is an explicit transition, requiring the
@@ -88116,7 +88417,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_search_user_home_content" lineno="2870">
+<interface name="userdom_search_user_home_content" lineno="2892">
 <summary>
 Search users home directories.
 </summary>
@@ -88126,7 +88427,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_signull_unpriv_users" lineno="2889">
+<interface name="userdom_signull_unpriv_users" lineno="2911">
 <summary>
 Send signull to unprivileged user domains.
 </summary>
@@ -88136,7 +88437,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_signal_unpriv_users" lineno="2907">
+<interface name="userdom_signal_unpriv_users" lineno="2929">
 <summary>
 Send general signals to unprivileged user domains.
 </summary>
@@ -88146,7 +88447,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_use_unpriv_users_fds" lineno="2925">
+<interface name="userdom_use_unpriv_users_fds" lineno="2947">
 <summary>
 Inherit the file descriptors from unprivileged user domains.
 </summary>
@@ -88156,7 +88457,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_use_unpriv_user_fds" lineno="2953">
+<interface name="userdom_dontaudit_use_unpriv_user_fds" lineno="2975">
 <summary>
 Do not audit attempts to inherit the file descriptors
 from unprivileged user domains.
@@ -88176,7 +88477,7 @@ Domain to not audit.
 </param>
 <infoflow type="none"/>
 </interface>
-<interface name="userdom_dontaudit_use_user_ptys" lineno="2971">
+<interface name="userdom_dontaudit_use_user_ptys" lineno="2993">
 <summary>
 Do not audit attempts to use user ptys.
 </summary>
@@ -88186,7 +88487,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_relabelto_user_ptys" lineno="2989">
+<interface name="userdom_relabelto_user_ptys" lineno="3011">
 <summary>
 Relabel files to unprivileged user pty types.
 </summary>
@@ -88196,7 +88497,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_relabelfrom_user_ptys" lineno="3008">
+<interface name="userdom_dontaudit_relabelfrom_user_ptys" lineno="3030">
 <summary>
 Do not audit attempts to relabel files from
 user pty types.
@@ -88207,7 +88508,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_write_user_tmp_files" lineno="3026">
+<interface name="userdom_write_user_tmp_files" lineno="3048">
 <summary>
 Write all users files in /tmp
 </summary>
@@ -88217,7 +88518,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_use_user_ttys" lineno="3044">
+<interface name="userdom_dontaudit_use_user_ttys" lineno="3066">
 <summary>
 Do not audit attempts to use user ttys.
 </summary>
@@ -88227,7 +88528,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_read_all_users_state" lineno="3062">
+<interface name="userdom_read_all_users_state" lineno="3084">
 <summary>
 Read the process state of all user domains.
 </summary>
@@ -88237,7 +88538,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_getattr_all_users" lineno="3081">
+<interface name="userdom_getattr_all_users" lineno="3103">
 <summary>
 Get the attributes of all user domains.
 </summary>
@@ -88247,7 +88548,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_use_all_users_fds" lineno="3099">
+<interface name="userdom_use_all_users_fds" lineno="3121">
 <summary>
 Inherit the file descriptors from all user domains
 </summary>
@@ -88257,7 +88558,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dontaudit_use_all_users_fds" lineno="3118">
+<interface name="userdom_dontaudit_use_all_users_fds" lineno="3140">
 <summary>
 Do not audit attempts to inherit the file
 descriptors from any user domains.
@@ -88268,7 +88569,7 @@ Domain to not audit.
 </summary>
 </param>
 </interface>
-<interface name="userdom_signal_all_users" lineno="3136">
+<interface name="userdom_signal_all_users" lineno="3158">
 <summary>
 Send general signals to all user domains.
 </summary>
@@ -88278,7 +88579,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_sigchld_all_users" lineno="3154">
+<interface name="userdom_sigchld_all_users" lineno="3176">
 <summary>
 Send a SIGCHLD signal to all user domains.
 </summary>
@@ -88288,7 +88589,7 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_create_all_users_keys" lineno="3172">
+<interface name="userdom_create_all_users_keys" lineno="3194">
 <summary>
 Create keys for all user domains.
 </summary>
@@ -88298,9 +88599,19 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="userdom_dbus_send_all_users" lineno="3190">
+<interface name="userdom_dbus_send_all_users" lineno="3212">
 <summary>
 Send a dbus message to all user domains.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="userdom_manage_all_users_keys" lineno="3231">
+<summary>
+Manage keys for all user domains.
 </summary>
 <param name="domain">
 <summary>
