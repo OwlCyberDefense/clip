@@ -248,7 +248,6 @@ else
 fi
 useradd -m "$USERNAME" -G wheel -Z "${USERNAME}_u"
 
-# Yes we could have hashed this, but you just entered it in plaintext above.
 if [ x"$HASHED_PASSWORD" == "x" ]; then
 	passwd --stdin "$USERNAME" <<< "$PASSWORD"
 else
@@ -261,7 +260,7 @@ chage -d 0 "$USERNAME"
 # This line enables a transition via sudo instead of requiring sudo and newrole.
 if [ x"$CONFIG_BUILD_SUPERADM" == "xy" ]; then
 	echo "$USERNAME        ALL=(ALL) ROLE=superadm_r TYPE=superadm_t      ALL" >> /etc/sudoers
-	echo "WARNING: This is a debug build with a super user present.  DO NOT USE IN PRODUCTION" > /etc/motd
+	echo "WARNING: This is a debug build with a super user present.  DO NOT USE IN PRODUCTION!" > /etc/motd
 else
 	echo "$USERNAME        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
 fi
@@ -293,24 +292,31 @@ secstate audit
 echo "All done with secstate :)  Now go play with your freshly remediated system!"
 ###### END SECSTATE AUDIT AND REMEDIATE ###########
 
-###### START CLIP-SPECIFIC CONFIGURATION ###########
-# The first users of a CLIP system will be devs. Lets make things a little easier on them.
-grubby --update-kernel=ALL --remove-args=quiet --remove-args=rhgb
-sed -i -e 's/^\(splashimage.*\)/#\1/' -e 's/^\(hiddenmenu.*\)/#\1/' /boot/grub/menu.lst
-plymouth-set-default-theme details --rebuild-initrd
-###### END CLIP-SPECIFIC CONFIGURATION ###########
-
-
 ###### START - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
-###### (eg put it into permissive etc)
+
+# Disable all that GUI stuff during boot so we can actually see what is going on during boot.
+if [ x"$CONFIG_BUILD_PRODUCTION" != "xy" ]; then
+	# The first users of a CLIP system will be devs. Lets make things a little easier on them.
+	# by getting rid of the framebuffer effects, rhgb, and quiet.
+	grubby --update-kernel=ALL --remove-args=quiet --remove-args=rhgb
+	sed -i -e 's/^\(splashimage.*\)/#\1/' -e 's/^\(hiddenmenu.*\)/#\1/' /boot/grub/grub.conf
+	# This is ugly but when plymouth re-rolls the initrd it creates a new entry in grub.conf that is redundant.
+	# Actually rather benign but may impact developers using grubby who think there is only one kernel to work with.
+	title="$(sed 's/ release.*$//' < /etc/redhat-release) ($(uname -r))"
+	sed -i -e "s;title.*;$title;" /boot/grub/grub.conf
+	plymouth-set-default-theme details --rebuild-initrd
+fi
+
+# Set permissive mode
 export POLNAME=`sestatus |awk '/Policy from config file:/ { print $5; }'`
-if [ x"$CONFIG_BUILD_ENFORCING" != "xy" ] && [ x"$POLNAME" != "x" ]; then
+if [ x"$CONFIG_BUILD_ENFORCING_MODE" != "xy" ]; then
         echo -e "#THIS IS A DEBUG BUILD HENCE SELINUX IS IN PERMISSIVE MODE\nSELINUX=permissive\nSELINUXTYPE=$POLNAME\n" > /etc/selinux/config
-	echo "WARNING: This is a debug build in permissive mode.  DO NOT USE IN PRODUCTION" >> /etc/motd
+	echo "WARNING: This is a debug build in permissive mode.  DO NOT USE IN PRODUCTION!" >> /etc/motd
 	# This line is used to make policy development easier.  It disables the "setfiles" check used by 
 	# semodule/semanage that prevents transactions containing invalid and dupe fc entries from rolling forward.
 	echo -e "module-store = direct\n[setfiles]\npath=/bin/true\n[end]\n" > /etc/selinux/semanage.conf
-	sed -ie 's/enforcing=1/enforcing=0/g' /boot/grub/menu.lst
+	grubby --update-kernel=ALL --remove-args=enforcing
+	grubby --update-kernel=ALL --args=enforcing=0
 fi
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
