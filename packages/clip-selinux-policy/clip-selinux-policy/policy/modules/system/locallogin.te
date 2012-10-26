@@ -128,7 +128,10 @@ init_dontaudit_use_fds(local_login_t)
 
 miscfiles_read_localization(local_login_t)
 
-userdom_spec_domtrans_all_users(local_login_t)
+# SRS: Removed for CLIP to ensure users must login as staff and then become privileged.
+#userdom_spec_domtrans_all_users(local_login_t)
+staff_entry_spec_domtrans(local_login_t)
+
 userdom_signal_all_users(local_login_t)
 userdom_search_user_home_content(local_login_t)
 userdom_use_unpriv_users_fds(local_login_t)

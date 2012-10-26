@@ -116,30 +116,30 @@ constrain process { transition noatsecure siginh rlimitinh }
 );
 
 # SRS: Added for CLIP - there is a bug in useradd that necessitates user_u to be present in policy.  But we dont really wrnt that ID being used for anything so lets neuter this via constraints.
-constrain_user_u(process)
-constrain_user_u(sock_file)
-constrain_user_u(lnk_file)
-constrain_user_u(chr_file)
-constrain_user_u(blk_file)
-constrain_user_u(sem)
-constrain_user_u(msg)
-constrain_user_u(msgq)
-constrain_user_u(tcp_socket)
-constrain_user_u(udp_socket)
-constrain_user_u(rawip_socket)
+#constrain_user_u(process)
+#constrain_user_u(sock_file)
+#constrain_user_u(lnk_file)
+#constrain_user_u(chr_file)
+#constrain_user_u(blk_file)
+#constrain_user_u(sem)
+#constrain_user_u(msg)
+#constrain_user_u(msgq)
+#constrain_user_u(tcp_socket)
+#constrain_user_u(udp_socket)
+#constrain_user_u(rawip_socket)
 
 #constrain_user_u(file)
 #constrain_user_u(dir)
-constrain dir { all_dir_perms }
-(
+#constrain dir { all_dir_perms }
+#(
 	# Only constrain u1 so useradd etc can still create files w/ this user ID
-	u1 != user_u
-);
-constrain file { all_file_perms }
-(
-	# Only constrain u1 so useradd etc can still create files w/ this user ID
-	u1 != user_u
-);
+#	u1 != user_u
+#);
+#constrain file { all_file_perms }
+#(
+#	# Only constrain u1 so useradd etc can still create files w/ this user ID
+#	u1 != user_u
+#);
 # SRS: END user_u stuff
 
 constrain process dyntransition

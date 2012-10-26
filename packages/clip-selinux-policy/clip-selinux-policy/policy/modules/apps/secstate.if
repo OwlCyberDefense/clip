@@ -38,9 +38,7 @@ interface(`secstate_domtrans',`
 interface(`secstate_run',`
 	gen_require(`
 		type secstate_t;
-		type openscap_probe_t;
 	')
 	secstate_domtrans($1)
 	role $2 types secstate_t;
-	role $2 types oscap_probe_t;
 ')

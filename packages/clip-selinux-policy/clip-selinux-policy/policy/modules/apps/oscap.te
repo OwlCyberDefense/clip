@@ -58,8 +58,8 @@ allow oscap_probe_t self:udp_socket create_socket_perms;;
 allow oscap_probe_t oscap_t:unix_stream_socket create_stream_socket_perms;
 
 # probe_selinuxsecuritycontext
-allow oscap_probe_t devlog_t:sock_file getattr;
-allow oscap_probe_t proc_kcore_t:file getattr;
+logging_send_syslog_msg(oscap_probe_t)
+kernel_getattr_core_if(oscap_probe_t)
 
 # probe_file, probe_textfilecontent
 files_read_all_files(oscap_probe_t)
@@ -88,11 +88,3 @@ optional_policy(`
 	rpm_read_db(oscap_probe_t)
 ')
 
-#require {
-#    type secadm_t;
-#    role secadm_r;
-# };
-
-# needs to be part of secadmuser
-#oscap_run(secadm_t, secadm_r)
-#oscap_probe_run(secadm_t, secadm_r)

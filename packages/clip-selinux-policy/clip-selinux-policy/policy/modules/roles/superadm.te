@@ -1,0 +1,459 @@
+policy_module(superadm, 2.3.0)
+
+########################################
+#
+# Declarations
+#
+
+role superadm_r;
+
+userdom_admin_user_template(superadm)
+
+ifndef(`enable_mls',`
+	userdom_security_admin_template(superadm_t, superadm_r)
+')
+
+########################################
+#
+# Local policy
+#
+
+corecmd_exec_shell(superadm_t)
+
+mls_process_read_up(superadm_t)
+
+# SRS: removed for CLIP for RHEL 6.2 since we want ubac on superadm too.
+#ubac_process_exempt(superadm_t)
+#ubac_file_exempt(superadm_t)
+#ubac_fd_exempt(superadm_t)
+
+init_exec(superadm_t)
+
+# Add/remove user home directories
+userdom_manage_user_home_dirs(superadm_t)
+userdom_home_filetrans_user_home_dir(superadm_t)
+
+ifdef(`direct_superadm_daemon',`
+	optional_policy(`
+		init_run_daemon(superadm_t, superadm_r)
+	')
+',`
+	ifdef(`distro_gentoo',`
+		optional_policy(`
+			seutil_init_script_run_runinit(superadm_t, superadm_r)
+		')
+	')
+')
+
+# SRS: removed for CLIP
+#ifndef(`enable_mls',`
+#	logging_manage_audit_log(superadm_t)
+#	logging_manage_audit_config(superadm_t)
+#	logging_run_auditctl(superadm_t, superadm_r)
+#')
+
+# SRS: removed for CLIP
+#tunable_policy(`allow_ptrace',`
+#	domain_ptrace_all_domains(superadm_t)
+#')
+
+# SRS: removed for CLIP
+#optional_policy(`
+#	amanda_run_recover(superadm_t, superadm_r)
+#')
+
+# SRS: removed for CLIP
+#optional_policy(`
+#	apache_run_helper(superadm_t, superadm_r)
+#	#apache_run_all_scripts(superadm_t, superadm_r)
+#	#apache_domtrans_sys_script(superadm_t)
+#	apache_role(superadm_r, superadm_t)
+#')
+
+optional_policy(`
+	# cjp: why is this not apm_run_client
+	apm_domtrans_client(superadm_t)
+')
+
+optional_policy(`
+	apt_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	auditadm_role_change(superadm_r)
+')
+
+optional_policy(`
+	backup_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	bind_run_ndc(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	bootloader_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	certwatch_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	clock_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	clockspeed_run_cli(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	consoletype_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	cvs_exec(superadm_t)
+')
+
+optional_policy(`
+	dcc_run_cdcc(superadm_t, superadm_r)
+	dcc_run_client(superadm_t, superadm_r)
+	dcc_run_dbclean(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	ddcprobe_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	dmesg_exec(superadm_t)
+')
+
+optional_policy(`
+	dmidecode_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	dpkg_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	firstboot_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	fstools_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	hostname_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	hadoop_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	# allow system administrator to use the ipsec script to look
+	# at things (e.g., ipsec auto --status)
+	# probably should create an ipsec_admin role for this kind of thing
+	ipsec_exec_mgmt(superadm_t)
+	ipsec_stream_connect(superadm_t)
+	# for lsof
+	ipsec_getattr_key_sockets(superadm_t)
+')
+
+optional_policy(`
+	iptables_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	kudzu_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	libs_run_ldconfig(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	lockdev_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	logrotate_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	lpd_run_checkpc(superadm_t, superadm_r)
+	lpd_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	lvm_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	modutils_run_depmod(superadm_t, superadm_r)
+	modutils_run_insmod(superadm_t, superadm_r)
+	modutils_run_update_mods(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	mount_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	mozilla_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	mplayer_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	mta_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	munin_stream_connect(superadm_t)
+')
+
+optional_policy(`
+	mysql_stream_connect(superadm_t)
+')
+
+optional_policy(`
+	netutils_run(superadm_t, superadm_r)
+	netutils_run_ping(superadm_t, superadm_r)
+	netutils_run_traceroute(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	ntp_stub()
+	corenet_udp_bind_ntp_port(superadm_t)
+')
+
+optional_policy(`
+	oav_run_update(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	pcmcia_run_cardctl(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	portage_run(superadm_t, superadm_r)
+	portage_run_gcc_config(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	portmap_run_helper(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	pyzor_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	quota_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	raid_run_mdadm(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	razor_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	rpc_domtrans_nfsd(superadm_t)
+')
+
+optional_policy(`
+	rpm_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	rssh_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	rsync_exec(superadm_t)
+')
+
+optional_policy(`
+	samba_run_net(superadm_t, superadm_r)
+	samba_run_winbind_helper(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	samhain_admin(superadm_t)
+')
+
+optional_policy(`
+	screen_role_template(superadm, superadm_r, superadm_t)
+')
+
+optional_policy(`
+	secadm_role_change(superadm_r)
+')
+
+optional_policy(`
+	seutil_run_setfiles(superadm_t, superadm_r)
+	seutil_run_runinit(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	spamassassin_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	ssh_role_template(superadm, superadm_r, superadm_t)
+')
+
+optional_policy(`
+	staff_role_change(superadm_r)
+')
+
+optional_policy(`
+	su_role_template(superadm, superadm_r, superadm_t)
+')
+
+optional_policy(`
+	sudo_role_template(superadm, superadm_r, superadm_t)
+')
+
+optional_policy(`
+	sysnet_run_ifconfig(superadm_t, superadm_r)
+	sysnet_run_dhcpc(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	thunderbird_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	tripwire_run_siggen(superadm_t, superadm_r)
+	tripwire_run_tripwire(superadm_t, superadm_r)
+	tripwire_run_twadmin(superadm_t, superadm_r)
+	tripwire_run_twprint(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	tvtime_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	tzdata_domtrans(superadm_t)
+')
+
+optional_policy(`
+	uml_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	unconfined_domtrans(superadm_t)
+')
+
+optional_policy(`
+	unprivuser_role_change(superadm_r)
+')
+
+optional_policy(`
+	usbmodules_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	userhelper_role_template(superadm, superadm_r, superadm_t)
+')
+
+optional_policy(`
+	usermanage_run_admin_passwd(superadm_t, superadm_r)
+	usermanage_run_groupadd(superadm_t, superadm_r)
+	usermanage_run_useradd(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	vmware_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	vpn_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	webalizer_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	wireshark_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	vlock_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	xserver_role(superadm_r, superadm_t)
+')
+
+optional_policy(`
+	yam_run(superadm_t, superadm_r)
+')
+
+optional_policy(`
+	secstate_run(superadm_t, superadm_r)
+	oscap_run(superadm_t, superadm_r)
+')
+
+ifndef(`distro_redhat',`
+	optional_policy(`
+		auth_role(superadm_r, superadm_t)
+	')
+
+	optional_policy(`
+		bluetooth_role(superadm_r, superadm_t)
+	')
+
+	optional_policy(`
+		cdrecord_role(superadm_r, superadm_t)
+	')
+
+	optional_policy(`
+		cron_admin_role(superadm_r, superadm_t)
+	')
+
+	optional_policy(`
+		dbus_role_template(superadm, superadm_r, superadm_t)
+	')
+
+	optional_policy(`
+		evolution_role(superadm_r, superadm_t)
+	')
+
+	optional_policy(`
+		games_role(superadm_r, superadm_t)
+	')
+
+	optional_policy(`
+		gift_role(superadm_r, superadm_t)
+	')
+
+	optional_policy(`
+		gnome_role(superadm_r, superadm_t)
+	')
+
+	optional_policy(`
+		gpg_role(superadm_r, superadm_t)
+	')
+
+	optional_policy(`
+		irc_role(superadm_r, superadm_t)
+	')
+
+	optional_policy(`
+		java_role(superadm_r, superadm_t)
+	')
+')
+
