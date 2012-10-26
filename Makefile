@@ -10,6 +10,8 @@
 include CONFIG_BUILD
 ######################################################
 
+RHEL_VER := 6
+
 ######################################################
 # BEGIN MAGIC
 $(info Boot strapping build system...)
@@ -215,7 +217,7 @@ $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(RE
 # Note that the recommended method here is to commit your pkglist file to your own dev repo.
 # Then you can consistently rebuild an ISO using the exact same package versions as the last time.
 # Effectively versioning the packages you use when rolling RPMs and ISOs.
-$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER) ./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)$(RHEL_VER): $(CONFIG_BUILD_DEPS)
+$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER) ./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)$(RHEL_VER): $(filter-out $(ROOT_DIR)/CONFIG_BUILD,$(CONFIG_BUILD_DEPS))
 	@echo "Generating list of packages for $(call GET_REPO_ID,$(1))$(RHEL_VER)"
 	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
 	echo -e $(YUM_CONF) >> $(YUM_CONF_FILE)
