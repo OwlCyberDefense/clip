@@ -72,9 +72,9 @@ the three options below, 2a, 2b, or 2c.
 
 2a. If you want to include a package and you have a src.rpm that needs *no*
 modifications refer to packages/examples/srcrpm as a reference.  You will copy
-the Makefile.tmpl and the gen-makefile-from-src-rpm.sh to the newly create
-(#1) package directory.  Now enter that directory and run "$
-./gen-makefile-from-src-rpm.sh <package>.src.rpm".  This will generate a
+the src rpm, Makefile.tmpl and the gen-makefile-from-src-rpm.sh to the newly 
+create (#1) package directory.  Now enter that directory and run 
+"$ ./gen-makefile-from-src-rpm.sh <package>.src.rpm".  This will generate a
 Makefile based on the src RPM.  Skip to step #3.
 
 or
