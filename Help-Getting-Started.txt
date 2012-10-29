@@ -1,17 +1,18 @@
 Here is a quick list of the things you need to do to get started.
 
-1. Your build host most be able to pull packages from RHEL, Opt, and EPEL yum repos.
-The details of doing this are discussed in detail elsewhere but here is a list of packages you will need to install:
-- rpm-build
-- mock
-- createrepo
-- repoview
-- livecd-tools
+0. If you're using RHEL you need to subscribe you system to the "Optional"
+software channel (if you're using CentOS for your build host you can ignore
+this step):
+"sudo rhn-channel --add --channel=rhel-x86_64-server-optional-6.2.z"
 
-Note: you may have to install other packages as well.  We don't know what your
-installation base contains ;)
+1. Add the EPEL yum repo:
+"sudo rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-7.noarch.rpm"
 
-2. Modify CONFIG_REPOS to point to your *local* RHEL, Opt, and EPEL repos.
+2. Install the necessary packages via yum:
+"sudo yum install rpm-build mock createrepo repoview" 
+
+3. Modify CONFIG_REPOS to point to your *local* RHEL, Opt, or CentOS, and EPEL 
+repos.  Refer to Help-FAQ.txt for help setting up local yum repos.
 
 3. Add your user to /etc/sudoers (required since mock and livecd creator use
 chroots)
@@ -23,8 +24,7 @@ chroots)
 6. Install the generated pungi rpm by running "# yum localinstall repos/my-repo/pungi*.noarch.rpm".
 
 7. CHANGE THE DEFAULT PASSWORD IN YOUR KICKSTART!  CLIP intentionally ships with an unencrypted
-default password!  It is "neutronbass".  DO NOT LEAVE THIS PASSWORD LINE
-INTACT!
+default password!  It is "neutronbass".  DO NOT LEAVE THIS PASSWORD LINE INTACT!
 
 8. Go back and re-read #7.
 

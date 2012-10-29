@@ -163,3 +163,12 @@ CLIP for RHEL 6 Frequently Asked Questions
 
     A bug has already been filed with Red Hat.  When this issue is resolved
     the FAQ will be updated.
+
+15. How do I get the dependencies for the host?
+  RHEL:
+       sudo rhn-channel --add --channel=rhel-x86_64-server-optional-6.2.z
+       sudo rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-7.noarch.rpm
+       sudo yum install rpm-build mock createrepo repoview
+  CentOS:
+       sudo rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-7.noarch.rpm
+       sudo yum install rpm-build mock createrepo repoview

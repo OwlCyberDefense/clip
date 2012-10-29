@@ -25,7 +25,7 @@ endif
 # So we will roll it ourselves inside of mock :)
 HOST_REQD_PKGS := pungi
 
-HOST_RPM_DEPS := rpm-build createrepo livecd-tools mock repoview
+HOST_RPM_DEPS := rpm-build createrepo mock repoview
 
 export ROOT_DIR ?= $(CURDIR)
 export OUTPUT_DIR ?= $(ROOT_DIR)
@@ -137,7 +137,7 @@ endef
 define CHECK_DEPS
 	@rpm -q $(HOST_RPM_DEPS) 2>&1 >/dev/null || echo "Please ensure the following RPMs are installed: $(HOST_RPM_DEPS)." || exit 1
 	@rpm -q $(HOST_REQD_PKGS) 2>&1 >/dev/null || echo "Pungi must be installed.  Please read Help-Getting-Started.txt." || exit 1
-	@if [ x"`cat /selinux/enforce`" == "x1" ]; then echo -e "This is embarassing but due to a bug in yum (bz #861281) you must do builds in permissive.\nThere is power in numbers so please help us get the bug fixed by commenting in the bug thus encouraging Red Hat to fix the problem.\nThanks!\nhttps://bugzilla.redhat.com/show_bug.cgi?id=861281" && exit 1; fi
+	@if [ x"`cat /selinux/enforce`" == "x1" ]; then echo -e "This is embarassing but due to a bug (bz #861281) you must do builds in permissive.\nhttps://bugzilla.redhat.com/show_bug.cgi?id=861281" && exit 1; fi
 endef
 
 ######################################################
@@ -238,10 +238,10 @@ help:
 	@echo "	all (roll all packages and generate all installation ISOs)"
 	@for cd in $(INSTISOS); do echo "	$$cd"; done
 	@echo
-	@echo "The following make targets are available for generating Live CDs:"
-	@echo "	all (generate all installation ISOs and Live CDs)"
-	@for cd in $(LIVECDS); do echo "	$$cd"; done
-	@echo
+	@#echo "The following make targets are available for generating Live CDs:"
+	@#echo "	all (generate all installation ISOs and Live CDs)"
+	@#for cd in $(LIVECDS); do echo "	$$cd"; done
+	@#echo
 	@echo "The following make targets are available for generating RPMs in mock:"
 	@echo "	rpms (generate all rpms in mock)"
 	@for pkg in $(PACKAGES); do echo "	$$pkg-rpm"; done
@@ -259,9 +259,9 @@ help:
 	@echo "The following make targets are available for generating yum repos used for mock and ISO generation:"
 	@for repo in $(setup_all_repos); do echo "	$$repo"; done
 	@echo
-	@echo "To burn a livecd image to a thumbdrive:"
-	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
-	@echo
+	@#echo "To burn a livecd image to a thumbdrive:"
+	@#echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
+	@#echo
 	@echo "The following make targets are available for cleaning:"
 	@for pkg in $(PACKAGES); do echo "	$$pkg-clean (remove rpm and srpm)"; done
 	@echo "	clean (cleans transient files)"
