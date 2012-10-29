@@ -79,15 +79,7 @@ Makefile based on the src RPM.  Skip to step #3.
 
 or
 
-2b. If it is merely wrapping an existing project's sources, eg the intent is to
-take an existing released tarball of a library and package it in an RPM, then
-you will provide a Makefile, spec file, package tarball, and any custom
-patches.  Refer to packages/examples/tarball for more information on the
-Makefile and spec file for this scenario.
-
-or
-
-2c. If the intent is to contain custom source code, eg an internally developed
+2b. If the intent is to contain custom source code, eg an internally developed
 application or library, then packages/<PACKAGE NAME> will still contain a
 Makefile and spec file, and packages/<PACKAGE NAME>/<PACKAGE NAME> will
 contain the sources and application-specific build system (eg the one that
