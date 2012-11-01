@@ -39,7 +39,7 @@ BUILD_DATE := $(shell date +%m-%d-%y)
 SYSTEM := clip-rhel$(RHEL_VER)
 
 # Config deps
-CONFIG_BUILD_DEPS = $(ROOT_DIR)/CONFIG_BUILD $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile
+CONFIG_BUILD_DEPS = $(ROOT_DIR)/CONFIG_BUILD $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
 
 # Typically we are rolling builds on the target arch.  Changing this may have dire consequences
 # (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
@@ -97,6 +97,8 @@ MOCK_ARGS += --resultdir=$(MY_REPO_DIR) -r $(MOCK_REL) --configdir=$(MOCK_CONF_D
 # This deps list gets propegated down to sub-makefiles
 # Add to this list to pass deps down to SRPM creation
 export SRPM_DEPS := $(CONFIG_BUILD_DEPS)
+
+PKG_BLACKLIST := $(shell $(SED) -e 's/\(.*\)\#.*/\1/g' $(CONF_DIR)/pkglist.blacklist|sed -e ':a;N;$$!ba;s/\n/ /g')
 
 # Macros to determine package info: version, release, arch.
 PKG_VER = $(strip $(eval $(shell $(GREP) ^VERSION $(PKG_DIR)/$(1)/Makefile))$(VERSION))
@@ -191,7 +193,7 @@ $(info Generating rules based on configured yum repository ID="$(REPO_ID)" PATH=
 
 $(eval setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo)
 
-$(eval YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n)
+$(eval YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
 $(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)$(YUM_CONF))
 $(eval MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated)
 $(eval REPO_LINES := $(REPO_LINES)repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=file://$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
@@ -321,7 +323,7 @@ $(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(call CHECK_DEPS)
 	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-installation-iso/\1/'`" installation-iso
 
-$(MOCK_CONF_DIR)/$(MOCK_REL).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl
+$(MOCK_CONF_DIR)/$(MOCK_REL).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl $(CONF_DIR)/pkglist.blacklist
 	$(call CHECK_DEPS)
 	$(VERBOSE)cat $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl > $@
 	$(VERBOSE)echo -e $(MOCK_YUM_CONF) >> $@
