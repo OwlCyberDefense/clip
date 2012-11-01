@@ -65,6 +65,7 @@ miscfiles_read_fonts(plymouthd_t)
 miscfiles_manage_fonts_cache(plymouthd_t)
 
 init_stream_connect_script(plymouthd_t)
+term_use_unallocated_ttys(plymouthd_t)
 
 ########################################
 #
