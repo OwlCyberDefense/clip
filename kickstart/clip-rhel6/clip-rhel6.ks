@@ -303,7 +303,7 @@ if [ x"$CONFIG_BUILD_PRODUCTION" != "xy" ]; then
 	# This is ugly but when plymouth re-rolls the initrd it creates a new entry in grub.conf that is redundant.
 	# Actually rather benign but may impact developers using grubby who think there is only one kernel to work with.
 	title="$(sed 's/ release.*$//' < /etc/redhat-release) ($(uname -r))"
-	sed -i -e "s;title.*;$title;" /boot/grub/grub.conf
+	sed -i -e "s;title.*;title $title;" /boot/grub/grub.conf
 	plymouth-set-default-theme details --rebuild-initrd
 fi
 
