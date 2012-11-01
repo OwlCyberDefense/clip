@@ -8,7 +8,7 @@ PKGNAME := clip-selinux-policy
 
 # These two are typically set by the top-level CONFIG_BUILD file.
 BUILD_CONFIG_ENFORCING_MODE ?= y
-BUILD_CONFIG_SUPERADM ?= n
+BUILD_CONFIG_TOOR ?= n
 
 # This is the version number of the RPM that will be
 # generated.  Typically you bump this for delivery.
@@ -66,12 +66,12 @@ ifneq ($(CONFIG_BUILD_ENFORCING_MODE),n)
 else
 	ENFORCING_MODE := permissive
 endif
-ifneq ($(CONFIG_BUILD_SUPERADM),n)
-	ENABLE_MODULES := superadm
+ifneq ($(CONFIG_BUILD_TOOR),n)
+	ENABLE_MODULES := toor
 else
 	ENABLE_MODULES := %{nil}
 endif
-ENABLE_MODULES := superadm
+ENABLE_MODULES := toor
 
 all: $(PKGNAME)-rpm $(PKGNAME)-srpm
 

@@ -48,7 +48,7 @@ optional_policy(`
 ')
 
 optional_policy(`
-	superadm_role_change(staff_r)
+	toor_role_change(staff_r)
 	userdom_dontaudit_use_user_terminals(staff_t)
 ')
 

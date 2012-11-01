@@ -64604,9 +64604,9 @@ Role allowed access.
 <rolecap/>
 </interface>
 </module>
-<module name="superadm" filename="policy/modules/roles/superadm.if">
+<module name="toor" filename="policy/modules/roles/toor.if">
 <summary>Super user administration role (DEBUG ONLY - DONT USE IN PRODUCTION)</summary>
-<interface name="superadm_role_change" lineno="14">
+<interface name="toor_role_change" lineno="14">
 <summary>
 Change to the system administrator role.
 </summary>
@@ -64617,7 +64617,7 @@ Role allowed access.
 </param>
 <rolecap/>
 </interface>
-<interface name="superadm_role_change_to" lineno="44">
+<interface name="toor_role_change_to" lineno="44">
 <summary>
 Change from the system administrator role.
 </summary>
@@ -64639,9 +64639,9 @@ Role allowed access.
 </param>
 <rolecap/>
 </interface>
-<interface name="superadm_shell_domtrans" lineno="62">
+<interface name="toor_shell_domtrans" lineno="62">
 <summary>
-Execute a shell in the superadm domain.
+Execute a shell in the toor domain.
 </summary>
 <param name="domain">
 <summary>
@@ -64649,9 +64649,9 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="superadm_bin_spec_domtrans" lineno="83">
+<interface name="toor_bin_spec_domtrans" lineno="83">
 <summary>
-Execute a generic bin program in the superadm domain.
+Execute a generic bin program in the toor domain.
 </summary>
 <param name="domain">
 <summary>
@@ -64659,9 +64659,9 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="superadm_entry_spec_domtrans" lineno="106">
+<interface name="toor_entry_spec_domtrans" lineno="106">
 <summary>
-Execute all entrypoint files in the superadm domain. This
+Execute all entrypoint files in the toor domain. This
 is an explicit transition, requiring the
 caller to use setexeccon().
 </summary>
@@ -64671,15 +64671,15 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="superadm_entry_spec_domtrans_to" lineno="141">
+<interface name="toor_entry_spec_domtrans_to" lineno="141">
 <summary>
-Allow superadm to execute all entrypoint files in
+Allow toor to execute all entrypoint files in
 a specified domain.  This is an explicit transition,
 requiring the caller to use setexeccon().
 </summary>
 <desc>
 <p>
-Allow superadm to execute all entrypoint files in
+Allow toor to execute all entrypoint files in
 a specified domain.  This is an explicit transition,
 requiring the caller to use setexeccon().
 </p>
@@ -64695,15 +64695,15 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="superadm_bin_spec_domtrans_to" lineno="175">
+<interface name="toor_bin_spec_domtrans_to" lineno="175">
 <summary>
-Allow superadm to execute a generic bin program in
+Allow toor to execute a generic bin program in
 a specified domain.  This is an explicit transition,
 requiring the caller to use setexeccon().
 </summary>
 <desc>
 <p>
-Allow superadm to execute a generic bin program in
+Allow toor to execute a generic bin program in
 a specified domain.
 </p>
 <p>
@@ -64718,9 +64718,9 @@ Domain to execute in.
 </summary>
 </param>
 </interface>
-<interface name="superadm_sigchld" lineno="196">
+<interface name="toor_sigchld" lineno="196">
 <summary>
-Send a SIGCHLD signal to superadm users.
+Send a SIGCHLD signal to toor users.
 </summary>
 <param name="domain">
 <summary>
@@ -64728,9 +64728,9 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="superadm_use_fds" lineno="214">
+<interface name="toor_use_fds" lineno="214">
 <summary>
-Inherit and use superadm file descriptors
+Inherit and use toor file descriptors
 </summary>
 <param name="domain">
 <summary>
@@ -64738,9 +64738,9 @@ Domain allowed access.
 </summary>
 </param>
 </interface>
-<interface name="superadm_rw_pipes" lineno="232">
+<interface name="toor_rw_pipes" lineno="232">
 <summary>
-Read and write superadm user unnamed pipes.
+Read and write toor user unnamed pipes.
 </summary>
 <param name="domain">
 <summary>
@@ -64751,7 +64751,7 @@ Domain allowed access.
 <tunable name="allow_ptrace" dftval="false">
 <desc>
 <p>
-Allow superadm to debug or ptrace all processes.
+Allow toor to debug or ptrace all processes.
 </p>
 </desc>
 </tunable>

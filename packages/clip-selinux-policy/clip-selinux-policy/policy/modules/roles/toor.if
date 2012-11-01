@@ -11,12 +11,12 @@
 ## </param>
 ## <rolecap/>
 #
-interface(`superadm_role_change',`
+interface(`toor_role_change',`
 	gen_require(`
-		role superadm_r;
+		role toor_r;
 	')
 
-	allow $1 superadm_r;
+	allow $1 toor_r;
 ')
 
 ########################################
@@ -41,17 +41,17 @@ interface(`superadm_role_change',`
 ## </param>
 ## <rolecap/>
 #
-interface(`superadm_role_change_to',`
+interface(`toor_role_change_to',`
 	gen_require(`
-		role superadm_r;
+		role toor_r;
 	')
 
-	allow superadm_r $1;
+	allow toor_r $1;
 ')
 
 ########################################
 ## <summary>
-##	Execute a shell in the superadm domain.
+##	Execute a shell in the toor domain.
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -59,20 +59,20 @@ interface(`superadm_role_change_to',`
 ##	</summary>
 ## </param>
 #
-interface(`superadm_shell_domtrans',`
+interface(`toor_shell_domtrans',`
 	gen_require(`
-		type superadm_t;
+		type toor_t;
 	')
 
-	corecmd_shell_domtrans($1, superadm_t)
-	allow superadm_t $1:fd use;
-	allow superadm_t $1:fifo_file rw_file_perms;
-	allow superadm_t $1:process sigchld;
+	corecmd_shell_domtrans($1, toor_t)
+	allow toor_t $1:fd use;
+	allow toor_t $1:fifo_file rw_file_perms;
+	allow toor_t $1:process sigchld;
 ')
 
 ########################################
 ## <summary>
-##	Execute a generic bin program in the superadm domain.
+##	Execute a generic bin program in the toor domain.
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -80,20 +80,20 @@ interface(`superadm_shell_domtrans',`
 ##	</summary>
 ## </param>
 #
-interface(`superadm_bin_spec_domtrans',`
+interface(`toor_bin_spec_domtrans',`
 	gen_require(`
-		type superadm_t;
+		type toor_t;
 	')
 
-	corecmd_bin_spec_domtrans($1, superadm_t)
-	allow superadm_t $1:fd use;
-	allow superadm_t $1:fifo_file rw_file_perms;
-	allow superadm_t $1:process sigchld;
+	corecmd_bin_spec_domtrans($1, toor_t)
+	allow toor_t $1:fd use;
+	allow toor_t $1:fifo_file rw_file_perms;
+	allow toor_t $1:process sigchld;
 ')
 
 ########################################
 ## <summary>
-##	Execute all entrypoint files in the superadm domain. This
+##	Execute all entrypoint files in the toor domain. This
 ##	is an explicit transition, requiring the
 ##	caller to use setexeccon().
 ## </summary>
@@ -103,26 +103,26 @@ interface(`superadm_bin_spec_domtrans',`
 ##	</summary>
 ## </param>
 #
-interface(`superadm_entry_spec_domtrans',`
+interface(`toor_entry_spec_domtrans',`
 	gen_require(`
-		type superadm_t;
+		type toor_t;
 	')
 
-	domain_entry_file_spec_domtrans($1, superadm_t)
-	allow superadm_t $1:fd use;
-	allow superadm_t $1:fifo_file rw_file_perms;
-	allow superadm_t $1:process sigchld;
+	domain_entry_file_spec_domtrans($1, toor_t)
+	allow toor_t $1:fd use;
+	allow toor_t $1:fifo_file rw_file_perms;
+	allow toor_t $1:process sigchld;
 ')
 
 ########################################
 ## <summary>
-##	Allow superadm to execute all entrypoint files in
+##	Allow toor to execute all entrypoint files in
 ##	a specified domain.  This is an explicit transition,
 ##	requiring the caller to use setexeccon().
 ## </summary>
 ## <desc>
 ##	<p>
-##	Allow superadm to execute all entrypoint files in
+##	Allow toor to execute all entrypoint files in
 ##	a specified domain.  This is an explicit transition,
 ##	requiring the caller to use setexeccon().
 ##	</p>
@@ -138,26 +138,26 @@ interface(`superadm_entry_spec_domtrans',`
 ##	</summary>
 ## </param>
 #
-interface(`superadm_entry_spec_domtrans_to',`
+interface(`toor_entry_spec_domtrans_to',`
 	gen_require(`
-		type superadm_t;
+		type toor_t;
 	')
 
-	domain_entry_file_spec_domtrans(superadm_t, $1)
-	allow $1 superadm_t:fd use;
-	allow $1 superadm_t:fifo_file rw_file_perms;
-	allow $1 superadm_t:process sigchld;
+	domain_entry_file_spec_domtrans(toor_t, $1)
+	allow $1 toor_t:fd use;
+	allow $1 toor_t:fifo_file rw_file_perms;
+	allow $1 toor_t:process sigchld;
 ')
 
 ########################################
 ## <summary>
-##	Allow superadm to execute a generic bin program in
+##	Allow toor to execute a generic bin program in
 ##	a specified domain.  This is an explicit transition,
 ##	requiring the caller to use setexeccon().
 ## </summary>
 ## <desc>
 ##	<p>
-##	Allow superadm to execute a generic bin program in
+##	Allow toor to execute a generic bin program in
 ##	a specified domain.
 ##	</p>
 ##	<p>
@@ -172,20 +172,20 @@ interface(`superadm_entry_spec_domtrans_to',`
 ##	</summary>
 ## </param>
 #
-interface(`superadm_bin_spec_domtrans_to',`
+interface(`toor_bin_spec_domtrans_to',`
 	gen_require(`
-		type superadm_t;
+		type toor_t;
 	')
 
-	corecmd_bin_spec_domtrans(superadm_t, $1)
-	allow $1 superadm_t:fd use;
-	allow $1 superadm_t:fifo_file rw_file_perms;
-	allow $1 superadm_t:process sigchld;
+	corecmd_bin_spec_domtrans(toor_t, $1)
+	allow $1 toor_t:fd use;
+	allow $1 toor_t:fifo_file rw_file_perms;
+	allow $1 toor_t:process sigchld;
 ')
 
 ########################################
 ## <summary>
-##	Send a SIGCHLD signal to superadm users.
+##	Send a SIGCHLD signal to toor users.
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -193,17 +193,17 @@ interface(`superadm_bin_spec_domtrans_to',`
 ##	</summary>
 ## </param>
 #
-interface(`superadm_sigchld',`
+interface(`toor_sigchld',`
 	gen_require(`
-		type superadm_t;
+		type toor_t;
 	')
 
-	allow $1 superadm_t:process sigchld;
+	allow $1 toor_t:process sigchld;
 ')
 
 ########################################
 ## <summary>
-##	Inherit and use superadm file descriptors
+##	Inherit and use toor file descriptors
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -211,17 +211,17 @@ interface(`superadm_sigchld',`
 ##	</summary>
 ## </param>
 #
-interface(`superadm_use_fds',`
+interface(`toor_use_fds',`
 	gen_require(`
-		type superadm_t;
+		type toor_t;
 	')
 
-	allow $1 superadm_t:fd use;
+	allow $1 toor_t:fd use;
 ')
 
 ########################################
 ## <summary>
-##	Read and write superadm user unnamed pipes.
+##	Read and write toor user unnamed pipes.
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -229,10 +229,10 @@ interface(`superadm_use_fds',`
 ##	</summary>
 ## </param>
 #
-interface(`superadm_rw_pipes',`
+interface(`toor_rw_pipes',`
 	gen_require(`
-		type superadm_t;
+		type toor_t;
 	')
 
-	allow $1 superadm_t:fifo_file rw_fifo_file_perms;
+	allow $1 toor_t:fifo_file rw_fifo_file_perms;
 ')

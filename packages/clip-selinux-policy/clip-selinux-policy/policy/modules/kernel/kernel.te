@@ -32,7 +32,6 @@ role user_r;
 #ifdef(`enable_mls',`
 #	role secadm_r;
 #	role auditadm_r;
-#	role superadm_r;
 #')
 
 #

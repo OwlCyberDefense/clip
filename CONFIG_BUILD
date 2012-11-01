@@ -19,23 +19,24 @@ PACKAGES := aqueduct scap-security-guide secstate clip-selinux-policy openscap
 ADDTL_DEPS := $(CURDIR)/CONFIG_REPOS $(CURDIR)/CONFIG_BUILD
 
 # These values can be used to tweak the build to facilitate development and debugging.
-# Eg, setting SELinux to permissive mode and enabling the super user role.
+# Eg, setting SELinux to permissive mode and enabling the super user role (called toor).
 # The CONFIG_BUILD_PRODUCTION flag sets all other build configuration to production values.
-export CONFIG_BUILD_PRODUCTION := y
+export CONFIG_BUILD_PRODUCTION := n
 ifeq ($(CONFIG_BUILD_PRODUCTION),y)
   export CONFIG_BUILD_ENFORCING_MODE := y
-  export CONFIG_BUILD_SUPERADM := n
+  export CONFIG_BUILD_TOOR := n
 else
   export CONFIG_BUILD_ENFORCING_MODE := n
-  export CONFIG_BUILD_SUPERADM := y
+  export CONFIG_BUILD_TOOR := y
 endif
 
 # If you want to override individual debug flags you can do it here.  Don't forget that setting the flags here overrides 
 # the values controlled by CONFIG_BUILD_PRODUCTION above.
-export CONFIG_BUILD_SUPERADM := y
+export CONFIG_BUILD_TOOR := y
+export CONFIG_BUILD_ENFORCING_MODE := y
 
 # Translate the CONFIG_BUILD_* flags into BASH vars that we insert into things like a kickstart %post
-CONFIG_BUILD_BASH_VARS := export CONFIG_BUILD_PRODUCTION=$(strip $(CONFIG_BUILD_PRODUCTION)) CONFIG_BUILD_ENFORCING_MODE=$(strip $(CONFIG_BUILD_ENFORCING_MODE)) CONFIG_BUILD_SUPERADM=$(strip $(CONFIG_BUILD_SUPERADM))
+CONFIG_BUILD_BASH_VARS := export CONFIG_BUILD_PRODUCTION=$(strip $(CONFIG_BUILD_PRODUCTION)) CONFIG_BUILD_ENFORCING_MODE=$(strip $(CONFIG_BUILD_ENFORCING_MODE)) CONFIG_BUILD_TOOR=$(strip $(CONFIG_BUILD_TOOR))
 
 # Typically we are rolling builds on the target arch.  Changing this may have dire consequences.
 # (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
@@ -44,4 +45,4 @@ ARCH := $(shell uname -i)
 # Quiet down the build output a bit.
 QUIET := n
 
-export ARCH PACKAGES ADDTL_DEPS QUIET PRE_ROLLED_PACKAGES CONFIG_BUILD_BASH_VARS CONFIG_BUILD_ENFORCING_MODE CONFIG_BUILD_SUPERADM CONFIG_BUILD_PRODUCTION
+export ARCH PACKAGES ADDTL_DEPS QUIET PRE_ROLLED_PACKAGES CONFIG_BUILD_BASH_VARS CONFIG_BUILD_ENFORCING_MODE CONFIG_BUILD_TOOR CONFIG_BUILD_PRODUCTION
