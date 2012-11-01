@@ -23,15 +23,18 @@ corecmd_exec_shell(superadm_t)
 mls_process_read_up(superadm_t)
 
 # SRS: removed for CLIP for RHEL 6.2 since we want ubac on superadm too.
-#ubac_process_exempt(superadm_t)
-#ubac_file_exempt(superadm_t)
-#ubac_fd_exempt(superadm_t)
+ubac_process_exempt(superadm_t)
+ubac_file_exempt(superadm_t)
+ubac_fd_exempt(superadm_t)
 
 init_exec(superadm_t)
 
 # Add/remove user home directories
 userdom_manage_user_home_dirs(superadm_t)
 userdom_home_filetrans_user_home_dir(superadm_t)
+
+files_manage_all_files(superadm_t)
+domain_unconfined(superadm_t)
 
 ifdef(`direct_superadm_daemon',`
 	optional_policy(`
