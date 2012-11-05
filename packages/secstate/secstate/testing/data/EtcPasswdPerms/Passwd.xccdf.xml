@@ -65,10 +65,6 @@
          <check-export value-id="Passwd-V-2-2" export-name="oval:com.tresys.oval.passwd:var:1004"/>
          <check-content-ref href="2-15Passwd.xml" name="oval:com.tresys.com.passwd:def:1000"/>     
       </check>
-      <fix system="urn:xccdf:fix:script:puppet">
-         class : passwd
-         parameter : etc_passwd_owner : root
-      </fix>
    </Rule>
    <Rule id="Passwd-R-2-2">
       <title>Passwd_Group_Ownership</title>
@@ -79,10 +75,6 @@
          <check-export value-id="Passwd-V-2-4" export-name="oval:com.tresys.oval.passwd:var:1005"/>
          <check-content-ref href="2-15Passwd.xml" name="oval:com.tresys.com.passwd:def:1001"/>     
       </check>
-      <fix system="urn:xccdf:fix:script:puppet">
-         class : passwd
-         parameter : etc_passwd_group_owner : root
-	</fix>
    </Rule>
    <Rule id="Passwd-R-2-3">
       <title>Passwd_Mode</title>
@@ -97,14 +89,5 @@
          <check-export value-id="Passwd-V-2-14" export-name="oval:com.tresys.oval.passwd:var:1010"/>
          <check-content-ref href="2-15Passwd.xml" name="oval:com.tresys.com.passwd:def:1002"/>     
       </check>
-      <fix system="urn:xccdf:fix:script:puppet">
-         manifest : passwd.pp
-         class : passwd
-         parameter : etc_passwd_gwrite : false
-         parameter : etc_passwd_owrite : false
-         parameter : etc_passwd_uexec  : false
-         parameter : etc_passwd_gexec  : false
-         parameter : etc_passwd_oexec  : false
-      </fix>
    </Rule>
 </Benchmark>

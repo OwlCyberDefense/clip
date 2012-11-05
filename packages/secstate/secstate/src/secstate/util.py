@@ -51,8 +51,22 @@ def load_config(conf_file):
 
     return config
 
+def wait_timeout(proc, seconds):
+    """
+    Waits the specified amount of time for proc to terminate and return True
+    If proc does not terminate within the specified time, return False
+    Note: this function WILL NOT kill or terminate proc for you, that is the caller's job
+    """
+    start = time.time()
+    while proc.poll() is None and time.time() - start < seconds:
+        time.sleep(0.5)
+    if proc.poll() is None:
+        return False
+    else:
+        return True
+
 def xccdf_reporter(msg, usr):
-    result = msg.user2num
+    result = msg.result
     if result == oscap.xccdf.XCCDF_RESULT_PASS:
         usr['pass'] += 1
     elif msg.user1str in usr['mitigations']:
@@ -71,9 +85,13 @@ def xccdf_reporter(msg, usr):
         usr['info'] += 1
     elif result == oscap.xccdf.XCCDF_RESULT_FIXED:
         usr['fixed'] += 1
+    elif result == oscap.xccdf.XCCDF_RESULT_ERROR:
+        usr['err'] += 1
+    else:
+        usr['parse_err'] += 1
 
     if usr['verbose']:
-        print "Rule '%(id)s' result: %(res)s" % {'id':msg.user1str,
+        print "Rule '%(id)s' result: %(res)s" % {'id':msg.idref,
                                                  'res':oscap.xccdf.test_result_type_get_text(result)}
     return 0
 
@@ -101,6 +119,7 @@ def evaluate_xccdf(benchmark, url_XCCDF, s_profile=None, all=False, verbose=Fals
                 'info':0,
                 'fixed':0,
                 'mitg_total':0,
+                'parse_err':0,
                 'verbose':verbose,
                 'mitigations':benchmark.mitigations.keys()}
 
@@ -158,7 +177,8 @@ def evaluate_xccdf(benchmark, url_XCCDF, s_profile=None, all=False, verbose=Fals
                 "Not Applicable:",
                 "Error:",
                 "Informational:",
-                "Unknown:"]
+                "Unknown:",
+                "Parse Error:",]
     right_col = ['pass',
                  'mitg_total',
                  'fail',
@@ -168,13 +188,16 @@ def evaluate_xccdf(benchmark, url_XCCDF, s_profile=None, all=False, verbose=Fals
                  'na',
                  'err',
                  'info',
-                 'unknown']
+                 'unknown',
+                 'parse_err',]
 
     print "--Results for '%(id)s' (Profile: '%(prof)s')--" % {'id':benchmark.id, 'prof':s_profile}
     for l, r in zip(left_col, right_col):
         print(l.ljust(16) + str(res_dict[r]))
-    print
 
+    totalrules = sum(i for i in res_dict.values() if type(i) is int)
+    print("Total:".ljust(16) + str(totalrules))
+    print
     results_benchmark = benchmark.clone()
     results_benchmark.add_result(oscap.xccdf.result_clone(ritem))
 
@@ -281,7 +304,7 @@ def result_to_html(input, stylesheet, output, media=None, about=None, help=None)
     style = libxslt.parseStylesheetDoc(styledoc)
     if os.path.isfile(input):
         doc = libxml2.parseFile(input)
-        if not is_benchmark(input):
+        if not is_valid_xccdf_file(input):
             transform_params['ovalid'] = "'%s'" % os.path.basename(input.split('.results.xml')[0])
     else:
         doc = libxml2.parseDoc(input)
@@ -320,12 +343,32 @@ def result_to_html(input, stylesheet, output, media=None, about=None, help=None)
 
     return True
 
-def is_benchmark(benchmark):
+def oscap_validate(filename, doc_type):
+    """
+    Validates an XML file against the openscap-provided schemas, using the openscap library.
+    doc_type should be one of oscap.OSCAP.OSCAP_DOCUMENT_XCCDF or oscap.OSCAP.OSCAP_DOCUMENT_OVAL_DEFINITIONS,
+    but there are other possibilities, which Secstate doesn't use.
+    """
     try:
-        tree = xml.dom.minidom.parse(benchmark)
-        return (tree.getElementsByTagName("Benchmark") != []) 
-    except xml.parsers.expat.ExpatError,e:
-        raise SecstateException("Error parsing '%(file)s': %(err)s" % {'file':benchmark, 'err':e})
+        version = oscap.OSCAP.oval_determine_document_schema_version(filename, doc_type)
+        if version is None:
+            version = oscap.OSCAP.xccdf_detect_version(filename)
+        if version is None:
+            return False
+        is_valid = oscap.OSCAP.oscap_validate_document(filename, doc_type, version, None, None)
+        # openscap is originally written in C, so they use 0 to mean success
+        if (0 == is_valid):
+            return True
+    except Exception, e:
+        raise SecstateException("Error parsing '%(file)s': %(err)s" % {'file':filename, 'err':e})
+    return False
+
+
+def is_valid_xccdf_file(filename):
+    return oscap_validate(filename, oscap.OSCAP.OSCAP_DOCUMENT_XCCDF)
+
+def is_valid_oval_file(filename):
+    return oscap_validate(filename, oscap.OSCAP.OSCAP_DOCUMENT_OVAL_DEFINITIONS)
 
 def get_benchmark_id(benchmark):
     tree = xml.dom.minidom.parse(benchmark)
@@ -512,14 +555,10 @@ def is_parent(parent, item):
 
 def parse_fixes(benchmark, ignore_ids=[]):
     fixes = xccdf_get_fixes(benchmark, ignore_ids)
-    all_puppet = {'classes' : set(), 'environment' : "", 'parameters' : {}}
     all_bash = []
     for fix in fixes:
         content = dereference_sub_elements(fix, benchmark)
-        if fix.system == 'urn:xccdf:fix:script:puppet':
-            # No longer supported!
-            continue
-        elif fix.system == 'urn:xccdf:fix:script:bash':
+        if fix.system == 'urn:xccdf:fix:script:bash':
             # Tag contents should be valid JSON describing a dictionary that looks like bash_fix
             bash_fix = {'script' : "", 'environment-variables' : {}, 'positional-args' : []}
             try:
@@ -560,32 +599,8 @@ def parse_fixes(benchmark, ignore_ids=[]):
             # add bash_fix to list of bash fixes
             all_bash.append(bash_fix)
 
-    all_puppet['classes'] = list(all_puppet['classes'])
+    return all_bash
 
-    return (all_puppet, all_bash)
-
-
-def dict_to_external(puppet_dict):
-   content = ['---','classes:']
-   for item in puppet_dict['classes']:
-      content.append('   - %s' % item)
-   environ = 'production'
-   if puppet_dict['environment']:
-      environ = puppet_dict['environment']
-   content.append('environment: %s' % environ)
-   content.append('parameters:')
-   for item in puppet_dict['parameters']:
-      value = puppet_dict['parameters'][item]
-      if isinstance(value, str):
-         content.append('   %s: %s' % (item, puppet_dict['parameters'][item]))
-      elif isinstance(value, set):
-         content.append('   %s:' % item)
-         for set_item in value:
-            content.append('      - "%s"' % set_item)
-          
-
-   return '\n'.join(content)
-   
 def dereference_sub_elements(fix, benchmark):
    sub_element_re = r'<sub\s+.*idref="(.*?)"\s*/\s*>'
    replacement_re = r'<sub\s+.*idref="%s"\s*/\s*>'
@@ -598,19 +613,6 @@ def dereference_sub_elements(fix, benchmark):
       content = re.sub(replacement_re % id, re.escape(value), content)
    return content
   
-def get_puppet_files(benchmark):
-    puppet_files = set()
-    line_reg = re.compile(r'\s*(manifest|class|environment|parameter|array)\s*:\s*((\S+)\s*:\s*(\S+)|\S+)\s*', re.IGNORECASE)
-    for fix in xccdf_get_fixes(benchmark):
-        if fix.system == 'urn:xccdf:fix:script:puppet':
-            content = dereference_sub_elements(fix, benchmark)
-            for line in content.split('\n'):
-                mtch = line_reg.match(line)
-                if mtch:
-                    if mtch.group(1).lower() == 'manifest':
-                        puppet_files.add(mtch.group(2))
-    return puppet_files
-
 def ancestors_selected(benchmark, id):
     item = benchmark.get_item(id)
     node = item

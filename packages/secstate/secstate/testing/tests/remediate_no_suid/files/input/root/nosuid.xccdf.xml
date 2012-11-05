@@ -41,11 +41,6 @@
             <fixtext>
                 Verify that all nfs filesystems within /proc/mounts have the nosuid flag.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : nosuid.pp
-               class : nosuid
-               parameter : nosuid_nfs_mounts : true
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-content-ref href="nosuid.oval.xml" name="oval:com.tresys.oval.rhel:def:1000"/>
             </check>
@@ -59,11 +54,6 @@
             <fixtext>
                 Verify that all nfs filesystems within /etc/fstab have the nosuid flag.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : nosuid.pp
-               class : nosuid
-               parameter : nosuid_nfs_fstab : true
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-content-ref href="nosuid.oval.xml" name="oval:com.tresys.oval.rhel:def:1004"/>
             </check>

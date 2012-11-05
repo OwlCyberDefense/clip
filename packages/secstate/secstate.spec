@@ -24,7 +24,7 @@ BuildRequires: python2-devel
 BuildRoot: %{_tmppath}/%{name}-buildroot
 
 %description
-SecState is a Security Configuration tool that utilizes openscap and puppet
+SecState is a Security Configuration tool that utilizes openscap and aqueduct
 to configure and validate security configuration information on a target
 system.  SecState targets U.S. federal regulations and guidance, but can be
 used with any SCAP compliant content.
@@ -49,8 +49,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir /var/lib/secstate/benchmarks/
 %dir /var/lib/secstate/configs/
 %dir /var/lib/secstate/oval/
-%dir /var/lib/secstate/puppet/
-/var/lib/secstate/puppet/*
 %dir /usr/share/secstate/
 %dir %{_libexecdir}/%{name}
 %{_libexecdir}/%{name}/secstate_external_node
@@ -67,16 +65,13 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/secstate/__init__.py*
 %{python_sitelib}/secstate/main.py*
 %{python_sitelib}/secstate/util.py*
-%dir /usr/share/puppet/modules/pam
-/usr/share/puppet/modules/pam/*
-%dir /usr/share/puppet/modules/file_perms
-/usr/share/puppet/modules/file_perms/*
 
-# BSD
-%dir /usr/share/puppet/modules/ifdefined
-/usr/share/puppet/modules/ifdefined/*
 
 %changelog
+* Mon Nov 5 2012 Michael Palmiotto <mpalmiotto@tresys.com> 0.5-git.e5058e4
+- Pulled into CLIP build system.
+- Drop all puppet content
+
 * Mon Jun 18 2012 Spencer Shimko <sshimko@tresys.com> 0.5-git.016887c
 - Pulled into CLIP build system. 
 

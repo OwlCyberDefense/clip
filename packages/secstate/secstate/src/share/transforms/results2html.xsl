@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- results2html.xsl -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"> 
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:x="http://checklists.nist.gov/xccdf/1.1"> 
 
 <xsl:output method="html"
     media-type="text/html"
@@ -24,6 +24,8 @@
 <xsl:variable name="numBenchNotSelected" select="count($ruleResult[.='notselected'])"/>
 <xsl:variable name="numBenchFixed" select="count($ruleResult[.='fixed'])"/>
 <xsl:variable name="numBenchMitd" select="count($ruleResult[.='informational'])"/>
+<xsl:variable name="numBenchTotal" select="count(//x:rule-result)"/>
+<xsl:variable name="numBenchParseError" select="count(//x:rule-result[not(x:result)])"/>
         
 <!-- OVAL result counts -->        
 <xsl:variable name="defResult" select="//*[local-name(.)='results']//*[local-name(.)='definition']"/>
@@ -128,6 +130,11 @@
         <xsl:variable name="numBenchNotSelected" select="count($ruleResult[.='notselected'])"/>
         <xsl:variable name="numBenchFixed" select="count($ruleResult[.='fixed'])"/>
         <xsl:variable name="numBenchMitd" select="count($ruleResult[.='informational'])"/>
+        <!--I am so, so sorry about this hack. We can't get the namespace into this template.
+            If you have a fix for this, please let us know. We'd like to do this properly. -->
+        <xsl:variable name="numBenchTotal" select="count($docFile//*[local-name(.)='rule-result'])"/>
+        <xsl:variable name="numBenchParseError" select="$numBenchTotal - count($ruleResult)"/>
+
         <li>
             <span class="toggle"></span>
             <a href="{$htmlFile}">
@@ -155,6 +162,10 @@
                     <dd><xsl:value-of select="$numBenchNotSelected"/></dd>
                     <dt>Fixed: </dt>
                     <dd><xsl:value-of select="$numBenchFixed"/></dd>
+                    <dt>Parse Error: </dt>
+                    <dd><xsl:value-of select="$numBenchParseError"/></dd>
+                    <dt>Total: </dt>
+                    <dd><xsl:value-of select="$numBenchTotal"/></dd>
                     <dt>Timestamp: </dt>
                     <xsl:variable name="date" select="substring-before($docFile//*[local-name(.)='TestResult']/@end-time, 'T')"/>
                     <xsl:variable name="time" select="substring-after($docFile//*[local-name(.)='TestResult']/@end-time, 'T')"/>
@@ -234,6 +245,8 @@
                     <xsl:variable name="time" select="substring-after(//*[local-name(.)='TestResult']/@end-time, 'T')"/>
                     <dt>Benchmark ID: </dt>
                     <dd><xsl:value-of select="@id"/> : <xsl:value-of select="$date"/> ( <xsl:value-of select="$time"/> ) </dd>
+                    <dt>Total: </dt>
+                    <dd><xsl:value-of select="$numBenchTotal"/></dd>
                     <dt>Failures: </dt>
                     <dd><xsl:value-of select="$numBenchFail"/></dd>
                     <dt>Mitigations: </dt>
@@ -242,7 +255,7 @@
                     <dd><xsl:value-of select="$numBenchPass"/></dd>
                     <dt class="toggle">Other</dt>
                     <dd>
-                        <xsl:value-of select="$numBenchError + $numBenchUnknown + $numBenchNotChecked + $numBenchNotApp + $numBenchNotSelected + $numBenchFixed"/>
+                        <xsl:value-of select="$numBenchError + $numBenchUnknown + $numBenchNotChecked + $numBenchNotApp + $numBenchNotSelected + $numBenchFixed + $numBenchParseError"/>
                     </dd>
                         <dl class="hidden summary">
                             <dt>Error: </dt>
@@ -257,6 +270,8 @@
                             <dd><xsl:value-of select="$numBenchNotSelected"/></dd>
                             <dt>Fixed: </dt>
                             <dd><xsl:value-of select="$numBenchFixed"/></dd>
+                            <dt>Parse Error: </dt>
+                            <dd><xsl:value-of select="$numBenchParseError"/></dd>
                         </dl>
                 </dl>
             </dd>
@@ -306,7 +321,7 @@
     <li>
     <dl class="result toggle">
         <dt class="title">Other: </dt>
-        <dd><xsl:value-of select="$numBenchError + $numBenchUnknown + $numBenchNotChecked + $numBenchNotApp + $numBenchNotSelected + $numBenchFixed"/></dd>
+        <dd><xsl:value-of select="$numBenchError + $numBenchUnknown + $numBenchNotChecked + $numBenchNotApp + $numBenchNotSelected + $numBenchFixed + $numBenchParseError"/></dd>
     </dl>
     <ol class="hidden other">
     <li>
@@ -387,7 +402,33 @@
                 </xsl:if>
         </ol>
     </li>
+    <li>
+        <dl class="result toggle">
+        <dt class="title">Parse Error: </dt>
+        <dd class="count"><xsl:value-of select="$numBenchParseError"/></dd>
+        </dl>
+        <ol class="hidden">
+                <xsl:if test="$numBenchParseError &gt; 0">
+                    <xsl:apply-templates select="//x:rule-result[not(x:result)]">
+                        <xsl:with-param name="result" select="'PARSE ERROR'"/>
+                    </xsl:apply-templates>
+                </xsl:if>
+        </ol>
+    </li>
     </ol>
+    <li>
+        <dl class="result toggle">
+        <dt class="title">Total: </dt>
+        <dd class="count"><xsl:value-of select="$numBenchTotal"/></dd>
+        </dl>
+        <ol class="hidden">
+                <xsl:if test="$numBenchTotal &gt; 0">
+                    <xsl:apply-templates select="//x:rule-result">
+                        <xsl:with-param name="result" select="'RESULT'"/>
+                    </xsl:apply-templates>
+                </xsl:if>
+        </ol>
+    </li>
     </li>
 </xsl:template>
 

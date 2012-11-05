@@ -326,20 +326,6 @@ class Secstate:
                 if not value.prohibit_changes:
                     benchmark.vals[refval.item] = value_instance_to_value(value.get_instance_by_selector(refval.selector))
 
-        puppet_files = get_puppet_files(benchmark)
-        if store_path == None and self.content.has_key(benchmark.id):
-            puppet_files =  map(lambda x: os.path.join(self.config.get('secstate', 'puppet_dir'), x), puppet_files)
-        else:
-            puppet_files =  map(lambda x: os.path.join(os.path.dirname(benchmark_file), x), puppet_files)
-
-        for pup in puppet_files:
-            if not os.path.isfile(pup):
-                self.log.error("Error loading associated puppet content: '%(file)s'" % {'file':pup})
-                return None
-
-        benchmark.__dict__['puppet'] = puppet_files
-        benchmark.config.set(benchmark.id, 'puppet', json.dumps(list(puppet_files)))
-
         benchmark.__dict__['mitigations'] = {}
         if benchmark.config.has_section('mitigations'):
             for opt,val in benchmark.config.items('mitigations'):
@@ -361,26 +347,6 @@ class Secstate:
                 for oval in list(set(oval_files)):
                     shutil.copy(os.path.join(oval_path, oval), directory)
 
-                puppet_dir = self.config.get('secstate', 'puppet_dir')
-                if not os.path.isdir(puppet_dir):
-                    os.makedirs(puppet_dir)
-
-                for puppet in benchmark.puppet:
-                    old_file = os.path.join(puppet_dir, os.path.basename(puppet))
-                    if os.path.isfile(old_file):
-                        old = open(old_file)
-                        new = open(puppet)
-                        if old.read() != new.read():
-                            self.log.info("A puppet file named '%(name)s' has already been imported.  Moving old file to '%(name)s.old'" % {'name':puppet})
-                            os.rename(old_file, old_file + '.old')
-                        else:
-                            continue
-
-                    shutil.copy(os.path.join(os.path.dirname(benchmark_file), os.path.basename(puppet)), self.config.get('secstate', 'puppet_dir'))
-
-                benchmark.__dict__['puppet'] = map(lambda x: os.path.join(self.config.get('secstate', 'puppet_dir'), os.path.basename(x)), benchmark.puppet)
-                benchmark.config.set(benchmark.id, 'puppet', json.dumps(benchmark.puppet))
-
                 conf_file = open(os.path.join(self.config.get('secstate', 'conf_dir'), id + ".cfg"), 'w')
                 benchmark.config.write(conf_file)
                 conf_file.close()
@@ -395,7 +361,7 @@ class Secstate:
     def import_zipped_content(self, zip, file_type, store_path, changes=False, active_profile=NONE_PROFILE):
         """
         Function:       Validate and copy content from zipped file to repository
-        Input:          Zipped file contating content and bool whether it contains puppet content
+        Input:          Zipped file containing content
         Output:         Success of failure of the import
         """
         extract_path = tempfile.mkdtemp()
@@ -460,7 +426,7 @@ class Secstate:
         for extracted_file in os.listdir(extract_path):
             print extracted_file
             if mimetypes.guess_type(os.path.join(extract_path, extracted_file))[0] == "text/xml":
-                if is_benchmark(os.path.join(extract_path, extracted_file)):
+                if is_valid_xccdf_file(os.path.join(extract_path, extracted_file)):
                     xccdf = extracted_file
             
         if xccdf == None:
@@ -505,20 +471,21 @@ class Secstate:
         file_type = mimetypes.guess_type(content)
         if file_type[0] == "text/xml":
             try:
-                xccdf = is_benchmark(content)
+                xccdf = is_valid_xccdf_file(content)
+                oval = is_valid_oval_file(content)
             except SecstateException, e:
                 self.log.error(str(e))
                 return None
 
             # We expect either XCCDF or OVAL
             if xccdf:
-                # Import the content as XCCDF if is_benchmark says it's XCCDF
                 return self.import_benchmark(content, store_path=store_path, oval_path=os.path.dirname(content), changes=changes, active_profile=active_profile)
-            else:
-                # Non-XCCDF content is expected to be OVAL, so handle it like OVAL
+            elif oval:
                 if save:
                     store_path = self.config.get('secstate', 'oval_dir')
                 return self.import_oval(content, store_path)
+            else:
+                self.log.error("File %s is neither OVAL nor XCCDF." % content)
                 
         else:
             return self.import_zipped_content(content, file_type, store_path=store_path, changes=changes, active_profile=active_profile)
@@ -548,7 +515,7 @@ class Secstate:
         bench_dir = os.path.join(self.benchmark_dir, benchmark_id)
         for content in os.listdir(bench_dir):
             file_type = mimetypes.guess_type(os.path.join(bench_dir, content))
-            if (file_type[0] == "text/xml") and (not is_benchmark(os.path.join(bench_dir, content))):
+            if (file_type[0] == "text/xml") and (not is_valid_xccdf_file(os.path.join(bench_dir, content))):
                 archive.write(os.path.join(bench_dir, content), content)
 
         try:
@@ -557,11 +524,6 @@ class Secstate:
             self.log.error(str(e))
             return False
 
-        if cfg.has_option(benchmark_id, 'puppet'):
-            puppet_files = json.loads(cfg.get(benchmark_id, 'puppet'))
-            for puppet in puppet_files:
-                archive.write(os.path.join(self.config.get('secstate', 'puppet_dir'), puppet), puppet)
-        
         archive.close()
         return True
 
@@ -576,23 +538,6 @@ class Secstate:
             except SecstateException, e:
                 self.log.error(str(e))
                 return False
-            if cfg.has_option(benchmark_id, 'puppet'):
-                rem_puppet = set(json.loads(cfg.get(benchmark_id, 'puppet')))
-                in_use = set()
-                for key in self.content:
-                    if key != benchmark_id:
-                        try:
-                            key_cfg = load_config(self.content_configs[benchmark_id])
-                        except SecstateException, e:
-                            self.log.error(str(e))
-                            return False
-                        if key_cfg.has_option(benchmark_id, 'puppet'):
-                            in_use = in_use | rem_puppet | set(json.loads(key_cfg.get(benchmark_id, 'puppet')))
-
-                for puppet_file in rem_puppet:
-                    if puppet_file not in in_use:
-                        os.remove(os.path.join(self.config.get('secstate', 'puppet_dir'), puppet_file))
-
             try:
                 if os.path.split(cfg.get(benchmark_id, "file"))[0] != self.config.get('secstate', 'oval_dir'):
                     shutil.rmtree(os.path.split(cfg.get(benchmark_id, "file"))[0])
@@ -833,6 +778,8 @@ class Secstate:
 
                 file_index.append(scanned_content.id)
 
+        print "Generating HTML output..."
+
         if output_html and file_index:
             impl = xml.dom.minidom.getDOMImplementation()
             newdoc = impl.createDocument(None, "Index", None)
@@ -844,7 +791,7 @@ class Secstate:
                 top_element.appendChild(file_node)
                 try:
                     result_to_html(os.path.join(results_dir, output + ".results.xml"), oval_ss, os.path.join(results_dir, output + ".results.html"))
-                except:
+                except Exception, e:
                     self.log.error(str(e))
                     return False
 
@@ -853,7 +800,7 @@ class Secstate:
             help = self.config.get('secstate', 'help_html')
             try:
                 result_to_html(newdoc.toxml(), oval_ss, os.path.join(results_dir, "index.html"), media, about, help)
-            except:
+            except Exception,e:
                 self.log.error(str(e))
                 return False
 
@@ -1091,7 +1038,7 @@ class Secstate:
         result_files = []
         if os.path.isdir(xccdf_results):
             for res_file in os.listdir(xccdf_results):
-                if res_file.endswith(".results.xml") and is_benchmark(os.path.join(xccdf_results, res_file)):
+                if res_file.endswith(".results.xml") and is_valid_xccdf_file(os.path.join(xccdf_results, res_file)):
                     result_files.append(os.path.join(xccdf_results, res_file))
 
         elif os.path.isfile(xccdf_results):
@@ -1151,15 +1098,6 @@ class Secstate:
                 if inpt != 'y':
                     continue
 
-            if self.content.has_key(bench_id):
-                site_pp = self.config.get('secstate', 'site_pp')
-            else:
-                (site_pp_buf, site_pp) = tempfile.mkstemp()
-                self.tempfiles['files'].append(site_pp)
-                for puppet in benchmark.puppet:
-                    os.write(site_pp_buf, 'import "%(file)s"\n' % {'file':puppet})
-                os.close(site_pp_buf)
-
             self.log.info("-- Remediating %(id)s --" % {'id':bench_id})
             ignore_ids = []
             try:
@@ -1168,91 +1106,79 @@ class Secstate:
                         ignore_ids.append(key)
                 ignore_ids += passing_ids
                 ignore_ids += benchmark.mitigations.keys()
-                (puppet_content, bash_content) = parse_fixes(benchmark, ignore_ids)
+                bash_content = parse_fixes(benchmark, ignore_ids)
             except SecstateException, se:
                 self.log.error('Error: %s' % str(se))
                 return False
 
             # Checking if there is automated content to run
-            if (puppet_content["classes"] == []) and (puppet_content["parameters"] == {}) and (bash_content == []):
+            if bash_content == []:
                 self.log.warning("No remediation to be done.")
                 if verbose:
                     self.log.info("Either results XCCDF did not report any failures, or failures reported did not have a well formed <fix> element in the corresponding XCCDF benchmark.")
+                return True
 
-            # Running automated content
-            else:
-                # Running puppet automated content if appropriate
-                if (puppet_content["classes"] != []) or (puppet_content["parameters"] != {}):
-                    handle, fname = tempfile.mkstemp(suffix='.yaml')
-                    self.tempfiles['files'].append(fname)
-                    os.write(handle, template % dict_to_external(puppet_content))
-                    os.close(handle)
-                    puppet_args = ['/usr/bin/puppet', '--external_node', '/usr/libexec/secstate/secstate_external_node %s' % fname, '--node_terminus', 'exec', site_pp]
-                    if noop:
-                        puppet_args.append('--noop')
-                    if log_dest:
-                        puppet_args.extend(['-l', log_dest])
+            # Running bash automated content
+            for fix in bash_content:
+                script_path = fix['script']
+
+                env_vars = fix['environment-variables']
+                environ = {}
+                try:
+                    for name, val in env_vars.iteritems():
+                        environ[str(name)] = str(val)
+                except:
+                    self.log.error("Failed to set up environment for script: %(script)s" % {'script':script_path})
+                    return False
+                
+                positional_args = fix['positional-args']
+                positional_args = [str(a) for a in positional_args]
+
+                if os.path.exists(script_path):
                     if verbose:
-                        puppet_args.append('--verbose')
+                        self.log.info("Running bash remediation script: %s" % script_path)
+                    cmd = ["/bin/bash", script_path] + positional_args
+                    try:
+                        # Runs the remediation script with all the environment variables
+                        # and positional args from a <fix> tag in the XCCDF content
+                        proc = subprocess.Popen(cmd, env=environ, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
-                    subprocess.call(puppet_args)
+                        # Check that the remediation script takes less than timeout seconds to terminate
+                        timeout = int(self.config.get('secstate', 'remediation_timeout'))
+                        finished = wait_timeout(proc, timeout)
+                        if not finished and proc.poll() is None:
+                            proc.kill()
+                            raise Exception("timeout after %d seconds" % timeout)
 
+                        # We pipe stdout and stderr into the same string, to keep the ordering
+                        out = proc.communicate()[0]
 
-                # Running bash automated content
-                if (bash_content != []):
-                    for fix in bash_content:
-                        script_path = fix['script']
+                        rc = proc.returncode
 
-                        env_vars = fix['environment-variables']
-                        environ = {}
-                        try:
-                            for name, val in env_vars.iteritems():
-                                environ[str(name)] = str(val)
-                        except:
-                            self.log.error("Failed to set up environment for script: %(script)s" % {'script':script_path})
-                            return False
-                        
-                        positional_args = fix['positional-args']
-                        positional_args = [str(a) for a in positional_args]
+                        # Log format lists script_path, command executed (incl. positional args),
+                        # returncode, and stdout+stderr.
+                        logs = "#"*20 + script_path + "#"*20 + "\n"
+                        logs += "Executed \"%s\"\n" % (" ".join(cmd))
+                        logs += "Environment: %s\n" % str(environ)
+                        logs += "Returned: %d\n" % rc
+                        logs += "-"*18 + " Output: " + "-"*18 + "\n"
+                        logs += out
+                        logs += "#"*20 + "end " + script_path + "#"*16 + "\n\n"
 
-                        if os.path.exists(script_path):
-                            if verbose:
-                                self.log.info("Running bash remediation script: %s" % script_path)
-                            cmd = ["/bin/bash", script_path] + positional_args
-                            try:
-                                # Runs the remediation script with all the environment variables
-                                # and positional args from a <fix> tag in the XCCDF content
-                                proc = subprocess.Popen(cmd, env=environ, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                        # log_dest set with -l flag, append log string to file
+                        if log_dest:
+                            save_logs(log_dest, logs)
 
-                                # We pipe stdout and stderr into the same string, to keep the ordering
-                                out = proc.communicate()[0]
-
-                                rc = proc.returncode
-
-                                # Log format lists script_path, command executed (incl. positional args),
-                                # returncode, and stdout+stderr.
-                                logs = "#"*20 + script_path + "#"*20 + "\n"
-                                logs += "Executed \"%s\"\n" % (" ".join(cmd))
-                                logs += "Environment: %s\n" % str(environ)
-                                logs += "Returned: %d\n" % rc
-                                logs += "-"*18 + " Output: " + "-"*18 + "\n"
-                                logs += out
-                                logs += "#"*20 + "end " + script_path + "#"*16 + "\n\n"
-
-                                # log_dest set with -l flag, append log string to file
-                                if log_dest:
-                                    save_logs(log_dest, logs)
-
-                                # Only print on successful run (rc==0) if verbose is enabled
-                                if rc != 0:
-                                    self.log.error(logs)
-                                elif verbose:
-                                    print logs
-                            except Exception, e:
-                                self.log.error("Failed to execute remediation script: '%(cmd)s' failed: %(err)s" % {'cmd': " ".join(cmd), 'err': str(e)})
-                        else:
-                            self.log.error("Script: %s does not exist\t\n" % script_path)
-                            return False
+                        # Only print on successful run (rc==0) if verbose is enabled
+                        if rc != 0:
+                            self.log.error(logs)
+                        elif verbose:
+                            print logs
+                    except Exception, e:
+                        self.log.error("Failed to execute remediation script: '%(cmd)s' failed: %(err)s" % {'cmd': " ".join(cmd), 'err': str(e)})
+                else:
+                    self.log.error("Script: %s does not exist\t\n" % script_path)
+                    return False
 
         return True
 

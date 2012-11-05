@@ -65,5 +65,4 @@ distcache:x:482:
 named:x:25:
 mysql:x:481:
 stap-server:x:155:
-puppet:x:52:
 unbound:x:480:

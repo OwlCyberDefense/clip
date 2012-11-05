@@ -47,8 +47,6 @@ bind_mount_deps = ["/dev","/sys","/proc","/selinux"]
 # important directories to be copied in recursively
 dir_deps = ["/etc/secstate",
             '/usr/share/secstate',
-            '/etc/puppet',
-            '/usr/share/puppet',
             '/usr/share/openscap',
             ] \
             + glob.glob('/usr/lib*/ruby')
@@ -114,7 +112,7 @@ binary_deps = ['/usr/bin/python',
                + glob.glob(USR_LIB + '/libuser/*') \
 
 # script executables and other regular files to copy into the chroot
-file_deps = ['/usr/bin/puppet',
+file_deps = [
              '/usr/bin/secstate',
              '/etc/ld.so.cache',
              '/usr/lib/locale/locale-archive',
@@ -122,7 +120,6 @@ file_deps = ['/usr/bin/puppet',
              '/etc/libuser.conf',
              '/etc/default/useradd',
              '/usr/libexec/secstate/secstate_external_node',
-             '/var/lib/secstate/puppet/site.pp',
              '/etc/mime.types',
              ] \
              + glob.glob('/usr/include/python' + PYVER + '/pyconfig-*.h')
@@ -153,10 +150,12 @@ def main():
               # exception during build of chroot   
               except ChrootException, ce:
                  print(ce)
+                 results[test_path] = None 
                  traceback.print_exc()
               # execution during test run
               except Exception, e:
                  print(e)
+                 results[test_path] = None
                  traceback.print_exc()
       finally:
          #raw_input("Press Enter to continue")
@@ -164,22 +163,32 @@ def main():
    
    success = 0
    fail = 0
+   broke = 0
    failed = []
+   broken = []
 
    for key in results:
       value = results[key]
-      if value:
+      if value is None:
+          broke += 1
+          broken.append(key)
+      elif value:
          success +=1
       else:
          fail +=1
          failed.append(key)
          
    print('\n')   
-   print('Successfull tests : %d' % success)
+   print('Successful tests  : %d' % success)
    print('Failed tests      : %d' % fail)
+   print('Broken tests      : %d' % broke)
+   print('Total tests       : %d' % len(args))
 
    for i, test in enumerate(failed):
         print "Failed test %d: %s" % (i + 1, test.split("/")[1])
+   for i, test in enumerate(broken):
+        print "Broken test %d: %s" % (i + 1, test.split("/")[1])
+
 
 #Catch signals
 def handle_signals(signum, frame):

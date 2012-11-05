@@ -1,11 +1,10 @@
 bash_import_passreqs
-bash_remediate_logged_passreqs
 bash_remediate_passreqs
 bash_remediate_logged_output
 bash_remediate_no_output
 bash_remediate_verbose_logged_output
 bash_remediate_verbose_output
-clip_puppet_content
+bash_remediate_timeout
 import_xccdf_tgz
 import_xccdf_tar
 import_xccdf_bz2
@@ -68,6 +67,7 @@ remediate_grub_conf_group_owner_verbose
 export_nonexistent
 import_clip_sample
 import_empty_xml
+import_arbitrary_xml
 import_nonexistent
 list_xccdf_parameter_dne
 manpage_installed

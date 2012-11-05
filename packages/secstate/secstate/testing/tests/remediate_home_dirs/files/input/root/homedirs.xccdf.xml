@@ -42,13 +42,6 @@
             <fixtext>
                 Verify that all users specified within /etc/passwd are assigned a home directory.
             </fixtext>
-            <!-- Uncomment if we decide to do this remediation
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : homedirs.pp
-               class : homedirs
-               parameter : user_assigned_home : true
-            </fix>
-            -->
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-content-ref href="homedirs.oval.xml" name="oval:com.tresys.oval.rhel:def:1000"/>
             </check>
@@ -62,11 +55,6 @@
             <fixtext>
                 Verify that every home directory specified within the /etc/passwd file exists.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : homedirs.pp
-               class : homedirs
-               parameter : user_home_exists : true
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-content-ref href="homedirs.oval.xml" name="oval:com.tresys.oval.rhel:def:1002"/>
             </check>

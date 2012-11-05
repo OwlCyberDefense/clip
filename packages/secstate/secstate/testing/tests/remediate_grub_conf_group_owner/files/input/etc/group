@@ -52,4 +52,3 @@ sshd:x:74:
 tcpdump:x:72:
 slocate:x:21:
 fslavin:x:500:
-puppet:x:52:

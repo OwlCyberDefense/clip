@@ -12,40 +12,36 @@ DDEESSCCRRIIPPTTIIOONN
        Linux systems. It  provides  auditing  of  a  system  against  security
        requirements  and,  optionally,  remediating  a  system  to  meet those
        requirements. Secstate uses  the  SCAP  language  (a  NIST  standard  -
-       http://scap.nist.gov)   and   Puppet   internally   (http://www.puppet-
-       labs.com).
+       http://scap.nist.gov) internally.
 
-       Using secstate involves importing  security  auditing  and  remediation
-       information  (referred to generically as content in this documentation)
+       Using  secstate  involves  importing  security auditing and remediation
+       information (referred to generically as content in this  documentation)
        into a stored content directory, customizing that content, and using it
        to audit and remediate the state of the system.
 
-       The  results  of  system audits are available as in SCAP XML formats or
+       The results of system audits are available as in SCAP  XML  formats  or
        HTML.
 
 CCOOMMMMAANNDDSS
        iimmppoorrtt [[ooppttiioonnss]] <<CCoonntteennttFFiillee>>
 
-              Validate and import an XCCDF benchmark and referenced  OVAL  and
-              Puppet files or a stand-alone OVAL file into the secstate stored
-              content directory. Content can be stored as an XCCDF file,  OVAL
-              file, ZIP file, tarball (.tar.gz).
+              Validate and import an XCCDF benchmark and referenced OVAL files
+              or a stand-alone OVAL file  into  the  secstate  stored  content
+              directory.  Content  can  be stored as an XCCDF file, OVAL file,
+              ZIP file, tarball (.tar.gz).
 
-              If  an  XCCDF  file is provided that XCCDF benchmark is imported
-              and all dependent OVAL and Puppet files are  imported  from  the
-              directory  containing  the XCCDF file. Archives (ZIP or .tar.gz)
-              are assumed to contain an XCCDF file and one or  more  dependent
-              OVAL  and  Puppet  files and are imported as a group. Finally, a
-              single (stand-alone) OVAL or Puppet file can be imported.
+              If an XCCDF file is provided that XCCDF  benchmark  is  imported
+              and  all  dependent  OVAL  files are imported from the directory
+              containing the XCCDF file. Archives (ZIP or .tar.gz) are assumed
+              to  contain  an  XCCDF file and one or more dependent OVAL files
+              and are imported as a group.  Finally,  a  single  (stand-alone)
+              OVAL file can be imported.
 
-              An OVAL file which is imported on its own is treated as  a  top-
-              level  item and it is audited separately from any XCCDF content.
-              All Puppet files which are imported are stored in a common loca-
-              tion and are available to all imported XCCDF content for remedi-
-              ation.
+              An  OVAL  file which is imported on its own is treated as a top-
+              level item and it is audited separately from any XCCDF  content.
 
-              After import, the content can be viewed using  list  or  search,
-              customized  using select / deselect, and used to audit and reme-
+              After  import,  the  content can be viewed using list or search,
+              customized using select / deselect, and used to audit and  reme-
               diate. By default, top-level content is selected after import.
 
               Example of importing an XCCDF file:
@@ -381,8 +377,19 @@ CCOOMMMMAANNDDSS
        rreemmeeddiiaattee [[ooppttiioonnss]] [[BBeenncchhmmaarrkkIIDD||BBeenncchhmmaarrkkFFiillee]]
 
               The remediate command brings the system into compliance with one or more
-              XCCDF benchmarks.  It uses information from the fix elements of selected rules
-              and passes that information on to Puppet which makes changes to the system.
+              XCCDF benchmarks. XCCDF benchmarks contain <fix> tags whose text is a JSON
+              dictionary which provides the path to a bash script, a dictionary of
+              environment variables, and a list of positional arguments which will be passed
+              to the script. These <fix> tags take the following format:
+
+                  <fix system="urn:xccdf:fix:script:bash">
+                      {
+                      "script" : "/path/to/script/file.sh",
+                      "environment-variables" : { "env_var_1" : <sub idref="variable-from-oval" />,
+                                                  "env_var_2" : "value" },
+                      "positional-args" : [ "first-arg", "2" ]
+                      }
+                  </fix>
 
               OOppttiioonnss::
 
@@ -391,9 +398,6 @@ CCOOMMMMAANNDDSS
 
               --ll,, ----lloogg--ddeesstt
               Output logs to FILE instead of stdout.
-
-              --nn,, ----nnoooopp
-              Run puppet in noop mode.  No changes will be made to the system.
 
               --pp,, ----pprrooffiillee
               Specifies the profile to use when remediating the system.
@@ -475,7 +479,7 @@ AAUUTTHHOORR
        Karl MacMillan <kmacmillan@tresys.com>
 
 SSEEEE AALLSSOO
-       oscap(30) puppet(8)
+       oscap(30)
 
 
 

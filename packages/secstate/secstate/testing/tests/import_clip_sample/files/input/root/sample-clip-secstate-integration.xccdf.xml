@@ -11,7 +11,7 @@
     <status date="2011-01-12">draft</status>
     <title>Sample CLIP Integration with Secstate</title>
     <description>
-        This document demonstrates how existing CLIP content (OVAL and puppet) can be used with the Secstate tool.
+        This document demonstrates how existing CLIP content (OVAL and XCCDF) can be used with the Secstate tool.
     </description>
 
     <notice id="terms-of-use" xml:lang="en">
@@ -55,10 +55,6 @@
                     Verify that /etc/syslog.conf contains an entry to log every priority of the &quot;auth&quot; facility to a log file.
                     Example: auth.* /var/log/authlog
                 </fixtext>
-                <fix system="urn:xccdf:fix:script:puppet">
-                    manifest : clip.pp
-                    class : gen000440
-                </fix>
                 <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                     <check-content-ref href="clip-ovaldi.xml" name="oval:tresys:def:2192"/>
                 </check>
@@ -99,10 +95,6 @@
                 <fixtext>
                     Verify that /etc/profile contains the line "readonly TMOUT=900"
                 </fixtext>
-                <fix system="urn:xccdf:fix:script:puppet">
-                    manifest : clip.pp
-                    class : ac-11::p1
-                </fix>
                 <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                     <check-content-ref href="clip-ovaldi.xml" name="oval:tresys:def:2004"/>
                 </check>
