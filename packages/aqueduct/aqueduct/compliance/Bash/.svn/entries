@@ -1,0 +1,49 @@
+10
+
+dir
+337
+svn+ssh://svn.fedorahosted.org/svn/aqueduct/trunk/compliance/Bash
+svn+ssh://svn.fedorahosted.org/svn/aqueduct
+
+
+
+2012-10-22T14:36:03.803924Z
+337
+mpalmiotto
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+222a7096-7963-498e-82ae-632bd6af5a1a
+
+HIPPA
+dir
+
+NISPOM
+dir
+
+STIG
+dir
+
+PCI
+dir
+
+SSG
+dir
+
+CIS
+dir
+
+DHS
+dir
+

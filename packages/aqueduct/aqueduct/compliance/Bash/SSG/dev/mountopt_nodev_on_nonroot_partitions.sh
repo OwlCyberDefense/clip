@@ -22,6 +22,9 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
 
+. $(dirname $0)/set_general_entry
+safe_add_field "()chroot\s+.*" "chroot	nodev" $FILE
+safe_add_field "()dev\s+.*" "
 if ! `/bin/grep -Pq "^\s*([^.\/chroot])\/*\s+.*,?nodev,?.*$" $FILE`; then
 	/bin/mount -o remount,nodev /chroot
 fi

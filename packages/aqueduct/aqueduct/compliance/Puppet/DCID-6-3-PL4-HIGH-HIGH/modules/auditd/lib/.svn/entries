@@ -1,0 +1,35 @@
+10
+
+dir
+0
+svn+ssh://svn.fedorahosted.org/svn/aqueduct/trunk/compliance/Puppet/DCID-6-3-PL4-HIGH-HIGH/modules/auditd/lib
+svn+ssh://svn.fedorahosted.org/svn/aqueduct
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+222a7096-7963-498e-82ae-632bd6af5a1a
+
+augeas
+dir
+
+
+
+add
+

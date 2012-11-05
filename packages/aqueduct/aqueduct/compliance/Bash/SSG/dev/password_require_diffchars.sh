@@ -20,3 +20,4 @@ set -e
 
 . $(dirname $0)/set_pam_common
 set_pam_unix_option difok 3
+set_pam_unix_flag use_first_pass

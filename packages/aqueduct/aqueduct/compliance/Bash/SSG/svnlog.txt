@@ -1,0 +1,1 @@
+- Changed name of generated manual profile.
