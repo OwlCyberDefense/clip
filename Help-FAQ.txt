@@ -27,6 +27,15 @@ CLIP for RHEL 6 Frequently Asked Questions
    # reposync --norepopath -m -p /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6 --repoid=rhel-x86_64-server-optional-6 -l
    # createrepo -d -g /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackages/repodata/comps.xml /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackage
 
+   To mirror EPEL you will need to ensure the system performing the mirroring
+   is already capable of pulling from EPEL. Refer to this page for help with
+   that:
+        http://fedoraproject.org/wiki/EPEL/FAQ#How_can_I_install_the_packages_from_the_EPEL_software_repository.3F
+   Once that is complete you can mirror EPEL.  This is how we do it:
+
+   # reposync --norepopath -m -p /opt/epel-6/ --repoid=epel  -l
+   # createrepo -d -g /opt/epel-6/comps.xml /opt/epel-6/
+
 5. Why do I get prompted for so many passwords the first time I login?
    The default user's password is immediately expired when the account is 
    created.  This means you have to login and choose a new password.
