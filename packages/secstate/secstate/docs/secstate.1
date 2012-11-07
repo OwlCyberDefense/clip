@@ -9,8 +9,7 @@ Secstate is a tool that streamlines security lockdown and monitoring
 on Linux systems. It provides auditing of a system against security
 requirements and, optionally, remediating a system to meet those
 requirements. Secstate uses the SCAP language (a NIST standard -
-http://scap.nist.gov) and Puppet internally
-(http://www.puppetlabs.com).
+http://scap.nist.gov) internally.
 .sp
 Using secstate involves importing security auditing and remediation
 information (referred to generically as content in this documentation)
@@ -22,21 +21,19 @@ The results of system audits are available as in SCAP XML formats or HTML.
 .TP
 .B import [options] <ContentFile>
 .sp
-Validate and import an XCCDF benchmark and referenced OVAL and Puppet files
+Validate and import an XCCDF benchmark and referenced OVAL files
 or a stand-alone OVAL file into the secstate stored content directory. Content
 can be stored as an XCCDF file, OVAL file, ZIP file, tarball
 (.tar.gz).
 .sp
 If an XCCDF file is provided that XCCDF benchmark is imported and all
-dependent OVAL and Puppet files are imported from the directory containing the
+dependent OVAL files are imported from the directory containing the
 XCCDF file. Archives (ZIP or .tar.gz) are assumed to contain an XCCDF
-file and one or more dependent OVAL and Puppet files and are imported as a
-group. Finally, a single (stand-alone) OVAL or Puppet file can be imported.
+file and one or more dependent OVAL files and are imported as a
+group. Finally, a single (stand-alone) OVAL file can be imported.
 .sp
 An OVAL file which is imported on its own is treated as a top-level item
-and it is audited separately from any XCCDF content.  All Puppet files which
-are imported are stored in a common location and are available to all
-imported XCCDF content for remediation.
+and it is audited separately from any XCCDF content.
 .sp
 After import, the content can be viewed using list or search,
 customized using select / deselect, and used to audit and
@@ -408,8 +405,19 @@ Show additional information on matching items.
 .B remediate [options] [BenchmarkID|BenchmarkFile]
 .sp
 The remediate command brings the system into compliance with one or more
-XCCDF benchmarks.  It uses information from the fix elements of selected rules
-and passes that information on to Puppet which makes changes to the system.
+XCCDF benchmarks. XCCDF benchmarks contain <fix> tags whose text is a JSON
+dictionary which provides the path to a bash script, a dictionary of
+environment variables, and a list of positional arguments which will be passed
+to the script. These <fix> tags take the following format:
+
+    <fix system="urn:xccdf:fix:script:bash">
+        {   
+        "script" : "/path/to/script/file.sh",
+        "environment-variables" : { "env_var_1" : <sub idref="variable-from-oval" />,
+                                    "env_var_2" : "value" },
+        "positional-args" : [ "first-arg", "2" ]
+        }   
+    </fix>
 .sp
 .B Options:
 .sp
@@ -420,10 +428,6 @@ show the help text.
 .B \-l, \-\-log\-dest
 .
 Output logs to FILE instead of stdout.
-.sp
-.B \-n, \-\-noop
-.
-Run puppet in noop mode.  No changes will be made to the system.
 .sp
 .B \-p, \-\-profile
 .
@@ -516,4 +520,3 @@ secstate returns 0 for success and non-0 for error.
 Karl MacMillan <kmacmillan@tresys.com>
 .SH SEE ALSO
 oscap(30)
-puppet(8)

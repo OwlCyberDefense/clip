@@ -60,10 +60,6 @@
             <question/>
             <rationale>Security measure for brute-force dictionary attacks.</rationale>
             <fixtext>Change password to have minimum number of lowercase letters.</fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               class : passwd_complexity
-               array : cracklib_args : lcredit=-2
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                <check-content-ref href="2-19PasswordComplexity_Lowercase.xml"
                                   name="oval:com.tresys.oval.rhel:def:1000" />
@@ -75,10 +71,6 @@
             <question/>
             <rationale>Security against brute force dictionary attacks.</rationale>
             <fixtext>Password must be no shorter than the minimum lengths.</fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               class : passwd_complexity
-               array : cracklib_args : minlen=<sub idref="pass-min-length-var" />
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                <check-content-ref href="2-20PasswordComplexity_MinLen.xml"
                                   name="oval:com.tresys.oval.rhel:def:1001" />
@@ -89,10 +81,6 @@
             <description>Passwords must have minimum amount of numbers.</description>
             <rationale>Security against brute force dictionary attacks.</rationale>
             <fixtext>Change password to contain minimum amount of letters.</fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               class : passwd_complexity
-               array : cracklib_args : dcredit=-1
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                <check-content-ref href="2-21PasswordComplexity_Numeric.xml"
                                   name="oval:com.tresys.oval.rhel:def:1002" />
@@ -103,10 +91,6 @@
             <description>Password must contain certain number of special characters.</description>
             <rationale>Security against brute force dictionary attacks.</rationale>
             <fixtext>Change password to contain a certain number of special characters.</fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               class : passwd_complexity
-               array : cracklib_args : ocredit=-1
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                <check-content-ref href="2-22PasswordComplexity_Special.xml"
                                   name="oval:com.tresys.oval.rhel:def:1003" />
@@ -117,10 +101,6 @@
             <description>Passwords must contain number of uppercase letters.</description>
             <rationale>Security against brute force dictionary attacks.</rationale>
             <fixtext>Change password to contain a certain number of uppercase letters.</fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               class : passwd_complexity
-               array : cracklib_args : ucredit=-2
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                <check-content-ref href="2-23PasswordComplexity_Uppercase.xml"
                                   name="oval:com.tresys.oval.rhel:def:1004" />

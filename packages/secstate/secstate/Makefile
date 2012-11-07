@@ -60,7 +60,6 @@ SYSCONFDIR := $(DESTDIR)/etc
 DATADIR := $(DESTDIR)/var/lib
 SHAREDIR := $(DESTDIR)/usr/share
 SECSTATE_DATADIR := $(DATADIR)/secstate
-SECSTATE_PUPPETDIR := $(DATADIR)/secstate/puppet
 BENCHDIR := $(SECSTATE_DATADIR)/benchmarks
 BENCHCONFDIR := $(SECSTATE_DATADIR)/configs
 OVALDIR := $(SECSTATE_DATADIR)/oval
@@ -69,7 +68,6 @@ MANDIR := $(DESTDIR)/usr/share/man
 LIBEXECDIR := $(DESTDIR)/usr/libexec
 PYTHON_LIB := $(DESTDIR)$(PY_LIB)
 PYTHON_LIB_SECSTATE := $(PYTHON_LIB)/$(PKG)
-PUPPET_MODULEDIR := $(DESTDIR)/usr/share/puppet/modules
 TRANSFORMDIR := $(SHAREDIR)/$(PKG)/transforms
 RPM_BUILD = rpmbuild --define '_topdir $(RPM_TOPDIR)' \
 			--define '_tmppath $(RPM_TMPDIR)' \
@@ -127,7 +125,6 @@ install:
 	$(verbose)test -d $(PYTHON_LIB) || $(INSTALL) $(MODE_DIR) -d $(PYTHON_LIB)
 	$(verbose)test -d $(PYTHON_LIB_SECSTATE) || $(INSTALL) $(MODE_DIR) -d $(PYTHON_LIB_SECSTATE)
 	$(verbose)test -d $(TRANSFORMDIR) || $(INSTALL) $(MODE_DIR) -d $(TRANSFORMDIR)
-	$(verbose)test -d $(SECSTATE_PUPPETDIR) || $(INSTALL) $(MODE_DIR) -d $(SECSTATE_PUPPETDIR)
 	$(verbose)$(GZIP) -c docs/secstate.1 > docs/secstate.1.gz
 	$(verbose)$(INSTALL) $(MODE_REG) docs/secstate.1.gz $(MANDIR)/man1/secstate.1.gz
 	$(verbose)$(INSTALL) $(MODE_EXEC) src/bin/$(PKG) $(BINDIR)/$(PKG)
@@ -138,10 +135,7 @@ install:
 	$(verbose)test -d $(BENCHDIR) || $(INSTALL) $(MODE_DIR) -d $(BENCHDIR)
 	$(verbose)test -d $(BENCHCONFDIR) || $(INSTALL) $(MODE_DIR) -d $(BENCHCONFDIR)
 	$(verbose)test -d $(OVALDIR) || $(INSTALL) $(MODE_DIR) -d $(OVALDIR)
-	$(verbose)test -d $(PUPPET_MODULEDIR) || $(INSTALL) $(MODE_DIR) -d $(PUPPET_MODULEDIR)
-	$(foreach module, $(MODULE_LIST), $(verbose)cp -r remediation/puppet-modules/${module} $(PUPPET_MODULEDIR);)
 	$(verbose)cp -a src/share/transforms/* $(TRANSFORMDIR)
-	$(verbose)cp -a src/puppet/* $(SECSTATE_PUPPETDIR)
 
 uninstall:
 	rm -rf $(SYSCONFDIR)/$(PKG)

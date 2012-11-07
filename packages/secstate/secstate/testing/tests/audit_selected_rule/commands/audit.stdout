@@ -9,6 +9,8 @@ Not Applicable: 0
 Error:          0
 Informational:  0
 Unknown:        0
+Parse Error:    0
+Total:          11
 
 --Results for 'PassComp' (Profile: 'None')--
 Passed:         0
@@ -21,4 +23,7 @@ Not Applicable: 0
 Error:          0
 Informational:  0
 Unknown:        0
+Parse Error:    0
+Total:          5
 
+Generating HTML output...

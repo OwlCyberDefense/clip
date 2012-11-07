@@ -22,6 +22,5 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
 
-if ! `/bin/grep -Pq "^\s*([\/tmp])\s+.*,?nosuid,?.*$" $FILE`; then
-	/bin/mount -o remount, nosuid /tmp
-fi
+. $(dirname $0)/set_general_entry
+safe_add_field "()tmp\s+" "tmp  /var/tmp        none    rw,nodev,noexec,nosuid,bind        0       0" $FILE

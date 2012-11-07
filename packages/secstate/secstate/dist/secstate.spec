@@ -17,15 +17,14 @@ Source0: http://oss.tresys.com/files/clip/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 BuildArch: noarch
 BuildRequires: redhat-rpm-config python2-devel
-Requires: openscap-python >= 0.8.5
+Requires: openscap-python >= 0.9.1
 Requires: python
 Requires: libxml2-python
 Requires: libxslt-python
-Requires: puppet
 Requires: python-simplejson
 
 %description
-SecState is a Security Configuration tool that utilizes openscap and puppet
+SecState is a Security Configuration tool that utilizes openscap and bash
 to configure and validate security configuration information on a target
 system.  SecState targets U.S. federal regulations and guidance, but can be
 used with any SCAP compliant content.
@@ -50,8 +49,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir /var/lib/secstate/benchmarks/
 %dir /var/lib/secstate/configs/
 %dir /var/lib/secstate/oval/
-%dir /var/lib/secstate/puppet/
-/var/lib/secstate/puppet/*
 %dir /usr/share/secstate/
 %dir %{_libexecdir}/%{name}
 %{_libexecdir}/%{name}/secstate_external_node
@@ -68,16 +65,11 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/secstate/__init__.py*
 %{python_sitelib}/secstate/main.py*
 %{python_sitelib}/secstate/util.py*
-%dir /usr/share/puppet/modules/pam
-/usr/share/puppet/modules/pam/*
-%dir /usr/share/puppet/modules/file_perms
-/usr/share/puppet/modules/file_perms/*
-
-# BSD
-%dir /usr/share/puppet/modules/ifdefined
-/usr/share/puppet/modules/ifdefined/*
 
 %changelog
+* Tue Oct 16 2012 Tyler Sellmayer <tsellmayer@tresys.com> 0.5.2-1
+- Removed all mention of puppet.
+
 * Mon Sep 13 2010 Marshall Miller <mmiller@tresys.com> 0.4.1-1
 - Updates to man page
 - Updated the human-readable output transform

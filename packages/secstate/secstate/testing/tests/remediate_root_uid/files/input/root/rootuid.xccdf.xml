@@ -70,10 +70,6 @@
                 Fix any conflicts encountered.
             </fixtext>
             <!-- no parameters are needed because the class only does one thing -->
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : rootuid.pp
-               class : rootuid
-            </fix>
         </Rule>
 
         <Rule id="root-zero-uid-destroy" extends="root-zero-uid-check" selected="0">
@@ -86,10 +82,6 @@
                 Destroy any conflicts encountered
             </fixtext>
             <!-- no parameters are needed because the class only does one thing -->
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : rootuid.pp
-               class : rootuid-destroy
-            </fix>
         </Rule>
     </Group>
 </Benchmark>

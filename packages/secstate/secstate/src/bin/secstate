@@ -164,8 +164,6 @@ def help(arg):
 
 def import_content(arguments):
     parser = OptionParser(usage="secstate import [options] <ContentFile>")
-    parser.add_option('-p', '--puppet', action='store_true', dest='puppet', default=False,
-                      help="Imports the specified puppet content")
     parser.add_option('--profile', action='store', type='string', dest='profile', default=secstate.NONE_PROFILE,
                       help="Selects the active profile")
     (options, args) = parser.parse_args(arguments)
@@ -174,7 +172,7 @@ def import_content(arguments):
         return -1
 
     for arg in args:
-        content = sec_instance.import_content(arg, options.puppet, save=True, active_profile=options.profile)
+        content = sec_instance.import_content(arg, save=True, active_profile=options.profile)
         if content == None:
             return -1
 
@@ -249,8 +247,6 @@ def remediate(arguments):
                       help='XCCDF results file to provide for selective remediation')
     parser.add_option('-l', '--log-dest', action='store', type='string', dest='log_dest', metavar='FILE',
                       help='Output logs to FILE instead of stdout')
-    parser.add_option('-n', '--noop', action='store_true', dest='noop', default=False,
-                      help='Run puppet in noop mode')
     parser.add_option('-p', '--profile', action='store', type='string', dest='profile',
                       default=None, help="Specifies the profile to use when remediating the system")
     parser.add_option('-v', '--verbose', action='store_true', dest='verbose', default=False, help="Prints out extra information during the remediate process")
@@ -277,7 +273,6 @@ def remediate(arguments):
     elif options.xccdf_results:
         kwargs['xccdf_results'] = options.xccdf_results
 
-    kwargs['noop'] = options.noop
     
     if not sec_instance.run_remediation(**kwargs):
         return -1

@@ -113,12 +113,6 @@
             <fixtext>
                 PASS_MIN_DAYS 1 exists within /etc/login.defs
             </fixtext>
-               <fix system="urn:xccdf:fix:script:puppet">
-                  manifest : passreqs.pp
-                  class : passreqs
-                  parameter : shadow_min_days : <sub idref="pass-min-age-var" />
-                  parameter : login_defs_min_days : <sub idref="pass-min-age-var" />
-               </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1000"/>
             </check>
@@ -132,11 +126,6 @@
             <fixtext>
                 Verify that all users specified within /etc/passwd are specified within the /etc/shadow file.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : passreqs.pp
-               class : passreqs
-               parameter : lock_accounts_missing_password : true
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1008"/>
             </check>
@@ -150,11 +139,6 @@
             <fixtext>
                 PASS_MIN_LEN must exist within /etc/login.defs and must be provided a valid number.  Value is specified externally.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : passreqs.pp
-               class : passreqs
-               parameter : login_defs_min_len : <sub idref="pass-min-length-var" />
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-export value-id="pass-min-length-var" export-name="oval:com.tresys.oval.rhel:var:1017"/>
                 <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1019"/>
@@ -169,11 +153,6 @@
             <fixtext>
                 minlen must be specified within /etc/pam.d/system-auth and provided a valid number.  Value is specified externally.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : passreqs.pp
-               class : passreqs
-               parameter : password_min_length : <sub idref="pass-min-length-var" />
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-export value-id="pass-min-length-var" export-name="oval:com.tresys.oval.rhel:var:1017"/>
                 <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1014"/>
@@ -188,12 +167,6 @@
             <fixtext>
                 ucredit must be specified within /etc/pam.d/system-auth and provided a valid number. Value is specified externally.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : passreqs.pp
-               class : passreqs
-               parameter : password_min_upper : <sub idref="pass-min-upper-alpha-var" />
-               parameter : password_min_lower : <sub idref="pass-min-lower-alpha-var" />
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-export value-id="pass-min-upper-alpha-var" export-name="oval:com.tresys.oval.rhel:var:1031"/>
                 <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1029"/>
@@ -208,11 +181,6 @@
             <fixtext>
                 dcredit must be specified within /etc/pam.d/system-auth and provided a valid number.  Value is specified externally.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : passreqs.pp
-               class : passreqs
-               parameter : password_min_digit : <sub idref="pass-min-num-var" />
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-export value-id="pass-min-num-var" export-name="oval:com.tresys.oval.rhel:var:1035"/>
                 <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1032"/>
@@ -227,11 +195,6 @@
             <fixtext>
                 ocredit must be specified within /etc/pam.d/system-auth and provided a valid number.  Value is specified externally.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : passreqs.pp
-               class : passreqs
-               parameter : password_min_other : <sub idref="pass-min-special-var" />
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-export value-id="pass-min-special-var" export-name="oval:com.tresys.oval.rhel:var:1039"/>
                 <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1036"/>
@@ -246,11 +209,6 @@
             <fixtext>
                 maxrepeat=1 must be specified within /etc/pam.d/system-auth.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : passreqs.pp
-               class : passreqs
-               parameter : password_max_repeat_characters : 1
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1040"/>
             </check>
@@ -264,11 +222,6 @@
             <fixtext>
                 Within /etc/login.defs PASS_MAX_DAYS must be set and set to a value less than or equal to the externally supplied value.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : passreqs.pp
-               class : passreqs
-               parameter : login_defs_max_days : <sub idref="pass-max-age-var" />
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-export value-id="pass-max-age-var" export-name="oval:com.tresys.oval.rhel:var:1045"/>
                 <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1042"/>
@@ -283,11 +236,6 @@
             <fixtext>
                 Each user within /etc/shadow that is specified a password must have a value within the field representing the maximum allowed age of a passwordthat is less than or equal to the externally supplied value.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : passreqs.pp
-               class : passreqs
-               parameter : shadow_max_days : <sub idref="pass-max-age-var" />
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-export value-id="pass-max-age-var" export-name="oval:com.tresys.oval.rhel:var:1045"/>
                 <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1047"/>
@@ -302,11 +250,6 @@
             <fixtext>
                 remember must be specified within /etc/pam.d/system-auth and provided a valid number.  Value is specified externally.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : passreqs.pp
-               class : passreqs
-               parameter : password_remember : <sub idref="pass-min-remember-var" />
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-export value-id="pass-min-remember-var" export-name="oval:com.tresys.oval.rhel:var:1052"/>
                 <check-content-ref href="passreqs.oval.xml" name="oval:com.tresys.oval.rhel:def:1049"/>

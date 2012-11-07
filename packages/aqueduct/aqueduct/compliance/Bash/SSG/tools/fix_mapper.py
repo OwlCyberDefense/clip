@@ -23,6 +23,8 @@ def map_fixes():
 	PROFILES = "scap-security-guide/RHEL6/input/profiles/"
 	MANUAL="/usr/libexec/aqueduct/SSG/tools/manual.xml"
 
+	#MANUAL="manual.xml"
+
 	if len(sys.argv) != 2:
 		BASEDIR="/usr/local/"
 	else:

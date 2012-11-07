@@ -12,7 +12,7 @@ VERSION := 0.5.9999
 
 # Bump this if creating multiple releases from the same
 # version.
-RELEASE := git.6fd7a70
+RELEASE := git.e5058e4
 
 # The name of the Vendor
 VENDOR := SecState

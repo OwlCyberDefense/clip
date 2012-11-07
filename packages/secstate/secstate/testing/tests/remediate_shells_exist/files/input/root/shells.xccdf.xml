@@ -41,10 +41,6 @@
             <fixtext>
                 Verify that all non-false shells assigned to users in /etc/passwd exist within /etc/shells.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : shells.pp
-               class : shells
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-content-ref href="shells.oval.xml" name="oval:com.tresys.oval.rhel:def:1000"/>
             </check>
@@ -58,10 +54,6 @@
             <fixtext>
                 Verify that all shells referenced within /etc/shells exist on the system.
             </fixtext>
-            <fix system="urn:xccdf:fix:script:puppet">
-               manifest : shells.pp
-               class : shells
-            </fix>
             <check system="http://oval.mitre.org/XMLSchema/oval-definitions-5">
                 <check-content-ref href="shells.oval.xml" name="oval:com.tresys.oval.rhel:def:1007"/>
             </check>
