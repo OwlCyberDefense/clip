@@ -221,6 +221,8 @@ $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(RE
 # Then you can consistently rebuild an ISO using the exact same package versions as the last time.
 # Effectively versioning the packages you use when rolling RPMs and ISOs.
 $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER) ./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)$(RHEL_VER): $(filter-out $(ROOT_DIR)/CONFIG_BUILD,$(CONFIG_BUILD_DEPS))
+	$(VERBOSE)$(RM) $(YUM_CONF_FILE)
+	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
 	@echo "Generating list of packages for $(call GET_REPO_ID,$(1))$(RHEL_VER)"
 	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
 	echo -e $(YUM_CONF) >> $(YUM_CONF_FILE)
@@ -269,6 +271,7 @@ help:
 	@for pkg in $(PACKAGES); do echo "	$$pkg-clean (remove rpm and srpm)"; done
 	@echo "	clean (cleans transient files)"
 	@echo "	bare-repos (deletes local repos)"
+	@echo "	clean-mock (deletes the yum and mock configuration we generate)"
 	@echo "	bare (deletes everything except ISOs)"
 	@echo -e "\n\n################################################################################"
 
@@ -348,9 +351,12 @@ iso-to-disk:
 	@echo "Writing image..."
 	$(VERBOSE)sudo $(CURDIR)/support/livecd-iso-to-disk --resetmbr $(ISO_FILE) $(USB_DEV)1
 
-bare-repos:
-	$(VERBOSE)$(RM) -r $(MY_REPO_DIRS) $(MY_REPO_DIR)
+clean-mock: $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
+	$(VERBOSE)$(RM) $(YUM_CONF_FILE)
 	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
+
+bare-repos: clean-mock
+	$(VERBOSE)$(RM) -r $(MY_REPO_DIRS) $(MY_REPO_DIR)
 
 clean:
 	@sudo $(RM) -rf $(RPM_TMPDIR)
@@ -366,7 +372,7 @@ FORCE:
 # Unfortunately mock isn't exactly "parallel" friendly which sucks since we could roll a bunch of packages in parallel.
 .NOTPARALLEL:
 
-.PHONY:  all all-vm create-repos $(setup_all_repos) srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE
+.PHONY:  all all-vm create-repos $(setup_all_repos) srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE clean-mock
 
 
 # END RULES
