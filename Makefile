@@ -98,7 +98,7 @@ MOCK_ARGS += --resultdir=$(MY_REPO_DIR) -r $(MOCK_REL) --configdir=$(MOCK_CONF_D
 # Add to this list to pass deps down to SRPM creation
 export SRPM_DEPS := $(CONFIG_BUILD_DEPS)
 
-PKG_BLACKLIST := $(shell $(SED) -e 's/\(.*\)\#.*/\1/g' $(CONF_DIR)/pkglist.blacklist|sed -e ':a;N;$$!ba;s/\n/ /g')
+PKG_BLACKLIST := $(shell $(SED) -e 's/\(.*\)\#.*/\1/g' $(CONF_DIR)/pkglist.blacklist|$(SED) -e ':a;N;$$!ba;s/\n/ /g')
 
 # Macros to determine package info: version, release, arch.
 PKG_VER = $(strip $(eval $(shell $(GREP) ^VERSION $(PKG_DIR)/$(1)/Makefile))$(VERSION))
@@ -127,7 +127,7 @@ LIVECDS := $(addsuffix -livecd,$(SYSTEM))
 INSTISOS := $(addsuffix -installation-iso,$(SYSTEM))
 
 # Add a file to a repo by either downloading it (if http/ftp), or symlinking if local.
-# TODO: add support for wget (problem with code below, running echo/grep for each file instead of once for the whole repo
+# TODO: add support for wget (problem with code below, running echo/GREP for each file instead of once for the whole repo
 #@if ( echo "$(2)" | $(GREP) -i -q '^http[s]?://|^ftp://' ); then\
 #	$(REPO_WGET) $(2)/$(1) -O $(3)/$(1);\
 #else\
@@ -173,9 +173,9 @@ endef
 # END RPM GENERATION RULES (BEWARE OF DRAGONS)
 ######################################################
 
-GET_REPO_ID = $(strip $(shell echo "$(1)" | sed -e 's/\(.*\)=.*/\1/'))
-GET_REPO_PATH = $(strip $(shell echo "$(1)" | sed -e 's/.*=\(.*\)/\1/'))
-GET_REPO_URL = $(strip $(shell if `echo "$(1)" | grep -Eq '^\/.*$$'`; then echo "file://$(1)"; else echo "$(1)"; fi))
+GET_REPO_ID = $(strip $(shell echo "$(1)" | $(SED) -e 's/\(.*\)=.*/\1/'))
+GET_REPO_PATH = $(strip $(shell echo "$(1)" | $(SED) -e 's/.*=\(.*\)/\1/'))
+GET_REPO_URL = $(strip $(shell if `echo "$(1)" | $(GREP) -Eq '^\/.*$$'`; then echo "file://$(1)"; else echo "$(1)"; fi))
 
 ######################################################
 # BEGIN REPO GENERATION RULES (BEWARE OF RMS)
@@ -278,7 +278,7 @@ help:
 all: create-repos $(INSTISOS)
 
 # Generate custom targets for managing the yum repos.  We have to generate the rules since the user provides the set of repos.
-$(foreach REPO,$(strip $(shell cat CONFIG_REPOS|grep -E '^[a-zA-Z].*=.*'|sed -e 's/ \?= \?/=/')),$(eval $(call REPO_RULE_template,$(REPO))))
+$(foreach REPO,$(strip $(shell cat CONFIG_REPOS|$(GREP) -E '^[a-zA-Z].*=.*'|$(SED) -e 's/ \?= \?/=/')),$(eval $(call REPO_RULE_template,$(REPO))))
 
 # The following line calls our RPM rule template defined above allowing us to build a proper dependency list.
 $(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
@@ -320,11 +320,11 @@ $(LIVECDS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(call CHECK_DEPS)
 	@if [ x"$(RHEL_VER)" == "x6" ]; then echo "Sorry but at this time RHEL 6 LiveCDs won't boot due to dracut issues.";\
 echo "Press enter to continue anyway or ctrl-c to exit."; read; fi
-	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-livecd/\1/'`" livecd
+	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-livecd/\1/'`" livecd
 
 $(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(call CHECK_DEPS)
-	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|sed -e 's/\(.*\)-installation-iso/\1/'`" installation-iso
+	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-installation-iso/\1/'`" installation-iso
 
 $(MOCK_CONF_DIR)/$(MOCK_REL).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl $(CONF_DIR)/pkglist.blacklist
 	$(call CHECK_DEPS)
@@ -334,10 +334,10 @@ $(MOCK_CONF_DIR)/$(MOCK_REL).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl $(CONF_
 
 iso-to-disk:
 	@if [ x"$(ISO_FILE)" = "x" -o x"$(USB_DEV)" = "x" ]; then echo "Error: set ISO_FILE=<filename> and USB_DEV=<dev> on command line to generate a bootable thumbdrive." && exit 1; fi
-	@if echo "$(USB_DEV)" | egrep -q "^.*[0-9]$$"; then echo "Error: it looks like you gave me a partition.  Set USB_DEV to a device root, eg /dev/sdb." && exit 1; fi
+	@if echo "$(USB_DEV)" | $(GREP) -q "^.*[0-9]$$"; then echo "Error: it looks like you gave me a partition.  Set USB_DEV to a device root, eg /dev/sdb." && exit 1; fi
 	@if [ ! -b $(USB_DEV) ]; then echo "Error: $(USB_DEV) doesn't exist or isn't a block device." && exit 1; fi
-	@if `sudo mount | grep -q $(USB_DEV)`; then echo "Warning - device is currently mounted!  I will unmount it for you.  Press Ctrl-C to cancel or any other key to continue."; read; sudo umount $(USB_DEV)1 2>&1 > /dev/null; fi
-	@if `sudo pvdisplay 2>/dev/null | grep -q $(USB_DEV)`; then echo "Warning - device is currently a a physical volume in an LVM configuration!  This usually means you're pointing me at your root filesystem instead of a thumbdrive. Try again or kill the LVM label with pvremove"; exit 1; fi
+	@if `sudo mount | $(GREP) -q $(USB_DEV)`; then echo "Warning - device is currently mounted!  I will unmount it for you.  Press Ctrl-C to cancel or any other key to continue."; read; sudo umount $(USB_DEV)1 2>&1 > /dev/null; fi
+	@if `sudo pvdisplay 2>/dev/null | $(GREP) -q $(USB_DEV)`; then echo "Warning - device is currently a a physical volume in an LVM configuration!  This usually means you're pointing me at your root filesystem instead of a thumbdrive. Try again or kill the LVM label with pvremove"; exit 1; fi
 	@echo -e "WARNING: This will destroy the contents of $(USB_DEV)!\nPress Ctrl-C to cancel or any other key to continue." && read
 	@echo "Destroying MBR and partition table."
 	$(VERBOSE)sudo dd if=/dev/zero of=$(USB_DEV) bs=512 count=1
