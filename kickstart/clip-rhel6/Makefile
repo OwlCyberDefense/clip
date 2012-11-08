@@ -8,13 +8,6 @@ RHEL_VER ?= 6
 NAME := clip-rhel
 KS := $(NAME)$(RHEL_VER).ks
 
-# bump this if creating multiple releases from the same
-# version (think about this... why are you doing this?)
-RELEASE ?= 1
-
-# The name of the Vendor
-VENDOR ?= Tresys Technology, LLC
-
 ROOT_DIR ?= $(CURDIR)
 TMP_DIR ?= $(ROOT_DIR)/tmp
 BUILD_DIR ?= $(TMP_DIR)/clip-iso-build
@@ -27,7 +20,6 @@ PUNGI_ISO_DIR := $(BUILD_DIR)/$(RHEL_VER)/$(shell uname -i)/iso/
 
 LIVECD_CREATOR ?= $(SUPPORT_DIR)/livecd-creator
 PUNGI ?= $(SUPPORT_DIR)/pungi
-BUILD_DATE ?= $(shell date +%m-%d-%y)
 
 DEBUG ?= y
 
