@@ -10,6 +10,8 @@ URL:            https://fedorahosted.org/scap-security-guide/
 Source0:        %{name}-%{version}.tar.gz
 Patch:          ssg-fix-fixes-tags.patch
 Patch0:		replace-pam-cracklib-with-pam-passwdqc.patch
+Patch1:		ldap-dependency-checking.patch
+Patch2:		postfix-package-dependency-checking.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 
@@ -35,6 +37,8 @@ involved in the SCAP Security Guide community.
 %setup -q -n %{pkgname}
 %patch -p1
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
 #configure
@@ -70,6 +74,9 @@ cd $RPM_BUILD_ROOT/usr/local/scap-security-guide/RHEL6
 make clean && make all
 
 %changelog
+* Thu Nov 08 2012 Mike Palmiotto <mpalmiotto@tresys.com> 1.0-5
+- Add some patches for dependency checking in OVAL checks
+
 * Tue Jul 17 2012 Mike Palmiotto <mpalmiotto@tresys.com> 1.0-4
 - Add aqueduct-SSG to Requires and get fixes into SSG in %post
 
