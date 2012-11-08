@@ -21,5 +21,5 @@ set -e
 FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
-
-/bin/grep -Pq "^\s*([/\w]*)\s+.*,?nosuid,?.*$" $FILE || exit 1
+. $(dirname $0)/set_fstab_general
+set_mount_opt media "" nosuid

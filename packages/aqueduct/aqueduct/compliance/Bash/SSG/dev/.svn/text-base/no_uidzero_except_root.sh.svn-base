@@ -29,7 +29,7 @@ FILE=/etc/passwd
 # Find all system accounts and disable their login shells. 
 /bin/awk -F: '{
 if ($3 == 0)
-	if (/usr/bin/test $7)
+	if ($7)
 		print $1 ":" $3 ":" $7
 }' $FILE
 

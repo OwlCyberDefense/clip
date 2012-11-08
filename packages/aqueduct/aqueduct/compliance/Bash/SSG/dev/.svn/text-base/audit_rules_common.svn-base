@@ -22,15 +22,19 @@ FILE=/etc/audit/audit.rules
 
 # add_rule with no order
 add_rule() {
-	/bin/grep -qP -- "^$1$" $FILE && return
-	/bin/sed -i -r -e "/^# Feel free/a$1" $FILE
+	if ! /bin/grep -qP -- "^$1$" $FILE; then
+		/bin/sed -i -r -e "/^(# Feel free.*)$/ a\
+$1" $FILE
+	fi
 }
 
 # add_after 'RULE' 'regex'
 add_after() {
-	/bin/grep -qPzo -- "$2\n$1" $FILE && return
-	/bin/sed -i -r -e "/^$(/bin/echo -n $1 | /usr/bin/tr "/" ".")$/d" $FILE
-	/bin/sed -i -r -e "/$2/a$1" $FILE
-/bin/echo =================
-/bin/cat $FILE
+	if ! /bin/grep -qPzo -- "$2\n$1" $FILE; then
+		/bin/sed -i -r -e "/^$(/bin/echo -n $1 | /usr/bin/tr "/" ".")$/d" $FILE
+		/bin/sed -i -r -e "/$2/ a\
+$1" $FILE
+		/bin/echo =================
+		/bin/cat $FILE
+	fi
 }

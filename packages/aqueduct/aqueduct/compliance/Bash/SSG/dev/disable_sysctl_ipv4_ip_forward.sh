@@ -22,4 +22,5 @@ FILE=/etc/sysconfig/network
 
 [ -f $FILE ] || exit 1
 
+. $(dirname $0)/set_general_entry
 safe_add_field "(FORWARD_IPV4=).*" "no" $FILE

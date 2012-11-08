@@ -25,27 +25,35 @@ set_sysctl_param() {
 	PARAM=$1
 	DESIRED=$2
 
-	MODULE=`/bin/echo "$PARAM"|/bin/sed -e "s/\./\//g"`
+	DIR=${PARAM/\./\/}
+	DIR="/proc/sys/"$DIR
+	sed -i -r -e "s/net.bridge.*//g" /etc/sysctl.conf
+
+	if [ -f $DIR ]; then
+		MODULE=`/bin/echo "$PARAM"|/bin/sed -e "s/\./\//g"`
 	
-	if /bin/echo "$PARAM"| /bin/grep -qr "ipv6" /etc/modprobe.d && /bin/grep -qPr "options\s+ipv6\s+disable\=1" /etc/modprobe.d; then
+		if /bin/echo "$PARAM"| /bin/grep -Pqr "ip(v?)6" && /bin/grep -qPr "options\s+ipv6\s+disable\=1" /etc/modprobe.d; then
+			return 0
+		fi
+
+		[ -f /etc/sysctl.conf ] || return 1
+
+		if /bin/grep -q "${PARAM}" /etc/sysctl.conf; then
+			/sbin/sysctl -q -p
+		else
+			/bin/echo ""                                 >> /etc/sysctl.conf &&
+			/bin/echo "# Added by $(/bin/basename $0) on $(/bin/date -u)" >> /etc/sysctl.conf &&
+			/bin/echo "$PARAM = $DESIRED"                       >> /etc/sysctl.conf
+		fi
+
+		if ! sysctl -q -w $PARAM=$DESIRED; then
+			/bin/echo "sysctl -w $PARAM=$DESIRED failed"
+        	fi
+	else
 		return 0
 	fi
 
-	[ -f "/proc/sys/$MODULE" ] || return 0
-	[ -f /etc/sysctl.conf ] || return 1
-
-	if /bin/grep -q "${PARAM}" /etc/sysctl.conf; then
-		/sbin/sysctl -q -p
-	else
-		/bin/echo ""                                 >> /etc/sysctl.conf &&
-		/bin/echo "# Added by $(/bin/basename $0) on $(/bin/date -u)" >> /etc/sysctl.conf &&
-		/bin/echo "$PARAM = $DESIRED"                       >> /etc/sysctl.conf
-	fi
-
-	if ! sysctl -q -w $PARAM=$DESIRED; then
-                /bin/echo "sysctl -w $PARAM=$DESIRED failed"
-        fi
-
 	. $(dirname $0)/set_general_entry
 	safe_add_field "($PARAM\s+=\s+).*" "$DESIRED" /etc/sysctl.conf
+	sysctl -q -w $PARAM=$DESIRED
 }

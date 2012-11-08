@@ -21,9 +21,7 @@ import sys, re, os
 def map_fixes():
 	FIXDIR = "scap-security-guide/RHEL6/input/fixes/"
 	PROFILES = "scap-security-guide/RHEL6/input/profiles/"
-	MANUAL="/usr/libexec/aqueduct/SSG/tools/manual.xml"
-
-	#MANUAL="manual.xml"
+	MANUAL="manual.xml"
 
 	if len(sys.argv) != 2:
 		BASEDIR="/usr/local/"

@@ -22,5 +22,5 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
 
-. $(dirname $0)/set_general_entry
-safe_add_field "()tmpfs\s+" "tmpfs	/dev/shm	nodev,noexec,nosuid	0	0" $FILE 
+. $(dirname $0)/set_fstab_general
+set_mount_opt tmpfs /dev/shm noexec

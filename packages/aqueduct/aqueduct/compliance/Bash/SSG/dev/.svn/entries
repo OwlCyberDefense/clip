@@ -1,14 +1,14 @@
 10
 
 dir
-337
+345
 svn+ssh://svn.fedorahosted.org/svn/aqueduct/trunk/compliance/Bash/SSG/dev
 svn+ssh://svn.fedorahosted.org/svn/aqueduct
 
 
 
-2012-10-22T14:36:03.803924Z
-337
+2012-11-08T21:42:17.352184Z
+345
 mpalmiotto
 
 
@@ -32,10 +32,10 @@ file
 
 
 
-2012-10-01T18:32:00.012579Z
-41a56f4eb634d77dc065e6c6b0269dd9
-2012-10-01T19:57:18.783419Z
-326
+2012-11-07T18:31:10.834130Z
+14f5cbc31d2b930185e7c096a69aea94
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -58,7 +58,7 @@ has-props
 
 
 
-1071
+1047
 
 service_ntpdate_disabled.sh
 file
@@ -334,14 +334,14 @@ has-props
 
 mountopt_noexec_on_removable_partitions.sh
 file
+348
 
 
 
-
-2012-10-01T18:32:00.008581Z
-5c52bab2525643125d02b29d3248f2e6
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T21:58:48.665186Z
+f29983c5ae37a04eca876571138fd120
+2012-11-08T22:01:12.745611Z
+348
 mpalmiotto
 has-props
 
@@ -364,7 +364,7 @@ has-props
 
 
 
-859
+869
 
 service_rsyslog_enabled.sh
 file
@@ -538,14 +538,14 @@ has-props
 
 mount_option_tmp_nodev.sh
 file
+347
 
 
 
-
-2012-10-22T14:10:22.971580Z
-8c86591d17e3c710f561a9bf61c1e49a
-2012-10-22T14:34:55.534158Z
-336
+2012-11-08T21:51:35.495051Z
+7568b367521badf431d01d26691d9507
+2012-11-08T21:55:11.504342Z
+347
 mpalmiotto
 has-props
 
@@ -568,7 +568,7 @@ has-props
 
 
 
-947
+873
 
 enable_selinux_bootloader.sh
 file
@@ -810,14 +810,14 @@ has-props
 
 mount_option_dev_shm_nodev.sh
 file
+347
 
 
 
-
-2012-10-22T14:06:49.170580Z
-82c595c4bf66e71e832aec37583d1830
-2012-10-22T14:34:55.534158Z
-336
+2012-11-08T21:49:48.219290Z
+0bb64654a9a44638cbd21bb16f3d94b2
+2012-11-08T21:55:11.504342Z
+347
 mpalmiotto
 has-props
 
@@ -840,7 +840,7 @@ has-props
 
 
 
-917
+876
 
 xwindows_no_listen.sh
 file
@@ -1286,14 +1286,14 @@ has-props
 
 mount_option_dev_shm_nosuid.sh
 file
+347
 
 
 
-
-2012-10-22T14:09:16.770580Z
-1f18e43c304fe47027565bb314950a2d
-2012-10-22T14:34:55.534158Z
-336
+2012-11-08T21:50:51.371294Z
+1bedf339653c2243b9a8e1b468f89da4
+2012-11-08T21:55:11.504342Z
+347
 mpalmiotto
 has-props
 
@@ -1316,7 +1316,7 @@ has-props
 
 
 
-915
+876
 
 password_min_age.sh
 file
@@ -1388,14 +1388,14 @@ has-props
 
 mountopt_nodev_on_removable_partitions.sh
 file
+348
 
 
 
-
-2012-10-01T18:32:00.008581Z
-ece6310a18bab5c4765a3bcefbe3680e
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T21:58:18.005241Z
+0d7dad93676946f2f7597679303c1d39
+2012-11-08T22:01:12.745611Z
+348
 mpalmiotto
 has-props
 
@@ -1418,7 +1418,7 @@ has-props
 
 
 
-858
+869
 
 set_password_hashing_algorithm.sh
 file
@@ -1936,7 +1936,7 @@ file
 
 
 
-2012-10-01T18:32:00.058580Z
+2012-11-02T18:29:38.237354Z
 329cb1059feb3728f87184c810284516
 2012-09-27T20:54:33.165906Z
 322
@@ -2140,11 +2140,11 @@ file
 
 
 
-2012-10-01T18:32:00.057581Z
-e69b9f314b326b56d58d0a3cff22b784
-2012-09-27T20:54:33.165906Z
-322
-sshimko
+2012-11-02T18:29:11.212368Z
+329cb1059feb3728f87184c810284516
+2012-11-08T19:50:33.813478Z
+342
+mpalmiotto
 has-props
 
 
@@ -2166,7 +2166,7 @@ has-props
 
 
 
-814
+813
 
 set_avahi_common
 file
@@ -2272,14 +2272,14 @@ has-props
 
 mountopt_nodev_on_nonroot_partitions.sh
 file
+347
 
 
 
-
-2012-10-01T18:32:00.008581Z
-dd1776d70a57f99959caffb5772a9bbf
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T21:53:27.387288Z
+838c8a74af022623da94dd8a3e02b122
+2012-11-08T21:55:11.504342Z
+347
 mpalmiotto
 has-props
 
@@ -2302,7 +2302,7 @@ has-props
 
 
 
-1029
+867
 
 service_autofs_disabled.sh
 file
@@ -2408,14 +2408,14 @@ has-props
 
 mount_option_tmp_noexec.sh
 file
+347
 
 
 
-
-2012-10-22T14:10:16.571581Z
-ca41ed25182fe5f01672dc8cd63c9292
-2012-10-22T14:34:55.534158Z
-336
+2012-11-08T21:52:05.135290Z
+92e5794bdcd4bfc51b1e163cd11987af
+2012-11-08T21:55:11.504342Z
+347
 mpalmiotto
 has-props
 
@@ -2438,7 +2438,7 @@ has-props
 
 
 
-948
+874
 
 service_rdisc_disabled.sh
 file
@@ -2616,10 +2616,10 @@ file
 
 
 
-2012-10-01T18:31:59.890580Z
-d9e8c3ee6a59b9195a0660985fb0db4c
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T19:39:55.730079Z
+cfccb2cd2b6702729f12cec1192863c6
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -2642,7 +2642,7 @@ has-props
 
 
 
-1124
+1115
 
 audit_time_rules.sh
 file
@@ -2684,10 +2684,10 @@ file
 
 
 
-2012-10-01T18:32:00.088580Z
-42585797ff69743d0383a6a301da6f84
-2012-10-01T19:57:18.783419Z
-326
+2012-11-07T20:14:35.160124Z
+4c4bbbb8089e1a119aeabbc7040f55cf
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 
 
@@ -2710,7 +2710,7 @@ mpalmiotto
 
 
 
-3722
+3723
 
 service_smartd_disabled.sh
 file
@@ -2922,10 +2922,10 @@ file
 
 
 
-2012-10-01T18:31:59.889579Z
-d5b4bd258e5244be942173d6145059bf
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T19:35:23.393307Z
+e9e2273daef0e602d60e854bb32cef06
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 
 
@@ -2948,7 +2948,7 @@ mpalmiotto
 
 
 
-1173
+1201
 
 audit_rules_dac_modification_fchmodat.sh
 file
@@ -2956,10 +2956,10 @@ file
 
 
 
-2012-10-01T18:31:59.890580Z
-c8ad6fb4469a480a4ac8d9a9112f1e51
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T19:39:48.288081Z
+215a508af2c32f0d7794224a98b8a696
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -2982,7 +2982,7 @@ has-props
 
 
 
-1130
+1121
 
 disable_sysctl_ipv4_ip_forward.sh
 file
@@ -2990,10 +2990,10 @@ file
 
 
 
-2012-10-01T18:31:59.902580Z
-057d83e2f3e770a681ebb9aed8c8c15d
-2012-09-05T20:36:34.798620Z
-303
+2012-11-07T18:36:01.575132Z
+252593e00f0bdcfd7bb4549e69a256ad
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -3016,7 +3016,7 @@ has-props
 
 
 
-864
+898
 
 audit_rules_dac_modification_chmod.sh
 file
@@ -3024,10 +3024,10 @@ file
 
 
 
-2012-10-01T18:31:59.890580Z
-c4157fae3cc633f065f5485ecb77854a
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T19:38:41.936294Z
+5f2c4a92dc4fa89c58068df0a2b94133
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -3050,7 +3050,7 @@ has-props
 
 
 
-1034
+1028
 
 no_uidzero_except_root.sh
 file
@@ -3058,10 +3058,10 @@ file
 
 
 
-2012-10-01T18:32:00.012579Z
-f6c01988aaba48a11df5fb62a7fe260a
-2012-10-01T19:57:18.783419Z
-326
+2012-11-07T18:33:13.971122Z
+1b31d3eca87561c13d8dd2ce3763a350
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -3084,7 +3084,7 @@ has-props
 
 
 
-1198
+1184
 
 audit_media_exports.sh
 file
@@ -3194,10 +3194,10 @@ file
 
 
 
-2012-10-01T18:31:59.891579Z
-3387bed4827d20ca20ef2abfe982fb70
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T21:03:23.380295Z
+856f0f24d440c5e2d8972e9052532fdc
+2012-11-08T21:05:56.966203Z
+343
 mpalmiotto
 has-props
 
@@ -3220,7 +3220,7 @@ has-props
 
 
 
-1145
+1121
 
 avahi_check_ttl.sh
 file
@@ -3296,10 +3296,10 @@ file
 
 
 
-2012-10-01T18:31:59.892578Z
-29314a9350433ce6bb0c9c01f18bbc8d
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T19:40:50.878288Z
+eaa3cc45d5d2bdafd883b843eefd71f6
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -3322,7 +3322,7 @@ has-props
 
 
 
-1139
+1130
 
 password_require_specials.sh
 file
@@ -3330,7 +3330,7 @@ file
 
 
 
-2012-10-01T18:32:00.058580Z
+2012-11-02T18:29:31.536381Z
 e69b9f314b326b56d58d0a3cff22b784
 2012-09-27T20:54:33.165906Z
 322
@@ -4108,14 +4108,14 @@ has-props
 
 perms_gshadow_file.sh
 file
+346
 
 
 
-
-2012-10-01T18:32:00.059580Z
-60d15f2aa89ddefefba792ef9ce5f484
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T20:20:13.971287Z
+379c5e35624c394c8e3dd4d247794807
+2012-11-08T21:43:57.734557Z
+346
 mpalmiotto
 has-props
 
@@ -4180,7 +4180,7 @@ file
 
 
 
-2012-10-01T18:32:00.100579Z
+2012-11-07T18:41:21.930130Z
 aa6733bdf60367d527d3c018b9343ee3
 2012-10-01T19:57:18.783419Z
 326
@@ -4276,6 +4276,40 @@ has-props
 
 887
 
+httpd_conf_dir_permissions.sh
+file
+
+
+
+
+2012-10-17T19:11:09.335581Z
+b6c42226d7cda273a53ac3875d108acc
+2012-10-01T19:57:18.783419Z
+326
+mpalmiotto
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+898
+
 service_sysstat_disabled.sh
 file
 
@@ -4344,40 +4378,6 @@ has-props
 
 895
 
-httpd_conf_dir_permissions.sh
-file
-
-
-
-
-2012-10-01T18:31:59.909581Z
-b6c42226d7cda273a53ac3875d108acc
-2012-10-01T19:57:18.783419Z
-326
-mpalmiotto
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-898
-
 password_max_age.sh
 file
 
@@ -4414,14 +4414,14 @@ has-props
 
 mount_option_var_tmp_bind_var.sh
 file
+347
 
 
 
-
-2012-10-22T14:11:13.951580Z
-ee1730ebbb3d54d8eeede786032d2c58
-2012-10-22T14:36:03.803924Z
-337
+2012-11-08T21:53:03.745288Z
+2cf9e587f7d047b441cdd640f18b8a1b
+2012-11-08T21:55:11.504342Z
+347
 mpalmiotto
 has-props
 
@@ -4444,7 +4444,7 @@ has-props
 
 
 
-924
+872
 
 set_sysctl_common
 file
@@ -4452,10 +4452,10 @@ file
 
 
 
-2012-10-08T14:13:36.630666Z
-e9d3f94beff1f999ff958c8fd24c80dc
-2012-10-22T13:36:46.006700Z
-335
+2012-11-08T21:41:43.230287Z
+8a5e7ce5ff61bff24d47928d214e5ed8
+2012-11-08T21:42:17.352184Z
+345
 mpalmiotto
 
 
@@ -4478,7 +4478,7 @@ mpalmiotto
 
 
 
-1827
+1943
 
 audit_manual_session_edits.sh
 file
@@ -4724,10 +4724,10 @@ file
 
 
 
-2012-10-01T18:32:00.010581Z
-cd7f3f0dbdce931d737bdbc325cd90cf
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T19:51:19.047290Z
+120384f9dba11a9fcf3086acbb548111
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -4750,18 +4750,18 @@ has-props
 
 
 
-887
+877
 
 mountopt_nosuid_on_removable_partitions.sh
 file
+348
 
 
 
-
-2012-10-01T18:32:00.008581Z
-dda64b62f46cb3a80b72e13c27835e8c
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T21:59:31.939296Z
+38f81364f52599333dc613603eef558a
+2012-11-08T22:01:12.745611Z
+348
 mpalmiotto
 has-props
 
@@ -4826,7 +4826,7 @@ file
 
 
 
-2012-10-01T18:32:00.011581Z
+2012-11-07T18:33:01.574124Z
 d39170433b2d9fb91d7d63894d44fe5b
 2012-10-01T19:57:18.783419Z
 326
@@ -4928,7 +4928,7 @@ file
 
 
 
-2012-10-01T18:31:59.984579Z
+2012-10-17T18:34:01.175578Z
 bacdf7daae03e923f5aa3a62551bda40
 2012-08-13T12:53:01.123223Z
 300
@@ -5064,10 +5064,10 @@ file
 
 
 
-2012-10-01T18:31:59.891579Z
-086553e8d75dc998b7d425f0bb9e6002
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T19:40:18.571287Z
+3e872eff41ba6ffbe399169ecdeca1dc
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -5090,7 +5090,7 @@ has-props
 
 
 
-1142
+1133
 
 set_sysctl_net_ipv4_conf_all_accept_redirects.sh
 file
@@ -5132,7 +5132,7 @@ file
 
 
 
-2012-10-01T18:32:00.058580Z
+2012-11-02T18:29:23.238361Z
 e69b9f314b326b56d58d0a3cff22b784
 2012-09-27T20:54:33.165906Z
 322
@@ -5196,14 +5196,14 @@ has-props
 
 mount_option_dev_shm_noexec.sh
 file
+347
 
 
 
-
-2012-10-22T14:09:10.391578Z
-2d5ba73ef0e9c0d50caaaf07c9e30a90
-2012-10-22T14:34:55.534158Z
-336
+2012-11-08T21:50:16.106289Z
+c0f7c6403d81150fbb788e4857b121a8
+2012-11-08T21:55:11.504342Z
+347
 mpalmiotto
 has-props
 
@@ -5226,7 +5226,7 @@ has-props
 
 
 
-916
+876
 
 password_warn_age.sh
 file
@@ -5404,10 +5404,10 @@ file
 
 
 
-2012-10-01T18:31:59.893584Z
-d393fd1e047a66d37e03dbdb93649a09
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T19:41:02.126295Z
+b44a9b40bb3d8d210fdf333490117d96
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -5430,7 +5430,7 @@ has-props
 
 
 
-1130
+1121
 
 rpm_verify_hashes.sh
 file
@@ -5642,7 +5642,7 @@ file
 
 
 
-2012-10-01T18:32:00.058580Z
+2012-11-02T18:29:34.932372Z
 e69b9f314b326b56d58d0a3cff22b784
 2012-09-27T20:54:33.165906Z
 322
@@ -6152,10 +6152,10 @@ file
 
 
 
-2012-10-01T18:31:59.891579Z
-f9bbcc3c92b6ef637c1cd8e0745ca2a3
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T19:40:25.944327Z
+cfa4347e1a4cefab78f5778529b28820
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -6178,7 +6178,7 @@ has-props
 
 
 
-1133
+1124
 
 install_openswan.sh
 file
@@ -6254,7 +6254,7 @@ file
 
 
 
-2012-10-01T19:14:37.101578Z
+2012-11-05T19:03:42.934580Z
 c955ff55a9f40c8f9d25a837e4d44599
 2012-10-01T19:18:18.571319Z
 323
@@ -6390,7 +6390,7 @@ file
 
 
 
-2012-10-01T18:32:00.062579Z
+2012-10-19T19:51:26.327670Z
 b525e6bd017648bfe4f913d5e978d345
 2012-10-01T19:57:18.783419Z
 326
@@ -6930,14 +6930,14 @@ has-props
 
 perms_shadow_file.sh
 file
+346
 
 
 
-
-2012-10-01T18:32:00.060579Z
-156babf00b223b7dbbf42d4a933d60d3
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T20:19:33.234285Z
+7b9a2957384f38e6cecf18b0f3bca38f
+2012-11-08T21:43:57.734557Z
+346
 mpalmiotto
 has-props
 
@@ -6998,14 +6998,14 @@ has-props
 
 mount_option_tmp_nosuid.sh
 file
+347
 
 
 
-
-2012-10-22T14:10:10.708580Z
-ca41ed25182fe5f01672dc8cd63c9292
-2012-10-22T14:34:55.534158Z
-336
+2012-11-08T21:52:28.752290Z
+43fb3883cd82f6a5b063b53f743ca940
+2012-11-08T21:55:11.504342Z
+347
 mpalmiotto
 has-props
 
@@ -7028,7 +7028,7 @@ has-props
 
 
 
-948
+874
 
 uninstall_dhcp_server.sh
 file
@@ -7104,10 +7104,10 @@ file
 
 
 
-2012-10-17T18:35:05.362579Z
-bd218458633ad88ff86fe3ddbbd01893
-2012-10-22T13:02:51.975023Z
-331
+2012-10-22T15:02:43.014580Z
+b7f6dd48001e15d75e1b4c0482caecbb
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -7130,7 +7130,7 @@ has-props
 
 
 
-1162
+1175
 
 httpd_logs_permissions.sh
 file
@@ -7478,10 +7478,10 @@ file
 
 
 
-2012-10-01T18:31:59.891579Z
-7bcc7771b64c634f8f5d0c245988d392
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T21:02:39.677076Z
+2feaa06e9a80ad00e7ad002133f5f2c7
+2012-11-08T21:05:56.966203Z
+343
 mpalmiotto
 has-props
 
@@ -7504,7 +7504,7 @@ has-props
 
 
 
-1139
+1115
 
 postfix_install_ssl_cert.sh
 file
@@ -7614,10 +7614,10 @@ file
 
 
 
-2012-10-01T18:31:59.892578Z
-2bbed7e95646a1228732eb728881300b
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T21:03:03.540069Z
+f3382e08804256e6cc4ad53ad1286450
+2012-11-08T21:05:56.966203Z
+343
 mpalmiotto
 has-props
 
@@ -7640,7 +7640,7 @@ has-props
 
 
 
-1139
+1115
 
 audit_rules_dac_modification_lsetxattr.sh
 file
@@ -7648,10 +7648,10 @@ file
 
 
 
-2012-10-01T18:31:59.892578Z
-17c0aeae1caf8b83f84e423984389816
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T19:40:46.022289Z
+2fb4d19097ab8d3b90654c8102c504f8
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -7674,7 +7674,7 @@ has-props
 
 
 
-1133
+1124
 
 disable_sysctl_ipv4_default_send_redirects.sh
 file
@@ -7750,10 +7750,10 @@ file
 
 
 
-2012-10-01T18:31:59.892578Z
-faf487c0ebc80b0713deddf26ab5d067
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T19:40:39.599288Z
+5fbee6581f8a3cf17a70717bc262d13f
+2012-11-08T19:50:33.813478Z
+342
 mpalmiotto
 has-props
 
@@ -7776,7 +7776,7 @@ has-props
 
 
 
-1142
+1133
 
 network_sniffer_disabled.sh
 file
@@ -8226,10 +8226,10 @@ file
 
 
 
-2012-10-01T18:31:59.890580Z
-5f83b4e57df638da7cef3c2ccb727b8a
-2012-10-01T19:57:18.783419Z
-326
+2012-11-08T21:06:18.328295Z
+fac373a893dbbdccecdddab8fde1437b
+2012-11-08T21:07:14.045391Z
+344
 mpalmiotto
 has-props
 
@@ -8252,7 +8252,7 @@ has-props
 
 
 
-1044
+1028
 
 avahi_restrict_published_information.sh
 file
@@ -8702,7 +8702,7 @@ file
 
 
 
-2012-10-01T18:32:00.057581Z
+2012-11-05T21:06:28.815358Z
 38a0fddf8e37dcb0657bf1f53d673dff
 2012-07-03T22:17:29.704145Z
 238
@@ -9069,6 +9069,40 @@ has-props
 
 
 886
+
+set_fstab_general
+file
+348
+
+
+
+2012-11-08T21:57:51.792288Z
+98b24ac2a5e537ff2f2ba0738787196f
+2012-11-08T22:01:12.745611Z
+348
+mpalmiotto
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1339
 
 set_sysctl_net_ipv4_conf_all_log_martians.sh
 file

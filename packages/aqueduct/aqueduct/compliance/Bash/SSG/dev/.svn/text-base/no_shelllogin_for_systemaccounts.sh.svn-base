@@ -25,7 +25,7 @@ FILE=/etc/passwd
 
 # Find all system accounts and disable their login shells. 
 /bin/awk -F: '{
-if (/usr/bin/test $3)
+if ($3)
 	if ($3 < 500 && $1 != "root")
-		/usr/sbin/usermod -s "/sbin/nologin" $1
+		usermod -s "/sbin/nologin" $1
 }' $FILE

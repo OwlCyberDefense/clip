@@ -23,15 +23,15 @@ function add_entry {
 #     ENTRY   - ENTRY to check for and add
 #     FILEDIR - File to which the entry should be added
 # 
-       ENTRY=$1
+       	ENTRY=$1
         FILEDIR=$2
 
         F=` /bin/echo $FILEDIR|/bin/grep -Po "[^\/]*$" `
         FILEDIR=${FILEDIR%"/$F"}
 
         if /bin/grep -Pq "^(\s*)(\#*)(\s*)$ENTRY" "$FILEDIR/$F"; then
-                ENTRY=` /bin/echo "$ENTRY"|/bin/sed 's!\([]\*\$\/&[]\)!\\\1!g' `
-                /bin/sed -i -r -e "s!(\s*)(\#*)(\s*)$ENTRY!\3\4!g" "$FILEDIR/$F"
+                ENTRY=` /bin/echo "$ENTRY"|/bin/sed 's@\([]\*\$\/&[]\)@\\\1@g' `
+                /bin/sed -i -r -e "s@(\s*)(\#*)(\s*)$ENTRY@\3\4@g" "$FILEDIR/$F"
         else
                 /bin/echo "$ENTRY" >> "$FILEDIR/$F"
         fi

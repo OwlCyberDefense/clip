@@ -22,4 +22,5 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
 
-/bin/grep -Pq "^\s*([/\w]*)\s+.*,?nodev,?.*$" $FILE
+. $(dirname $0)/set_fstab_general
+set_mount_opt media "" nodev

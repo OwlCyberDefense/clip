@@ -23,5 +23,5 @@ set -e
 if /bin/awk -F: '($2 != "x") {print $1}' /etc/passwd; then
 	exit 0
 else
-	/usr/sbin/pwconv
+	pwconv
 fi

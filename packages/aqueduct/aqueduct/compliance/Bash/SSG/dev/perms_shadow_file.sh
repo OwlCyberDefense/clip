@@ -26,4 +26,4 @@ FILE=/etc/shadow
 # Can't set ownership of this file if it doesn't exist
 [ -f $FILE ] || exit 1
 
-/bin/chmod 400 $FILE
+/bin/chmod 000 $FILE
