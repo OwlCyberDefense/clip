@@ -1,34 +1,0 @@
-10
-
-dir
-337
-svn+ssh://svn.fedorahosted.org/svn/aqueduct/trunk/compliance/Bash/STIG/rhel-5-beta
-svn+ssh://svn.fedorahosted.org/svn/aqueduct
-
-
-
-2012-06-04T18:24:24.045804Z
-207
-dwagenheim
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-222a7096-7963-498e-82ae-632bd6af5a1a
-
-prod
-dir
-
-manual-checks
-dir
-

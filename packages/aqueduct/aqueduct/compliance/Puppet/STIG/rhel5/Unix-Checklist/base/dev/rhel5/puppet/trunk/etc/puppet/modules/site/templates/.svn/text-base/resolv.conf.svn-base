@@ -1,4 +1,0 @@
-# This file is auto generated with puppet.  Anything modfified will be lost at the next run.
-search chs.domain.org domain.org
-nameserver x.x.132.20
-nameserver x.x.132.24
