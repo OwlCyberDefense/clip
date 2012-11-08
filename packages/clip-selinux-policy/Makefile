@@ -66,7 +66,7 @@ ifneq ($(CONFIG_BUILD_ENFORCING_MODE),n)
 else
 	ENFORCING_MODE := permissive
 endif
-ifneq ($(CONFIG_BUILD_TOOR),n)
+ifneq ($(CONFIG_BUILD_UNCONFINED_TOOR),n)
 	ENABLE_MODULES := toor
 else
 	ENABLE_MODULES := %{nil}

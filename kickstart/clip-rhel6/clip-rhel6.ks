@@ -240,8 +240,8 @@ HASHED_PASSWORD='$6$314159265358$ytgatj7CAZIRFMPbEanbdi.krIJs.mS9N2JEl0jkPsCvtwC
 #       sudo.  The information used to create the account comes from the 
 #       USERNAME and PASSWORD values defined a few lines above.
 #
-# Don't get lost in the 'if' statement - basically map $USERNAME to toor role if it is enabled.  
-if [ x"$CONFIG_BUILD_TOOR" == "xy" ]; then
+# Don't get lost in the 'if' statement - basically map $USERNAME to the unconfined toor_r:toor_t role if it is enabled.  
+if [ x"$CONFIG_BUILD_UNCONFINED_TOOR" == "xy" ]; then
 	semanage user -a -R toor_r -R staff_r -R sysadm_r "${USERNAME}_u" 
 else
 	semanage user -a -R staff_r -R sysadm_r "${USERNAME}_u" || semanage user -a -R staff_r "${USERNAME}_u"
@@ -258,7 +258,7 @@ chage -d 0 "$USERNAME"
 
 # Add the user to sudoers and setup an SELinux role/type transition.
 # This line enables a transition via sudo instead of requiring sudo and newrole.
-if [ x"$CONFIG_BUILD_TOOR" == "xy" ]; then
+if [ x"$CONFIG_BUILD_UNCONFINED_TOOR" == "xy" ]; then
 	echo "$USERNAME        ALL=(ALL) ROLE=toor_r TYPE=toor_t      ALL" >> /etc/sudoers
 	echo "WARNING: This is a debug build with a super user present.  DO NOT USE IN PRODUCTION!" > /etc/motd
 else
