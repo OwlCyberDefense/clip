@@ -2,6 +2,8 @@
 #
 # Authors: Spencer Shimko <sshimko@tresys.com>
 #
+# CLIP officially supports RHEL.  If you choose to use CentOS it will probably
+# work.  There is guidance below for both.
 #
 # Basic instructions:
 #
