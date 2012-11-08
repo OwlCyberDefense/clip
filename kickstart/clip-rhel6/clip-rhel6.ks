@@ -272,6 +272,9 @@ usermod -L root
 
 ###### START SECSTATE AUDIT AND REMEDIATE ###########
 
+# FIXME: Remove <platform> tags from SSG to temporarily resolve non-applicable openscap results
+sed -i -r -e "s/<platform.*//g" /usr/local/scap-security-guide/RHEL6/output/rhel6-xccdf-scap-security-guide.xml
+
 # Import SSG into secstate.
 # Running this command again, even after install, will result in a harmless error
 # as you are effectively importing the same IDs again.
