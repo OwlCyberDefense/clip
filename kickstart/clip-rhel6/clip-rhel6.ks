@@ -94,7 +94,6 @@ bind-utils
 chkconfig
 coreutils
 cpio
-dhclient
 e2fsprogs
 filesystem
 glibc
