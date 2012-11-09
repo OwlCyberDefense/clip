@@ -27,7 +27,6 @@ set_sysctl_param() {
 
 	DIR=${PARAM/\./\/}
 	DIR="/proc/sys/"$DIR
-	sed -i -r -e "s/net.bridge.*//g" /etc/sysctl.conf
 
 	if [ -f $DIR ]; then
 		MODULE=`/bin/echo "$PARAM"|/bin/sed -e "s/\./\//g"`
@@ -55,5 +54,4 @@ set_sysctl_param() {
 
 	. $(dirname $0)/set_general_entry
 	safe_add_field "($PARAM\s+=\s+).*" "$DESIRED" /etc/sysctl.conf
-	sysctl -q -w $PARAM=$DESIRED
 }

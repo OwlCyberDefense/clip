@@ -34,6 +34,6 @@ function set_mount_opt {
 	}' testfile)
 	
 	
-	echo -e "$str" > testfile
+	echo -e "$str" > /etc/fstab
         return
 }
