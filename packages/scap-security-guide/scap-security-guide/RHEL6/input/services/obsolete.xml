@@ -29,6 +29,7 @@ is not even available as part of RHEL 6.</description>
 <description>
 <service-disable-macro service="xinetd" />
 </description>
+<ocil><service-disable-check-macro service="xinetd" /></ocil>
 <rationale>
 The xinetd service provides a dedicated listener service for some programs,
 which is no longer necessary for commonly-used network services. Disabling
@@ -37,6 +38,7 @@ attacks against xinetd itself.
 </rationale>
 <ident cce="4252-3" />
 <oval id="service_xinetd_disabled" />
+<ref disa="305"/>
 </Rule>
 
 <Rule id="uninstall_xinetd">
@@ -44,12 +46,14 @@ attacks against xinetd itself.
 <description>The <tt>xinetd</tt> package can be uninstalled with the following command:
 <pre># yum erase xinetd</pre>
 </description>
+<ocil><package-check-macro package="xinetd" /> </ocil>
 <rationale>
 Removing the <tt>xinetd</tt> package decreases the risk of the
 xinetd service's accidental (or intentional) activation.
 </rationale>
 <ident cce="4164-0" />
 <oval id="package_xinetd_removed" />
+<ref disa="305"/>
 </Rule>
 
 </Group>
@@ -65,6 +69,7 @@ actively working to migrate to a more secure protocol.</description>
 <description>
 <service-disable-macro service="telnet" />
 </description>
+<ocil><service-disable-check-macro service="telnet" /></ocil>
 <rationale>
 The telnet protocol uses unencrypted network communication, which
 means that data from the login session, including passwords and
@@ -82,12 +87,14 @@ subject to man-in-the-middle attacks.
 <description>The <tt>telnet-server</tt> package can be uninstalled with
 the following command:
 <pre># yum erase telnet-server</pre></description>
+<ocil><package-check-macro package="telnet-server" /> </ocil>
 <rationale>
 Removing the <tt>telnet-server</tt> package decreases the risk of the
 telnet service's accidental (or intentional) activation.
 </rationale>
 <ident cce="4330-7" />
 <oval id="package_telnet-server_removed" />
+<ref disa="305"/>
 </Rule>
 </Group>
 
@@ -105,6 +112,7 @@ model.</description>
 the following command:
 <pre># yum erase rsh-server</pre>
 </description>
+<ocil><package-check-macro package="rsh-server" /> </ocil>
 <rationale>The <tt>rsh-server</tt> package provides several obsolete and insecure
 network services. Removing it
 decreases the risk of those services' accidental (or intentional)
@@ -112,6 +120,7 @@ activation.
 </rationale>
 <ident cce="4308-3" />
 <oval id="package_rsh-server_removed" />
+<ref disa="305"/>
 </Rule>
 
 <Rule id="disable_rexec" severity="high">
@@ -121,6 +130,7 @@ the <tt>rsh-server</tt> package and runs as a service through xinetd,
 should be disabled.
 <service-disable-macro service="rexec" />
 </description> 
+<ocil><service-disable-check-macro service="rexec" /></ocil>
 <rationale>The rexec service uses unencrypted network communications, which
 means that data from the login session, including passwords and
 all other information transmitted during the session, can be
@@ -128,6 +138,7 @@ stolen by eavesdroppers on the network.
 </rationale>
 <ident cce="undefined" />
 <oval id="service_rexec_disabled" />
+<ref disa="1436"/>
 </Rule>
 
 <Rule id="disable_rsh" severity="high">
@@ -137,6 +148,7 @@ the <tt>rsh-server</tt> package and runs as a service through xinetd,
 should be disabled.
 <service-disable-macro service="rsh" />
 </description> 
+<ocil><service-disable-check-macro service="rsh" /></ocil>
 <rationale>The rsh service uses unencrypted network communications, which
 means that data from the login session, including passwords and
 all other information transmitted during the session, can be
@@ -154,6 +166,7 @@ the <tt>rsh-server</tt> package and runs as a service through xinetd,
 should be disabled.
 <service-disable-macro service="rlogin" />
 </description> 
+<ocil><service-disable-check-macro service="rlogin" /></ocil>
 <rationale>The rlogin service uses unencrypted network communications, which
 means that data from the login session, including passwords and
 all other information transmitted during the session, can be
@@ -168,9 +181,19 @@ stolen by eavesdroppers on the network.
 <title>Remove Rsh Trust Files</title>
 <description>The files <tt>/etc/hosts.equiv</tt> and <tt>~/.rhosts</tt> (in
 each user's home directory) list remote hosts and users that are trusted by the
-local system when using the rshd daemon.</description>
-<rationale>These files are not needed and should be removed if they exist.
-When used in conjunction with the R-services, they can allow
+local system when using the rshd daemon.
+To remove these files, run the following command to delete them from any
+location:
+<pre># rm /etc/hosts.equiv</pre>
+<pre>$ rm ~/.rhosts</pre>
+</description>
+<ocil clause="these files exist">
+The existence of the file <tt>/etc/hosts.equiv</tt> or a file named
+<tt>.rhosts</tt> inside a user home directory indicates the presence
+of an Rsh trust relationship.
+</ocil>
+<rationale>Trust files are convenient, but when
+used in conjunction with the R-services, they can allow
 unauthenticated access to a system.</rationale>
 <ident cce="TODO" />
 <oval id="no_rsh_trusted_host_files" />
@@ -192,11 +215,13 @@ important authentication information.</description>
 the following command:
 <pre># yum erase ypserv</pre>
 </description>
+<ocil><package-check-macro package="ypserv" /> </ocil>
 <rationale>Removing the <tt>ypserv</tt> package decreases the risk of the
 accidental (or intentional) activation of NIS or NIS+ services.
 </rationale>
 <ident cce="4348-9" />
 <oval id="package_ypserv_removed" />
+<ref disa="305"/>
 </Rule>
 
 <Rule id="disable_ypbind">
@@ -205,12 +230,14 @@ accidental (or intentional) activation of NIS or NIS+ services.
 a NIS or NIS+ domain, should be disabled.
 <service-disable-macro service="ypbind" />
 </description>
+<ocil><service-disable-check-macro service="ypbind" /></ocil>
 <rationale>
 Disabling the <tt>ypbind</tt> service ensures the system is not acting
 as a client in a NIS or NIS+ domain.
 </rationale>
 <ident cce="3705-1" />
 <oval id="service_ypbind_disabled" />
+<ref disa="305"/>
 </Rule>
 </Group>
 
@@ -230,6 +257,7 @@ found.</description>
 <description>The <tt>tftp</tt> service should be disabled.
 <service-disable-macro service="tftp" />
 </description>
+<ocil><service-disable-check-macro service="tftp" /></ocil>
 <rationale>
 Disabling the <tt>tftp</tt> service ensures the system is not acting
 as a tftp server, which does not provide encryption or authentication.
@@ -241,23 +269,26 @@ as a tftp server, which does not provide encryption or authentication.
 
 <Rule id="uninstall_tftp-server">
 <title>Uninstall tftp-server Package</title>
-<description>The <tt>tftp-server</tt> package can be removed with the following
-command:
-<pre># yum erase tftp-server</pre>
+<description>
+<package-remove-macro package="tftp-server" />
 </description>
+<ocil>
+<package-check-macro package="tftp-server" />
+</ocil>
 <rationale>
 Removing the <tt>tftp-server</tt> package decreases the risk of the
 accidental (or intentional) activation of tftp services.
 </rationale>
 <ident cce="3916-4" />
 <oval id="package_tftp-server_removed" />
+<ref disa="305"/>
 </Rule>
 
 <Rule id="tftpd_uses_secure_mode" severity="high">
-<title>Ensure TFTP Daemon Uses Secure Mode</title>
-<description>If running the TFTP service is necessary, it should be configured
+<title>Ensure <tt>tftp</tt> Daemon Uses Secure Mode</title>
+<description>If running the <tt>tftp</tt> service is necessary, it should be configured
 to change its root directory at startup. To do so, ensure that
-<tt>/etc/xinted.d/tftp</tt> includes <tt>-s</tt> as a command line argument, as shown in
+<tt>/etc/xinetd.d/tftp</tt> includes <tt>-s</tt> as a command line argument, as shown in
 the following example (which is also the default):
 <pre>server_args = -s /var/lib/tftpboot</pre>
 </description>
@@ -265,8 +296,17 @@ the following example (which is also the default):
 given directory. Serving files from an intentionally-specified directory
 reduces the risk of sharing files which should remain private.
 </rationale>
+<ocil>Verify that <tt>tftp</tt> is configured by with the <tt>-s</tt> option by running the
+following command:
+<pre>grep "server_args" /etc/xinetd.d/tftpboot</pre>
+The output should indicate the <tt>server_args</tt> variable is configured with the <tt>-s</tt>
+flag, matching the example below:
+<pre> # grep "server_args" /etc/xinetd.d/tftpboot
+server_args = -s /var/lib/tftpboot</pre>
+</ocil>
 <ident cce="TODO" />
 <oval id="tftpd_uses_secure_mode" />
+<ref disa="366"/>
 </Rule>
 
 </Group>

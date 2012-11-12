@@ -33,13 +33,13 @@ remote access.
 
 <Rule id="ssh_server_iptables_exception">
 <title>Remove SSH Server <tt>iptables</tt> Firewall exception (Unusual)</title>
-<description>By default, inbound connections to SSH’s port are allowed. If 
+<description>By default, inbound connections to SSH's port are allowed. If 
 the SSH server is not being used, this exception should be removed from the
 firewall configuration.
 <br /><br />
 Edit the files <tt>/etc/sysconfig/iptables</tt> and <tt>/etc/sysconfig/ip6tables</tt>
 (if IPv6 is in use). In each file, locate and delete the line:
-<pre>-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT</pre>
+<pre>-A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT</pre>
 This is unusual, as SSH is a common method for encrypted and authenticated
 remote access.
 </description>
@@ -69,6 +69,11 @@ verified by ensuring that the following
 line appears:
 <pre>Protocol 2</pre>
 </description>
+<ocil clause="it is not">
+To check which SSH protocol version is allowed, run the following command:
+<pre># grep Protocol /etc/ssh/sshd_config</pre>
+If configured properly, output should be <pre>Protocol 2</pre>
+</ocil>
 <rationale>
 SSH protocol version 1 suffers from design flaws that
 result in security vulnerabilities and
@@ -76,7 +81,7 @@ should not be used.
 </rationale>
 <ident cce="4325-7" />
 <oval id="sshd_protocol_2" />
-<ref disa="776,774,1135" />
+<ref disa="776,774,1135,1436" />
 </Rule>
 
 <Rule id="sshd_limit_user_access">
@@ -151,6 +156,12 @@ shell, that value will preempt any SSH
 setting made here. Keep in mind that some processes may stop SSH
 from correctly detecting that the user is idle.
 </description>
+<ocil clause="it is not">
+Run the following command to see what the timeout interval is:
+<pre># grep ClientAliveInterval /etc/ssh/sshd_config</pre>
+If properly configured, the output should be:
+<pre>ClientAliveInterval 900</pre>
+</ocil>
 <rationale>
 Causing idle users to be automatically logged out
 guards against compromises one system leading trivially
@@ -169,12 +180,19 @@ edit <tt>/etc/ssh/sshd_config</tt> as
 follows:
 <pre>ClientAliveCountMax 0</pre>
 </description>
+<ocil clause="it is not">
+To ensure the SSH idle timeout will occur when the <tt>ClientAliveInterval</tt> is set, run the following command:
+<pre># grep ClientAliveCountMax /etc/ssh/sshd_config</pre>
+If properly configured, output should be:
+<pre>ClientAliveCountMax 0</pre>
+</ocil>
 <rationale>
-This ensures that a user login will be terminated as soon as the <tt>ClientAliveInternal</tt>
+This ensures that a user login will be terminated as soon as the <tt>ClientAliveInterval</tt>
 is reached.
 </rationale>
 <ident cce="14061-6" />
 <oval id="sshd_clientalivecountmax" />
+<ref disa="879,1133"/>
 </Rule>
 
 
@@ -188,12 +206,16 @@ To ensure that this behavior is disabled, add or correct the
 following line:
 <pre>IgnoreRhosts yes</pre>
 </description>
+<ocil>
+<sshd-check-macro option="IgnoreRhosts" value="yes" default="yes" />
+</ocil>
 <rationale>
 SSH trust relationships mean that a compromise on one host
 can allow an attacker to move trivially to other hosts.
 </rationale>
 <ident cce="4475-0" />
 <oval id="sshd_rsh_emulation_disabled" />
+<ref disa="765,766"/>
 </Rule>
 
 
@@ -209,12 +231,16 @@ To disable host-based authentication, add or correct the
 following line:
 <pre>HostbasedAuthentication no</pre>
 </description>
+<ocil>
+<sshd-check-macro option="HostbasedAuthentication" value="no" default="yes" />
+</ocil>
 <rationale>
 SSH trust relationships mean that a compromise on one host
 can allow an attacker to move trivially to other hosts.
 </rationale>
 <ident cce="4370-3" />
 <oval id="sshd_hostbasedauthentication" />
+<ref disa="765,766"/>
 </Rule>
 
 
@@ -225,10 +251,13 @@ system directly over a network.
 To disable root login via SSH, add or correct the following line:
 <pre>PermitRootLogin no</pre>
 </description>
+<ocil>
+<sshd-check-macro option="PermitRootLogin" value="no" default="no" />
+</ocil>
 <rationale>
 Permitting direct root login reduces auditable information about who ran
 privileged commands on the system
-and also allows direct attack attempts on root’s password.
+and also allows direct attack attempts on root's password.
 </rationale>
 <ident cce="4387-7" />
 <oval id="sshd_permitrootlogin_no" />
@@ -244,6 +273,9 @@ empty passwords, add or correct the following line:
 Any accounts with empty passwords should be disabled immediately, and PAM configuration
 should prevent users from being able to assign themselves empty passwords.
 </description>
+<ocil>
+<sshd-check-macro option="PermitEmptyPasswords" value="no" default="yes" />
+</ocil>
 <rationale>
 Configuring this setting for the SSH daemon provides additional assurance that
 remote login via SSH will require a password,
@@ -251,6 +283,7 @@ even in the event of misconfiguration elsewhere.
 </rationale>
 <ident cce="3660-8" />
 <oval id="sshd_permitemptypasswords_no" />
+<ref disa="765,766"/>
 </Rule>
 
 <Rule id="sshd_enable_warning_banner">
@@ -262,6 +295,9 @@ across the system, add or correct the following line in <tt>/etc/ssh/sshd_config
 Another section contains information on how to create an
 appropriate system-wide warning banner.
 </description>
+<ocil>
+<sshd-check-macro option="Banner" value="/etc/issue" default="no" />
+</ocil>
 <rationale>
 Although unlikely to dissuade a serious attacker, the warning message
 reinforces policy awareness during the logon process. Alternatively,
@@ -281,12 +317,19 @@ environment options to the SSH daemon, add or correct the following line
 in <tt>/etc/ssh/sshd_config</tt>:
 <pre>PermitUserEnvironment no</pre>
 </description>
+<ocil clause="it is not">
+To ensure users are not able to present environment daemons, run the following command:
+<pre># grep PermitUserEnvironment /etc/ssh/sshd_config</pre>
+If properly configured, output should be:
+<pre>PermitUserEnvironment no</pre>
+</ocil>
 <rationale>
 SSH environment options potentially allow users to bypass
 access restriction in some configurations.
 </rationale>
 <ident cce="4422-2" />
 <oval id="sshd_no_user_envset" />
+<ref disa="1414" />
 </Rule>
 
 <Rule id="sshd_use_approved_ciphers">
@@ -303,6 +346,12 @@ may not support CTR mode. This may become an issue if, for example,
 these systems need to retrieve files from your SSH server using SFTP.
 TODO: Need to investigate current status of this. Earlier issues with
 CBC were supposed to be fixed.</description>
+<ocil clause="that is not the case">
+Only FIPS-approved ciphers should be used.  To verify that only FIPS-approved 
+ciphers are in use, run the following command:
+<pre>$ grep Ciphers /etc/ssh/sshd_config</pre>
+The output should contain only those ciphers which are FIPS-approved.
+</ocil>
 <rationale>
 Approved algorithms should impart some level of confidence in their
 implementation. These are also required for compliance.
@@ -312,7 +361,7 @@ implementation. These are also required for compliance.
 <ref disa="803,1144,1145,1146,196" />
 </Rule>
 
-<Rule id="sshd_strengthen_firewall">
+<Group id="sshd_strengthen_firewall">
 <title>Strengthen Firewall Configuration if Possible</title>
 <description>If the SSH server is expected to only receive connections from 
 the local network, then strengthen the default firewall rule for the SSH service
@@ -323,16 +372,16 @@ representing the machines on your network which will be allowed to access this S
 <br /><br />
 Edit the files <tt>etc/sysconfig/iptables</tt> and <tt>/etc/sysconfig/ip6tables</tt>
 (if IPv6 is in use). In each file, locate the line:
-<pre>-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT</pre>
+<pre>-A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT</pre>
 and replace it with:
-<pre>-A RH-Firewall-1-INPUT -s netwk /mask -m state --state NEW -p tcp --dport 22 -j ACCEPT</pre>
+<pre>-A INPUT -s netwk/mask -m state --state NEW -p tcp --dport 22 -j ACCEPT</pre>
 </description>
 <rationale>
 Restricting SSH access to only trusted network segments reduces exposure of the SSH 
 server to attacks from unauthorized networks.</rationale>
 <!-- <ident cce="14491-5" /> -->
 <!-- <oval id="sshd_strengthen_firewall" /> -->
-</Rule>
+</Group>
 
 </Group>
 </Group>

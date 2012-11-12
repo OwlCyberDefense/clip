@@ -86,7 +86,7 @@ character, locate the following line in <tt>/etc/pam.d/system-auth</tt>:
 and then alter it to read:
 <pre>password required pam_cracklib.so try_first_pass retry=3 minlen=14 dcredit=-1 ucredit=-1 ocredit=-1 lcredit=0</pre>
 The arguments can be modified to ensure compliance with
-your organization’s security policy. Discussion of each parameter follows.
+your organization's security policy. Discussion of each parameter follows.
 </description>
 <warning category="general">Note that the password quality
 requirements are not enforced for the root account for some
@@ -105,7 +105,7 @@ reason.</warning>
 operator="equals" interactive="0">
 <title>minlen</title>
 <description>Minimum number of characters in password</description>
-<value selector="">12</value>
+<value selector="">14</value>
 <value selector="6">6</value>
 <!-- NIST 800-53 requires 1 in a million using brute force which translates to six numbers -->
 <value selector="8">8</value>
@@ -158,7 +158,7 @@ operator="equals" interactive="0">
 password</description>
 <warning category="general">Keep this high for short
 passwords</warning>
-<value selector="">3</value>
+<value selector="">4</value>
 <value selector="2">2</value>
 <value selector="3">3</value>
 <value selector="4">4</value>
@@ -168,17 +168,28 @@ passwords</warning>
 operator="equals" interactive="0">
 <title>fail_deny</title>
 <description>Number of failed login attempts before account lockout</description>
-<value selector="">5</value>
+<value selector="">3</value>
 <value selector="3">3</value>
 <value selector="5">5</value>
 <value selector="10">10</value>
 </Value>
 
 <Rule id="password_retry">
-<title>Set Password Retry Prompts Permitted Per-session</title>
-<description>The pam_cracklib module's <tt>retry=</tt> parameter controls how many times a program
-will re-prompt a user after an incorrect password entry, on a per-session basis.
+<title>Set Password Retry Prompts Permitted Per-Session</title>
+<description>To configure the number of retry prompts that are permitted per-session:
+<br /><br />
+Edit the <tt>pam_cracklib.so</tt> statement in <tt>/etc/pam.d/system-auth</tt> to 
+show <tt>retry=3</tt>.
+<br /><br />
+The DoD requirement is three prompts per session.
 </description>
+<ocil clause="it is not the required value">
+To check how many retry attempts are permitted on a per-session basis, run the following command:
+<pre>$ grep pam_cracklib /etc/pam.d/system-auth</pre>
+The <tt>retry</tt> parameter will indicate how many attempts are permitted.
+The DoD required value is 3.
+This would appear as <tt>retry=3</tt>.
+</ocil>
 <rationale>
 Setting the password retry prompts that are permitted on a per-session basis to a low value
 requires some software, such as SSH, to re-connect. This can slow down and
@@ -190,13 +201,39 @@ is different from account lockout, which is provided by the pam_faillock module.
 <ref nist="IA-5" disa="1092" />
 </Rule>
 
+<Rule id="password_require_3consecrepeat">
+<title>Set Password to Maximum of Three Consecutive Repeating Characters</title>
+<description>The pam_cracklib module's <tt>maxrepeat</tt> parameter controls requirements for
+consecutive repeating characters.  Edit the <tt>/etc/pam.d/system-auth</tt> file to include the following 
+line prior to the <tt>password include system-auth-ac</tt> line:
+<pre>password required pam_cracklib.so maxrepeat=3</pre>
+</description>
+<ocil clause="maxrepeat is not found or not set to the required value">
+To check the maximum value for consecutive repeating characters, run the following command:
+<pre>$ grep pam_cracklib /etc/pam.d/system-auth</pre>
+Look for the value of the <tt>maxrepeat</tt> parameter.  The DoD requirement is 3.
+</ocil>
+<rationale>
+Passwords with excessive repeating characters may be more vulnerable to password-guessing attacks.
+</rationale>
+<ref disa="366"/>
+</Rule>
+
 <Rule id="password_require_digits">
 <title>Set Password Strength Minimum Digit Characters</title>
-<description>The pam_cracklib module's <tt>dcredit=</tt> parameter controls requirements for
+<description>The pam_cracklib module's <tt>dcredit</tt> parameter controls requirements for
 usage of digits in a password. When set to a negative number, any password will be required to
 contain that many digits. When set to a positive number, pam_cracklib will grant +1 additional
-length credit for each digit.
+length credit for each digit.  
+Add <tt>dcredit=-1</tt> after pam_cracklib.so to require use of a digit in passwords.
 </description>
+<ocil clause="dcredit is not found or not set to the required value">
+To check how many digits are required in a password, run the following command:
+<pre>$ grep pam_cracklib /etc/pam.d/system-auth</pre>
+The <tt>dcredit</tt> parameter (as a negative number) will indicate how many digits are required.
+The DoD requires at least one digit in a password.
+This would appear as <tt>dcredit=-1</tt>.
+</ocil>
 <rationale>
 Requiring digits makes password guessing attacks more difficult by ensuring a larger
 search space.
@@ -212,7 +249,15 @@ search space.
 usage of uppercase letters in a password. When set to a negative number, any password will be required to
 contain that many uppercase characters. When set to a positive number, pam_cracklib will grant +1 additional
 length credit for each uppercase character.
+Add <tt>ucredit=-1</tt> after pam_cracklib.so to require use of a digit in passwords.
 </description>
+<ocil clause="ucredit is not found or not set to the required value">
+To check how many uppercase characters are required in a password, run the following command:
+<pre>$ grep pam_cracklib /etc/pam.d/system-auth</pre>
+The <tt>ucredit</tt> parameter (as a negative number) will indicate how many uppercase characters are required.
+The DoD requires at least one uppercase character in a password.
+This would appear as <tt>ucredit=-1</tt>.
+</ocil>
 <rationale>
 Requiring a minimum number of uppercase characters makes password guessing attacks
 more difficult by ensuring a larger search space.
@@ -228,7 +273,15 @@ more difficult by ensuring a larger search space.
 usage of special (or ``other'') characters in a password. When set to a negative number, any password will be required to
 contain that many special characters. When set to a positive number, pam_cracklib will grant +1 additional
 length credit for each special character.
+Add <tt>ocredit=-1</tt> after pam_cracklib.so to require use of a special character in passwords.
 </description>
+<ocil clause="ocredit is not found or not set to the required value">
+To check how many special characters are required in a password, run the following command:
+<pre>$ grep pam_cracklib /etc/pam.d/system-auth</pre>
+The <tt>ocredit</tt> parameter (as a negative number) will indicate how many special characters are required.
+The DoD requires at least one special character in a password.
+This would appear as <tt>ocredit=-1</tt>.
+</ocil>
 <rationale>
 Requiring a minimum number of special characters makes password guessing attacks
 more difficult by ensuring a larger search space.
@@ -244,7 +297,15 @@ more difficult by ensuring a larger search space.
 usage of lowercase letters in a password. When set to a negative number, any password will be required to
 contain that many lowercase characters. When set to a positive number, pam_cracklib will grant +1 additional
 length credit for each lowercase character.
+Add <tt>lcredit=-1</tt> after pam_cracklib.so to require use of a lowercase character in passwords.
 </description>
+<ocil clause="lcredit is not found or not set to the required value">
+To check how many lowercase characters are required in a password, run the following command:
+<pre>$ grep pam_cracklib /etc/pam.d/system-auth</pre>
+The <tt>lcredit</tt> parameter (as a negative number) will indicate how many special characters are required.
+The DoD requires at least one lowercase character in a password.
+This would appear as <tt>lcredit=-1</tt>.
+</ocil>
 <rationale>
 Requiring a minimum number of lowercase characters makes password guessing attacks
 more difficult by ensuring a larger search space.
@@ -256,9 +317,19 @@ more difficult by ensuring a larger search space.
 
 <Rule id="password_require_diffchars">
 <title>Set Password Strength Minimum Different Characters</title>
-<description>The pam_cracklib module's <tt>difok=</tt> parameter controls requirements for
+<description>The pam_cracklib module's <tt>difok</tt> parameter controls requirements for
 usage of different characters during a password change.
+Add <tt>difok=<i>NUM</i></tt> after pam_cracklib.so to require differing
+characters when changing passwords, substituting <i>NUM</i> appropriately.
+The DoD requirement is 4.
 </description>
+<ocil clause="difok is not found or not set to the required value">
+To check how many characters must differ during a password change, run the following command:
+<pre>$ grep pam_cracklib /etc/pam.d/system-auth</pre>
+The <tt>difok</tt> parameter will indicate how many characters must differ.
+The DoD requires 4 character differ during a password change.
+This would appear as <tt>difok=4</tt>.
+</ocil>
 <rationale>
 Requiring a minimum number of different characters during password changes ensures that
 newly changed passwords should not resemble previously compromised ones.
@@ -292,38 +363,21 @@ and a second to use unlock_time and set it to a Value
 
 <Rule id="deny_password_attempts">
 <title>Set Deny For Failed Password Attempts</title>
-<!-- TODO JB: there needs to be a comprehensive discussion of
-this, to explain meaning of "PAM-aware", for all PAM module changes.
-These include
-<tt>login</tt>, <tt>sshd</tt>, and <tt>vsftpd</tt>.
-
-By default, all individual programs' configuration files in <tt>/etc/pam.d</tt>
-include <tt>system-auth</tt> or <tt>password-auth</tt>.
--->
 <description>
-To configure
-the system to lock out accounts after a number of incorrect login
-attempts using
-<tt>pam_faillock.so</tt>,
+To configure the system to lock out accounts after a number of incorrect login
+attempts using <tt>pam_tally2.so</tt>:
 <br /><br />
-Find the following line in <tt>/etc/pam.d/system-auth</tt> and <tt>/etc/pam.d/password-auth</tt>:
-<pre>auth sufficient pam_unix.so try_first_pass</pre>
-and then change it so that it reads as follows:
-<pre>auth required pam_unix.so try_first_pass</pre>
-In the same file, comment out or delete the lines:
-<pre>auth requisite pam_succeed_if.so uid &gt;= 500 quiet
-auth required pam_deny.so</pre>
-To enforce password
-lockout, add the following to <tt>/etc/pam.d/system-auth</tt> and <tt>/etc/pam.d/password-auth</tt>.
-First, add the following just before the pam_unix.so auth line:
-<pre>auth required pam_faillock.so preauth audit silent deny=<sub idref="var_accounts_passwords_pam_faillock_deny" /> unlock_time=900</pre>
-Second, add the following two lines just after the pam_unix.so auth line:
-<pre>auth     [default=die]  pam_faillock.so authfail audit deny=<sub idref="var_accounts_passwords_pam_faillock_deny" /> unlock_time=900
-auth     sufficient     pam_faillock.so authsucc audit deny=<sub idref="var_accounts_passwords_pam_faillock_deny" /> unlock_time=900</pre>
-<ul><li>NOTE: The DoD requires accounts be locked out after 3 failed login attempts,
-accomplished by changing the value of the <tt>deny</tt> option to <i>3</i> in the example
-above.</li></ul>
+Add the following line immediately below the <tt>pam_env.so</tt> statement in <tt>/etc/pam.d/system-auth-ac</tt> and <tt>/etc/pam.d/password-auth</tt>:
+<pre>auth required pam_tally2.so deny=3 onerr=fail unlock_time=900</pre>
+The DoD requirement is three failed attempts.
 </description>
+<ocil clause="that is not the case">
+To ensure the failed password attempt policy is configured correctly, run the following command:
+<pre># grep onerr /etc/pam.d/system-auth-ac</pre>
+and
+<pre># grep onerr /etc/pam.d/password-auth</pre>
+The output of both should show <tt>deny=3</tt>.
+</ocil>
 <rationale>
 Locking out user accounts after a number of incorrect attempts
 prevents direct password guessing attacks.
@@ -341,7 +395,7 @@ prevents direct password guessing attacks.
 <description>The system's default algorithm for storing password hashes in
 <tt>/etc/shadow</tt> is SHA-512.
 In order to ensure the system is still configured to use SHA-512 algorithm,
-ensure that the following line appears in <tt>/etc/login.defs</tt>:
+the following line must appear in <tt>/etc/login.defs</tt>:
 <pre>ENCRYPT_METHOD SHA512</pre>
 Also ensure that the <tt>pam_unix.so</tt> module in the <tt>password</tt> section in
 <tt>/etc/pam.d/system-auth</tt> includes the argument <tt>sha512</tt>.
@@ -354,26 +408,35 @@ will be generated using the SHA-512 algorithm.
 need to perform a password change in order to upgrade the stored
 hashes to the stronger algorithm. -->
 </description>
+<ocil clause="either of these are not the case">
+To ensure the system is configured to store password hashes using the SHA-512 algorithm, two conditions must be met.
+First, ensure the following line appears in <tt>/etc/login.defs</tt>:
+<pre>ENCRYPT_METHOD SHA512</pre>
+Also, ensure the <tt>pam_unix.so</tt> module in the <tt>password</tt> section of <tt>/etc/pam.d/system-auth</tt> includes 
+the argument <tt>sha512</tt>.
+</ocil>
 <rationale>
 Using a stronger hashing algorithm makes password cracking attacks more difficult.
 </rationale>
 <ident cce="14063-2" />
 <oval id="accounts_password_hashing_algorithm" />
-<ref nist="IA-5" />
+<ref nist="IA-5" disa="803"/>
 </Rule>
 
 <Rule id="limiting_password_reuse">
 <title>Limit Password Reuse</title>
 <description>Do not allow users to reuse recent passwords. This can
 be accomplished by using the <tt>remember</tt> option for the <tt>pam_unix</tt> PAM
-module. In order to prevent a user from re-using any of their
-last <sub idref="password_history_retain_number" /> passwords, 
-append <tt>remember=<sub idref="password_history_retain_number" /></tt> to
-the password line which uses the <tt>pam_unix</tt> module in the file
-<tt>/etc/pam.d/system-auth</tt>, as shown:
-<pre>password sufficient pam_unix.so existing_options remember=<sub idref="password_history_retain_number" /></pre>
-Old (and thus no longer valid) passwords are stored in the
-file <tt>/etc/security/opasswd</tt>.  The DoD requirement is currently 24 passwords.</description>
+module.  In the file <tt>/etc/pam.d/system-auth</tt>, append <tt>remember=24</tt> to the 
+line which refers to the <tt>pam_unix.so</tt> module, as shown:
+<pre>password sufficient pam_unix.so <i>existing_options</i> remember=24</pre>
+The DoD requirement is 24 passwords.</description>
+<ocil clause="it does not">
+To verify that the password reuse setting is compliant, run the following command:
+<pre>$ grep remember /etc/pam.d/system-auth</pre>
+The output should show the following at the end of the line:
+<pre>remember=24</pre>
+</ocil>
 <rationale>
 Preventing re-use of previous passwords helps ensure that a compromised password is not re-used by a user.
 </rationale>

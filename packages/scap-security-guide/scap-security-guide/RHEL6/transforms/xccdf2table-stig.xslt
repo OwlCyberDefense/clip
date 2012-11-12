@@ -56,14 +56,14 @@
 			<table class="bbl">
 				<tr><td class="bl">Title</td></tr>
 				<tr><td>V-ID</td></tr>
-				<tr><td>GEN-ID</td></tr>
+				<!--<tr><td>GEN-ID</td></tr>-->
 				<tr><td>CAT</td></tr>
 			</table>
 			</td>
 			</xsl:when>
 			<xsl:otherwise>
 				<td>V-ID</td>
-				<td>GEN-ID</td>
+				<!--<td>GEN-ID</td>-->
 				<td>CAT</td>
 				<td>Title</td>
 			</xsl:otherwise>
@@ -90,7 +90,7 @@
 			<table class="bl">
 					<tr><td><xsl:value-of select="cdf:Rule/cdf:title" /></td></tr>
 					<tr><td><xsl:value-of select="@id"/></td></tr>
-					<tr><td><xsl:value-of select="cdf:title" /></td></tr>
+					<!--<tr><td><xsl:value-of select="cdf:title" /></td></tr>-->
 					<tr><td><xsl:value-of select="cdf:Rule/@severity" /></td></tr>
 			</table>
 			</td>
@@ -98,16 +98,16 @@
 			<xsl:otherwise>
 				<td><xsl:value-of select="@id"/></td> 
 				<!--<td> <xsl:value-of select="cdf:ident" /></td>-->
-				<td> <xsl:value-of select="cdf:title" /></td>
+				<!--<td> <xsl:value-of select="cdf:title" /></td>-->
 				<td> <xsl:value-of select="cdf:Rule/@severity" /></td>
 				<td> <xsl:value-of select="cdf:Rule/cdf:title" /></td>
 			</xsl:otherwise>
 			</xsl:choose>
 			<td> <xsl:call-template name="extract-vulndiscussion"><xsl:with-param name="desc" select="cdf:Rule/cdf:description"/></xsl:call-template> </td>
-			<td> <xsl:value-of select="cdf:Rule/cdf:check/cdf:check-content"/> </td>
-			<td> <xsl:value-of select="cdf:Rule/cdf:fixtext"/> </td>
+			<td> <xsl:apply-templates select="cdf:Rule/cdf:check/cdf:check-content/node()"/> </td>
+			<td> <xsl:apply-templates select="cdf:Rule/cdf:fixtext/node()"/> </td>
 			<xsl:if test='$notes'>
-				<td> <xsl:call-template name="print-notes"><xsl:with-param name="vulnid" select="@id"/></xsl:call-template> </td>
+				<td> <table><xsl:call-template name="print-notes"><xsl:with-param name="vulnid" select="@id"/></xsl:call-template> </table> </td>
 			</xsl:if>
 		</tr>
      </xsl:template>
@@ -123,12 +123,10 @@
     <xsl:template name="print-notes">
             <xsl:param name="vulnid"/>
 		<xsl:for-each select="$notegroup/note">
-			<table>
         	<xsl:call-template name="search_vulnidlist" select="note">
 		    	<xsl:with-param name="vulnid_sought" select="$vulnid" />
 		    	<xsl:with-param name="vulnid_list" select="@ref" />
         	</xsl:call-template>
-			</table>
 		</xsl:for-each>
 
     </xsl:template>
@@ -176,13 +174,21 @@
  </xsl:template>
 
 
-    <!-- return only the text between the "VulnDiscussion" (non-XCCDF) tags -->
-    <!-- this should be removed as soon as SRGs include only a description instead of odd tags -->
-    <xsl:template name="extract-vulndiscussion">
-            <xsl:param name="desc"/>
-          <xsl:variable name="desc_info" select="substring-before($desc, '&lt;/VulnDiscussion&gt;')"/>
-          <xsl:value-of select="substring-after($desc_info, '&lt;VulnDiscussion&gt;')"/>
-    </xsl:template>
+    <!-- remove any encoded non-XCCDF tags. -->
+    <!-- continue to wonder: -->
+    <!-- 1) why this is not in the XCCDF spec, if it's needed by one of its major users, or -->
+    <!-- 2) why this garbage is ever exported by VMS -->
+    <!-- this should be removed as soon as SRGs don't include this detritus -->
+  <xsl:template name="extract-vulndiscussion">
+	<xsl:param name="desc"/>
+	<xsl:if test="contains($desc, '&lt;VulnDiscussion&gt;')">
+		<xsl:variable name="desc_info" select="substring-before($desc, '&lt;/VulnDiscussion&gt;')"/>
+		<xsl:value-of select="substring-after($desc_info, '&lt;VulnDiscussion&gt;')"/>
+	</xsl:if>
+	<xsl:if test="not(contains($desc, '&lt;VulnDiscussion&gt;'))">
+		<xsl:apply-templates select="$desc"/>
+	</xsl:if>
+  </xsl:template>
 
 
 

@@ -5,6 +5,8 @@
 
 <xsl:variable name="cci_list" select="document('../references/disa-cci-list.xml')/cci:cci_list" />
 
+<xsl:param name="testinfo" select="''" />
+
 <xsl:include href="constants.xslt"/>
 
 	<xsl:template match="/">
@@ -46,10 +48,11 @@
 		<table>
 			<thead>
 				<td>Vuln ID</td>
-				<td>GEN ID</td>
+				<!-- <td>GEN ID</td> -->
 				<td>Title</td>
 				<td>Discussion (Rationale)</td>
 				<td>Fix Text (Description)</td>
+				<td>Check Text (OCIL Check)</td>
 				<!-- <td>Variable Setting</td> -->
 				<td>CCI Ref<br/>(800-53 Origin)</td>
 			</thead>
@@ -113,11 +116,31 @@
 		<xsl:if test="@id=$idreference and $enabletest='true'">
 		<tr>
 			<td> TBD<!--extract value of Vuln-ID (stored as reference or note or ident) when mapping is available --></td>
-			<td> TBD<!--extract value of GEN-ID (stored as reference or note or ident) when mapping is available --></td>
+			<!-- <td> TBD</td> --> <!--extract value of GEN-ID (stored as reference or note or ident) when mapping is available -->
 			<td> <xsl:value-of select="cdf:title" /></td>
 			<!-- call template to grab text and also child nodes (which should all be xhtml)  -->
 			<td> <xsl:apply-templates select="cdf:rationale"/> </td>
 			<td> <xsl:apply-templates select="cdf:description"/> </td>
+
+
+			<td>
+			<!-- print pretty visual indication of testing data -->
+			<xsl:if test="$testinfo and cdf:reference[@href='test_attestation']">
+				<!-- add green border on left if test attestation found -->
+				<xsl:attribute name="style">border-left:solid thick lime</xsl:attribute>
+			</xsl:if>
+
+			<!-- print the manual check text -->
+			<xsl:apply-templates select="cdf:check" /> 
+
+			<!-- print the test attestation info -->
+			<xsl:if test="$testinfo">
+				<xsl:for-each select="cdf:reference[@href='test_attestation']">
+					<br/><br/><i>Tested on <xsl:value-of select="dc:date"/> by <xsl:value-of select="dc:contributor"/>.</i>
+				</xsl:for-each>
+			</xsl:if>
+			</td>
+
 			<!-- need to resolve <sub idref=""> here  -->
 			<!-- <td> TODO: print refine-value from profile associated with rule  </td> -->
 			<td> 
@@ -145,15 +168,23 @@
 
 
 	<xsl:template match="cdf:check">
+	    <xsl:if test="@system=$ociltransitional">
+			<xsl:apply-templates select="cdf:check-content" />
+			<!-- print clause with "finding" text -->
+			 <xsl:if test="cdf:check-export/@export-name != ''">
+			 <br/>If <xsl:value-of select="cdf:check-export/@export-name" />, this is a finding. 
+			 </xsl:if>
+		</xsl:if>
+<!--	    <xsl:if test="@system=$ovaluri">
 		<xsl:for-each select="cdf:check-export">
 			<xsl:variable name="rulevar" select="@value-id" />
-				<!--<xsl:value-of select="$rulevar" />:-->
 				<xsl:for-each select="/cdf:Benchmark/cdf:Profile[@id=$profile]/cdf:refine-value">
 					<xsl:if test="@idref=$rulevar">
 						<xsl:value-of select="@selector" />
 					</xsl:if>
 				</xsl:for-each>
 		</xsl:for-each>
+		</xsl:if> -->
 	</xsl:template>
 
 

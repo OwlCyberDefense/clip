@@ -17,6 +17,9 @@ POP3 server, the dovecot software should be disabled and removed.
 <description>
 <service-disable-macro service="dovecot" />
 </description>
+<ocil>
+<service-disable-check-macro service="dovecot" />
+</ocil>
 <rationale>
 Running an IMAP or POP3 server provides a network-based
 avenue of attack, and should be disabled if not needed.
@@ -31,6 +34,9 @@ avenue of attack, and should be disabled if not needed.
 with the following command:
 <pre># yum erase dovecot</pre>
 </description>
+<ocil>
+<package-check-macro package="dovecot" />
+</ocil>
 <rationale>
 If there is no need to make the Dovecot software available,
 removing it provides a safeguard against its activation.
@@ -169,11 +175,7 @@ attacker access to credentials by monitoring network traffic.
 access to any services. This modification will allow remote hosts to 
 initiate connections to the IMAP daemon, while keeping all other ports 
 on the server in their default protected state. 
-<br /><br />
-Edit <tt>/etc/sysconfig/iptables</tt>. Add the following line, ensuring 
-that it appears before the final <tt>LOG</tt> and <tt>DROP</tt> lines 
-for the <tt>RH-Firewall-1-INPUT</tt> chain:
-<pre>-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 143 -j ACCEPT</pre>
+<iptables-desc-macro proto="tcp" port="143" />
 </description>
 
 </Group> <!-- <Group id="dovecot_allow_imap_access"> -->

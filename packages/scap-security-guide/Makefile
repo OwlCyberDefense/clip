@@ -12,7 +12,7 @@ VERSION := 1.0
 
 # Bump this if creating multiple releases from the same
 # version.
-RELEASE := git.c06e009
+RELEASE := git.4d28ff3
 
 # The name of the Vendor
 VENDOR := SCAP Security Guide

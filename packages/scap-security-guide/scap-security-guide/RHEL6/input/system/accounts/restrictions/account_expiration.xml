@@ -46,6 +46,12 @@ period of inactivity for users in the particular environment. Setting
 the timeout too low incurs support costs and also has the potential to impact
 availability of the system to legitimate users.
 </description>
+<ocil>To verify the <tt>INACTIVE</tt> setting, run the following command:
+<pre>grep "INACTIVE" /etc/defaults/useradd</pre>
+The output should indicate the <tt>INACTIVE</tt> configuration option is set
+to an appropriate integer as shown in the example below:
+<pre># grep "INACTIVE" /etc/defaults/useradd
+INACTIVE=35</pre></ocil>
 <rationale>
 Disabling inactive accounts ensures that accounts which may not
 have been responsibly removed are not available to attackers
@@ -53,6 +59,22 @@ who may have compromised their credentials.
 </rationale>
 <oval id="accounts_disable_post_pw_expiration" value="var_account_disable_post_pw_expiration"/>
 <ref disa="15,16,17,795"/>
+</Rule>
+
+<Rule id="account_unique_name">
+<title>All Accounts on the System Must Have Unique User or Account Names</title>
+<description>
+Change usernames, or delete accounts, so each has a unique name.
+</description>
+<ocil clause="a line is returned">
+Run the following command to check for duplicate account names:
+<pre># pwck -r</pre>
+If there are no duplicate names, no line will be returned.
+</ocil>
+<rationale>
+Unique usernames allow for accountability on the system.
+</rationale>
+<ref disa="770,804"/>
 </Rule>
 
 </Group>

@@ -12,7 +12,7 @@ of Zeroconf networking. </description>
 <title>Disable Avahi Server if Possible</title>
 <description>Because the Avahi daemon service keeps an open network
 port, it is subject to network attacks.
-Disabling it can reduce the system’s vulnerability to such attacks.
+Disabling it can reduce the system's vulnerability to such attacks.
 </description>
 
 <Rule id="disable_avahi">
@@ -20,6 +20,7 @@ Disabling it can reduce the system’s vulnerability to such attacks.
 <description>
 <service-disable-macro service="avahi-daemon" />
 </description>
+<ocil><service-disable-check-macro service="avahi-daemon" /></ocil>
 <rationale>
 Because the Avahi daemon service keeps an open network
 port, it is subject to network attacks. Its functionality
@@ -28,7 +29,7 @@ can be trusted.
 </rationale>
 <ident cce="4365-3" />
 <oval id="service_avahi-daemon_disabled" />
-<ref nist="CM-6, CM-7" />
+<ref nist="CM-6, CM-7" disa="366"/>
 </Rule>
 
 </Group>
@@ -108,7 +109,7 @@ that port on the system.
 </Rule>
 
 
-<Rule id="avahi_restrict_published_information">
+<Group id="avahi_restrict_published_information">
 <title>Restrict Information Published by Avahi</title>
 <description>
 If it is necessary to publish some information to the network, it should not be joined
@@ -135,7 +136,7 @@ the types of published information in the event that some information
 must be published.
 </rationale>
 <ref nist="AC-4, CM-6, CM-7" />
-</Rule>
+</Group>
 
 </Group>
 

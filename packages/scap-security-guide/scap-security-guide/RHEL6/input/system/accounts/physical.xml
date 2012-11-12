@@ -12,57 +12,63 @@ console.</description>
 <description>During the boot process, the boot loader is
 responsible for starting the execution of the kernel and passing
 options to it. The boot loader allows for the selection of
-different kernels – possibly on different partitions or media.
+different kernels - possibly on different partitions or media.
 The default RHEL boot loader for x86 systems is called GRUB.
 Options it can pass to the kernel include <i>single-user mode</i>, which
 provides root access without any authentication, and the ability to
 disable SELinux. To prevent local users from modifying the boot
-parameters and endangering security, the boot loader configuration
-should be protected with a password and its configuration file's permissions
-should be set properly.
-<br/><br />
-If any correction is needed for the permissions on <tt>/etc/grub.conf</tt>, (which is a symlink to
-<tt>../boot/grub/grub.conf</tt>) the following commands can be used:
-<pre># chown root:root /etc/grub.conf
-# chmod 600 /etc/grub.conf</pre>
+parameters and endangering security, protect the boot loader configuration
+with a password and ensure its configuration file's permissions
+are set properly.
 </description>
 
 <Rule id="user_owner_grub_conf">
 <title>Verify /boot/grub/grub.conf User Ownership</title>
-<description>The file <tt>/etc/grub.conf</tt> is a symbolic link to <tt>/boot/grub/grub.conf</tt> which
-should be owned by the <tt>root</tt> user to prevent destruction or modification of the file.</description>
+<description>The file <tt>/etc/grub.conf</tt> is a symbolic link to
+<tt>/boot/grub/grub.conf</tt> which should be owned by the <tt>root</tt> user
+to prevent destruction or modification of the file.
+<fileowner-desc-macro file="/boot/grub/grub.conf" owner="root"/>
+</description>
+<ocil><fileowner-check-macro file="/boot/grub/grub.conf" owner="root"/></ocil>
 <rationale>
 Only root should be able to modify important boot parameters.
 </rationale>
 <ident cce="4144-2" />
 <oval id="file_user_owner_grub_conf" />
-<ref nist="AC-3, CM-6"/>
+<ref nist="AC-3, CM-6" disa="225"/>
 </Rule>
 
 <Rule id="group_owner_grub_conf">
 <title>Verify /boot/grub/grub.conf Group Ownership</title>
-<description>The file <tt>/etc/grub.conf</tt> is a symbolic link to <tt>/boot/grub/grub.conf</tt> which
-should be group-owned by the <tt>root</tt> group to prevent destruction or modification of the file.</description>
+<description>The file <tt>/etc/grub.conf</tt> is a symbolic link to
+<tt>/boot/grub/grub.conf</tt> which should be group-owned by the <tt>root</tt>
+group to prevent destruction or modification of the file.
+<filegroupowner-desc-macro file="/boot/grub/grub.conf" group="root"/>
+</description>
+<ocil><filegroupowner-check-macro file="/boot/grub/grub.conf" group="root"/></ocil>
 <rationale>
 The <tt>root</tt> group is a highly-privileged group. Furthermore, the group-owner of this
 file should not have any access privileges anyway.
 </rationale>
 <ident cce="4197-0" />
 <oval id="file_group_owner_grub_conf" />
-<ref nist="AC-3, CM-6"/>
+<ref nist="AC-3, CM-6" disa="225"/>
 </Rule>
 
 <Rule id="permissions_grub_conf">
 <title>Verify /boot/grub/grub.conf Permissions</title>
 <description>File permissions for <tt>/boot/grub/grub.conf</tt> should be set to 600, which
-is the default.</description>
+is the default.
+<fileperms-desc-macro file="/boot/grub/grub.conf" perms="600"/>
+</description>
+<ocil><fileperms-check-macro file="/boot/grub/grub.conf" perms="-rw-------"/></ocil>
 <rationale>
-This ensures that only the root user should be able to modify important boot parameters contained in
-this file.
+Proper permissions ensure that only the root user can modify important boot
+parameters.
 </rationale>
 <ident cce="3923-0" />
 <oval id="file_permissions_grub_conf" />
-<ref nist="AC-3, CM-6"/>
+<ref nist="AC-3, CM-6" disa="225"/>
 </Rule>
 
 <Rule id="bootloader_password" severity="high">
@@ -71,11 +77,18 @@ this file.
 enabled to protect boot-time settings.
 To do so, select a password and then generate a hash from it by running:
 <pre># grub-crypt --sha-512</pre>
+You will then be prompted to enter a password.
 Insert the following line into <tt>/etc/grub.conf</tt> immediately
 after the header comments. (Use the output from <tt>grub-crypt</tt> as the
 value of <b>password-hash</b>):
 <pre>password --encrypted <b>password-hash</b></pre>
 </description>
+<ocil clause="it does not">
+To verify the boot loader password has been set and encrypted, run the following command:
+<pre># grep password /etc/grub.conf/</pre>
+The output should show the following:
+<pre>password --encrypted <b>password-hash</b></pre>
+</ocil>
 <rationale>
 Password protection on the boot loader configuration ensures that
 users with physical access cannot trivially alter
@@ -101,6 +114,12 @@ started in single-user mode, add or correct the following line in the
 file <tt>/etc/sysconfig/init</tt>:
 <pre>SINGLE=/sbin/sulogin</pre>
 </description>
+<ocil clause="the output is different">
+To check if authentication is required for single-user mode, run the following command:
+<pre>$ grep SINGLE /etc/sysconfig/init</pre>
+The output should be:
+<pre>SINGLE=/sbin/sulogin</pre>
+</ocil>
 <rationale>
 This prevents attackers with physical access from trivially bypassing security
 on the machine and gaining root access. Such accesses are further prevented
@@ -123,6 +142,12 @@ The <tt>PROMPT</tt> option allows the console user to perform an
 interactive system startup, in which it is possible to select the
 set of services which are started on boot.
 </description>
+<ocil clause="it does not">
+To check whether interactive boot is disabled, run the following command:
+<pre>$ grep PROMPT /etc/sysconfig/init</pre>
+If interactive boot is disabled, the output will show:
+<pre>PROMPT=no</pre>
+</ocil>
 <rationale>
 Using interactive boot,
 the console user could disable auditing, firewalls, or other
@@ -130,7 +155,7 @@ services, weakening system security.
 </rationale>
 <ident cce="4245-7" />
 <oval id="interactive_boot_disable" />
-<ref nist="CM-7, IA-4, SC-2"/>
+<ref nist="CM-7, IA-4, SC-2" disa="213"/>
 </Rule>
 
 
@@ -187,14 +212,19 @@ the man page <tt>gconftool-2(1)</tt>.</description>
 <Rule id="set_screensaver_inactivity_timeout">
 <title>Set GNOME Login Inactivity Timeout</title>
 <description>
-The idle time-out value for period of inactivity GNOME
-desktop lockout should be 15 minutes.
+Run the following command to set the idle time-out value for
+inactivity in the GNOME desktop to 15 minutes:
 <pre># gconftool-2 \
   --direct \
   --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
   --type int \
   --set /apps/gnome-screensaver/idle_delay 15</pre>
 </description>
+<ocil clause="it is not">
+To check the current idle time-out value, run the following command:
+<pre>$ gconftool-2 -g /apps/gnome-screensaver/idle_delay</pre>
+If properly configured, the output should be <tt>15</tt>. 
+</ocil>
 <rationale>
 Setting the idle delay controls when the
 screensaver will start, and can be combined with
@@ -207,16 +237,25 @@ screen locking to prevent access from passersby.
 
 <Rule id="enable_screensaver_after_idle">
 <title>GNOME Desktop Screensaver Mandatory Use</title>
-<description>Idle activation of the screen saver should be
-enabled
+<description>
+Run the following command to activate the screensaver
+in the GNOME desktop after a period of inactivity:
 <pre># gconftool-2 --direct \
   --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
   --type bool \
   --set /apps/gnome-screensaver/idle_activation_enabled true</pre>
 </description>
+<ocil clause="it is not">To check the screensaver mandatory use status, run the following command:
+<pre>$ gconftool-2 -g /apps/gnome-screensaver/idle_activation_enabled</pre>
+If properly configured, the output should be <tt>true</tt>.
+</ocil>
 <rationale>
-Enabling idle activation of the screen saver ensures that the
-screensaver will be activated after the idle delay.
+Enabling idle activation of the screen saver ensures that the screensaver will
+be activated after the idle delay.  Applications requiring continuous,
+real-time screen display (such as network management products) require the
+following and need to be documented with the IAO: the login session does not
+have administrator rights; and the display station is located in a
+controlled-access area.
 </rationale>
 <ident cce="14604-3" />
 <oval id="gconf_gnome_screensaver_idle_activation_enabled" />
@@ -225,13 +264,19 @@ screensaver will be activated after the idle delay.
 
 <Rule id="enable_screensaver_password_lock">
 <title>Enable Screen Lock Activation After Idle Period</title>
-<description>Idle activation of the screen lock should be
-enabled
+<description>
+Run the following command to activate locking of the screensaver
+in the GNOME desktop when it is activated:
 <pre># gconftool-2 --direct \
   --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
   --type bool \
   --set /apps/gnome-screensaver/lock_enabled true</pre>
 </description>
+<ocil clause="it is not">
+To check the status of the idle screen lock activation, run the following command:
+<pre>$ gconftool-2 -g /apps/gnome-screensaver/lock_enabled</pre>
+If properly configured, the output should be <tt>true</tt>.
+</ocil>
 <rationale>
 Enabling the activation of the screen lock after an idle period
 ensures that password entry will be required in order to
@@ -245,13 +290,19 @@ access the system, preventing access by passersby.
 <Rule id="set_blank_screensaver">
 <title>Implement Blank Screen Saver</title>
 <description>
-The screen saver should be blank
+Run the following command to set the screensaver mode
+in the GNOME desktop to a blank screen:
 <pre># gconftool-2
   --direct \
   --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
   --type string \
   --set /apps/gnome-screensaver/mode blank-only</pre>
 </description>
+<ocil clause="it is not">
+To ensure the screensaver is configured to be blank, run the following command:
+<pre>$ gconftool-2 -g /apps/gnome-screensaver/mode</pre>
+If properly configured, the output should be <tt>blank-only</tt> 
+</ocil>
 <rationale>
 Setting the screensaver mode to blank-only conceals the
 contents of the display from passersby.
@@ -268,7 +319,7 @@ contents of the display from passersby.
 <title>Configure Console Screen Locking</title>
 <description>
 A console screen locking mechanism is provided in the
-<tt>vlock package</tt>, which is not installed by default.
+vlock package, which is not installed by default.
 </description>
 
 <Rule id="install_vlock_package">
@@ -282,6 +333,11 @@ to prevent passersby from abusing their login:
 The <tt>-a</tt> option can be used to prevent switching to other
 virtual consoles.
 </description>
+<ocil clause="there is a command not found error">
+To check whether vlock has been installed, run the following command:
+<pre>$ vlock</pre>
+If vlock is available, then the terminal will lock.
+</ocil>
 <rationale>
 Installing vlock ensures that a console locking capability is available
 for users who may need to suspend console logins.
@@ -295,21 +351,21 @@ for users who may need to suspend console logins.
 <Group id="smart_card_login">
 <title>Using Smart Cards for System Login</title>
 <description>
-The use of Smart Cards, like Common Access Cards (CAC), for system login
+The use of smart cards, like Common Access Cards (CAC), for system login
 provides stronger, two-factor authentication than using a username/password.
-Smart Cards take advantage of Public Key Infrastructure (PKI) to store
+Smart cards take advantage of Public Key Infrastructure (PKI) to store
 encrypted digital certificates that can be used to authenticate the card
 owner.
 <br /><br />
-In Red Hat Enterprise Linux servers and workstations, Smart Card login
+In Red Hat Enterprise Linux servers and workstations, smart card login
 is not enabled by default and must be enabled in the system settings.
-Detailed procedures on how to configure a system to use Smart Card
+Detailed procedures on how to configure a system to use smart card
 authentication for login can be found in the Red Hat Documentation web site:
 <ul>
 <li>https://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Linux/6/html/Managing_Smart_Cards/enabling-smart-card-login.html</li>
 </ul>
-It is recommended to use Smart Cards wherever feasible as part of a multifactor
-authentication system
+It is recommended to use smart cards wherever feasible as part of a multifactor
+authentication system.
 </description>
 <ref disa="765,766,767,768,771,772,884" />
 </Group>

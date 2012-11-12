@@ -27,6 +27,9 @@ and removed from the system.
 <description>
 <service-disable-macro service="httpd" />
 </description>
+<ocil>
+<service-disable-check-macro service="httpd" />
+</ocil>
 <rationale>
 Running web server software provides a network-based avenue
 of attack, and should be disabled if not needed.
@@ -38,10 +41,12 @@ of attack, and should be disabled if not needed.
 
 <Rule id="uninstall_httpd">
 <title>Uninstall httpd Package</title>
-<description>The <tt>httpd</tt> package can be uninstalled with
-the following command:
-<pre># yum erase httpd</pre>
+<description>
+<package-remove-macro package="httpd" />
 </description>
+<ocil>
+<package-check-macro package="httpd" />
+</ocil>
 <rationale>
 If there is no need to make the web server software available,
 removing it provides a safeguard against its activation.
@@ -156,7 +161,7 @@ Following each DSO removal, the configuration can be tested with the following c
 to check if everything still works:
 <pre># service httpd configtest</pre>
 The purpose of each of the modules loaded by default will now be addressed one at a time.
-If none of a module’s directives are being used, remove it.
+If none of a module's directives are being used, remove it.
 </description>
 
 <Group id="httpd_core_modules">
@@ -190,7 +195,7 @@ be restricted by a password.
 <br /><br />
 Authentication can be performed using local plain text password files (<tt>authn_file</tt>),
 local DBM password files (<tt>authn_dbm</tt>) or an LDAP directory. The only module required by
-the web server depends on your choice of authentication. Comment out the modules you don’t
+the web server depends on your choice of authentication. Comment out the modules you don't
 need from the following:
 <pre>LoadModule authn_file_module modules/mod_authn_file.so
 LoadModule authn_dbm_module modules/mod_authn_dbm.so</pre>
@@ -441,7 +446,7 @@ If the web server requires the use of CGI, enable <tt>mod_cgi</tt>.
 CGI functionality is required, include the appropriate modules. <tt>env</tt> allows for
 control of the environment passed to CGI scripts. <tt>actions</tt> allows CGI events
 to be triggered when files of a certain type are requested. <tt>su exec</tt> allows
-CGI scripts to run as a specified user/group instead of as the server’s user/group. -->
+CGI scripts to run as a specified user/group instead of as the server's user/group. -->
 </description>
 <rationale>
 Minimizing the number of loadable modules available to the web server reduces risk
@@ -806,15 +811,10 @@ to access information about the web server or to alter the server's configuratio
 <Group id="httpd_configure_iptables">
 <title>Configure <tt>iptables</tt> to Allow Access to the Web Server</title>
 <description>
-By default, <tt>iptables</tt> blocks access to the ports used by the web server.
-To configure <tt>iptables</tt> to allow port 80 traffic edit <tt>/etc/sysconfig/iptables</tt>.
-Add the following line, ensuring that it appears before the final LOG and DROP lines for
-the RH-Firewall-1-INPUT chain:
-<pre>-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 80 -j ACCEPT</pre>
-To configure <tt>iptables</tt> to allow port 443 traffic edit <tt>/etc/sysconfig/iptables</tt>.
-Add the following line, ensuring that it appears before the final LOG and DROP lines for
-the RH-Firewall-1-INPUT chain:
-<pre>-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 443 -j ACCEPT</pre>
+By default, <tt>iptables</tt>
+blocks access to the ports used by the web server.
+<iptables-desc-macro allow="true" proto="tcp" port="80" />
+<iptables-desc-macro allow="true" proto="tcp" port="443" />
 </description>
 
 </Group> <!-- <Group id="httpd_configure_iptables"> -->

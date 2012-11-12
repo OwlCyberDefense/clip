@@ -88,18 +88,19 @@ def main():
 		ovaltree.remove(variables)
 
 	# turn IDs into meaningless numbers
-	translator = idtranslate.idtranslator("./output/"+idname+".ini", "oval:"+idname)
+	translator = idtranslate.idtranslator("./output/"+idname+".ini", idname)
 	ovaltree = translator.translate(ovaltree)
 
-	newovalfile = ovalfile.replace("oval", "cpe-oval-"+idname)
+	newovalfile = ovalfile.replace("oval", "cpe-oval")
+	newovalfile = newovalfile.replace("unlinked", idname)
 	ET.ElementTree(ovaltree).write(newovalfile)
 
 	# replace and sync IDs, href filenames in input cpe dictionary file
 	cpedicttree = parse_xml_file(cpedictfile)
-	newcpedictfile = os.path.basename(cpedictfile).replace(".xml","-"+idname+".xml")
+	newcpedictfile = idname + "-" + os.path.basename(cpedictfile)
 	for check in cpedicttree.findall(".//{%s}check" % cpe_ns):
 		check.set("href",os.path.basename(newovalfile))
-		check.text = translator.assign_id("definition", check.text)	
+		check.text = translator.assign_id("{" + oval_ns + "}definition", check.text)	
 	ET.ElementTree(cpedicttree).write("./output/"+newcpedictfile)
 
 	sys.exit(0)

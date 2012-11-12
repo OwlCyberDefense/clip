@@ -19,6 +19,9 @@ data available to the public.</description>
 <description>
 <service-disable-macro service="vsftpd" />
 </description>
+<ocil>
+<service-disable-check-macro service="vsftpd" />
+</ocil>
 <rationale>
 Running FTP server software provides a network-based avenue
 of attack, and should be disabled if not needed.
@@ -32,17 +35,19 @@ a risk of compromising sensitive information.
 
 <Rule id="uninstall_vsftpd">
 <title>Uninstall vsftpd Package</title>
-<description>The <tt>vsftpd</tt> package can be
-uninstalled with the following command:
-<pre># yum erase vsftpd</pre>
+<description>
+<package-remove-macro package="vsftpd" />
 </description>
+<ocil>
+<package-check-macro package="vsftpd" />
+</ocil>
 <rationale>
 Removing the vsftpd package decreases the risk of its
 accidental activation.
 </rationale>
 <ident cce="14881-7" />
 <oval id="package_vsftpd_removed" />
-<ref nist="CM-6, CM-7" />
+<ref nist="CM-6, CM-7" disa="1436"/>
 </Rule>
 
 </Group> <!-- <Group id="disabling_vsftpd"> -->
@@ -66,8 +71,10 @@ and for consistency with future Red Hat releases, the use of vsftpd is recommend
 
 <Group id="ftp_configure_vsftpd">
 <title>Use vsftpd to Provide FTP Service if Necessary</title>
-<description>The primary vsftpd configuration file is <tt>/etc/vsftpd.conf</tt>, if that file exists, or <tt>/etc/vsftpd/vsftpd.conf</tt> if it does not. For the remainder of this section, the phrase “the configuration file” will refer to whichever of those files is appropriate for your environment.</description>
-
+<description>The primary vsftpd configuration file is
+<tt>/etc/vsftpd.conf</tt>, if that file exists, or
+<tt>/etc/vsftpd/vsftpd.conf</tt> if it does not. 
+</description>
 <Rule id="ftp_log_transactions">
 <title>Enable Logging of All FTP Transactions</title>
 <description>Edit the vsftpd configuration file. Add or correct the following configuration options:
@@ -85,7 +92,8 @@ format. The default vsftpd log file is /var/log/vsftpd.log.</rationale>
 
 <Rule id="ftp_present_banner">
 <title>Create Warning Banners for All FTP Users</title>
-<description>Edit the vsftpd configuration file. Add or correct the following configuration options:
+<description>Edit the vsftpd configuration file, which resides at <tt>/etc/vsftpd/vsftpd.conf</tt>
+by default. Add or correct the following configuration options:
 <pre>banner_file=/etc/issue</pre>
 </description>
 <rationale>This setting will cause the system greeting banner to be used for FTP connections as well.</rationale>
@@ -93,6 +101,14 @@ format. The default vsftpd log file is /var/log/vsftpd.log.</rationale>
 <ref disa="48" />
 <!--<oval id="ftp_present_banner" />-->
 <!--<ref nist="CM-6, CM-7" /> -->
+<ocil clause="it does not">
+To verify this configuration, run the following command:
+<pre>grep "banner_file" /etc/vsftpd/vsftpd.conf</pre>
+
+The output should show the value of <tt>banner_file</tt> is set to <tt>/etc/issue</tt>, an example of which is shown below:
+<pre># grep "banner_file" /etc/issue
+banner_file=/etc/issue"</pre>
+</ocil>
 </Rule>
 
 <Group id="ftp_restrict_users">
@@ -114,13 +130,13 @@ these logins as much as possible.</description>
 <!--<ref nist="CM-6, CM-7" /> -->
 </Rule>
 
-<Rule id="ftp_limit_users">
+<Group id="ftp_limit_users">
 <title>Limit Users Allowed FTP Access if Necessary</title>
 <description>If there is a mission-critical reason for users to access their accounts via the insecure FTP protocol, limit the set of users who are allowed this access. Edit the vsftpd configuration file. Add or correct the following configuration options:
 <pre>userlist_enable=YES
 userlist_file=/etc/vsftp.ftpusers
 userlist_deny=NO</pre>
-Edit the file <tt>/etc/vsftp.ftpusers</tt>. For each user USERNAME who should be allowed to access the system via ftp, add a line containing that user’s name.
+Edit the file <tt>/etc/vsftp.ftpusers</tt>. For each user USERNAME who should be allowed to access the system via ftp, add a line containing that user's name.
 <pre>USERNAME</pre>
 If anonymous access is also required, add the anonymous usernames to <tt>/etc/vsftp.ftpusers</tt> as well:
 <pre>anonymous
@@ -130,7 +146,7 @@ ftp</pre>
 <!--<ident cce="4443-8" />-->
 <!--<oval id="ftp_limit_users" />-->
 <!--<ref nist="CM-6, CM-7" /> -->
-</Rule>
+</Group>
 
 </Group> <!-- <Group id="ftp_restrict_users"> -->
 
@@ -161,11 +177,11 @@ these users from filling a disk used by other services.</rationale>
 <!--<ref nist="CM-6, CM-7" /> -->
 </Rule>
 
-<Rule id="ftp_configure_firewall">
+<Group id="ftp_configure_firewall">
 <title>Configure Firewalls to Protect the FTP Server</title>
-<description>Edit the file <tt>/etc/sysconfig/iptables</tt>. Add the following lines, ensuring that they appear before the final
-LOG and DROP lines for the RH-Firewall-1-INPUT chain:
-<pre>-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 21 -j ACCEPT</pre>
+<description>By default, <tt>iptables</tt>
+blocks access to the ports used by the web server.
+<iptables-desc-macro allow="true" proto="tcp" port="21" />
 Edit the file <tt>/etc/sysconfig/iptables-config</tt>. Ensure that the space-separated list of modules contains
 the FTP connection tracking module:
 <pre>IPTABLES_MODULES="ip_conntrack_ftp"</pre></description>
@@ -178,7 +194,7 @@ FTP server to operate on a machine which is running a firewall.</rationale>
 <!--<ident cce="4443-8" />-->
 <!--<oval id="ftp_configure_firewall" />-->
 <!--<ref nist="CM-6, CM-7" /> -->
-</Rule>
+</Group>
 
 </Group> <!-- <Group id="ftp_configure_vsftpd"> -->
 </Group> <!-- <Group id="ftp"> -->

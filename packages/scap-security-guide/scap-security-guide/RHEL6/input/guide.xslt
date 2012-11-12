@@ -1,9 +1,15 @@
 <?xml version="1.0"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xccdf="http://checklists.nist.gov/xccdf/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xccdf="http://checklists.nist.gov/xccdf/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:dc="http://purl.org/dc/elements/1.1/">
 
   <xsl:template match="Benchmark">
     <xsl:copy>
       <xsl:copy-of select="@*|node()" />
+       <Value id="conditional_clause" type="string" operator="equals">
+                 <title>A conditional clause for check statements.</title>
+                 <description>A conditional clause for check statements.</description>
+                 <value>This is a placeholder.</value>
+       </Value>
+
       <xsl:apply-templates select="document('intro/intro.xml')" />
       <xsl:apply-templates select="document('system/system.xml')" />
       <xsl:apply-templates select="document('services/services.xml')" />
@@ -52,7 +58,6 @@
       <xsl:apply-templates select="document('system/accounts/restrictions/password_storage.xml')" />
       <xsl:apply-templates select="document('system/accounts/restrictions/password_expiration.xml')" />
       <xsl:apply-templates select="document('system/accounts/restrictions/account_expiration.xml')" />
-      <xsl:apply-templates select="document('system/accounts/restrictions/nis_inclusions.xml')" />
     </xsl:copy>
   </xsl:template>
 
