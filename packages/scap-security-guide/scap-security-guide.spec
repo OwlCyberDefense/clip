@@ -12,6 +12,7 @@ Patch:          ssg-fix-fixes-tags.patch
 Patch0:		replace-pam-cracklib-with-pam-passwdqc.patch
 Patch1:		ldap-dependency-checking.patch
 Patch2:		postfix-package-dependency-checking.patch
+Patch3:		httpd-dependency-checking.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 
@@ -39,6 +40,7 @@ involved in the SCAP Security Guide community.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 #configure
