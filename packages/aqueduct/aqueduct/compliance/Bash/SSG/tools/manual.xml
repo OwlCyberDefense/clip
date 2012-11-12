@@ -3,6 +3,7 @@
 <description>This profile contains items that require user interaction during audit.</description>
 <select idref="install_aide" selected="true"/>
 <select idref="install_vsftpd" selected="true"/>
+<select idref="install_httpd" selected="true"/>
 <select idref="install_openswan" selected="true"/>
 <select idref="install_vlock_package" selected="true"/>
 <select idref="bios_disable_usb_boot" selected="true"/>

@@ -22,10 +22,13 @@ set -e
 
 # verify we have the right key
 keyid=$( /bin/echo $(/usr/bin/gpg --throw-keyids < /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release ) | /bin/cut --characters=11-18 | /usr/bin/tr [A-Z] [a-z] )
-[ "$keyid" == "fd431d51" ] || exit 1
+
+if [ "$keyid" != "fd431d51" ]; then
+	 exit 1
+fi
 
 # if not installed, install it
-if /bin/rpm -qi gpg-pubkey-$keyid | /bin/grep -q "release key 2"; then
+if ! /bin/rpm -qi gpg-pubkey-$keyid | /bin/grep -q "release key 2"; then
 	/bin/rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 fi
 

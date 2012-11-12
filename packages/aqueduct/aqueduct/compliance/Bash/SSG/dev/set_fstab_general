@@ -27,11 +27,13 @@ function set_mount_opt {
        	#DEV=$1 LOC=$2 OPT=$3
 	str=""
         str=$(/bin/awk -v STR=$str -v DEV=$1 -v LOC=$2 -v OPT=$3 '{
-		if ($1~DEV && $2==LOC || LOC="" && $4!~OPT)
+		if ($1~DEV && $2==LOC && $4!~OPT)
+			print $1 "\t" $2 "\t" $3 "\t" $4 "," OPT "\t" $5 " " $6
+		else if ($1~DEV && LOC=="" && $4!~OPT)
 			print $1 "\t" $2 "\t" $3 "\t" $4 "," OPT "\t" $5 " " $6
 		else
 			print $0
-	}' testfile)
+	}' /etc/fstab)
 	
 	
 	echo -e "$str" > /etc/fstab
