@@ -1,11 +1,13 @@
+diff --git a/RHEL6/Makefile b/RHEL6/Makefile
+index 53ee443..8d4b37a 100644
 --- a/RHEL6/Makefile
 +++ b/RHEL6/Makefile
-@@ -15,7 +15,7 @@ shorthand-guide:
- shorthand2xccdf: shorthand-guide
- 	xsltproc -o $(OUT)/rhel6-xccdf-noprofiles.xml $(TRANS)/shorthand2xccdf.xslt $(OUT)/rhel6-shorthand.xml
- 	xsltproc -stringparam profile "allprofiles" -o $(OUT)/rhel6-xccdf.xml $(TRANS)/xccdf-addprofiles.xslt $(OUT)/rhel6-xccdf-noprofiles.xml
--#	xsltproc -stringparam fixes "../$(IN)/fixes/bash-ks.xml" -o $(OUT)/rhel6-xccdf.xml $(TRANS)/xccdf-addfixes.xslt $(OUT)/rhel6-xccdf.xml
-+	xsltproc -stringparam fixes "../$(IN)/fixes/bash-ks.xml" -o $(OUT)/rhel6-xccdf.xml $(TRANS)/xccdf-addfixes.xslt $(OUT)/rhel6-xccdf.xml
- #	xsltproc -stringparam fixes "../$(IN)/fixes/puppet-example.xml" -o $(OUT)/rhel6-xccdf.html $(TRANS)/xccdf-addfixes.xslt $(OUT)/rhel6-xccdf.xml
- 	xmllint --format --output $(OUT)/rhel6-xccdf.xml $(OUT)/rhel6-xccdf.xml
+@@ -23,7 +23,7 @@ shorthand2xccdf: shorthand-guide
+ 	xsltproc -o $(OUT)/unlinked-rhel6-ocil.xml $(TRANS)/xccdf-create-ocil.xslt $(OUT)/unlinked-rhel6-xccdf.xml
+ 	xmllint --format --output $(OUT)/unlinked-rhel6-ocil.xml $(OUT)/unlinked-rhel6-ocil.xml 
+ 	xsltproc -o $(OUT)/unlinked-ocilrefs-rhel6-xccdf.xml $(TRANS)/xccdf-ocilcheck2ref.xslt $(OUT)/unlinked-rhel6-xccdf.xml
+-#	xsltproc -stringparam fixes "../$(IN)/fixes/bash-ks.xml" -o $(OUT)/unlinked-rhel6-xccdf.xml $(TRANS)/xccdf-addfixes.xslt $(OUT)/unlinked-rhel6-xccdf.xml
++	xsltproc -stringparam fixes "../$(IN)/fixes/bash-ks.xml" -o $(OUT)/unlinked-rhel6-xccdf.xml $(TRANS)/xccdf-addfixes.xslt $(OUT)/unlinked-rhel6-xccdf.xml
+ 	xmllint --format --output $(OUT)/unlinked-rhel6-xccdf.xml $(OUT)/unlinked-rhel6-xccdf.xml
  
+ checks:
