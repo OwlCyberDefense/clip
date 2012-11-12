@@ -13,6 +13,7 @@ Patch0:		replace-pam-cracklib-with-pam-passwdqc.patch
 Patch1:		ldap-dependency-checking.patch
 Patch2:		postfix-package-dependency-checking.patch
 Patch3:		httpd-dependency-checking.patch
+Patch4:		sysctl-module-dependency-checking.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 
