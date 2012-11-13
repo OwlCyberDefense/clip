@@ -354,6 +354,7 @@ iso-to-disk:
 clean-mock: $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
 	$(VERBOSE)$(RM) $(YUM_CONF_FILE)
 	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
+	$(VERBOSE)$(RM) -rf $(REPO_DIR)/yumcache
 
 bare-repos: clean-mock
 	$(VERBOSE)$(RM) -r $(MY_REPO_DIRS) $(MY_REPO_DIR)
