@@ -22,5 +22,5 @@ FILE=/etc/modprobe.d/bluetooth.conf
 
 . $(dirname $0)/modprobe_common
 
-add_modprobe_entries 'install net-pf-31 /bin/true' $FILE
-add_modprobe_entries 'install bluetooth /bin/true' $FILE
+add_modprobe_entries 'alias net-pf-31 off' $FILE
+add_modprobe_entries 'alias bluetooth off' $FILE

@@ -26,8 +26,7 @@ FILE=/etc/passwd
 # Check each user in /etc/passwd for a file and change the permisssions if it
 # exists
 /bin/awk -F: '{
-	if (/usr/bin/test -f "/home/"$1) 
-		/bin/chmod g-w "/home/"$1
-		/bin/chmod o-rwx "/home/"$1
-}' $FILE
-
+	if( system( "[ -f " "/home/"$1 " ] " ) == 0 ) 
+		print "/bin/chmod g-w /home/"$1
+		print "/bin/chmod o-rwx "/home/$1
+}' $FILE | bash

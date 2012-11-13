@@ -22,4 +22,4 @@ FILE=/etc/modprobe.d/mounting.conf
 
 . $(dirname $0)/modprobe_common
 
-add_modprobe_entries 'install vxfs /bin/true' $FILE
+add_modprobe_entries 'install freevxfs /bin/true' $FILE

@@ -22,9 +22,9 @@ FILE="/etc/sysconfig/iptables"
 
 [ -f $FILE ] || exit 1
 
-PATTERN="-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 25 -j ACCEPT"
-INSERTPOS="RH-Firewall-1-INPUT\s+.*\s+LOG"
+PATTERN='-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 25 -j ACCEPT'
+INSERTPOS='RH-Firewall-1-INPUT\s+.*\s+LOG'
 
 . $(dirname $0)/set_general_entry
-add_entry_after $PATTERN $INSERTPOS $FILE
-add_entry $PATTERN $FILE
+add_entry_after "$PATTERN" "$INSERTPOS" $FILE
+add_entry "$PATTERN" $FILE

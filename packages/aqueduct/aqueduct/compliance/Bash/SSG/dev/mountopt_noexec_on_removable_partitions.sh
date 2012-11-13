@@ -22,5 +22,5 @@ FILE=/etc/fstab
 
 [ -f $FILE ] || exit 1
 
-. $(dirname $0)/set_fstab_common
+. $(dirname $0)/set_fstab_general
 set_mount_opt media "" noexec

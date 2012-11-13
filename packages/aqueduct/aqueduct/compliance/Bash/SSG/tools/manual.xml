@@ -14,6 +14,7 @@
 <select idref="set_gdm_login_banner_text" selected="true"/>
 <select idref="no_empty_passwords" selected="true"/>
 <select idref="no_uidzero_except_root" selected="true"/>
+<select idref="no_unpackaged_suid_files" selected="true"/>
 <select idref="postfix_create_cert" selected="true"/>
 <select idref="postfix_install_ssl_cert" selected="true"/>
 <select idref="postfix_seperate_internal_external" selected="true"/>

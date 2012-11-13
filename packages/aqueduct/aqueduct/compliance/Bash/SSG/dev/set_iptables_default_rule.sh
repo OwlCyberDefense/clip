@@ -20,7 +20,7 @@ set -e
 
 FILE=/etc/sysconfig/iptables
 
-[ -f $FILE ] || iptables-save > /etc/sysconfig/iptables
+[ -f $FILE ] || /sbin/iptables-save > /etc/sysconfig/iptables
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(:INPUT\s+).*" "DROP [0:0]" $FILE

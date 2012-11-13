@@ -31,7 +31,7 @@ function add_entry {
 
         if /bin/grep -Pq "^(\s*)(\#*)(\s*)$ENTRY" "$FILEDIR/$F"; then
                 ENTRY=` /bin/echo "$ENTRY"|/bin/sed 's@\([]\*\$\/&[]\)@\\\1@g' `
-                /bin/sed -i -r -e "s@(\s*)(\#*)(\s*)$ENTRY@\3\4@g" "$FILEDIR/$F"
+                /bin/sed -i -r -e "s@(\s*)(\#*)(\s*)($ENTRY)@\3\4@g" "$FILEDIR/$F"
         else
                 /bin/echo "$ENTRY" >> "$FILEDIR/$F"
         fi

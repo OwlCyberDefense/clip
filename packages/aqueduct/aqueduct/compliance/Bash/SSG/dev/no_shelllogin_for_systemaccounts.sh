@@ -27,5 +27,5 @@ FILE=/etc/passwd
 /bin/awk -F: '{
 	if ($3)
 		if ($3 < 500 && $1 != "root")
-			print "usermod -s /sbin/nologin " $1
+			print "/usr/sbin/usermod -s /sbin/nologin " $1
 }' $FILE | bash

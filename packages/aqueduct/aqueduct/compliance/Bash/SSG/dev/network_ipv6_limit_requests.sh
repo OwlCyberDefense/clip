@@ -20,7 +20,7 @@ set -e
 
 . $(dirname $0)/set_sysctl_common
 
-set_sysctl_param_net.ipv6.conf.default.router_solicitations 0
+set_sysctl_param net.ipv6.conf.default.router_solicitations 0
 set_sysctl_param net.ipv6.conf.default.accept_ra_rtr_pref 0
 set_sysctl_param net.ipv6.conf.default.accept_ra_pinfo 0
 set_sysctl_param net.ipv6.conf.default.accept_ra_defrtr 0
