@@ -3950,7 +3950,7 @@ Domain allowed to transition.
 </summary>
 </param>
 </interface>
-<interface name="oscap_run" lineno="57">
+<interface name="oscap_run" lineno="59">
 <summary>
 Execute oscap in the oscap domain, and
 allow the specified role the oscap domain.
@@ -3966,7 +3966,7 @@ The role to be allowed the oscap domain.
 </summary>
 </param>
 </interface>
-<interface name="oscap_probe_run" lineno="82">
+<interface name="oscap_probe_run" lineno="84">
 <summary>
 Execute oscap probes in the oscap_probe domain, and
 allow the specified role the oscap_probe domain.
@@ -3982,7 +3982,7 @@ The role to be allowed the oscap_probe domain.
 </summary>
 </param>
 </interface>
-<interface name="oscap_role" lineno="106">
+<interface name="oscap_role" lineno="108">
 <summary>
 Role access for oscap
 </summary>
@@ -4480,10 +4480,17 @@ Role allowed access.
 </param>
 <rolecap/>
 </interface>
-<tunable name="secstate_remediate" dftval="false">
+<tunable name="secstate_enable_remediation" dftval="false">
 <desc>
 <p>
 Allow secstate to remediate
+</p>
+</desc>
+</tunable>
+<tunable name="secstate_enable_oscap_probes" dftval="true">
+<desc>
+<p>
+Allow secstate to execute (read-only) scap probes
 </p>
 </desc>
 </tunable>
@@ -64603,65 +64610,9 @@ Role allowed access.
 </param>
 <rolecap/>
 </interface>
-</module>
-<module name="toor" filename="policy/modules/roles/toor.if">
-<summary>Super user administration role (DEBUG ONLY - DONT USE IN PRODUCTION)</summary>
-<interface name="toor_role_change" lineno="14">
+<interface name="staff_entry_spec_domtrans" lineno="64">
 <summary>
-Change to the system administrator role.
-</summary>
-<param name="role">
-<summary>
-Role allowed access.
-</summary>
-</param>
-<rolecap/>
-</interface>
-<interface name="toor_role_change_to" lineno="44">
-<summary>
-Change from the system administrator role.
-</summary>
-<desc>
-<p>
-Change from the system administrator role to
-the specified role.
-</p>
-<p>
-This is an interface to support third party modules
-and its use is not allowed in upstream reference
-policy.
-</p>
-</desc>
-<param name="role">
-<summary>
-Role allowed access.
-</summary>
-</param>
-<rolecap/>
-</interface>
-<interface name="toor_shell_domtrans" lineno="62">
-<summary>
-Execute a shell in the toor domain.
-</summary>
-<param name="domain">
-<summary>
-Domain allowed access.
-</summary>
-</param>
-</interface>
-<interface name="toor_bin_spec_domtrans" lineno="83">
-<summary>
-Execute a generic bin program in the toor domain.
-</summary>
-<param name="domain">
-<summary>
-Domain allowed access.
-</summary>
-</param>
-</interface>
-<interface name="toor_entry_spec_domtrans" lineno="106">
-<summary>
-Execute all entrypoint files in the toor domain. This
+Execute all entrypoint files in the staff domain. This
 is an explicit transition, requiring the
 caller to use setexeccon().
 </summary>
@@ -64670,91 +64621,8 @@ caller to use setexeccon().
 Domain allowed access.
 </summary>
 </param>
+
 </interface>
-<interface name="toor_entry_spec_domtrans_to" lineno="141">
-<summary>
-Allow toor to execute all entrypoint files in
-a specified domain.  This is an explicit transition,
-requiring the caller to use setexeccon().
-</summary>
-<desc>
-<p>
-Allow toor to execute all entrypoint files in
-a specified domain.  This is an explicit transition,
-requiring the caller to use setexeccon().
-</p>
-<p>
-This is a interface to support third party modules
-and its use is not allowed in upstream reference
-policy.
-</p>
-</desc>
-<param name="domain">
-<summary>
-Domain allowed access.
-</summary>
-</param>
-</interface>
-<interface name="toor_bin_spec_domtrans_to" lineno="175">
-<summary>
-Allow toor to execute a generic bin program in
-a specified domain.  This is an explicit transition,
-requiring the caller to use setexeccon().
-</summary>
-<desc>
-<p>
-Allow toor to execute a generic bin program in
-a specified domain.
-</p>
-<p>
-This is a interface to support third party modules
-and its use is not allowed in upstream reference
-policy.
-</p>
-</desc>
-<param name="domain">
-<summary>
-Domain to execute in.
-</summary>
-</param>
-</interface>
-<interface name="toor_sigchld" lineno="196">
-<summary>
-Send a SIGCHLD signal to toor users.
-</summary>
-<param name="domain">
-<summary>
-Domain allowed access.
-</summary>
-</param>
-</interface>
-<interface name="toor_use_fds" lineno="214">
-<summary>
-Inherit and use toor file descriptors
-</summary>
-<param name="domain">
-<summary>
-Domain allowed access.
-</summary>
-</param>
-</interface>
-<interface name="toor_rw_pipes" lineno="232">
-<summary>
-Read and write toor user unnamed pipes.
-</summary>
-<param name="domain">
-<summary>
-Domain allowed access.
-</summary>
-</param>
-</interface>
-<tunable name="allow_ptrace" dftval="false">
-<desc>
-<p>
-Allow toor to debug or ptrace all processes.
-</p>
-</desc>
-</tunable>
 </module>
 <module name="sysadm" filename="policy/modules/roles/sysadm.if">
 <summary>General system administration role</summary>
@@ -64907,6 +64775,151 @@ Allow sysadm to debug or ptrace all processes.
 </p>
 </desc>
 </tunable>
+</module>
+<module name="toor" filename="policy/modules/roles/toor.if">
+<summary>Super user administration role (DEBUG ONLY - DONT USE IN PRODUCTION)</summary>
+<interface name="toor_role_change" lineno="14">
+<summary>
+Change to the system administrator role.
+</summary>
+<param name="role">
+<summary>
+Role allowed access.
+</summary>
+</param>
+<rolecap/>
+</interface>
+<interface name="toor_role_change_to" lineno="44">
+<summary>
+Change from the system administrator role.
+</summary>
+<desc>
+<p>
+Change from the system administrator role to
+the specified role.
+</p>
+<p>
+This is an interface to support third party modules
+and its use is not allowed in upstream reference
+policy.
+</p>
+</desc>
+<param name="role">
+<summary>
+Role allowed access.
+</summary>
+</param>
+<rolecap/>
+</interface>
+<interface name="toor_shell_domtrans" lineno="62">
+<summary>
+Execute a shell in the toor domain.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="toor_bin_spec_domtrans" lineno="83">
+<summary>
+Execute a generic bin program in the toor domain.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="toor_entry_spec_domtrans" lineno="106">
+<summary>
+Execute all entrypoint files in the toor domain. This
+is an explicit transition, requiring the
+caller to use setexeccon().
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="toor_entry_spec_domtrans_to" lineno="141">
+<summary>
+Allow toor to execute all entrypoint files in
+a specified domain.  This is an explicit transition,
+requiring the caller to use setexeccon().
+</summary>
+<desc>
+<p>
+Allow toor to execute all entrypoint files in
+a specified domain.  This is an explicit transition,
+requiring the caller to use setexeccon().
+</p>
+<p>
+This is a interface to support third party modules
+and its use is not allowed in upstream reference
+policy.
+</p>
+</desc>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="toor_bin_spec_domtrans_to" lineno="175">
+<summary>
+Allow toor to execute a generic bin program in
+a specified domain.  This is an explicit transition,
+requiring the caller to use setexeccon().
+</summary>
+<desc>
+<p>
+Allow toor to execute a generic bin program in
+a specified domain.
+</p>
+<p>
+This is a interface to support third party modules
+and its use is not allowed in upstream reference
+policy.
+</p>
+</desc>
+<param name="domain">
+<summary>
+Domain to execute in.
+</summary>
+</param>
+</interface>
+<interface name="toor_sigchld" lineno="196">
+<summary>
+Send a SIGCHLD signal to toor users.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="toor_use_fds" lineno="214">
+<summary>
+Inherit and use toor file descriptors
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
+<interface name="toor_rw_pipes" lineno="232">
+<summary>
+Read and write toor user unnamed pipes.
+</summary>
+<param name="domain">
+<summary>
+Domain allowed access.
+</summary>
+</param>
+</interface>
 </module>
 <module name="unprivuser" filename="policy/modules/roles/unprivuser.if">
 <summary>Generic unprivileged user role</summary>

@@ -48,6 +48,10 @@ ifdef(`direct_toor_daemon',`
 	')
 ')
 
+optional_policy(`
+	secstate_run(toor_t, toor_r)
+')
+
 # SRS: removed for CLIP
 #ifndef(`enable_mls',`
 #	logging_manage_audit_log(toor_t)

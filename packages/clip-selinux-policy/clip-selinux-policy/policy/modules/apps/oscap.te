@@ -15,9 +15,6 @@ type oscap_probe_exec_t;
 application_domain(oscap_probe_t, oscap_probe_exec_t)
 role system_r types oscap_probe_t;
 
-permissive oscap_t;
-permissive oscap_probe_t;
-
 ########################################
 #
 # oscap local policy

@@ -5,13 +5,6 @@ policy_module(secstate, 0.5.0)
 # Declarations
 #
 
-## <desc>
-## <p>
-## Allow secstate to remediate
-## </p>
-## </desc>
-gen_tunable(secstate_remediate, false)
-
 type secstate_t;
 type secstate_exec_t;
 domain_type(secstate_t)
@@ -21,74 +14,75 @@ role system_r types secstate_t;
 type secstate_var_t;
 files_type(secstate_var_t)
 
-allow secstate_t self:capability dac_override;
-allow secstate_t self:process signal;
+## <desc>
+## <p>
+## Allow secstate to remediate
+## </p>
+## </desc>
+gen_tunable(secstate_enable_remediation, false)
+#
+## <desc>
+## <p>
+## Allow secstate to execute (read-only) scap probes
+## </p>
+## </desc>
+gen_tunable(secstate_enable_oscap_probes, true)
+
+allow secstate_t self:capability { dac_override net_admin ipc_lock sys_nice };
+allow secstate_t self:process { setsched setfscreate getcap getsched signal };
 allow secstate_t self:fifo_file rw_fifo_file_perms;
 allow secstate_t self:tcp_socket create_socket_perms;
 allow secstate_t self:udp_socket create_socket_perms;
 allow secstate_t self:netlink_route_socket r_netlink_socket_perms;
 
-allow secstate_t secstate_var_t:file setattr;
 manage_files_pattern(secstate_t, secstate_var_t, secstate_var_t)
-rw_files_pattern(secstate_t, secstate_var_t, secstate_var_t)
 read_lnk_files_pattern(secstate_t, secstate_var_t, secstate_var_t)
 
 kernel_read_system_state(secstate_t)
 kernel_read_kernel_sysctls(secstate_t)
 kernel_read_crypto_sysctls(secstate_t)
 
-#corecmd_exec_bin(secstate_t)
-#corecmd_exec_shell(secstate_t)
+corecmd_exec_bin(secstate_t)
 
 dev_getattr_all_blk_files(secstate_t)
 dev_getattr_all_chr_files(secstate_t)
 dev_read_urand(secstate_t)
 
-domain_use_interactive_fds(secstate_t)
-
-files_read_all_files(secstate_t)
-files_read_all_symlinks(secstate_t)
-files_getattr_all_pipes(secstate_t)
-files_getattr_all_sockets(secstate_t)
-
 fs_getattr_xattr_fs(secstate_t)
 fs_list_all(secstate_t)
-
-auth_read_shadow(secstate_t)
 
 logging_send_syslog_msg(secstate_t)
 
 sysnet_read_config(secstate_t)
 
-oscap_probe_domtrans(secstate_t)
-allow secstate_t oscap_probe_t:process signal;
-allow oscap_probe_t secstate_t:unix_stream_socket create_stream_socket_perms;
-
 userdom_use_user_terminals(secstate_t)
-userdom_home_filetrans_user_home_dir(secstate_t)
-userdom_manage_user_home_content_dirs(secstate_t)
-userdom_manage_user_home_content_files(secstate_t)
-userdom_user_home_dir_filetrans_user_home_content(secstate_t, { dir file })
 
 #domain_role_change_exemption(secstate_t)
 domain_obj_id_change_exemption(secstate_t)
 
+#### DO THIS STUFF WHEN REMEDIATION IS ENABLED
+# This is going to be messy.
+# You cant conditionally associate types with roles.
+# So we cant use run interfaces.
+# You also cant put optional blocks in tunable blocks.
+# Bleh.
+tunable_policy(`secstate_enable_remediation',`
+	files_manage_all_files(secstate_t)
+	dev_getattr_all_blk_files(secstate_t)
+	dev_getattr_all_chr_files(secstate_t)
+	kernel_rw_all_sysctls(secstate_t)
+	corecmd_exec_shell(secstate_t)
+	libs_exec_ldconfig(secstate_t)
+')
+
 optional_policy(`
-	gen_require(`
-		type gpg_exec_t;
-	')
-	tunable_policy(`secstate_remediate',`
-		files_manage_all_files(secstate_t)
-		kernel_rw_all_sysctls(secstate_t)
-
-		can_exec(secstate_t, gpg_exec_t)
-		corecmd_exec_bin(secstate_t)
-		corecmd_exec_shell(secstate_t)
+	tunable_policy(`secstate_enable_remediation',`
 		rpm_exec(secstate_t)
-		libs_exec_ldconfig(secstate_t)
-		exec_files_pattern(secstate_t, tmp_t, tmp_t)
-
-		allow secstate_t self:capability { dac_override net_admin ipc_lock sys_nice };
-		allow secstate_t self:process { setsched setfscreate getcap getsched };
 	')
 ')
+optional_policy(`
+	tunable_policy(`secstate_enable_remediation',`
+		gpg_domtrans(secstate_t)
+	')
+')
+#### STOP DOING THIS STUFF WHEN REMEDIATION IS DISABLED

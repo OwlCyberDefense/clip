@@ -37,6 +37,8 @@ interface(`oscap_probe_domtrans',`
 
 	corecmd_search_bin($1)
 	domtrans_pattern($1, oscap_probe_exec_t, oscap_probe_t)
+	allow $1 oscap_probe_t:process signal;
+	allow oscap_probe_t $1:unix_stream_socket create_stream_socket_perms;
 ')
 
 ########################################
@@ -66,6 +68,31 @@ interface(`oscap_run',`
 
 ########################################
 ## <summary>
+##	This interface simply allows the passed-in role to 
+##      associated with the oscap_probe_t domain.
+##      This is mainly used for statisfying the conditional
+##      policy constraint where you can't conditionally a
+##      associate a role with a domain.
+##      
+##      Note: typically you see this called outside a 
+##      conditional, and oscap_prob_domtrans() called
+## </summary>
+## <param name="role">
+##	<summary>
+##	The role to be allowed the oscap_probe domain.
+##	</summary>
+## </param>
+#
+interface(`oscap_probe_role_assoc',`
+	gen_require(`
+		type oscap_probe_t;
+	')
+
+	role $1 types oscap_probe_t;
+')
+
+########################################
+## <summary>
 ##	Execute oscap probes in the oscap_probe domain, and
 ##	allow the specified role the oscap_probe domain.
 ## </summary>
@@ -86,7 +113,7 @@ interface(`oscap_probe_run',`
 	')
 
 	oscap_probe_domtrans($1)
-	role $2 types oscap_probe_t;
+	oscap_probe_role_assoc($2)
 ')
 
 ########################################

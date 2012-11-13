@@ -413,7 +413,6 @@ optional_policy(`
 
 optional_policy(`
 	secstate_run(sysadm_t, sysadm_r)
-	oscap_run(sysadm_t, sysadm_r)
 ')
 
 ifndef(`distro_redhat',`
