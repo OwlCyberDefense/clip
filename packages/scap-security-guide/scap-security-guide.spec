@@ -70,10 +70,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0750,root,root)/usr/local/scap-security-guide/
 
 %post
-cp %{_usr}/libexec/aqueduct/SSG/tools/manual.xml $RPM_BUILD_ROOT/usr/local/${name}/RHEL6/input/profiles/
 $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools/fix_mapper.py
-
 cd $RPM_BUILD_ROOT/usr/local/scap-security-guide/RHEL6
+# Prevent clock drift from breaking the make.
+find ./ -exec touch '{}' \;
 make clean && make all
 
 %changelog
