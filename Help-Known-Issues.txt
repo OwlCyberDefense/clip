@@ -2,6 +2,34 @@ Our journey towards perfection is still a WiP so here are the CLIP known
 issues:
 
 =============================================================================
+CLIP for RHEL 6.2 Final Release - Novemberish 2012:
+
+- useradd has a bug that causes problems with a SELinux policy that lacks a
+  __default__ user mapping, a specific user mapping for the user being added
+(eg bob->staff_u), and user_u is missing.  Thus CLIP must include user_u for
+useradd to work correctly.  We suggest the following workflow:
+  - "# useradd -Z staff_u -m bob"
+  - "# genhomedircon"
+  - "# restorecon -R /home/bob"
+  Note this appears to be related to another policycoreutils bug that we 
+  filed with and confirmed by Red Hat.  If the fix for that issue doesn't 
+  also fix this problem we will open another bug.
+
+- scap-security-guide uses a hard coded /usr/local for the install directory.
+  The CLIP team submitted a patch (a long, long time ago) to fix this but it 
+  has not been accepted upstream.  Since this is a minor issue, CLIP is *not* 
+  patching SSG to fix it.
+
+- We (almost) have the ability to roll LiveCDs which are great for stateless
+  solutions. While the system works for RHEL 5, we are having issues with
+  dracut in RHEL 6.  As a result, LiveCDs don't work out of the box.  We're
+  open to patches from the community to fix this issue :)
+	
+- We have made minor updates to the oss.tresys.com/projects/clip website.
+  More changes are necessary but are not considered a blocker for release. 
+=============================================================================
+
+=============================================================================
 CLIP for RHEL 6.2 Beta Release - September 20ish, 2012:
 
 - useradd has a bug that causes problems with a SELinux policy that lacks a
