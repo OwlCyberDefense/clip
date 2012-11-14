@@ -411,7 +411,6 @@ optional_policy(`
 
 optional_policy(`
 	secstate_run(toor_t, toor_r)
-	oscap_run(toor_t, toor_r)
 ')
 
 ifndef(`distro_redhat',`

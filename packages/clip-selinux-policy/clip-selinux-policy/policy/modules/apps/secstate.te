@@ -8,6 +8,7 @@ policy_module(secstate, 0.5.0)
 type secstate_t;
 type secstate_exec_t;
 domain_type(secstate_t)
+application_domain(secstate_t, secstate_exec_t)
 domain_entry_file(secstate_t, secstate_exec_t)
 role system_r types secstate_t;
 
@@ -43,9 +44,15 @@ kernel_read_kernel_sysctls(secstate_t)
 kernel_read_crypto_sysctls(secstate_t)
 
 corecmd_exec_bin(secstate_t)
+files_read_etc_files(secstate_t)
+files_read_usr_files(secstate_t)
+files_read_usr_symlinks(secstate_t)
+miscfiles_read_localization(secstate_t)
+libs_search_lib(secstate_t)
 
-dev_getattr_all_blk_files(secstate_t)
-dev_getattr_all_chr_files(secstate_t)
+userdom_use_user_ttys(secstate_t)
+userdom_use_user_terminals(secstate_t)
+
 dev_read_urand(secstate_t)
 
 fs_getattr_xattr_fs(secstate_t)
@@ -55,10 +62,15 @@ logging_send_syslog_msg(secstate_t)
 
 sysnet_read_config(secstate_t)
 
-userdom_use_user_terminals(secstate_t)
 
 #domain_role_change_exemption(secstate_t)
-domain_obj_id_change_exemption(secstate_t)
+#domain_obj_id_change_exemption(secstate_t)
+#### DO THIS STUFF WHEN OSCAP PROBES ARE ENABLED 
+tunable_policy(`secstate_enable_oscap_probes',`
+        oscap_probe_domtrans(secstate_t)
+	userdom_manage_user_home_content_files(secstate_t)
+')
+#### STOP DOING THIS STUFF WHEN OSCAP PROBES ARE DISABLED 
 
 #### DO THIS STUFF WHEN REMEDIATION IS ENABLED
 # This is going to be messy.

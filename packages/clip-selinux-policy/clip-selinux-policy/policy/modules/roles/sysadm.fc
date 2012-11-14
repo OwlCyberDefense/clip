@@ -8,5 +8,5 @@
 /root/\.forward         --  gen_context(root:object_r:mail_forward_t,s0)
 /root/\.ssh(/.*)?           gen_context(root:object_r:ssh_home_t,s0)
 /root/\.shosts              gen_context(root:object_r:ssh_home_t,s0)
-/root(/.*)?                 gen_context(root:object_r:user_home_dir_t,s0)
+/root(/.*)?                 gen_context(root:object_r:user_home_t,s0)
 /root/\.debug(/.*)?         <<none>>

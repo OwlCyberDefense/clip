@@ -41,8 +41,5 @@ interface(`secstate_run',`
 	')
 	secstate_domtrans($1)
 	oscap_probe_role_assoc($2)
-	tunable_policy(`secstate_enable_oscap_probes',`
-		oscap_probe_domtrans($1)
-	')
 	role $2 types secstate_t;
 ')
