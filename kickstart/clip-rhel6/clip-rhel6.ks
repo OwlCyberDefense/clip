@@ -280,7 +280,6 @@ sed -i -r -e "s/<platform.*//g" /usr/local/scap-security-guide/RHEL6/output/ssg-
 # as you are effectively importing the same IDs again.
 echo "Importing SSG content into secstate..."
 secstate import /usr/local/scap-security-guide/RHEL6/output/ssg-rhel6-xccdf.xml --profile=common
-secstate select -r RHEL-6
 
 cd /root
 echo "About to use secstate to do a pre-remediation audit using SSG content..."
