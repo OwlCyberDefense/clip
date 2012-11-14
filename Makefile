@@ -143,6 +143,10 @@ define CHECK_DEPS
 	@if [ x"`cat /selinux/enforce`" == "x1" ]; then echo -e "This is embarassing but due to a bug (bz #861281) you must do builds in permissive.\nhttps://bugzilla.redhat.com/show_bug.cgi?id=861281" && exit 1; fi
 endef
 
+define CHECK_MOCK
+	@if ps -eo comm= | grep -q mock; then echo "ERROR: Another instance of mock is running.  Please hangup and try your build again later." && exit 1; fi
+endef
+
 ######################################################
 # BEGIN RPM GENERATION RULES (BEWARE OF DRAGONS)
 # This define directive is used to generate build rules.
@@ -153,6 +157,7 @@ $(info Generating rules for rolling package $(1).)
 $(1): $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
 	$(call CHECK_DEPS)
 	$(call MKDIR,$(MY_REPO_DIR))
+	$(call CHECK_MOCK)
 	$(VERBOSE)$(MOCK) $(MOCK_ARGS) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	cd $(MY_REPO_DIR) && $(REPO_CREATE) .
 ifeq ($(ENABLE_SIGNING),y)
