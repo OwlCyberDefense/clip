@@ -1,8 +1,8 @@
 diff --git a/RHEL6/input/profiles/common.xml b/RHEL6/input/profiles/common.xml
-index 93642aa..e6b5608 100644
+index 93642aa..b31e6b4 100644
 --- a/RHEL6/input/profiles/common.xml
 +++ b/RHEL6/input/profiles/common.xml
-@@ -1,292 +1,733 @@
+@@ -1,292 +1,767 @@
  <Profile id="common" xmlns="http://checklists.nist.gov/xccdf/1.1" >
 -<title>Common Profile for General-Purpose Systems</title>
 -<description>This profile contains items common to general-purpose desktop and server installations.</description>
@@ -12,8 +12,11 @@ index 93642aa..e6b5608 100644
 -<select idref="partition_for_var_log_audit" selected="true"/>
 -<select idref="partition_for_home" selected="true"/>
 -<select idref="ensure_redhat_gpgkey_installed" selected="true"/>
-+<title>Profile for the Automated portion of a Complete DCID_6-3 lockdown.</title>
++<title>Profile for the Automated portion of a Complete DCID_6-3
++lockdown.</title>
++
 +<description>This profile contains items that address the requirements within the DCID6/3 document without any user interaction. </description>
++
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="disable_vsftpd" selected="true"/>
 +
@@ -21,7 +24,8 @@ index 93642aa..e6b5608 100644
 +<select idref="uninstall_vsftpd" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="install_vsftpd" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="install_vsftpd" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="disable_avahi" selected="true"/>
@@ -78,7 +82,8 @@ index 93642aa..e6b5608 100644
 +<select idref="postfix_logging" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 4.B.4.a(17)" -->
-+<select idref="postfix_install_ssl_cert" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="postfix_install_ssl_cert" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="6.B.3.a(6)" -->
 +<select idref="postfix_server_denial_of_service" selected="true"/>
@@ -223,7 +228,8 @@ index 93642aa..e6b5608 100644
 -<select idref="enable_randomize_va_space" selected="true"/>
 -<select idref="enable_execshield" selected="true"/>
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="disable_dhcp_client" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="disable_dhcp_client" selected="true"/>-->
  
 -<select idref="disable_sysctl_ipv4_default_send_redirects" selected="true"/>
 -<select idref="disable_sysctl_ipv4_all_send_redirects" selected="true"/>
@@ -259,25 +265,30 @@ index 93642aa..e6b5608 100644
 -<select idref="rsyslog_send_messages_to_logserver" selected="true"/>
 -<select idref="ensure_logrotate_activated" selected="true"/>
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17), 4.B.2.a(3), 4.B.1.b(1), 4.B.4.a(5), 4.B.3.a(4), 4.B.5.a(5)" -->
-+<select idref="ldap_server_config_olcsuffix" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="ldap_server_config_olcsuffix" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 4.B.4.a(17)" -->
 +<select idref="ldap_server_config_bdb_file_security" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(7), 4.B.4.a(11), 4.B.1.b(3), 4.B.3.a(9), 4.B.5.a(11), 4.B.2.a(3), 4.B.1.b(1), 4.B.4.a(5), 4.B.3.a(4), 4.B.5.a(5)" -->
-+<select idref="ldap_server_config_olcrootpw" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="ldap_server_config_olcrootpw" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.4.a(14)(a), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 4.B.4.a(17)" -->
-+<select idref="ldap_server_config_certificate_files" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="ldap_server_config_certificate_files" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="5.B.3.b(2), 4.B.4.b(8), 4.B.4.b(7)(b), 4.B.5.b(7)(b), 4.B.5.b(8), 4.B.3.b(6)(a), 5.B.3.b(1), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 4.B.4.a(17), 4.B.2.a(3), 4.B.1.b(1), 4.B.4.a(5), 4.B.3.a(4), 4.B.5.a(5)" -->
-+<select idref="ldap_server_config_olcaccess" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="ldap_server_config_olcaccess" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 4.B.4.a(17)" -->
 +<select idref="ldap_server_config_directory_file_security" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="7.B, 6.B.3.a(6), 5.B.3.b(2), 4.B.4.b(8), 4.B.4.b(7)(b), 4.B.5.b(7)(b), 4.B.5.b(8), 4.B.3.b(6)(a), 5.B.3.b(1), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="iptables_ldap_enabled" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="iptables_ldap_enabled" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(4)(b), 4.B.3.a(8)(b), 4.B.4.a(6)(b), 4.B.5.a(6)(b), 4.B.3.a(8)(a), 4.B.2.a(5)(a), 4.B.2.a(4)(a), 4.B.5.a(6)(a), 4.B.4.a(8)(a), 4.B.1.b(2)(a), 4.B.4.a(6)(a), 4.B.3.a(5)(a), 4.B.5.a(9)(a), 4.B.2.a(4)(d), 4.B.4.a(6)(d), 4.B.3.a(5)(d), 4.B.5.a(6)(d), 4.B.1.b(2)(d), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 4.B.4.a(17)" -->
 +<select idref="ldap_server_config_logging" selected="true"/>
@@ -289,7 +300,8 @@ index 93642aa..e6b5608 100644
 +<select idref="set_selinux_state" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="set_selinux_policy" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="set_selinux_policy" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.5.a(3), 4.B.4.a(3)" -->
 +<select idref="service_restorecond_enabled" selected="true"/>
@@ -429,7 +441,8 @@ index 93642aa..e6b5608 100644
 +<select idref="audit_config_immutable" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(4)(b), 4.B.3.a(8)(b), 4.B.4.a(6)(b), 4.B.5.a(6)(b), 4.B.2.a(4)(d), 4.B.4.a(6)(d), 4.B.3.a(5)(d), 4.B.5.a(6)(d), 4.B.1.b(2)(d)" -->
-+<select idref="package_rsyslog_installed" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="package_rsyslog_installed" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(4)(d), 4.B.4.a(6)(d), 4.B.3.a(5)(d), 4.B.5.a(6)(d), 4.B.1.b(2)(d)" -->
 +<select idref="service_rsyslog_enabled" selected="true"/>
@@ -447,7 +460,8 @@ index 93642aa..e6b5608 100644
 +<select idref="rsyslog_file_permissions" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(4)(b), 4.B.3.a(8)(b), 4.B.4.a(6)(b), 4.B.5.a(6)(b), 4.B.2.a(4)(d), 4.B.4.a(6)(d), 4.B.3.a(5)(d), 4.B.5.a(6)(d), 4.B.1.b(2)(d)" -->
-+<select idref="rsyslog_send_messages_to_logserver" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="rsyslog_send_messages_to_logserver" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(4)(b), 4.B.3.a(8)(b), 4.B.4.a(6)(b), 4.B.5.a(6)(b), 4.B.2.a(4)(d), 4.B.4.a(6)(d), 4.B.3.a(5)(d), 4.B.5.a(6)(d), 4.B.1.b(2)(d)" -->
 +<select idref="rsyslog_accept_remote_messages_none" selected="true"/>
@@ -459,10 +473,12 @@ index 93642aa..e6b5608 100644
 +<select idref="rsyslog_accept_remote_messages_udp" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="wireless_disable_in_bios" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="wireless_disable_in_bios" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="deactivate_wireless_interfaces" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="deactivate_wireless_interfaces" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="service_bluetooth_disabled" selected="true"/>
@@ -471,11 +487,15 @@ index 93642aa..e6b5608 100644
 +<select idref="kernel_module_bluetooth_disabled" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
++<!-- TO BE DONE MANUALLY
++<select idref="network_disable_unused_interfaces" selected="true"/>-->
++
++<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="network_disable_zeroconf" selected="true"/>
- 
++
 +<!-- DCID Chapters: dcid="8.B.8.c(6), 8.B.8.c(5), 8.B.8.c(4), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="network_sniffer_disabled" selected="true"/>
-+
+ 
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="enable_ip6tables" selected="true"/>
 +
@@ -540,13 +560,15 @@ index 93642aa..e6b5608 100644
 +<select idref="set_sysctl_net_ipv4_conf_default_rp_filter" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(19)(a), 4.B.4.a(26)(a), 4.B.1.a(8)(a), 4.B.3.a(22)(a), 4.B.5.a(26)(a), 8.B.8.d, 4.B.3.a(1)(b), 4.B.1.a(1)(b), 4.B.2.a(1)(b), 4.B.5.a(1)(b), 4.B.4.a(1)(b)" -->
-+<select idref="install_openswan" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="install_openswan" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="disable_ipv6_module_loading" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="network_ipv6_disable_interfaces" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="network_ipv6_disable_interfaces" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="network_ipv6_disable_rpc" selected="true"/>
@@ -558,31 +580,36 @@ index 93642aa..e6b5608 100644
 +<select idref="set_sysctl_ipv6_default_accept_redirects" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="network_ipv6_static_address" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="network_ipv6_static_address" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="network_ipv6_privacy_extensions" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="network_ipv6_default_gateway" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="network_ipv6_default_gateway" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="network_ipv6_limit_requests" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="5.B.2.a(3)(b), 4.B.2.b(4), 5.B.2.a(6), 4.B.4.b(5), 4.B.3.b(4), 5.B.1.a(3), 4.B.5.b(5), 5.B.3.a(2)(b), 5.B.3.a(7), 4.B.1.c(2), 5.B.2.a(6), 5.B.3.a(7), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="install_aide" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="install_aide" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="5.B.2.a(3)(b), 4.B.2.b(4), 5.B.2.a(6), 4.B.4.b(5), 4.B.3.b(4), 5.B.1.a(3), 4.B.5.b(5), 5.B.3.a(2)(b), 5.B.3.a(7), 4.B.1.c(2), 5.B.2.a(6), 5.B.3.a(7)" -->
 +<select idref="disable_prelink" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="5.B.2.a(3)(b), 4.B.2.b(4), 5.B.2.a(6), 4.B.4.b(5), 4.B.3.b(4), 5.B.1.a(3), 4.B.5.b(5), 5.B.3.a(2)(b), 5.B.3.a(7), 4.B.1.c(2), 5.B.2.a(6), 5.B.3.a(7)" -->
-+<select idref="aide_build_database" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="aide_build_database" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="5.B.2.a(3)(b), 4.B.2.b(4), 5.B.2.a(6), 4.B.4.b(5), 4.B.3.b(4), 5.B.1.a(3), 4.B.5.b(5), 5.B.3.a(2)(b), 5.B.3.a(7), 4.B.1.c(2), 5.B.2.a(6), 5.B.3.a(7)" -->
 +<select idref="aide_periodic_cron_checking" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="5.B.2.a(3)(b), 4.B.2.b(4), 5.B.2.a(6), 4.B.4.b(5), 4.B.3.b(4), 5.B.1.a(3), 4.B.5.b(5), 5.B.3.a(2)(b), 5.B.3.a(7), 4.B.1.c(2)" -->
-+<select idref="rpm_verify_permissions" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="rpm_verify_permissions" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="5.B.2.a(3)(b), 4.B.2.b(4), 5.B.2.a(6), 4.B.4.b(5), 4.B.3.b(4), 5.B.1.a(3), 4.B.5.b(5), 5.B.3.a(2)(b), 5.B.3.a(7), 4.B.1.c(2)" -->
 +<select idref="rpm_verify_hashes" selected="true"/>
@@ -624,10 +651,12 @@ index 93642aa..e6b5608 100644
 +<select idref="set_system_login_banner" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(16), 4.B.4.a(23), 4.B.3.a(19), 4.B.5.a(23), 4.B.1.a(6), 4.B.5.a(3), 4.B.4.a(3)" -->
-+<select idref="enable_gdm_login_banner" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="enable_gdm_login_banner" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(16), 4.B.4.a(23), 4.B.3.a(19), 4.B.5.a(23), 4.B.1.a(6), 4.B.5.a(3), 4.B.4.a(3)" -->
-+<select idref="set_gdm_login_banner_text" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="set_gdm_login_banner_text" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.5.a(3), 4.B.4.a(3)" -->
 +<select idref="homedir_perms_no_groupwrite_worldread" selected="true"/>
@@ -654,7 +683,8 @@ index 93642aa..e6b5608 100644
 +<select idref="permissions_grub_conf" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.5.a(3), 4.B.4.a(3), 4.B.2.a(7), 4.B.4.a(11), 4.B.1.b(3), 4.B.3.a(9), 4.B.5.a(11), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="bootloader_password" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="bootloader_password" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(7), 4.B.4.a(11), 4.B.1.b(3), 4.B.3.a(9), 4.B.5.a(11), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 4.B.4.a(17)" -->
 +<select idref="require_singleuser_auth" selected="true"/>
@@ -678,7 +708,8 @@ index 93642aa..e6b5608 100644
 -<select idref="service_abrtd_disabled" selected="true"/>
 -<select idref="service_atd_disabled" selected="true"/>
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="install_vlock_package" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="install_vlock_package" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.5.a(3), 4.B.4.a(3), 4.B.2.a(7), 4.B.4.a(11), 4.B.1.b(3), 4.B.3.a(9), 4.B.5.a(11), 4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="password_min_len" selected="true"/>
@@ -702,10 +733,12 @@ index 93642aa..e6b5608 100644
 +<select idref="no_shelllogin_for_systemaccounts" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17), 4.B.3.a(20)(b), 4.B.5.a(21), 4.B.1.a(5), 4.B.4.a(21), 4.B.3.a(17), 4.B.2.a(15), 4.B.2.a(17)(b), 4.B.5.a(24)(b), 4.B.4.a(24)(b), 4.B.5.a(3), 4.B.4.a(3)" -->
-+<select idref="no_uidzero_except_root" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="no_uidzero_except_root" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(7), 4.B.4.a(11), 4.B.1.b(3), 4.B.3.a(9), 4.B.5.a(11), 4.B.5.a(3), 4.B.4.a(3)" -->
-+<select idref="no_empty_passwords" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="no_empty_passwords" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.2.a(7), 4.B.4.a(11), 4.B.1.b(3), 4.B.3.a(9), 4.B.5.a(11)" -->
 +<select idref="no_hashes_outside_shadow" selected="true"/>
@@ -723,7 +756,8 @@ index 93642aa..e6b5608 100644
 +<select idref="bootloader_nousb_argument" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="bios_disable_usb_boot" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="bios_disable_usb_boot" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
  <select idref="service_autofs_disabled" selected="true"/>
@@ -752,9 +786,6 @@ index 93642aa..e6b5608 100644
 -<select idref="uninstall_net-snmp" selected="true"/>
 -<select idref="limiting_password_reuse" selected="true"/>
 -<!-- Refine Values -->
-+<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
-+<select idref="gconf_gnome_disable_automount" selected="true"/>
-+
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="disable_module_cramfs" selected="true"/>
 +
@@ -816,16 +847,20 @@ index 93642aa..e6b5608 100644
 +<select idref="file_permissions_etc_passwd" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.5.a(3), 4.B.4.a(3)" -->
-+<select idref="no_unpackaged_suid_files" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="no_unpackaged_suid_files" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.5.a(3), 4.B.4.a(3)" -->
-+<select idref="no_files_unowned_by_user" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="no_files_unowned_by_user" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.5.a(3), 4.B.4.a(3)" -->
-+<select idref="no_files_unowned_by_group" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="no_files_unowned_by_group" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.5.a(3), 4.B.4.a(3)" -->
-+<select idref="world_writable_files_system_ownership" selected="true"/>
++<!-- TO BE DONE MANUALLY
++<select idref="world_writable_files_system_ownership" selected="true"/>-->
 +
 +<!-- DCID Chapters: dcid="4.B.5.a(3), 4.B.4.a(3)" -->
 +<select idref="set_daemon_umask" selected="true"/>
@@ -926,8 +961,9 @@ index 93642aa..e6b5608 100644
 -<!-- net.ipv4.conf.default.secure_redirects -->
  <refine-value idref="sysctl_net_ipv4_icmp_echo_ignore_broadcasts_value" selector="enabled"/>
 -<!-- net.ipv4.icmp_echo_ignore_broadcast -->
- <refine-value idref="sysctl_net_ipv4_icmp_ignore_bogus_error_messages_value" selector="enabled"/>
+-<refine-value idref="sysctl_net_ipv4_icmp_ignore_bogus_error_messages_value" selector="enabled"/>
 -<!-- net.ipv4.icmp_ignore_bogus_error_messages -->
++<refine-value idref="sysctl_net_ipv4_icmp_ignore_bogus_error_responses_value" selector="enabled"/>
  <refine-value idref="sysctl_net_ipv4_tcp_syncookies_value" selector="enabled"/>
 -<!-- net.ipv4.tcp_syncookie -->
  <refine-value idref="sysctl_net_ipv4_conf_all_rp_filter_value" selector="enabled"/>
@@ -940,7 +976,6 @@ index 93642aa..e6b5608 100644
 -<!-- permissions of system log files -->
  <refine-value idref="sshd_idle_timeout_value" selector="5_minutes"/>
 +<refine-value idref="max_concurrent_login_sessions_value" selector="10"/>
-+<refine-value idref="user_umask_value" selector="077"/>
 +<refine-value idref="var_accounts_passwords_pam_faillock_deny" selector="3"/>
 +<refine-value idref="var_auditd_space_left_action" selector="syslog"/>
 +<refine-value idref="var_auditd_action_mail_acct" selector="root"/>
