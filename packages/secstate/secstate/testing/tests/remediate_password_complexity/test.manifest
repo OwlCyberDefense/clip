@@ -1,9 +1,0 @@
-[requires]
-
-[test]
-import
-audit_fail
-remediate
-audit_pass
-
-[verify]
