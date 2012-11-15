@@ -1,5 +1,5 @@
 
-/usr/bin/secstate <sub-command> [options]
+/usr/sbin/secstate <sub-command> [options]
 Sub-commands:
     import          --  Validates and imports a benchmark and its associated OVAL into the system
     remove          --  Removes content that had been added via the 'import' command
@@ -10,7 +10,7 @@ Sub-commands:
     list            --  List the imported benchmarks
     show            --  Shows the information associated with a group, rule, or definition id
     search          --  Search through imported content
-    mitigate        --  Mark a rule as mitigated and provide an explanation
+    mitigate        --  Mark a rule as mitigated and provide an explanation (beta - use at own risk)
     remediate       --  Bring the local system into compliance with a benchmark
-    version         --  provides current version information for secstate
+    version         --  Provides current version information for secstate
     audit           --  Audit the local system based the specified XCCDF/OVAL content

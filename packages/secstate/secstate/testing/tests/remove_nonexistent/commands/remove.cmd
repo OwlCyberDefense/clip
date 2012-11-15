@@ -1,1 +1,1 @@
-/usr/bin/secstate remove fjdskafdjskl
+/usr/sbin/secstate remove fjdskafdjskl

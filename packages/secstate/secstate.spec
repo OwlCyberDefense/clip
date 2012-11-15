@@ -4,33 +4,33 @@
 %endif
 
 
-Name:           %{pkgname}
-Version:        %{version}
-Release:        %{release}
 Summary: Security State Configuration Tool
+Name: %{pkgname}
 URL: https://fedorahosted.org/secstate/
+Version: %{version}
+Release: %{release}
 License: GPLv2+ and LGPLv2+ and BSD
-Vendor: %{packager}
-Packager: %{packager}
+Vendor: %{_packager}
+Packager: %{_packager}
 Group: System Environment/Base
-Source0: %{pkgname}-%{version}.tar.gz
-Requires: openscap-python
+Source0: http://oss.tresys.com/files/clip/%{name}-%{version}.tar.gz
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+BuildArch: noarch
+BuildRequires: redhat-rpm-config python2-devel
+Requires: openscap-python >= 0.9.1
 Requires: python
 Requires: libxml2-python
 Requires: libxslt-python
 Requires: python-simplejson
-BuildArch: noarch
-BuildRequires: python2-devel
-BuildRoot: %{_tmppath}/%{name}-buildroot
 
 %description
-SecState is a Security Configuration tool that utilizes openscap and aqueduct
+SecState is a Security Configuration tool that utilizes openscap and bash
 to configure and validate security configuration information on a target
 system.  SecState targets U.S. federal regulations and guidance, but can be
 used with any SCAP compliant content.
 
 %prep
-%setup -q -n %{pkgname}
+%setup -q -c
 
 %build
 
@@ -51,12 +51,12 @@ rm -rf $RPM_BUILD_ROOT
 %dir /var/lib/secstate/oval/
 %dir /usr/share/secstate/
 %dir %{_libexecdir}/%{name}
-%{_libexecdir}/%{name}/secstate_external_node
 %doc LICENSE LICENSE.BSD LICENSE.LGPLv21 LICENSE.GPLv2
-%{_mandir}/man1/secstate.1.gz
+%{_mandir}/man8/secstate.8.gz
+%{_mandir}/man5/secstate.conf.5.gz
 
 # GPLv2+
-%{_bindir}/secstate
+%{_sbindir}/secstate
 %dir /usr/share/secstate/transforms
 /usr/share/secstate/transforms/*
 
@@ -66,14 +66,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/secstate/main.py*
 %{python_sitelib}/secstate/util.py*
 
-
 %changelog
-* Mon Nov 5 2012 Michael Palmiotto <mpalmiotto@tresys.com> 0.5-git.e5058e4
-- Pulled into CLIP build system.
-- Drop all puppet content
-
-* Mon Jun 18 2012 Spencer Shimko <sshimko@tresys.com> 0.5-git.016887c
-- Pulled into CLIP build system. 
+* Tue Oct 16 2012 Tyler Sellmayer <tsellmayer@tresys.com> 0.5.2-1
+- Removed all mention of puppet.
 
 * Mon Sep 13 2010 Marshall Miller <mmiller@tresys.com> 0.4.1-1
 - Updates to man page

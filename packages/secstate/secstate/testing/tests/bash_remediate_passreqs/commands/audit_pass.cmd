@@ -1,1 +1,1 @@
-/usr/bin/secstate audit password-req
+/usr/sbin/secstate audit password-req

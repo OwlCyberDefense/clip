@@ -1,0 +1,15 @@
+[requires]
+usage
+bash_import_passreqs
+bash_import_strict_passreqs
+
+[test]
+audit_fail
+select
+deselect
+list
+remediate
+audit_pass
+
+[verify]
+

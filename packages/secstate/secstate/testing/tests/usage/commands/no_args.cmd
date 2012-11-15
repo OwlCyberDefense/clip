@@ -1,1 +1,1 @@
-/usr/bin/secstate
+/usr/sbin/secstate

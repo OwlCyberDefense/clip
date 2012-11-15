@@ -1,1 +1,1 @@
-/usr/bin/secstate import /root/grub-conf.xccdf.xml
+/usr/sbin/secstate import /root/grub-conf.xccdf.xml

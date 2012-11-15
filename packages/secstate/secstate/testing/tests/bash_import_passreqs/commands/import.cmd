@@ -1,1 +1,1 @@
-/usr/bin/secstate import /root/passreqs.xccdf.xml
+/usr/sbin/secstate import /root/passreqs.xccdf.xml

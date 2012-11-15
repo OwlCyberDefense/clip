@@ -24,6 +24,11 @@ import subprocess
 import shutil
 import re
 import ConfigParser
+import time
+
+PASSED = 0
+FAILED = 1
+FIXED = 2
 
 def tab(lst, num_tabs=1):
    return [join(['    ' * num_tabs,line]) for line in lst]
@@ -57,19 +62,144 @@ def compare_configs(input, output):
 
     return True
 
+def display_columns(headers, data, width=140, diff=True):
+    """
+    Input:
+    headers = ("header1", "header2")
+    data = ( ["data A", "data B", "data C"],
+             ["data a", "data B", "data 3", "data 4"] )
+    width = 54
+    diff = True
+
+    Output:
+    
+     |header1                    |header2                    |
+     |===========================|========================== |
+     |data A                     |data a                     |
+     |data B                     |data B                     |
+    X|data C                     |data 3                     |
+    -|                           |data 4                     |
+    """
+    if len(headers) != len(data):
+        raise ValueError("Must have same number of headers as data columns.")
+    num_cols = len(headers)
+    col_w = width / num_cols
+    output_rows = ['']
+    for h in headers:
+        output_rows[0] += " |" + h.ljust(col_w)
+    output_rows[0] += "|"
+    output_rows.append((" |"+ "="*col_w)*num_cols + "|")
+    num_rows = max(len(col) for col in data)
+    for r in range(num_rows):
+        output_rows.append('')
+        for c, column in enumerate(data):
+            if len(column) <= r:
+                output_rows[r+2] += " |" + " "*col_w
+            else:
+                trunced = column[r].rstrip().ljust(col_w)
+                # Determine whether to print "." (match), "X" (no match),
+                # or " " (nothing to compare) as column separator
+                # if there is a column to the right, 
+                # and that column exists for this row
+                if c+1 < len(data) and r < len(data[c+1]):
+                    if data[c+1][r].lower().rstrip() == data[c][r].lower().rstrip():
+                        # current cell matches cell to its right
+                        diff = " "
+                    else:
+                        # current cell DOES NOT match cell to its right
+                        diff = "X"
+                elif c+1 < len(data):
+                    # no cell in next column at this row
+                    diff = "-"
+                else:
+                    # no column to the right
+                    diff = " "
+                trunced = trunced.replace('\t','   ')
+                if len(trunced) > col_w:
+                    trunced = trunced[:col_w]
+                output_rows[r+2] += ("%s|" % diff) + trunced
+        # end of row marker
+        output_rows[r+2] += "|"
+
+    # print the whole table
+    for o in output_rows:
+        print o
+
+def update_file(filename, new_data):
+    """
+    Input:
+        filename = file to update
+        new_data = list of lines to put in file, can end with newline or not, doesn't matter
+    """
+    try:
+        original_stat = None
+        if os.path.exists(filename):
+            original_stat = os.stat(filename)
+        tmp_filename = "%s~tmp%f" % (filename, time.time())
+        tmpfile = open(tmp_filename, "w")
+        tmpfile.write('\n'.join(line.rstrip('\n') for line in new_data))
+        if new_data[-1].endswith("\n"):
+            tmpfile.write('\n')
+        tmpfile.close()
+        os.rename(tmp_filename, filename)
+
+        # chmod and chown back to what the file had originally
+        if original_stat is not None:
+            os.chmod(filename, original_stat.st_mode)
+            os.chown(filename, original_stat.st_uid, original_stat.st_gid)
+    except Exception, e:
+        print("Failed to update file %s: %s" % (filename, str(e)))
+
+def offer_fix(filename, new_data):
+    """
+    Offers to create or update a file with new_data in it.
+    This is called in various places where the actual results differ from the expected,
+    and the fixtests flag is set to True. That way, we can update tests automatically.
+    """
+    if type(new_data) == str:
+        new_data = [i + '\n' for i in new_data.split('\n')]
+    elif type(new_data) == int:
+        new_data = [str(new_data)]
+    try:
+        f = open(filename, "r")
+        old_data = f.readlines()
+        f.close()
+    except:
+        print("="*10 + filename + "="*10)
+        for line in new_data:
+            sys.stdout.write(line)
+        print("="*10 + filename + "="*10)
+        do_fix = raw_input("'%s' not found, would you like to create it with the above contents? [y/N]: " % filename)
+        if do_fix.lower().startswith("y"):
+            update_file(filename, new_data)
+            return True
+        else:
+            return False
+
+    left_header = "Expected contents:"
+    right_header = "Actual contents:"
+    display_columns((left_header, right_header), (old_data, new_data))
+    do_fix = raw_input("'%s' differs from actual result, would you like to replace it? [y/N]: " % filename)
+    if do_fix.lower().startswith("y"):
+        update_file(filename, new_data)
+        return True
+    return False
+
 class Command:
    results_template = 'Command %(command_name)s Results:\n%(rc_results)s%(stdout_results)s%(stderr_results)s\n\tCommand Completed Successfully: %(success)s'
    rc_results = 'Expected RC : %(expected)s, Actual RC : %(actual)s'
    stdout_results = 'Expected STDOUT :\n%(expected)s\nActual STDOUT :\n%(actual)s\n'
    stderr_results = 'Expected STDERR :\n%(expected)s\nActual STDERR :\n%(actual)s\n'
    
-   def __init__(self, commands_dir, command_name):
+   def __init__(self, commands_dir, command_name, fixtests=False):
       self.cmd_args = None
       self.cmd_proc = None
       self.expected_rc = None
       self.expected_stdout = None
       self.expected_stderr = None
       self.executed = False
+      self.fixtests = fixtests
+      self.was_fixed = False
       
       self.rc = None
       self.stdout = None
@@ -101,7 +231,10 @@ class Command:
    def cache_rc(self):
       if self.rc_exists:
          rc_file = open(self.rc_path, 'r')
-         self.expected_rc = int(rc_file.read().strip())
+         try:
+             self.expected_rc = int(rc_file.read().strip())
+         except:
+             self.expected_rc = 0
          rc_file.close()
 
    def cache_stdout(self):
@@ -168,6 +301,11 @@ class Command:
       elif not self.expected_stdout:
          self.cache_stdout()
       
+      # save a copy of stdout (before lowercaseifying)
+      # so we can potentially update the testcase with it
+      if self.fixtests:
+          orig_stdout = list(self.stdout)
+
       for i, e in enumerate(self.stdout):
          self.stdout[i] = e.lower()
 
@@ -193,6 +331,9 @@ class Command:
 
          print "----------------------------\n"
 
+      if diff and self.fixtests:
+         self.was_fixed |= offer_fix(self.stdout_path, orig_stdout)
+
       self._does_stdout_differ_cache = diff
       return diff
 
@@ -212,6 +353,9 @@ class Command:
       elif not self.expected_stderr:
          self.cache_stderr()
       
+      if self.fixtests:
+          orig_stderr = list(self.stderr)
+
       for i, e in enumerate(self.stderr):
          self.stderr[i] = e.lower()
 
@@ -236,6 +380,9 @@ class Command:
 
          print "----------------------------\n"
 
+      if diff and self.fixtests:
+          self.was_fixed |= offer_fix(self.stderr_path, orig_stderr)
+
       self._does_stderr_differ_cache = diff
       return diff
 
@@ -258,7 +405,10 @@ class Command:
       diff = self.rc != self.expected_rc
 
       if diff:
-         sys.stdout.write("RC differs\nexpected rc: %s\n\nactual rc: %s\n\n\n" % (self.expected_rc, self.rc))
+         sys.stdout.write("RC differs\nexpected rc: %s\nactual rc: %s\n\n" % (self.expected_rc, self.rc))
+
+      if diff and self.fixtests:
+         self.was_fixed |= offer_fix(self.rc_path, self.rc)
 
       self._does_rc_differ_cache = diff
       return diff
@@ -293,12 +443,14 @@ class TestCase:
    TEST_SECTION = 1
    VERIFY_SECTION = 2
    
-   def __init__(self, test_path, chroot_path=None):
+   def __init__(self, test_path, chroot_path=None, fixtests=False):
       self.parse_errors = False
    
       self.path = test_path
       self.test_name = os.path.basename(self.path)
       self.chroot = chroot_path
+      self.fixtests = fixtests
+      self.was_fixed = False
 		
       self.commands_dir = os.path.join(self.path, 'commands')
       self.files_dir = os.path.join(self.path, 'files')
@@ -332,13 +484,14 @@ class TestCase:
                   if line.strip() != '':
                      if cmd_type == 0:
                         required_test_dir = os.path.join(os.path.dirname(self.path), line)
+                        # We won't bother you to fix testcases in the 'required' section.
                         rtc = TestCase(required_test_dir, self.chroot)
                         #rtc = TestCase(required_test_dir)
                         self.manifest[cmd_type].append(rtc)
                      elif cmd_type == 1:
-                        self.manifest[cmd_type].append(Command(self.commands_dir, line))
+                        self.manifest[cmd_type].append(Command(self.commands_dir, line, self.fixtests))
                      else:
-                        self.manifest[cmd_type].append(Command(self.commands_dir, line))   	
+                        self.manifest[cmd_type].append(Command(self.commands_dir, line, self.fixtests))
                except Exception, e:
                   self.parse_errors = True
                   sys.stderr.write('%s\n' % str(e))
@@ -384,8 +537,8 @@ class TestCase:
             otext = ofile.readlines()
             ofile.close()
 
+            compare_success = True
             if os.path.exists(cpath):
-               compare_success = True
 
                cfile = open(cpath)
                ctext = cfile.readlines()
@@ -407,75 +560,83 @@ class TestCase:
                   atext = '\n'.join(tab((actual % join(tab(ctext))).split('\n')))
                   dtext = fdiffer % {'oname' : os.path.join(dirname,file), 'expected' : etext, 'actual' : atext}
                   sys.stdout.write('\n'.join(tab(dtext.rstrip('\n').split('\n'))) + '\n')
+                  if self.fixtests:
+                     self.was_fixed |= offer_fix(opath, ctext)
             else:
+               compare_success = False
                rc = False
                sys.stdout.write('\n'.join(tab(["Expected output file '%s' does not exist" % cpath])) + '\n')
+            
 
       return rc
    
    def run_test(self):
-      #sys.stdout.write('Test %s:\n' % self.test_name)
-      sys.stdout.write('Test %s:\n' % self.path)
+      print('Test %s:' % self.path)
       rc = self.__run_requires()
       if rc:
          rc = self.__run_tests()
-         if rc:
+         if rc or self.fixtests:
             rc = self.__run_verification()
-            if rc:
+            if rc or self.fixtests:
                rc = self.check_output_files()
-               if rc:
-                  sys.stdout.write('Test %s Completed Successfully: True\n' % self.test_name)
-                  return True
-               #sys.stdout.write('Test %s Completed Successfully: True\n\n' % self.test_name)
-               #return True
-      sys.stdout.write('Test %s Completed Successfully: False\n' % self.test_name)
-      return False
-   
+               if rc and not self.was_fixed:
+                  print('Test %s Completed Successfully: True' % self.test_name)
+                  return PASSED
+      print('Test %s Completed Successfully: False' % self.test_name)
+      if self.was_fixed:
+          print("Test %s had some fix(es) made. Will rerun later." % self.test_name)
+          return FIXED
+      return FAILED
+
    def __run_requires(self):
       if not self.manifest[self.REQUIRES_SECTION]:
          return True
 
       testName = self.path.rstrip('/')
-      sys.stdout.write(join(tab(['Requires Section - for test %s:\n' % (testName)])))
+      print(join(tab(['Requires Section - for test %s:' % (testName)])))
       for required_test_dir in self.manifest[self.REQUIRES_SECTION]:
-         sys.stdout.write(join(tab(['Required test = %s\n\n' % (required_test_dir.path)])))
-         required_test_successful = required_test_dir.run_test()
+         print(join(tab(['Required test = %s' % (required_test_dir.path)])))
+         required_test_successful = required_test_dir.run_test() == PASSED
          if not required_test_successful:
-            sys.stdout.write(join(tab(['Requires Section Completed Successfully: False\n\n'])))
+            print(join(tab(['Requires Section Completed Successfully: False\n'])))
             break
 
       return required_test_successful
       
    def __run_tests(self):
       testName = self.path
-      sys.stdout.write(join(tab(['Tests Section - %s\n' % (testName)])))
+      print(join(tab(['Tests Section - %s' % (testName)])))
       cmds_ok = True
       for cmd in self.manifest[self.TEST_SECTION]:
          cmd.execute(self.chroot)
          if cmd.does_rc_differ() or cmd.does_stdout_differ() or cmd.does_stderr_differ():
             cmds_ok = False
-            
-         sys.stdout.write('%s\n\n' % '\n'.join(tab(cmd.get_results_string().split('\n'), num_tabs=2)))
+
+         self.was_fixed |= cmd.was_fixed
+
+         print('%s\n' % '\n'.join(tab(cmd.get_results_string().split('\n'), num_tabs=2)))
          
-         if not cmds_ok:
+         if not cmds_ok and not self.fixtests:
             break
       
-      sys.stdout.write(join(tab(['Tests Section Completed Successfully: %s\n\n' % str(cmds_ok)])))
+      print(join(tab(['Tests Section Completed Successfully: %s\n' % str(cmds_ok)])))
       return cmds_ok
    
    def __run_verification(self):
       if not self.manifest[self.VERIFY_SECTION]:
          return True
-      sys.stdout.write(join(tab(['Verification Section:\n'])))
+      print(join(tab(['Verification Section:'])))
       cmds_ok = True
       for cmd in self.manifest[self.VERIFY_SECTION]:
          cmd.execute(self.chroot)
          if cmd.does_rc_differ() or cmd.does_stdout_differ() or cmd.does_stderr_differ():
             cmds_ok = False
             
+         self.was_fixed |= cmd.was_fixed
+
          sys.stdout.write('%s\n\n' % '\n'.join(tab(cmd.get_results_string().split('\n'), num_tabs=2)))
          
-         if not cmds_ok:
+         if not cmds_ok and not self.fixtests:
             break
       
       sys.stdout.write(join(tab(['Verification Section Completed Successfully: %s\n' % str(cmds_ok)])))

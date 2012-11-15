@@ -1,1 +1,1 @@
-/usr/bin/secstate list PassComp
+/usr/sbin/secstate list PassComp

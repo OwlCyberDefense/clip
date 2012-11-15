@@ -1,1 +1,1 @@
-/usr/bin/secstate show PassComp-G-2-2
+/usr/sbin/secstate show PassComp PassComp-G-2-2

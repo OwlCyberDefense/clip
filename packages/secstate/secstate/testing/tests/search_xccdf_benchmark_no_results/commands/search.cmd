@@ -1,1 +1,1 @@
-/usr/bin/secstate search foobarbazdne
+/usr/sbin/secstate search foobarbazdne

@@ -1,1 +1,1 @@
-/usr/bin/secstate select password-req profile_name
+/usr/sbin/secstate select password-req profile-test

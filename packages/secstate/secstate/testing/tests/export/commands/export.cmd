@@ -1,2 +1,2 @@
-/usr/bin/secstate export password-req pass.zip
+/usr/sbin/secstate export password-req pass.zip
 unzip pass.zip -d /

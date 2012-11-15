@@ -1,1 +1,1 @@
-/usr/bin/secstate import /root/notfound.xml
+/usr/sbin/secstate import /root/notfound.xml

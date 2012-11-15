@@ -1,1 +1,1 @@
-/usr/bin/secstate import /root/empty.xml
+/usr/sbin/secstate import /root/empty.xml

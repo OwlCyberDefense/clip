@@ -1,1 +1,1 @@
-/usr/bin/secstate deselect password-reqs
+/usr/sbin/secstate deselect password-reqs

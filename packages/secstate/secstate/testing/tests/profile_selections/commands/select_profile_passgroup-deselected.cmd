@@ -1,1 +1,1 @@
-/usr/bin/secstate select PassComp passgroup-deselected
+/usr/sbin/secstate select PassComp passgroup-deselected

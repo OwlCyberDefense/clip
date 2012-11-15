@@ -1,6 +1,5 @@
 [requires]
 import_xccdf_benchmark
-import_passreqs
 
 [test]
 list

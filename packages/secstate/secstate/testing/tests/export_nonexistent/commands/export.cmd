@@ -1,1 +1,1 @@
-/usr/bin/secstate export fjdskafdjskl zcxjzcnjkl
+/usr/sbin/secstate export fjdskafdjskl zcxjzcnjkl

@@ -1,1 +1,1 @@
-/usr/bin/secstate search Pass
+/usr/sbin/secstate search Pass

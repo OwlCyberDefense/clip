@@ -1,1 +1,1 @@
-/usr/bin/secstate import /root/passcomp.tar
+/usr/sbin/secstate import /root/passcomp.tar

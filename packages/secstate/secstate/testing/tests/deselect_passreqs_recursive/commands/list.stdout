@@ -1,4 +1,7 @@
 [ ]Benchmark - ID: password-req, Title: 'Linux Password Requirements XCCDF', Profile: 'Custom'
+	[ ]profile - id: profile-test, title: 'profile test'
+	[ ]profile - id: none, title: 'none'
+	[x]profile - id: custom, title: '-- customized --none'
 	[ ]Group - ID: pass-reqs, Title: 'Linux Password Requirement Rules'
 		[ ]Rule - ID: password-change-time, Title: 'GEN0000540 - Password Change Time'
 		[ ]Rule - ID: passwd-accts-password, Title: 'GEN0000560 - Passwd Accounts Have Passwords'

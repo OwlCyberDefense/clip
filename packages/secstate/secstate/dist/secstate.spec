@@ -51,12 +51,12 @@ rm -rf $RPM_BUILD_ROOT
 %dir /var/lib/secstate/oval/
 %dir /usr/share/secstate/
 %dir %{_libexecdir}/%{name}
-%{_libexecdir}/%{name}/secstate_external_node
 %doc LICENSE LICENSE.BSD LICENSE.LGPLv21 LICENSE.GPLv2
-%{_mandir}/man1/secstate.1.gz
+%{_mandir}/man8/secstate.8.gz
+%{_mandir}/man5/secstate.conf.5.gz
 
 # GPLv2+
-%{_bindir}/secstate
+%{_sbindir}/secstate
 %dir /usr/share/secstate/transforms
 /usr/share/secstate/transforms/*
 

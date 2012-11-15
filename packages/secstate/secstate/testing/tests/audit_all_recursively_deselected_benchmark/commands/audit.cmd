@@ -1,1 +1,1 @@
-/usr/bin/secstate audit -a
+/usr/sbin/secstate audit -a

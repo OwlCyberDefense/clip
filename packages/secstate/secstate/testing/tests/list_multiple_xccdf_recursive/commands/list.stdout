@@ -1,4 +1,6 @@
 Benchmark - ID: password-req, Title: 'Linux Password Requirements XCCDF', Profile: None
+	profile - id: profile-test, title: 'profile test'
+	profile - id: none, title: 'none'
 	Group - ID: pass-reqs, Title: 'Linux Password Requirement Rules'
 		Rule - ID: password-change-time, Title: 'GEN0000540 - Password Change Time'
 		Rule - ID: passwd-accts-password, Title: 'GEN0000560 - Passwd Accounts Have Passwords'
@@ -12,6 +14,8 @@ Benchmark - ID: password-req, Title: 'Linux Password Requirements XCCDF', Profil
 		Rule - ID: pass-max-age, Title: 'GEN0000700-720 - Passwords Are Changed Every N Days'
 		Rule - ID: pass-min-reuse, Title: 'GEN0000800 - (PAM) Passwords Cannot Be Reused Within N Days'
 Benchmark - ID: PassComp, Title: 'Password Complexity', Profile: None
+	profile - id: emptyprofile, title: 'an empty profile'
+	profile - id: none, title: 'none'
 	Group - ID: PassComp-G-2-2, Title: 'Password'
 		Group - ID: PassComp-G-2-3, Title: 'Password Complexity'
 			Rule - ID: PassComp-R-2-1, Title: 'Lowercase'

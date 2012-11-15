@@ -25,7 +25,7 @@ import sys
 import optparse
 import traceback
 from secstate_harness.chroot import Chroot, ChrootException
-from secstate_harness.testcase import TestCase
+from secstate_harness.testcase import TestCase, PASSED, FIXED, FAILED
 
 PYVER = sys.version[:3]
 ARCH_64 = 'x86_64'
@@ -112,40 +112,23 @@ binary_deps = ['/usr/bin/python',
                + glob.glob(USR_LIB + '/libuser/*') \
 
 # script executables and other regular files to copy into the chroot
-file_deps = [
-             '/usr/bin/secstate',
+file_deps = ['/usr/sbin/secstate',
              '/etc/ld.so.cache',
              '/usr/lib/locale/locale-archive',
              '/etc/nsswitch.conf',
              '/etc/libuser.conf',
              '/etc/default/useradd',
-             '/usr/libexec/secstate/secstate_external_node',
              '/etc/mime.types',
              ] \
              + glob.glob('/usr/include/python' + PYVER + '/pyconfig-*.h')
 
-def main():
-   parser = optparse.OptionParser()
-   parser.add_option('-c', '--chroot', dest='chroot', help='Path where to create the chroot (cannot exist yet)')
-   parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False, help='Print extra info such as generated dependencies')
-   #parser.add_option('-f', '--force', dest='force', action='store_true', default=False, help='Force running of all commands even when one fails')
-   options, args = parser.parse_args()
-   
-   try:
-      chroot = Chroot(options.chroot, bind_mount_deps, dir_deps, binary_deps, file_deps)
-      chroot.build_deps()
-      if options.verbose:
-         chroot.print_deps()
-   except ChrootException, e:
-      print(e)
-      sys.exit(1)
-
+def run_tests(tests):
    results = {}
-   for test_path in args:
+   for test_path in tests:
       try:
               try:
                  chroot.build_chroot()
-                 tc = TestCase(test_path, options.chroot)
+                 tc = TestCase(test_path, options.chroot, fixtests=options.fixtests)
                  results[test_path] = tc.run_test()
               # exception during build of chroot   
               except ChrootException, ce:
@@ -157,37 +140,95 @@ def main():
                  print(e)
                  results[test_path] = None
                  traceback.print_exc()
+              except KeyboardInterrupt, e:
+                 chroot.clean_chroot()
       finally:
          #raw_input("Press Enter to continue")
          chroot.clean_chroot()
+   return results
+
+def main():
+   parser = optparse.OptionParser()
+   parser.add_option('-c', '--chroot', dest='chroot', help='Path where to create the chroot (cannot exist yet)')
+   parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False, help='Print extra info such as generated dependencies')
+   parser.add_option('-x', '--fix', dest='fixtests', action='store_true', default=False,
+                     help="Offer to fix broken tests.")
+   options, args = parser.parse_args()
    
-   success = 0
-   fail = 0
-   broke = 0
-   failed = []
-   broken = []
+   try:
+      chroot = Chroot(options.chroot, bind_mount_deps, dir_deps, binary_deps, file_deps)
+      chroot.build_deps()
+      if options.verbose:
+         chroot.print_deps()
+   except ChrootException, e:
+      print(e)
+      sys.exit(1)
 
-   for key in results:
-      value = results[key]
-      if value is None:
-          broke += 1
-          broken.append(key)
-      elif value:
-         success +=1
-      else:
-         fail +=1
-         failed.append(key)
-         
-   print('\n')   
-   print('Successful tests  : %d' % success)
-   print('Failed tests      : %d' % fail)
-   print('Broken tests      : %d' % broke)
-   print('Total tests       : %d' % len(args))
+   fix = 1
+   while fix > 0:
+       results = {}
+       for test_path in args:
+           try:
+               try:
+                   chroot.build_chroot()
+                   tc = TestCase(test_path, options.chroot, fixtests=options.fixtests)
+                   results[test_path] = tc.run_test()
+               # exception during build of chroot   
+               except ChrootException, ce:
+                   print(ce)
+                   results[test_path] = None 
+                   traceback.print_exc()
+               # execution during test run
+               except Exception, e:
+                   print(e)
+                   results[test_path] = None
+                   traceback.print_exc()
+           finally:
+              #raw_input("Press Enter to continue")
+              chroot.clean_chroot()
 
-   for i, test in enumerate(failed):
-        print "Failed test %d: %s" % (i + 1, test.split("/")[1])
-   for i, test in enumerate(broken):
-        print "Broken test %d: %s" % (i + 1, test.split("/")[1])
+       success = 0
+       fail = 0
+       broke = 0
+       fix = 0
+       failed = []
+       broken = []
+       fixed = []
+
+       for key in results:
+          value = results[key]
+          if value is None:
+              broke += 1
+              broken.append(key)
+          elif value == PASSED:
+             success +=1
+          elif value == FAILED:
+             fail +=1
+             failed.append(key)
+          elif value == FIXED:
+             fix += 1
+             fixed.append(key)
+             
+       print('\n')   
+       print('Successful tests  : %d' % success)
+       print('Failed tests      : %d' % fail)
+       print('Broken tests      : %d' % broke)
+       print('Fixed tests       : %d' % fix)
+       print('Total tests       : %d' % len(args))
+
+       for i, test in enumerate(failed):
+            print "Failed test %d: %s" % (i + 1, test.split("/")[1])
+       for i, test in enumerate(broken):
+            print "Broken test %d: %s" % (i + 1, test.split("/")[1])
+       for i, test in enumerate(fixed):
+            print "Fixed test %d: %s" % (i + 1, test.split("/")[1])
+       
+       if fix > 0:
+           rerun_fixed = raw_input("Would you like to re-run the fixed tests? [Y/n]: ")
+           if rerun_fixed.lower().startswith("y"):
+               args = fixed
+           else:
+               return
 
 
 #Catch signals

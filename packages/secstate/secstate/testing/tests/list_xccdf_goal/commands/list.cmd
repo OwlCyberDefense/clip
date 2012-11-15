@@ -1,1 +1,1 @@
-/usr/bin/secstate list PassComp-G-2-2
+/usr/sbin/secstate list PassComp PassComp-G-2-2

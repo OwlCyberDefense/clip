@@ -1,1 +1,1 @@
-/usr/bin/secstate select password-req None
+/usr/sbin/secstate select password-req None

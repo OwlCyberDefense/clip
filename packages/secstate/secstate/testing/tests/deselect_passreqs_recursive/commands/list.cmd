@@ -1,1 +1,1 @@
-/usr/bin/secstate list password-req -a -r
+/usr/sbin/secstate list password-req -a -r

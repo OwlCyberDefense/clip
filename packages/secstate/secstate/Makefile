@@ -63,7 +63,7 @@ SECSTATE_DATADIR := $(DATADIR)/secstate
 BENCHDIR := $(SECSTATE_DATADIR)/benchmarks
 BENCHCONFDIR := $(SECSTATE_DATADIR)/configs
 OVALDIR := $(SECSTATE_DATADIR)/oval
-BINDIR := $(DESTDIR)/usr/bin
+BINDIR := $(DESTDIR)/usr/sbin
 MANDIR := $(DESTDIR)/usr/share/man
 LIBEXECDIR := $(DESTDIR)/usr/libexec
 PYTHON_LIB := $(DESTDIR)$(PY_LIB)
@@ -121,14 +121,16 @@ install:
 	$(verbose)test -d $(SYSCONFDIR)/$(PKG) || $(INSTALL) $(MODE_DIR) -d $(SYSCONFDIR)/$(PKG)
 	$(verbose)test -d $(BINDIR) || $(INSTALL) $(MODE_DIR) -d $(BINDIR)
 	$(verbose)test -d $(LIBEXECDIR)/$(PKG) || $(INSTALL) $(MODE_DIR) -d $(LIBEXECDIR)/$(PKG)
-	$(verbose)test -d $(MANDIR)/man1 || $(INSTALL) $(MODE_DIR) -d $(MANDIR)/man1
+	$(verbose)test -d $(MANDIR)/man8 || $(INSTALL) $(MODE_DIR) -d $(MANDIR)/man8
+	$(verbose)test -d $(MANDIR)/man5 || $(INSTALL) $(MODE_DIR) -d $(MANDIR)/man5
 	$(verbose)test -d $(PYTHON_LIB) || $(INSTALL) $(MODE_DIR) -d $(PYTHON_LIB)
 	$(verbose)test -d $(PYTHON_LIB_SECSTATE) || $(INSTALL) $(MODE_DIR) -d $(PYTHON_LIB_SECSTATE)
 	$(verbose)test -d $(TRANSFORMDIR) || $(INSTALL) $(MODE_DIR) -d $(TRANSFORMDIR)
-	$(verbose)$(GZIP) -c docs/secstate.1 > docs/secstate.1.gz
-	$(verbose)$(INSTALL) $(MODE_REG) docs/secstate.1.gz $(MANDIR)/man1/secstate.1.gz
+	$(verbose)$(GZIP) -c docs/secstate.8 > docs/secstate.8.gz
+	$(verbose)$(GZIP) -c docs/secstate.conf.5 > docs/secstate.conf.5.gz
+	$(verbose)$(INSTALL) $(MODE_REG) docs/secstate.8.gz $(MANDIR)/man8/secstate.8.gz
+	$(verbose)$(INSTALL) $(MODE_REG) docs/secstate.conf.5.gz $(MANDIR)/man5/secstate.conf.5.gz
 	$(verbose)$(INSTALL) $(MODE_EXEC) src/bin/$(PKG) $(BINDIR)/$(PKG)
-	$(verbose)$(INSTALL) $(MODE_EXEC) src/bin/secstate_external_node $(LIBEXECDIR)/$(PKG)/secstate_external_node
 	$(verbose)$(INSTALL) $(MODE_REG) src/secstate/*.py $(PYTHON_LIB_SECSTATE)
 	$(verbose)$(INSTALL) $(MODE_REG) src/etc/$(PKG).conf $(SYSCONFDIR)/$(PKG)/$(PKG).conf
 	$(verbose)test -d $(SECSTATE_DATADIR) || $(INSTALL) $(MODE_DIR) -d $(SECSTATE_DATADIR)
@@ -143,10 +145,14 @@ uninstall:
 	rm -f $(BINDIR)/$(PKG)
 	rm -rf $(SECSTATE_DATADIR)
 	rm -f $(PYTHON_LIB)/secstate_package.py*
-	rm -f $(MANDIR)/man1/secstate.1.gz
+	rm -f $(MANDIR)/man8/secstate.8.gz
+	rm -f $(MANDIR)/man5/secstate.conf.5.gz
 
 runtests:
 	cd testing; ./tests.py $(TESTS); 
+
+fixtests:
+	cd testing; ./tests.py --fix $(TESTS);
 
 rpm: $(PKG)-rpm
 
@@ -173,14 +179,15 @@ clean:
 	$(verbose)if [ x"$(SUBDIRS)" != "x" ]; then for c in $(SUBDIRS); do $(MAKE) -C../$$c $@; done; fi;
 	$(verbose)rm -rf $(RPM_TMPDIR)
 	$(verbose)rm -f $(SOURCE)
-	$(verbose)rm -f docs/secstate.1.gz
+	$(verbose)rm -f docs/secstate.8.gz
+	$(verbose)rm -f docs/secstate.conf.5.gz
 	$(verbose)rm -f $(PKG)-$(VERSION)-$(RELEASE)*.noarch.rpm
 	$(verbose)rm -f $(PKG)-$(VERSION)-$(RELEASE)*.src.rpm
 
 bare: clean
 	$(verbose)if [ x"$(SUBDIRS)" != "x" ]; then for c in $(SUBDIRS); do $(MAKE) -C../$$c/build $@; done; fi;
 
-.PHONY: all all-rpms clean bare $(PKG)-rpm check runtests
+.PHONY: all all-rpms clean bare $(PKG)-rpm check runtests fixtests
 
 ## END TARGETS 
 ######################################################################

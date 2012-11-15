@@ -1,1 +1,1 @@
-/usr/bin/secstate remediate -y
+/usr/sbin/secstate remediate -y

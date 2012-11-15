@@ -1,1 +1,1 @@
-/usr/bin/secstate select PassComp minlen-deselected
+/usr/sbin/secstate select PassComp minlen-deselected

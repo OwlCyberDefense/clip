@@ -1,1 +1,1 @@
-/usr/bin/secstate show PassComp
+/usr/sbin/secstate show PassComp

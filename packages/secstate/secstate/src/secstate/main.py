@@ -595,16 +595,27 @@ class Secstate:
                     return False
 
             if item.type == oscap.xccdf.XCCDF_PROFILE:
+                # check if benchmark was selected before selecting new benchmark
+                if benchmark.config.getboolean(benchmark_id, 'selected'):
+                    benchmark.config.set(benchmark_id, 'selected', selected)
+
                 benchmark.config.set(benchmark_id, 'profile', item_id)
                 self.log.debug("Setting active profile to %(id)s" % {'id':item_id})
             else:
                 if benchmark.config.has_option(benchmark_id, 'profile'):
                     active_profile = benchmark.config.get(benchmark_id, 'profile')
-                    # Only create 'Custom' profile if modifying an original profile
-                    if (active_profile != "Custom") and (not benchmark.config.has_section(active_profile)):
+                    # Create 'Custom' profile if it doesn't exist
+                    if (active_profile != "Custom"):
                         if not benchmark.config.has_section("Custom"):
                             benchmark.config.add_section("Custom")
-                        benchmark.config.set('Custom', 'extends', active_profile)
+
+                        # We either keep the 'extends' property from the configured profile,
+                        # or set the 'extends' property to the original profile, we were on
+                        if benchmark.config.has_section(active_profile):
+                            for opt,val in benchmark.config.items(active_profile):
+                                benchmark.config.set('Custom', opt, val)
+                        else:
+                            benchmark.config.set('Custom', 'extends', active_profile)
                         active_profile = 'Custom'
 
                 if item.type != oscap.xccdf.XCCDF_BENCHMARK:
@@ -648,16 +659,28 @@ class Secstate:
             self.log.error("An item with the name '%(name)s' already exists in the benchmark" % {'name':profile_name})
             return False
 
-        if benchmark.config.has_section("Custom"):
+        # check if profile_name exists, and create if it doesn't
+        if not benchmark.config.has_section(profile_name):
             benchmark.config.add_section(profile_name)
+
+        # for each selection, set the config for the new
+        # profile to have the same values as before
+        for opt,val in benchmark.config.items(profile_name):
+            benchmark.config.set(profile_name, opt, val)
+
+        # any updates will be in the "Custom" section, so we
+        # update the saved profile with those values, then remove
+        # the Custom section because it is no longer necessary
+        if benchmark.config.has_section("Custom"):
             for opt,val in benchmark.config.items("Custom"):
                 benchmark.config.set(profile_name, opt, val)
             benchmark.config.remove_section("Custom")
-            benchmark.config.set(benchmark_id, 'profile', profile_name)
-        else:
-            self.log.error("No changes have been made to the current profile")
-            return False
 
+        # set profile_name as the currently active profile for
+        # the benchmark
+        benchmark.config.set(benchmark_id, 'profile', profile_name)
+
+        # write changes to disk
         try:
             fp = open(self.content_configs[benchmark_id], 'w')
             benchmark.config.write(fp)
@@ -862,91 +885,106 @@ class Secstate:
 
         return found_something
 
-    def show(self, item_id=None, verbose=False):
-        for key in self.content:
-            content = self.import_content(key)
-            if content == None:
-                self.log.error("Error importing content: %(file)s" % {'file':key})
-                return None
-            
-            if not content.__dict__.has_key('oval'):
-                defn = content.get_definition(item_id)
-                if defn == None:
-                    continue
+    def show(self, content_id=None, item_id=None, verbose=False):
+        # check arguments
+        if content_id is None:
+            raise TypeError("Content ID must be provided.")
+        
+        # import content with provided ID
+        content = self.import_content(content_id)
+        if content is None:
+            self.log.error("Error importing content: %s" % content_id)
+            return False
+
+        # no item_id? just print info about the content
+        if item_id is None:
+            # to_item() is a weird openscap function which
+            # switches content into a different type, which
+            # gives us access to stuff like item.title
+            item = content.to_item()
+        elif is_xccdf(content):
+            # searches and retrieves the item from inside the xccdf
+            # it might be a group, profile, or rule
+            item = content.get_item(item_id)
+        else:
+            # can't find anything useful, give up
+            if item_id is None:
+                self.log.error("No item ID provided and content ID does not refer to an XCCDF benchmark.")
+            else:
+                self.log.error("Could not find item %s in benchmark %s" % (item_id, content_id))
+            return False
+
+        # maybe we're getting a profile, those don't show up in the XCCDF
+        if item is None and len(content.profiles) > 0:
+            for profile in content.profiles:
+                if item_id == profile.id:
+                    item = profile
+                    break
+
+        # We've tried everything, give up
+        if item is None:
+            self.log.error("Could not find item %s in benchmark %s" % (item_id, content_id))
+            return False
+
+        print "%s:" % item.id
+        if len(item.title) > 0:
+            print "\tTitle:  '%s'" % item.title[0].get_text()
+        if len(item.description) > 0:
+            print "\tDescription:  %s" % item.description[0].get_text()
+
+        if type(item.selected) == str or type(item.selected) == bool:
+            print "\tSelected:  %s" % item.selected
+        elif item.id == get_active_profile(content, content_id):
+            print "\tSelected:  True"
+        elif item_id is None and content.config.getboolean(content_id, 'selected'):
+            print "\tSelected:  True"
+        else:
+            print "\tSelected:  False"
+
+        # if we have them, print a list of profiles in this content
+        if len(content.profiles) > 0 and item.type == oscap.OSCAP.XCCDF_BENCHMARK:
+            active_profile = get_active_profile(content, content_id)
+            print "\tProfiles:"
+            for profile in content.profiles:
+                # If this is the active profile, mark the box
+                if profile.id == active_profile:
+                    selected = '[X]'
                 else:
-                    print "%(id)s:" % {'id':item_id}
-                    print "\tTitle:  '%(title)s'" % {'title':defn.title}
-                    print "\tDescription:  '%(desc)s'" % {'desc':defn.description}
-                    return True
+                    selected = '[ ]'
+                # Get the title of this profile
+                title = ""
+                if len(profile.title) > 0:
+                    title = " - '%(title)s'" % {'title':profile.title[0].text}
+                # Print [X]ProfileID - Title (see manpage for examples)
+                print "\t\t%(sel)s%(id)s%(title)s" % {'sel':selected, 'id':profile.id, 'title':title}
+        
+        # verbocity!
+        if verbose:
+            # groups and rules have parents, print it if we have one
+            parent = item.parent
+            if parent is not None:
+                print "\tMember of %(parent)s" % {'parent':parent.id}
 
-            item = None
-            if item_id == key:
-                item = content.to_item()
-            else:
-                if content.__dict__.has_key('oval'):
-                    item = content.get_item(item_id)
+            # groups and benchmarks have children, print them if we have them
+            if item.type in (oscap.xccdf.XCCDF_GROUP, oscap.xccdf.XCCDF_BENCHMARK):
+                print "\tSub Elements:"
+                for sub in item.content:
+                    print "\t\t%s" % sub.id
+            # rules reference OVAL definitions, print that info
+            elif item.type == oscap.xccdf.XCCDF_RULE:
+                rule = item.to_rule()
+                print "\tReferenced Definitions:"
+                for defn in xccdf_rule_get_defs(rule):
+                    print "\t\t%s" % defn
 
-            if item == None:
-                for def_model in content.oval.values():
-                    defn = def_model.get_definition(item_id)
-                    if defn != None:
-                        print "%(id)s:" % {'id':item_id}
-                        print "\tTitle:  '%(title)s'" % {'title':defn.title}
-                        print "\tDescription:  '%(desc)s'" % {'desc':defn.description}
-                        return True
-
-            else:
-                print "%(id)s:" % {'id':item.id}
-                for title in item.title:
-                    print "\tTitle:  '%(title)s'" % {'title':title.text}
-
-                for description in item.description:
-                    print "\tDescription:  %(desc)s" % {'desc':description.text}
-
-                print "\tSelected:  %(sel)s" % {'sel':item.selected}
-
-                item_type = item.type
-                if item_type == oscap.xccdf.XCCDF_BENCHMARK:
-                    active_profile = NONE_PROFILE
-                    if content.config.has_option(key, 'profile'):
-                        active_profile = content.config.get(key, 'profile')
-                    if len(content.profiles) > 0:
-                        print "\tProfiles:"
-                        for profile in content.profiles:
-                            selected = "[ ]"
-                            title = ""
-                            prof_id = profile.id
-                            if len(profile.title) > 0:
-                                title = " - '%(title)s'" % {'title':profile.title[0].text}
-                            if prof_id == active_profile:
-                                selected = "[X]"
-                            print "\t\t%(sel)s%(id)s%(title)s" % {'sel':selected, 'id':prof_id, 'title':title}
-
-                if verbose:
-                    parent = item.parent
-                    if parent != None:
-                        print "\tMember of %(parent)s" % {'parent':parent.id}
-                    if (item_type == oscap.xccdf.XCCDF_GROUP) or (item_type == oscap.xccdf.XCCDF_BENCHMARK):
-                        if len(item.content) > 0:
-                            print "\tSub Elements:"
-                            for sub in item.content:
-                                print "\t\t%(id)s" % {'id':sub.id}
-
-                    elif item_type == oscap.xccdf.XCCDF_RULE:
-                        rule = item.to_rule()
-                        print "\tReferenced Definitions:"
-                        for defn in xccdf_rule_get_defs(rule):
-                            print "\t\t%(id)s" % {'id':defn}
-
-                return True
-
-        self.log.error("Item '%(id)s' could not be found in the imported content" % {'id':item_id})
-        return False
+        return True
 
     def sublist(self, content, arg, recurse, show_all, tabs=0):
         tabstr = "\t" * tabs
         selected = ""
         profile = ""
+        profiles = []
+        profile_name = None
 
         is_selected = False
         if not content.__dict__.has_key('oval'):
@@ -968,7 +1006,8 @@ class Secstate:
         else:
             item = None
             if arg == content.id:
-                item = content.to_item()
+                item = content.to_item() # get groups and rules
+                profiles = content.get_profiles() # get profiles
                 is_selected = content.config.getboolean(arg, 'selected')
                 profile_name = content.config.get(arg, 'profile')
                 if profile_name != NONE_PROFILE:
@@ -977,11 +1016,24 @@ class Secstate:
 
             else:
                 item = content.get_item(arg)
+
                 if item == None:
-                    for oval_file,def_model in content.oval.items():
-                        return self.sublist(def_model, arg, recurse, show_all, tabs)
-                else:
+                    item = content.get_member(oscap.xccdf.XCCDF_PROFILE, arg)
+
+                    if item == None:
+                        for oval_file,def_model in content.oval.items():
+                            return self.sublist(def_model, arg, recurse, show_all, tabs)
+
+                try:
                     is_selected = content.selections[item.id]
+                except:
+                    # profile
+                    if profile_name == None:
+                        # use the benchmark's ID to determine profile name
+                        profile_name = content.config.get(content.id, 'profile')
+
+                    if profile_name == item.id:
+                        is_selected = 1
 
             for title in item.title:
                 if show_all:
@@ -994,36 +1046,54 @@ class Secstate:
                     if not recurse or (tabs == 0):
                         selected = "[ ]"
 
-                if show_all or is_selected:
-                    print "%(indent)s%(sel)s%(type)s - ID: %(id)s, Title: '%(title)s'%(prof)s" % {'indent':tabstr, 'sel':selected,
+                print "%(indent)s%(sel)s%(type)s - ID: %(id)s, Title: '%(title)s'%(prof)s" % {'indent':tabstr, 'sel':selected,
                                                                                                   'type':item_get_type_str(item), 'id':arg,
                                                                                                   'title':title.text,
                                                                                                   'prof':profile}
             if recurse and (is_selected or show_all):
                 item_type = item.type
                 if (item_type == oscap.xccdf.XCCDF_GROUP) or (item_type == oscap.xccdf.XCCDF_BENCHMARK):
+                    # add profiles
+                    for prof in profiles:
+                        self.sublist(content, prof.id, recurse, show_all, tabs+1)
+
                     for sub in item.content:
                         self.sublist(content, sub.id, recurse, show_all, tabs+1)
 
         return True
 
-
-    def list_content(self, arg=None, recurse=False, show_all=False):
+    def list_content(self, content_id=None, item_id=None, recurse=False, show_all=False):
         ret = False
         if self.content == {}:
             return True
 
-        for key in self.content:
-            content = self.import_content(key)
+        if content_id == None:
+            for key in self.content:
+                content = self.import_content(key)
+                if content == None:
+                    self.log.error("Error loading benchmark: %(id)s" % {'id':key})
+                    return False
+
+                ret = self.sublist(content, key, recurse, show_all)
+        elif item_id == None:
+            content = self.import_content(content_id)
             if content == None:
-                self.log.error("Error loading benchmark: %(id)s" % {'id':key})
+                self.log.error("Error loading benchmark: %(id)s" % {'id':content_id})
                 return False
 
-            if (arg == None) or (arg == key): 
-                ret = self.sublist(content, key, recurse, show_all)
-            else:
-                self.log.error("Error listing benchmark: %s" % arg)
+            ret = self.sublist(content, content_id, recurse, show_all)
+        else:
+            content = self.import_content(content_id)
+            if content == None:
+                self.log.error("Error loading benchmark: %(id)s" % {'id':content_id})
                 return False
+
+            if not content.get_item(item_id):
+                if not content.get_member(oscap.xccdf.XCCDF_PROFILE, item_id):
+                    self.log.error("Could not find [group][rule][profile]: %(id)s" % {'id':item_id})
+                    return False
+
+            ret = self.sublist(content, item_id, recurse, show_all)
 
         return ret
 
@@ -1041,8 +1111,12 @@ class Secstate:
                 if res_file.endswith(".results.xml") and is_valid_xccdf_file(os.path.join(xccdf_results, res_file)):
                     result_files.append(os.path.join(xccdf_results, res_file))
 
-        elif os.path.isfile(xccdf_results):
+        elif os.path.isfile(xccdf_results) and is_valid_xccdf_file(xccdf_results):
             result_files.append(xccdf_results)
+
+        else:
+            self.log.error("Not a valid xccdf result file: %s" % xccdf_results)
+            return (None, None)
        
         result_ids = []
         for result in result_files:
@@ -1068,8 +1142,6 @@ class Secstate:
         return (result_ids, passing_ids)
 
     def run_remediation(self, args, xccdf_results=None, log_dest=None, noop=False, verbose=False, yes_all=False):
-        template = '%s\n'
-
         if args == []:
             args = self.content.keys()
 
@@ -1116,7 +1188,7 @@ class Secstate:
                 self.log.warning("No remediation to be done.")
                 if verbose:
                     self.log.info("Either results XCCDF did not report any failures, or failures reported did not have a well formed <fix> element in the corresponding XCCDF benchmark.")
-                return True
+                continue
 
             # Running bash automated content
             for fix in bash_content:

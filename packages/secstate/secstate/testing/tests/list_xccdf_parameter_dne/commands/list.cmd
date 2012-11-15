@@ -1,1 +1,1 @@
-/usr/bin/secstate list baz
+/usr/sbin/secstate list baz

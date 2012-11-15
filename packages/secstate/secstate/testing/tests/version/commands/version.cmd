@@ -1,1 +1,1 @@
-/usr/bin/secstate --version
+/usr/sbin/secstate --version

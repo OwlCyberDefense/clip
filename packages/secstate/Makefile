@@ -12,7 +12,7 @@ VERSION := 0.5.9999
 
 # Bump this if creating multiple releases from the same
 # version.
-RELEASE := git.e5058e4
+RELEASE := git.1c402913
 
 # The name of the Vendor
 VENDOR := SecState
@@ -38,7 +38,7 @@ OUTPUT_DIR ?= $(ROOT_DIR)
 SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
 
 # exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
-TAR_DEPS := $(shell find $(PKGNAME)/*)
+TAR_DEPS := $(shell find $(PKGNAME)/*) $(CURDIR)/Makefile
 RPM_DEPS := $(TARBALL) $(RPM_SPEC) Makefile
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
@@ -60,7 +60,7 @@ endef
 all: $(PKGNAME)-rpm $(PKGNAME)-srpm
 
 $(TARBALL): $(TAR_DEPS)
-	tar -czf $@ $(PKGNAME)
+	tar -C $(PKGNAME) -czf $@ .
 
 rpm: $(PKGNAME)-rpm
 

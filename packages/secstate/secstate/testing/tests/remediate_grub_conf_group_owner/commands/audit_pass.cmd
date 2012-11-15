@@ -1,1 +1,1 @@
-/usr/bin/secstate audit grub-conf
+/usr/sbin/secstate audit grub-conf

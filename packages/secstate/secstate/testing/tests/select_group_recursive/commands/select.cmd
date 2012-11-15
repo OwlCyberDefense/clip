@@ -1,1 +1,1 @@
-/usr/bin/secstate select password-req pass-reqs -r
+/usr/sbin/secstate select password-req pass-reqs -r

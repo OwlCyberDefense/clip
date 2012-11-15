@@ -1,1 +1,1 @@
-/usr/bin/secstate import /root/books.xml
+/usr/sbin/secstate import /root/books.xml

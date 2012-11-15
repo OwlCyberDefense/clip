@@ -1,1 +1,1 @@
-/usr/bin/secstate select password-req myProfile
+/usr/sbin/secstate select password-req myProfile

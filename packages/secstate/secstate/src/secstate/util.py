@@ -350,11 +350,19 @@ def oscap_validate(filename, doc_type):
     but there are other possibilities, which Secstate doesn't use.
     """
     try:
-        version = oscap.OSCAP.oval_determine_document_schema_version(filename, doc_type)
+        version = None
+        # detect OVAL version
+        if doc_type == oscap.OSCAP.OSCAP_DOCUMENT_OVAL_DEFINITIONS:
+            version = oscap.OSCAP.oval_determine_document_schema_version(filename, doc_type)
+
+        # detect XCCDF version
         if version is None:
             version = oscap.OSCAP.xccdf_detect_version(filename)
+
+        # no version detected, die
         if version is None:
             return False
+
         is_valid = oscap.OSCAP.oscap_validate_document(filename, doc_type, version, None, None)
         # openscap is originally written in C, so they use 0 to mean success
         if (0 == is_valid):
@@ -369,6 +377,37 @@ def is_valid_xccdf_file(filename):
 
 def is_valid_oval_file(filename):
     return oscap_validate(filename, oscap.OSCAP.OSCAP_DOCUMENT_OVAL_DEFINITIONS)
+
+def is_xccdf(obj):
+    """
+    This is currently the best way of telling if an object is an openscap XCCDF benchmark object.
+    """
+    try:
+        return obj.object == "xccdf_benchmark"
+    except:
+        return False
+
+def is_oval(obj):
+    """
+    This is currently the best way of telling if an object is an openscap OVAL definition object.
+    """
+    try:
+        return obj.object == "oval_definition_model"
+    except:
+        return False
+
+def get_active_profile(content, key):
+    """
+    Gets the active profile for the given key in the content's config object, or NONE_PROFILE
+    """
+    try:
+        if content.config.has_option(key, 'profile'):
+            return content.config.get(key, 'profile')
+        else:
+            return 'None'
+    except:
+        return 'None'
+         
 
 def get_benchmark_id(benchmark):
     tree = xml.dom.minidom.parse(benchmark)

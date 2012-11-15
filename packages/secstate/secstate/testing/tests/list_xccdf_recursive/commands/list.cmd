@@ -1,1 +1,1 @@
-/usr/bin/secstate list -r
+/usr/sbin/secstate list -r
