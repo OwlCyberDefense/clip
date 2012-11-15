@@ -214,10 +214,16 @@ yum
 
 %end
 
-%post --log=/root/clip_post_install.log
+%post 
+# Anaconda's fails at the stdout redirections so let's do it on our own.
+exec 1> /root/clip_post_install.log
+exec 2> /root/clip_post_install.log
 # DO NOT REMOVE THE FOLLOWING LINE. NON-EXISTENT WARRANTY VOID IF REMOVED.
 #CONFIG-BUILD-PLACEHOLDER
 export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
+
+echo "Installation timestamp: `date`" > /root/clip-info.txt
+echo "#CONFIG-BUILD-PLACEHOLDER" >> /root/clip-info.txt
 
 # FIXME: Change the username and password.
 #        If a hashed password is specified it will be used
@@ -275,6 +281,9 @@ usermod -L root
 # FIXME: Remove <platform> tags from SSG to temporarily resolve non-applicable openscap results
 sed -i -r -e "s/<platform.*//g" /usr/local/scap-security-guide/RHEL6/output/ssg-rhel6-xccdf.xml
 
+# SecState's timeout is too short for some remediation scripts in Aqueduct.
+sed -i -e 's/^remediation_timeout.*/remediation_timeout=30/' /etc/secstate/secstate.conf
+
 # Import SSG into secstate.
 # Running this command again, even after install, will result in a harmless error
 # as you are effectively importing the same IDs again.
@@ -285,11 +294,12 @@ cd /root
 echo "About to use secstate to do a pre-remediation audit using SSG content..."
 secstate audit 
 
-# Remediate w/ secstate using aqueduct content
-secstate remediate -y
-
-echo "About to use secstate to do a post-remediation audit using SSG content..."
-secstate audit
+if [ x"$CONFIG_BUILD_SECSTATE_REMEDIATE" == "xy" ]; then
+	# Remediate w/ secstate using aqueduct content
+	secstate remediate -y --verbose
+	echo "About to use secstate to do a post-remediation audit using SSG content..."
+	secstate audit
+fi
 
 echo "All done with secstate :)  Now go play with your freshly remediated system!"
 ###### END SECSTATE AUDIT AND REMEDIATE ###########

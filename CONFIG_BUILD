@@ -14,31 +14,58 @@ PACKAGES := aqueduct scap-security-guide secstate clip-selinux-policy openscap
 # to CONFIG_REPOS.
 # PRE_ROLLED_PACKAGES := "/home/joeuser/lha-1.14i-19.2.2.el6.rf.x86_64.rpm"
 
-# This variable can be leveraged by sub-makes (eg in the packages/foo/Makefile).
-# if files at this top-level should trigger a rebuild.
-ADDTL_DEPS := $(CURDIR)/CONFIG_REPOS $(CURDIR)/CONFIG_BUILD
+
+# The ISO_VERSION field doesn't alter functionality at all.  The variable name and value will appear in /root/clip-info.txt.
+# This provides a way to figure out what version of your repo was used to generate the ISO once it is installed.  E.g. 
+#   Tester: "My install is busted."
+#   Developer: "What version do you have installed?"
+#   Tester: "I don't know.  How do figure that out?"
+#   Developer: "Run '# cat /root/clip-info.txt' and send me the output."
+#   Tester: "Will do!  Thanks Developer!"
+#   Developer: "No, thank you Tester!"
+ISO_VERSION := $(strip $(shell test -d .git && git log -1|head -1|awk '{ print $$2; }'))
+ifeq ($(strip $(ISO_VERSION)),)
+  ISO_VERSION := 0.1
+endif
 
 # These values can be used to tweak the build to facilitate development and debugging.
 # The CONFIG_BUILD_PRODUCTION flag sets all other build configuration to production values.
 # CONFIG_BUILD_ENFORCING_MODE is used to put the system in permissive mode or enforcing mode after install.
+# CONFIG_BUILD_SECSTATE_REMEDIATE SecState audits the systems using SCAP content then remediates problems by 
+#                                 modifying the system to resolve identified problems.  CLIP uses SecState in 
+#                                 %post of the kickstart.  If this is set to "n" SecState is used to audit but
+#                                 not remediate.  You can still remediate at run-time after deployment.
 # CONFIG_BUILD_UNCONFINED_TOOR allows the toor user to run the unconfined (read->all powerful) toor_r:toor_t role.
 #                              Normally the toor user is confined in the sysadm_r:sysadm_t role.
-export CONFIG_BUILD_PRODUCTION := n
+# Note: these variables and values will be inserted into /root/clip-info.txt for inspection at run-time.
+CONFIG_BUILD_PRODUCTION := n
 ifeq ($(CONFIG_BUILD_PRODUCTION),y)
-  export CONFIG_BUILD_ENFORCING_MODE := y
-  export CONFIG_BUILD_UNCONFINED_TOOR := n
+  CONFIG_BUILD_ENFORCING_MODE := y
+  CONFIG_BUILD_SECSTATE_REMEDIATE := n
+  CONFIG_BUILD_UNCONFINED_TOOR := n
 else
-  export CONFIG_BUILD_ENFORCING_MODE := n
-  export CONFIG_BUILD_UNCONFINED_TOOR := y
+  CONFIG_BUILD_ENFORCING_MODE := n
+  CONFIG_BUILD_SECSTATE_REMEDIATE := n
+  CONFIG_BUILD_UNCONFINED_TOOR := y
 endif
 
 # If you want to override individual debug flags you can do it here.  Don't forget that setting the flags here overrides 
 # the values controlled by CONFIG_BUILD_PRODUCTION above.
-export CONFIG_BUILD_UNCONFINED_TOOR := y
-export CONFIG_BUILD_ENFORCING_MODE := y
+CONFIG_BUILD_UNCONFINED_TOOR := y
+CONFIG_BUILD_SECSTATE_REMEDIATE := y
+CONFIG_BUILD_ENFORCING_MODE := y
+
+################################################
+### STOP USER CONFIG 
+################################################
+# The values below probably won't have to change.
+
+# This variable can be leveraged by sub-makes (eg in the packages/foo/Makefile).
+# if files at this top-level should trigger a rebuild.
+ADDTL_DEPS := $(CURDIR)/CONFIG_REPOS $(CURDIR)/CONFIG_BUILD
 
 # Translate the CONFIG_BUILD_* flags into BASH vars that we insert into things like a kickstart %post
-CONFIG_BUILD_BASH_VARS := export CONFIG_BUILD_PRODUCTION=$(strip $(CONFIG_BUILD_PRODUCTION)) CONFIG_BUILD_ENFORCING_MODE=$(strip $(CONFIG_BUILD_ENFORCING_MODE)) CONFIG_BUILD_UNCONFINED_TOOR=$(strip $(CONFIG_BUILD_UNCONFINED_TOOR))
+CONFIG_BUILD_BASH_VARS := export CONFIG_BUILD_PRODUCTION=$(strip $(CONFIG_BUILD_PRODUCTION)) CONFIG_BUILD_ENFORCING_MODE=$(strip $(CONFIG_BUILD_ENFORCING_MODE)) CONFIG_BUILD_UNCONFINED_TOOR=$(strip $(CONFIG_BUILD_UNCONFINED_TOOR)) CONFIG_BUILD_SECSTATE_REMEDIATE=$(strip $(CONFIG_BUILD_SECSTATE_REMEDIATE)) ISO_VERSION=$(strip $(ISO_VERSION))
 
 # Typically we are rolling builds on the target arch.  Changing this may have dire consequences.
 # (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
@@ -47,4 +74,4 @@ ARCH := $(shell uname -i)
 # Quiet down the build output a bit.
 QUIET := n
 
-export ARCH PACKAGES ADDTL_DEPS QUIET PRE_ROLLED_PACKAGES CONFIG_BUILD_BASH_VARS CONFIG_BUILD_ENFORCING_MODE CONFIG_BUILD_UNCONFINED_TOOR CONFIG_BUILD_PRODUCTION
+export ARCH PACKAGES ADDTL_DEPS QUIET PRE_ROLLED_PACKAGES CONFIG_BUILD_BASH_VARS CONFIG_BUILD_ENFORCING_MODE CONFIG_BUILD_UNCONFINED_TOOR CONFIG_BUILD_PRODUCTION ISO_VERSION CONFIG_BUILD_SECSTATE_REMEDIATE
