@@ -54,7 +54,13 @@ def map_fixes():
 					
 					if (inclusion+".sh" in legit_scripts):
 						fixes.write("<fix rule=\"%s\"> {\"script\" : \"/usr/libexec/aqueduct/SSG/scripts/%s.sh\"} </fix>\n" %(inclusion, inclusion))
-
+			
+                fixes.write('<!-- Manual content. -->\n')
+		
+		exclusions = re.sub("(<.*Profile.*)|(<title.*)|(<description.*)", "", exclusions)
+		manual_content = re.sub("(<select idref=)\"([^\"]*)\".*", "<fix rule=\"\\2\"> {\"script\" : \"/usr/libexec/aqueduct/SSG/scripts/\\2.sh\"} </fix>", exclusions)
+	
+		fixes.write(manual_content)
 		fixes.write("</fix-group>")
 
 map_fixes()

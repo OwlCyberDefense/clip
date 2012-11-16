@@ -22,12 +22,15 @@
 #Vincent[.]Passaro[@]gmail[.]com				     #
 #www.vincentpassaro.com						     #
 ######################################################################
-#_____________________________________________________________________
-#|  Version |   Change Information  |      Author        |    Date    |
-#|__________|_______________________|____________________|____________|
-#|    1.0   |   Initial Script      | Vincent C. Passaro | 20-oct-2011|
-#|	    |   Creation	    |                    |            |
-#|__________|_______________________|____________________|____________|
+# _____________________________________________________________________
+# |  Version |   Change Information  |      Author        |    Date    |
+# |__________|_______________________|____________________|____________|
+# |    1.0   |   Initial Script      | Vincent C. Passaro | 20-oct-2011|
+# |          |   Creation	     |                    |            |
+# |--------------------------------------------------------------------|
+# |          |   modified syntax for |     Lee Kinser     | 8-Nov-2012 |
+# |          |   confFORWARD_PATH    |                    |            |
+# |__________|_______________________|____________________|____________|
 #######################DISA INFORMATION###############################
 #Group ID (Vulid): V-4385
 #Group Title: .forward files
@@ -60,7 +63,7 @@
 #
 #Procedure:
 #Edit the /etc/mail/sendmail.mc file to change the ForwardPath entry to a null path by adding the line.
-#define(`confFORWARD_PATH`,`')
+#define(`confFORWARD_PATH',`')
 #rebuild the sendmail.cf file.
 #
 #Remove all .forward files on the system

@@ -24,5 +24,4 @@ FILE=/etc/security/limits.conf
 
 . $(dirname $0)/set_general_entry
 
-safe_add_field "(*\s+hard\s+core\s+).*" "0" $FILE
-safe_add_field "(End of file).*" "" $FILE
+safe_add_field "(\*\s+).*core.*" "hard\tcore\t0" $FILE

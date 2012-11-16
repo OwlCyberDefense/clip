@@ -18,3 +18,4 @@ set -e
 [ -f /etc/init.d/cgred  ] || exit 0
 
 /sbin/chkconfig --level 0123456 cgred off
+/sbin/service cgred stop

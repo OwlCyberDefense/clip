@@ -22,3 +22,4 @@ set -e
 [ -f /etc/init.d/auditd ] || exit 1
 
 /sbin/chkconfig --level 0123456 auditd on
+/sbin/service auditd start

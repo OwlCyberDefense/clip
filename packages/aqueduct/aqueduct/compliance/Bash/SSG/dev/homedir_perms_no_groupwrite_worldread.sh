@@ -28,5 +28,5 @@ FILE=/etc/passwd
 /bin/awk -F: '{
 	if( system( "[ -f " "/home/"$1 " ] " ) == 0 ) 
 		print "/bin/chmod g-w /home/"$1
-		print "/bin/chmod o-rwx "/home/$1
+		print "/bin/chmod o-rwx /home/"$1
 }' $FILE | bash

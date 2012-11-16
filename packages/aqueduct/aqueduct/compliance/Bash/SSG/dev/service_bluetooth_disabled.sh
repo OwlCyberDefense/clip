@@ -18,3 +18,4 @@ set -e
 [ -f /etc/init.d/bluetooth  ] || exit 0
 
 /sbin/chkconfig --level 0123456 bluetooth off
+/sbin/service bluetooth stop

@@ -18,3 +18,4 @@ set -e
 [ -f /etc/init.d/acpid  ] || exit 0
 
 /sbin/chkconfig --level 0123456 acpid off
+/sbin/service acpid stop

@@ -18,3 +18,4 @@ set -e
 [ -f /etc/init.d/cpuspeed  ] || exit 0
 
 /sbin/chkconfig --level 0123456 cpuspeed off
+/sbin/service cpuspeed stop

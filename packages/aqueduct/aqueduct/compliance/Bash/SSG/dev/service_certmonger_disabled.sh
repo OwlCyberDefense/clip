@@ -18,3 +18,4 @@ set -e
 [ -f /etc/init.d/certmonger ] || exit 0
 
 /sbin/chkconfig --level 0123456 certmonger off
+/sbin/service certmonger stop

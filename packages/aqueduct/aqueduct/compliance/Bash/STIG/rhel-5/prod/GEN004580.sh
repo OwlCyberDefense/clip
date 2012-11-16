@@ -34,6 +34,9 @@
 # |__________|_______________________|____________________|____________|
 # |    1.0   |   Initial Script      | Vincent C. Passaro | 1-Aug-2012 |
 # |          |   Creation            |                    |            |
+# |--------------------------------------------------------------------|
+# |          |   modified syntax for |     Lee Kinser     | 8-Nov-2012 |
+# |          |   confFORWARD_PATH    |                    |            |
 # |__________|_______________________|____________________|____________|
 #	                                                                  
    
@@ -82,7 +85,7 @@
 # Procedure:
 # Edit the /etc/mail/sendmail.mc file to change the ForwardPath entry to a 
 # null path by adding the line
-# define(`confFORWARD_PATH`,`')
+# define(`confFORWARD_PATH',`')
 # rebuild the sendmail.cf file.
 
 # Remove all .forward files on the system

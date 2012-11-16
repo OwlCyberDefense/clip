@@ -1,5 +1,7 @@
 #!/bin/bash -u
 set -e
+
+# 
 # Copyright (c) 2012 Tresys Technology LLC, Columbia, Maryland, USA
 #
 # This software was developed by Tresys Technology LLC
@@ -11,10 +13,11 @@ set -e
 # version 2.1 of the License, or (at your option) any later version.
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an AS IS BASIS,
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-[ -f /etc/init.d/cups  ] || exit 0
 
-/sbin/chkconfig --level 0123456 cups off
+. $(dirname $0)/audit_rules_common
+
+add_rule '-w /etc/selinux -p wa -l MAC-policy'

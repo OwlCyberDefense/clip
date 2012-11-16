@@ -23,4 +23,4 @@ FILE=/etc/fstab
 [ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_fstab_general
-set_mount_opt tmp /var/tmp nodev
+set_mount_opt tmp /tmp nodev

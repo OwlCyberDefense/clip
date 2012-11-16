@@ -19,3 +19,4 @@ set -e
 [ -f /etc/init.d/irqbalance  ] || exit 1
 
 /sbin/chkconfig --level 0123456 irqbalance on
+/sbin/service irqbalance start

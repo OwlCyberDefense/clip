@@ -25,16 +25,12 @@ set_sysctl_param() {
 	PARAM=$1
 	DESIRED=$2
 
-	DIR=${PARAM/\./\/}
+	DIR=${PARAM//\./\/}
 	DIR="/proc/sys/"$DIR
 
 	if [ -f $DIR ]; then
-		MODULE=`/bin/echo "$PARAM"|/bin/sed -e "s/\./\//g"`
+		MODULE=`/bin/echo "${PARAM}"|/bin/sed -e "s/\./\//g"`
 	
-		if /bin/echo "$PARAM"| /bin/grep -Pqr "ip(v?)6" && /bin/grep -qPr "options\s+ipv6\s+disable\=1" /etc/modprobe.d; then
-			return 0
-		fi
-
 		[ -f /etc/sysctl.conf ] || return 1
 
 		if /bin/grep -q "${PARAM}" /etc/sysctl.conf; then
@@ -54,4 +50,5 @@ set_sysctl_param() {
 
 	. $(dirname $0)/set_general_entry
 	safe_add_field "($PARAM\s+=\s+).*" "$DESIRED" /etc/sysctl.conf
+	sysctl -e -q -p
 }

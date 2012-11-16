@@ -18,3 +18,4 @@ set -e
 [ -f /etc/init.d/autofs  ] || exit 0
 
 /sbin/chkconfig --level 0123456 autofs off
+/sbin/service autofs stop

@@ -18,3 +18,4 @@ set -e
 [ -f /etc/init.d/abrtd  ] || exit 0
 
 /sbin/chkconfig --level 0123456 abrtd off
+/sbin/service abrtd stop

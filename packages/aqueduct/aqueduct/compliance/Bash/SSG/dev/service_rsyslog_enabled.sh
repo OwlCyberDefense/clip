@@ -18,3 +18,4 @@ set -e
 [ -f /etc/init.d/rsyslog  ] || exit 1
 
 /sbin/chkconfig --level 0123456 rsyslog on
+/sbin/service rsyslog start
