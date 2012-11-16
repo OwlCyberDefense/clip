@@ -19,7 +19,7 @@ index eb4d349..d16fb3d 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_kernel_exec_shield_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/kernel/</unix:path>
++   <unix:path operation="equals">/proc/sys/kernel</unix:path>
 +   <unix:filename operation="pattern match">exec-shield</unix:filename>
 +  </unix:file_object>
 +  
@@ -47,7 +47,7 @@ index 24dfe55..ff41109 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_kernel_randomize_va_space_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/kernel/</unix:path>
++   <unix:path operation="equals">/proc/sys/kernel</unix:path>
 +   <unix:filename operation="pattern match">randomize_va_space</unix:filename>
 +  </unix:file_object>
 +  
@@ -75,7 +75,7 @@ index a975c3f..c9f4755 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_conf_all_accept_redirects_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all</unix:path>
 +   <unix:filename operation="pattern match">accept_redirects</unix:filename>
 +  </unix:file_object>
 +  
@@ -103,7 +103,7 @@ index 6c88e98..d27dae7 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_conf_all_accept_source_route_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all</unix:path>
 +   <unix:filename operation="pattern match">accept_source_route</unix:filename>
 +  </unix:file_object>
 +  
@@ -131,7 +131,7 @@ index 460d1d6..ce7fb52 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_conf_all_log_martians_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all</unix:path>
 +   <unix:filename operation="pattern match">log_martians</unix:filename>
 +  </unix:file_object>
 +  
@@ -159,7 +159,7 @@ index 4ca98cc..889eabd 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_conf_all_rp_filter_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all</unix:path>
 +   <unix:filename operation="pattern match">rp_filter</unix:filename>
 +  </unix:file_object>
 +  
@@ -187,7 +187,7 @@ index a9ff005..1c51d91 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_conf_all_secure_redirects_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all</unix:path>
 +   <unix:filename operation="pattern match">secure_redirects</unix:filename>
 +  </unix:file_object>
 +  
@@ -215,7 +215,7 @@ index 7a21347..b67dc15 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_conf_all_send_redirects_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4/conf/all</unix:path>
 +   <unix:filename operation="pattern match">send_redirects</unix:filename>
 +  </unix:file_object>
 +  
@@ -243,7 +243,7 @@ index dc64174..cd1579c 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_conf_default_accept_redirects_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/conf/default/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4/conf/default</unix:path>
 +   <unix:filename operation="pattern match">accept_redirects</unix:filename>
 +  </unix:file_object>
 +  
@@ -271,7 +271,7 @@ index 3f54b26..710db8b 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_conf_default_accept_source_route_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/conf/default/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4/conf/default</unix:path>
 +   <unix:filename operation="pattern match">accept_source_route</unix:filename>
 +  </unix:file_object>
 +  
@@ -299,7 +299,7 @@ index 9fdd884..cde8a2a 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_conf_default_rp_filter_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/conf/default/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4/conf/default</unix:path>
 +   <unix:filename operation="pattern match">rp_filter</unix:filename>
 +  </unix:file_object>
 +  
@@ -327,7 +327,7 @@ index 7b54d5e..84ccfc2 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_conf_default_secure_redirects_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/conf/default/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4/conf/default</unix:path>
 +   <unix:filename operation="pattern match">secure_redirects</unix:filename>
 +  </unix:file_object>
 +  
@@ -355,7 +355,7 @@ index c2db75b..b5befb8 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_conf_default_send_redirects_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/conf/default/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4/conf/default</unix:path>
 +   <unix:filename operation="pattern match">send_redirects</unix:filename>
 +  </unix:file_object>
 +  
@@ -383,7 +383,7 @@ index c34f6e2..9cff31d 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_icmp_echo_ignore_broadcasts_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4</unix:path>
 +   <unix:filename operation="pattern match">icmp_echo_ignore_broadcasts</unix:filename>
 +  </unix:file_object>
 +  
@@ -411,7 +411,7 @@ index 87c7d45..0f4e6c0 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_icmp_ignore_bogus_error_responses_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4</unix:path>
 +   <unix:filename operation="pattern match">icmp_ignore_bogus_error_responses</unix:filename>
 +  </unix:file_object>
 +  
@@ -439,7 +439,7 @@ index 96f0948..007cb47 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_ip_forward_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4</unix:path>
 +   <unix:filename operation="pattern match">ip_forward</unix:filename>
 +  </unix:file_object>
 +  
@@ -467,7 +467,7 @@ index 78f7c2d..ae0a5b6 100644
 +  </unix:file_test>
 +  
 +  <unix:file_object comment="look for kernel module in /proc/sys" id="object_sysctl_net_ipv4_tcp_syncookies_exists" version="1">
-+   <unix:path operation="equals">/proc/sys/net/ipv4/</unix:path>
++   <unix:path operation="equals">/proc/sys/net/ipv4</unix:path>
 +   <unix:filename operation="pattern match">tcp_syncookies</unix:filename>
 +  </unix:file_object>
 +  
