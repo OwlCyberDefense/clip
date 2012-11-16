@@ -294,6 +294,7 @@ cd /root
 echo "About to use secstate to do a pre-remediation audit using SSG content..."
 secstate audit 
 
+setsebool secstate_enable_remediation 1
 if [ x"$CONFIG_BUILD_SECSTATE_REMEDIATE" == "xy" ]; then
 	# Remediate w/ secstate using aqueduct content
 	secstate remediate -y --verbose
