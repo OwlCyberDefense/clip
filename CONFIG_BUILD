@@ -14,16 +14,19 @@ PACKAGES := aqueduct scap-security-guide secstate clip-selinux-policy openscap
 # to CONFIG_REPOS.
 # PRE_ROLLED_PACKAGES := "/home/joeuser/lha-1.14i-19.2.2.el6.rf.x86_64.rpm"
 
+# This is a list of kickstarts that can be used to generate systems.  Each name here must have a matching directory
+# in kickstarts/<name>.  That directory must contain a Makefile (see kickstarts/clip-rhel6/Makefile) and a <name.ks>.
+# The idea here is that you can generate multiple system variants all from one the CLIP build environment.  E.g.
+# you could generate chat-server and jboss-server from this build environment sharing everything expect the kickstart.
+SYSTEMS := clip-rhel6
 
 # The ISO_VERSION field doesn't alter functionality at all.  The variable name and value will appear in /root/clip-info.txt.
 # This provides a way to figure out what version of your repo was used to generate the ISO once it is installed.  E.g. 
 #   Tester: "My install is busted."
 #   Developer: "What version do you have installed?"
-#   Tester: "I don't know.  How do figure that out?"
+#   Tester: "I don't know.  How do I figure that out?"
 #   Developer: "Run '# cat /root/clip-info.txt' and send me the output."
-#   Tester: "Will do!  Thanks Developer!"
-#   Developer: "No, thank you Tester!"
-ISO_VERSION := $(strip $(shell test -d .git && git log -1|head -1|awk '{ print $$2; }'))
+ISO_VERSION := $(strip $(shell test -d .git && git log -1|head -1|awk '{ print substr ($$2, 0, 7); }'))
 ifeq ($(strip $(ISO_VERSION)),)
   ISO_VERSION := 0.1
 endif
@@ -51,9 +54,9 @@ endif
 
 # If you want to override individual debug flags you can do it here.  Don't forget that setting the flags here overrides 
 # the values controlled by CONFIG_BUILD_PRODUCTION above.
-CONFIG_BUILD_UNCONFINED_TOOR := y
-CONFIG_BUILD_SECSTATE_REMEDIATE := y
-CONFIG_BUILD_ENFORCING_MODE := y
+#CONFIG_BUILD_UNCONFINED_TOOR := y
+#CONFIG_BUILD_SECSTATE_REMEDIATE := n
+#CONFIG_BUILD_ENFORCING_MODE := y
 
 ################################################
 ### STOP USER CONFIG 

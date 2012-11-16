@@ -33,11 +33,6 @@ export OUTPUT_DIR ?= $(ROOT_DIR)
 export RPM_TMPDIR ?= $(ROOT_DIR)/tmp
 export CONF_DIR ?= $(ROOT_DIR)/conf
 
-BUILD_DATE := $(shell date +%m-%d-%y)
-
-# This the system image type.  This should be a valid directory in kickstart/$(SYSTEM)
-SYSTEM := clip-rhel$(RHEL_VER)
-
 # Config deps
 CONFIG_BUILD_DEPS = $(ROOT_DIR)/CONFIG_BUILD $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
 
@@ -121,10 +116,10 @@ endif
 MKDIR = $(VERBOSE)test -d $(1) || mkdir -p $(1)
 
 # These are targets supported by the kickstart/Makefile that will be used to generate LiveCD images.
-LIVECDS := $(addsuffix -livecd,$(SYSTEM))
+LIVECDS := $(foreach SYSTEM,$(SYSTEMS),$(addsuffix -live-iso,$(SYSTEM)))
 
 # These are targets supported by the kickstart/Makefile that will be used to generate installation ISOs.
-INSTISOS := $(addsuffix -installation-iso,$(SYSTEM))
+INSTISOS := $(foreach SYSTEM,$(SYSTEMS),$(addsuffix -iso,$(SYSTEM)))
 
 # Add a file to a repo by either downloading it (if http/ftp), or symlinking if local.
 # TODO: add support for wget (problem with code below, running echo/GREP for each file instead of once for the whole repo
@@ -150,8 +145,6 @@ endef
 ######################################################
 # BEGIN RPM GENERATION RULES (BEWARE OF DRAGONS)
 # This define directive is used to generate build rules.
-# This is an unfortunate consequence of not being able to do complex
-# target name->dependency name munging, eg not being able to convert foo.<random arch>.rpm into foo.src.rpm.
 define RPM_RULE_template
 $(info Generating rules for rolling package $(1).)
 $(1): $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
@@ -329,7 +322,7 @@ echo "Press enter to continue anyway or ctrl-c to exit."; read; fi
 
 $(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(call CHECK_DEPS)
-	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-installation-iso/\1/'`" installation-iso
+	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-iso/\1/'`" iso
 
 $(MOCK_CONF_DIR)/$(MOCK_REL).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl $(CONF_DIR)/pkglist.blacklist
 	$(call CHECK_DEPS)

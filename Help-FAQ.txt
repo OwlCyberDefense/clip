@@ -1,15 +1,44 @@
 CLIP for RHEL 6 Frequently Asked Questions
 
+0. I deployed my system and everything is broken.  HELP!
+   That isn't a question but OK.  
+
+   First, CLIP is very, very locked down.  This does not indicate breakage, 
+   rather a conscious decision to address security requirements first and 
+   foremost.  CLIP is not a general-purpose OS.  It is an base platform and 
+   build environment that provides a starting point for developing 
+   solutions that meet strict security requirements.  Red Hat Enterprise 
+   Linux is a general-purpose OS (and rightly so).  The security requirements 
+   of a general-purpose OS, such as using a "targeted" SELinux policy, do not 
+   mesh with the requirements that must be met by security solutions.
+
+   Second, we applied a least privilege model during development.  This means
+   that we exercised the core system functions and permitted access only when
+   absolutely necessary.  If you're doing something that isn't part of what
+   the CLIP team considers "core system" then that access isn't accounted for
+   in policy or remediation content.  
+
+   For example, we do not consider Apache to be part of the "core system."
+   Getting Apache up and running in CLIP will take a little bit of work.  
+   Another example is USB support.  The remediation content disables 
+   USB support.  This is aligned with the requirements and CLIP itself.
+   If you need USB support you're going to have to update the remediation
+   content.
+
+   A benefit to this model is that the developer is made aware of any
+   deviations from the requirements when it occurs, not during a certification
+   and accreditation process.
+
 1. How do I roll an installation ISO?
-   Run "make clip-rhel6-installation-iso"
+   Run "make clip-rhel6-iso"
 
 2. What other things can I make?
    Run "make help"
 
 3a. What is the default username and password for CLIP?
-    The username is "clipuser" and the password is "neutronbass".  You can 
+    The username is "toor" and the password is "neutronbass".  You can 
     change this in the %post of the kickstart
-    (./kickstarts/ciip-rhel6/clip-rhel6.ks).
+    (./kickstarts/clip-rhel6/clip-rhel6.ks).
 
 3b. What is the default bootloader password for GRUB?
     The default password for GRUB is "neutronbass".  You can change this in 
@@ -26,15 +55,6 @@ CLIP for RHEL 6 Frequently Asked Questions
    # createrepo -d -g /opt/rhel-6-2-x86_64/rhel-x86_64-server-6/comps.xml /opt/rhel-6-2-x86_64/rhel-x86_64-server-6/getPackage
    # reposync --norepopath -m -p /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6 --repoid=rhel-x86_64-server-optional-6 -l
    # createrepo -d -g /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackages/repodata/comps.xml /opt/rhel-6-2-x86_64/rhel-x86_64-server-optional-6/getPackage
-
-   To mirror EPEL you will need to ensure the system performing the mirroring
-   is already capable of pulling from EPEL. Refer to this page for help with
-   that:
-        http://fedoraproject.org/wiki/EPEL/FAQ#How_can_I_install_the_packages_from_the_EPEL_software_repository.3F
-   Once that is complete you can mirror EPEL.  This is how we do it:
-
-   # reposync --norepopath -m -p /opt/epel-6/ --repoid=epel  -l
-   # createrepo -d -g /opt/epel-6/comps.xml /opt/epel-6/
 
 5. Why do I get prompted for so many passwords the first time I login?
    The default user's password is immediately expired when the account is 
@@ -163,21 +183,20 @@ CLIP for RHEL 6 Frequently Asked Questions
     It looks like a bug was introduced in:
        policycoreutils-python-2.0.83-19.21.el6_2.x86_64.rpm
 
-    Please use:
+    It works in version:
        policycoreutils-python-2.0.83-19.18.el6_2.x86_64.rpm
 
-    You can force this to be used by modifying conf/pkglist.<repo name>,
-    switch *all* policycoreutils-* packages to release .18 instead of .21,
-    and running "make bare-repos setup-<repo name><ver>-repo".
-
+    This bug led to the introduction of a conf/pkglist.blacklist file.  Adding
+    packages to that file will prevent them from being using when generating
+    yum repos.  We've already added the problematic packages above to that
+    list.
+    
     A bug has already been filed with Red Hat.  When this issue is resolved
     the FAQ will be updated.
 
 15. How do I get the dependencies for the host?
   RHEL:
        sudo rhn-channel --add --channel=rhel-x86_64-server-optional-6.2.z
-       sudo rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-7.noarch.rpm
        sudo yum install rpm-build mock createrepo repoview
   CentOS:
-       sudo rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-7.noarch.rpm
        sudo yum install rpm-build mock createrepo repoview

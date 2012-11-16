@@ -1,18 +1,15 @@
 Here is a quick list of the things you need to do to get started.
 
-0. If you're using RHEL you need to subscribe you system to the "Optional"
+1. If you're using RHEL you need to subscribe you system to the "Optional"
 software channel (if you're using CentOS for your build host you can ignore
 this step):
 "sudo rhn-channel --add --channel=rhel-x86_64-server-optional-6.2.z"
 
-1. Add the EPEL yum repo:
-"sudo rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-7.noarch.rpm"
-
 2. Install the necessary packages via yum:
 "sudo yum install rpm-build mock createrepo repoview" 
 
-3. Modify CONFIG_REPOS to point to your *local* RHEL, Opt, or CentOS, and EPEL 
-repos.  Refer to Help-FAQ.txt for help setting up local yum repos.
+3. Modify CONFIG_REPOS to point to your *local* RHEL, Opt, or CentOS repos.  
+Refer to Help-FAQ.txt for help setting up local yum repos.
 
 3. Add your user to /etc/sudoers (required since mock and livecd creator use
 chroots)
@@ -28,7 +25,7 @@ default password!  It is "neutronbass".  DO NOT LEAVE THIS PASSWORD LINE INTACT!
 
 8. Go back and re-read #7.
 
-9. Roll an ISO by running "$ make clip-rhel6-installation-iso".
+9. Roll an ISO by running "$ make clip-rhel6-iso".
 Note: for a complete list of targets available please run "$ make help".
 
 After you have successfully rolled an installation ISO it is time to move on
