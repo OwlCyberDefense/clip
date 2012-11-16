@@ -642,7 +642,7 @@ freetype-2.3.11-6.el6_2.9.i686.rpm
 freetype-2.3.11-6.el6_2.9.x86_64.rpm
 freetype-devel-2.3.11-6.el6_2.9.i686.rpm
 freetype-devel-2.3.11-6.el6_2.9.x86_64.rpm
-ftp-0.17-51.1.el6_2.1.x86_64.rpm
+ftp-0.17-51.1.el6.x86_64.rpm
 fuse-2.8.3-4.el6.x86_64.rpm
 fuse-devel-2.8.3-4.el6.i686.rpm
 fuse-devel-2.8.3-4.el6.x86_64.rpm
@@ -676,12 +676,12 @@ gdb-7.2-56.el6.x86_64.rpm
 gdb-gdbserver-7.2-56.el6.x86_64.rpm
 gdbm-1.8.0-36.el6.i686.rpm
 gdbm-1.8.0-36.el6.x86_64.rpm
-gdm-2.30.4-33.el6_2.2.x86_64.rpm
-gdm-libs-2.30.4-33.el6_2.2.i686.rpm
-gdm-libs-2.30.4-33.el6_2.2.x86_64.rpm
-gdm-plugin-fingerprint-2.30.4-33.el6_2.2.x86_64.rpm
-gdm-plugin-smartcard-2.30.4-33.el6_2.2.x86_64.rpm
-gdm-user-switch-applet-2.30.4-33.el6_2.2.x86_64.rpm
+gdm-2.30.4-33.el6_2.x86_64.rpm
+gdm-libs-2.30.4-33.el6_2.i686.rpm
+gdm-libs-2.30.4-33.el6_2.x86_64.rpm
+gdm-plugin-fingerprint-2.30.4-33.el6_2.x86_64.rpm
+gdm-plugin-smartcard-2.30.4-33.el6_2.x86_64.rpm
+gdm-user-switch-applet-2.30.4-33.el6_2.x86_64.rpm
 gedit-2.28.4-3.el6.x86_64.rpm
 gedit-plugins-2.28.0-2.el6.x86_64.rpm
 gegl-0.1.2-3.el6.x86_64.rpm
