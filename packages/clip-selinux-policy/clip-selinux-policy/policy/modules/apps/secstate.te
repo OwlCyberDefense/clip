@@ -85,6 +85,7 @@ tunable_policy(`secstate_enable_remediation',`
 	kernel_rw_all_sysctls(secstate_t)
 	corecmd_exec_shell(secstate_t)
 	libs_exec_ldconfig(secstate_t)
+	domain_read_all_domains_state(secstate_t)
 ')
 
 optional_policy(`
