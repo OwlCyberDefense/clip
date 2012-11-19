@@ -24,9 +24,43 @@ useradd to work correctly.  We suggest the following workflow:
   solutions. While the system works for RHEL 5, we are having issues with
   dracut in RHEL 6.  As a result, LiveCDs don't work out of the box.  We're
   open to patches from the community to fix this issue :)
-	
+
+- There are multiple probes which appear to be working improperly.  The
+  specified requirement appears to be met, yet the OVAL check fails. We
+suspect that the following items are false negatives, due to faulty probes. We
+will follow up with the openscap community and get these items resolved for
+future versions.
+	- disable_sysctl_ipv4_default_send_redirects
+	- disable_sysctl_ipv4_ip_forward
+	- set_sysctl_net_ipv4_conf_all_accept_source_route
+	- set_sysctl_net_ipv4_conf_all_accept_redirects
+	- set_sysctl_net_ipv4_conf_all_secure_redirects
+	- set_sysctl_net_ipv4_conf_all_log_martians
+	- set_sysctl_net_ipv4_conf_default_accept_source_route
+	- set_sysctl_net_ipv4_conf_default_accept_redirects
+	- set_sysctl_net_ipv4_conf_default_secure_redirects
+	- set_sysctl_net_ipv4_icmp_echo_ignore_broadcasts
+	- set_sysctl_net_ipv4_icmp_ignore_bogus_error_responses
+	- set_sysctl_net_ipv4_tcp_syncookies
+	- set_sysctl_net_ipv4_conf_all_rp_filter
+	- set_sysctl_net_ipv4_conf_default_rp_filter
+	- enable_randomize_va_space
+	- set_password_hashing_algorithm
+	- bootloader_auditd_argument
+	- set_system_login_banner
+	- audit_mac_changes
+	- bootloader_nousb_argument
+	- mount_option_tmp_nodev
+	- mount_option_tmp_noexec
+	- mount_option_tmp_nosuid
+	- mount_option_dev_shm_nodev
+	- mount_option_dev_shm_noexec
+	- mount_option_dev_shm_nosuid
+	- iptables_smtp_enabled
+	- enable_execshield
+
 - We have made minor updates to the oss.tresys.com/projects/clip website.
-  More changes are necessary but are not considered a blocker for release. 
+  More changes are necessary but are not considered a blocker for release.
 =============================================================================
 
 =============================================================================
