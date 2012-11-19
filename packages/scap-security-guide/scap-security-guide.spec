@@ -15,6 +15,7 @@ Patch2:		postfix-package-dependency-checking.patch
 Patch3:		httpd-dependency-checking.patch
 Patch4:		sysctl-module-dependency-checking.patch
 Patch5:		add-dcid-profile.patch
+Patch6:		add-manual-profile.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 
@@ -45,6 +46,7 @@ involved in the SCAP Security Guide community.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 #configure
