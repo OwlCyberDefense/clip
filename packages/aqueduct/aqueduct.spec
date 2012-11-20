@@ -16,7 +16,7 @@
 #Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #Boston, MA  02110-1301, USA.
 
-Name: %{pkgname}
+Name: aqueduct
 Version: %{version}
 Release: %{release}
 Summary:	BASH scripts from the Aqueduct Project (https:/fedorahosted.org/aqueduct) that are meant to assist in the securing of a RHEL server.
