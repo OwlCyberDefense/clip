@@ -69,7 +69,6 @@ $(SRPM_OUTPUT_DIR)/$(SRPM): $(RPM_DEPS)
 		$(call rpm-prep)\
 		cp  $(SRPM) $(SRPM_OUTPUT_DIR) 2>&1 1>/dev/null;\
 	fi
-	$(VERBOSE)cp $(PKGNAME).spec $(RPM_TOPDIR)/SPECS/
 
 clean:
 	$(RM) -r $(RPM_TMPDIR)
