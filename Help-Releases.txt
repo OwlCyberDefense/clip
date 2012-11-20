@@ -2,18 +2,12 @@ This document describes the steps taken to create release of the CLIP, or CLIP-b
 
 Steps for release:
 0. Enter the clip/ directory.
-1. Update the VERSION and RELEASE fields in the CONFIG_BUILD file.
-2. $ git commit CONFIG_BUILD
-3. $ git push
-4. $ git tag -a "<COMMENT ABOUT TAG USUALLY REFERENCING VERSION/RELEASE/PURPOSE>"
-5. $ git push --tags
-6. All releases must be built from a clean checkout.  Do a clean "$ git clone".
-7. It is possible that someone committed after your tag so ensure you are at
+1. $ git tag -a "<Tag name usually referencing build/release/purpose>" <committish>
+2. $ git push --tags
+3. All releases must be built from a clean checkout.  Do a clean "$ git clone".
+4. It is possible that someone committed after your tag so ensure you are at
 your tag by using "$ git checkout <tagname>".
-8. Top level "$ make <ISO>-iso". [1]
-9. Upload the release to your standard location used for hosting releases.
-10. Notify the appropriate parties, e.g. the entire team, of the release.
+5. Top level "$ make <ISO>-iso". [1]
+6. Upload the release to your standard location used for hosting releases.
+7. Notify the appropriate parties, e.g. the entire team, of the release.
 
-[1] Please see "$ make help" for a complete list of targets.  Two examples:
-"$ make clip-rhel6-iso" <= generate an installable ISO image.
-"$ make secstate-rpm" <= generate only single RPM.
