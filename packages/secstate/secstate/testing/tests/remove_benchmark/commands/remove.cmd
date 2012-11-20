@@ -1,1 +1,0 @@
-secstate remove PassComp

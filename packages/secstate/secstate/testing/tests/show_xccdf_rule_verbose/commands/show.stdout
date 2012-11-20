@@ -1,7 +1,0 @@
-PassComp-R-2-2:
-	Title:  'Min. Length'
-	Description:  Password has a minimum length.
-	Selected:  True
-	Member of PassComp-G-2-3
-	Referenced Definitions:
-		oval:com.tresys.oval.rhel:def:1001

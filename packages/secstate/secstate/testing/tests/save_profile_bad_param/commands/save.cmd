@@ -1,1 +1,0 @@
-secstate save badName myProfile

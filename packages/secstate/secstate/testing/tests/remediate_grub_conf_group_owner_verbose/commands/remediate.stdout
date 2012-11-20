@@ -1,8 +1,0 @@
-####################/root/group_owner_grub_conf.sh####################
-executed "/bin/bash /root/group_owner_grub_conf.sh"
-environment: {}
-returned: 0
------------------- output: ------------------
-####################end /root/group_owner_grub_conf.sh################
-
-
