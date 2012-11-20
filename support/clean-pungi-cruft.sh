@@ -6,5 +6,5 @@ read
 
 pushd . 1>/dev/null
 cd /tmp;
-rm -rf keepfile* modinfo* instimage* keymaps* makeboot* yumcache*
+rm -rf keepfile* modinfo* instimage* keymaps* makeboot* yumcache* yumdir* buildinstall*
 popd 1>/dev/null
