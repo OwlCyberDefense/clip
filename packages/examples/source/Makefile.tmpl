@@ -68,6 +68,8 @@ $(PKGNAME)-rpm: $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
 
 $(PKGNAME)-srpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 
+# Note: if you're carrying a tarball already (e.g., you are using an officially released tarball), just copy it from here to $(TARBALL)
+#      	Something like this should work: "cp $@ $(RPM_TOPDIR)/SOURCES/"
 $(TARBALL): $(TAR_DEPS)
 	@echo "Building $(PKGNAME) source tarball..."
 	tar -czf $@ $(PKGNAME)/

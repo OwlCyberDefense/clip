@@ -11,7 +11,7 @@ BuildRequires: make, bash
 BuildRoot: %{_tmppath}/%{name}-root
 
 Source0: %{pkgname}-%{version}.tgz
-Patch0: %(pkgname}.patch
+#Patch0: %(pkgname}.patch
 
 
 %description
@@ -19,7 +19,7 @@ This package contains the example daemon.
 
 %prep
 %setup -q -n %{pkgname}-%{version}
-%patch0 -p1
+#%patch0 -p1
 
 %build
 %configure
