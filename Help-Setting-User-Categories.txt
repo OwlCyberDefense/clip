@@ -1,0 +1,13 @@
+After the clip installation completes, you will want to set the SELinux
+categories for toor.  This can be accomplished by running the
+following commands in order:
+
+# sudo -s
+# setenforce 0
+# semanage user -m -L s0 -r s0-s0:c0.c1023 toor_u
+# semanage login -m -s toor_u -r s0-s0:c0.c1023 toor
+# exit
+# exit
+
+After logging back in, running 'id -Z' should produce following the output:
+# toor_u:staff_r:staff_t:s0-s0:c0.c1023
