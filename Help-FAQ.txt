@@ -92,19 +92,37 @@ CLIP for RHEL 6 Frequently Asked Questions
    password.  The fourth command causes the password to immediately expire 
    thus forcing the user to set a new password on their first login.
 
-7. How do I become a privileged user?
+7. How do I add categories to a user?
+
+   After the clip installation completes, you will want to set the SELinux
+   categories for privileged users.  This can be accomplished by running the
+   following commands in order:
+   
+   # export username=`whoami`
+   # sudo -Es
+   # setenforce 0
+   # semanage user -m -L s0 -r s0-s0:c0.c1023 ${username}_u
+   # semanage login -m -s ${username}_u -r s0-s0:c0.c1023 ${username}
+   # exit
+   # exit
+
+   After logging back in, running 'id -Z' should produce following the output:
+   
+   # <username>_u:staff_r:staff_t:s0-s0:c0.c1023
+
+8. How do I become a privileged user?
    Use "sudo -s".  Make the user has a line in sudoers like this:
     echo "<USERNAME>        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
    Note: You will have to adjust the ROLE and TYPE fields as appropriate. For
          example, ROLE=auditadm_r TYPE=auditadm_t. 
 
-8. Why am I getting "permission denied" when adding a user?
+9. Why am I getting "permission denied" when adding a user?
    You probably removed user_u from your SELinux policy.  Due to a bug in
    useradd this SELinux user *must* be present.  CLIP uses SELinux constraints 
    to strip all access from that user ID so leaving it present isn't a real
    issue.
 
-9. An EXCEPTION was thrown during the build.  What do I do?
+10. An EXCEPTION was thrown during the build.  What do I do?
    The likely culprit is an RPM that failed to roll properly. Open 
    ./repos/my-repo/build.log.  A good option for debugging the issue
    is to roll the RPM outside of mock.  Go into packages/<PACKAGENAME>
@@ -113,7 +131,7 @@ CLIP for RHEL 6 Frequently Asked Questions
    build occurred.  You can now poke around in this directory to see what 
    went wrong.
 
-10. Why do I have to have local yum repos?
+11. Why do I have to have local yum repos?
     One of the reasons we wrote this new build and integration system is to
     ensure consistency across builds.  That is, we wanted to ensure that an ISO
     generated in 2012 could be re-generated in 2014 without any functional
@@ -131,13 +149,13 @@ CLIP for RHEL 6 Frequently Asked Questions
     community that implement support for remote repos but do so in a way to still
     meets the goal of reproducable builds.
 
-11. Why do I see a series of question marks in the output of "ls -l"?
+12. Why do I see a series of question marks in the output of "ls -l"?
     This is SELinux enforcing a mandatory access control security policy that
     prevents a given subject (eg sysadm) from querying the security attributes of
     a file or directory.  Assuming you have search and read permissions on the
     directory you will be able to view the filename, but that is it.
 
-12. I get setfiles errors running semodule and/or semanage.  What is going on here?
+13. I get setfiles errors running semodule and/or semanage.  What is going on here?
     The likely culprit is libsemanage being configured to validate fc entries
     prior to rolling a transaction forward.  The following is the error
     message emitted when this occurs:
@@ -153,7 +171,7 @@ CLIP for RHEL 6 Frequently Asked Questions
     Note: I would recommend doing this only when doing development.  Errors
     like this are a sign of a policy problem that needs to be fixed.
 
-13. What are some workflows I can use to source control my changes to CLIP and
+14. What are some workflows I can use to source control my changes to CLIP and
     keep in sync with updates?
     You have several options here.  One option is to do your work in a branch in
     a checkout of the CLIP git repo.  Then when a new CLIP release is made, or you
@@ -184,7 +202,7 @@ CLIP for RHEL 6 Frequently Asked Questions
     RPM or yum repo.  In that way you can use your existing build system/SCM to
     generate the package(s).
 
-14. I get errors when running semanage to manipulate users and login mappings.
+15. I get errors when running semanage to manipulate users and login mappings.
     What is the deal?
     The following error message is emitted when running:
     # semanage login -a -s foo_u foo
@@ -205,7 +223,7 @@ CLIP for RHEL 6 Frequently Asked Questions
     A bug has already been filed with Red Hat.  When this issue is resolved
     the FAQ will be updated.
 
-15. How do I get the dependencies for the host?
+16. How do I get the dependencies for the host?
   RHEL:
        sudo rhn-channel --add --channel=rhel-x86_64-server-optional-6.2.z
        sudo yum install rpm-build mock createrepo repoview
