@@ -214,10 +214,11 @@ yum
 
 %end
 
-%post 
-# Anaconda's fails at the stdout redirections so let's do it on our own.
-exec 1> /root/clip_post_install.log
-exec 2> /root/clip_post_install.log
+%post --interpreter=/bin/bash
+exec >/root/clip_post_install.log 2>&1
+# Print the log to tty7 so that the user know what's going on
+tail -f /root/clip_post_install.log >/dev/tty7 &
+chvt 7
 # DO NOT REMOVE THE FOLLOWING LINE. NON-EXISTENT WARRANTY VOID IF REMOVED.
 #CONFIG-BUILD-PLACEHOLDER
 export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
@@ -317,13 +318,15 @@ if [ x"$CONFIG_BUILD_PRODUCTION" != "xy" ]; then
 	# Actually rather benign but may impact developers using grubby who think there is only one kernel to work with.
 	title="$(sed 's/ release.*$//' < /etc/redhat-release) ($(uname -r))"
 	sed -i -e "s;title.*;title $title;" /boot/grub/grub.conf
-	plymouth-set-default-theme details --rebuild-initrd
+    echo "Modifying splash screen with plymouth..."
+	plymouth-set-default-theme details --rebuild-initrd &> /dev/null
 fi
 
 # Set permissive mode
 export POLNAME=`sestatus |awk '/Policy from config file:/ { print $5; }'`
 if [ x"$CONFIG_BUILD_ENFORCING_MODE" != "xy" ]; then
-        echo -e "#THIS IS A DEBUG BUILD HENCE SELINUX IS IN PERMISSIVE MODE\nSELINUX=permissive\nSELINUXTYPE=$POLNAME\n" > /etc/selinux/config
+    echo "Setting permissive mode..."
+    echo -e "#THIS IS A DEBUG BUILD HENCE SELINUX IS IN PERMISSIVE MODE\nSELINUX=permissive\nSELINUXTYPE=$POLNAME\n" > /etc/selinux/config
 	echo "WARNING: This is a debug build in permissive mode.  DO NOT USE IN PRODUCTION!" >> /etc/motd
 	# This line is used to make policy development easier.  It disables the "setfiles" check used by 
 	# semodule/semanage that prevents transactions containing invalid and dupe fc entries from rolling forward.
@@ -332,6 +335,7 @@ if [ x"$CONFIG_BUILD_ENFORCING_MODE" != "xy" ]; then
 	grubby --update-kernel=ALL --args=enforcing=0
 fi
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
+echo "Done with post install scripts..."
 
 %end
 
