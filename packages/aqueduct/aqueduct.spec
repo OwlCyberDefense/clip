@@ -67,6 +67,17 @@ Summary: 	Compliance scripts for the SCAP SEcurity Guide
 %description SSG
 This package contains the bash compliance scripts for SSG compliance. 
 
+%package bash
+Group:		Application/SystemTools
+Summary:	Bash-related compliance scripts.
+%description bash
+This package contains the bash-related compliance scripts for all compliance packages.
+
+%package puppet
+Group:		Application/SystemTools
+Summary:	Puppet-related compliance scripts.
+%description puppet
+This package contains the puppet-related compliance scripts for all compliance packages.
 
 %prep
 %setup -q -n %{pkgname}
@@ -149,6 +160,34 @@ install -m 0755 -d $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools
 install -m 0750 -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/scripts compliance/Bash/SSG/dev/*
 install -m 0750 -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools compliance/Bash/SSG/tools/*
 
+# Files used in the aqueduct-puppet rpm.
+
+# To avoid syntactical confusion, `find -print` was employed when copying
+# puppet files and folders. `find -exec` proved to be a bit too messy.  The
+# following loops carry out the necessary string substitutions for setting up
+# target directories and then proceed to copy the appropriate files over.
+
+for dcid_folders in `find "compliance/Puppet/DCID-6-3-PL4-HIGH-HIGH" -path '*.svn*' -prune -o -type d -print`; do
+	install -m 0755 -d ${dcid_folders/compliance/$RPM_BUILD_ROOT\/usr\/libexec\/aqueduct};
+done
+
+for dcid_files in `find "compliance/Puppet/DCID-6-3-PL4-HIGH-HIGH" -type f`; do
+        file_name=`echo $dcid_files| grep -Po "\/[^\/]*$"`
+        folder_name=${dcid_files%${file_name}}
+        install -m 0750 -t ${folder_name/compliance/$RPM_BUILD_ROOT\/usr\/libexec\/aqueduct} $dcid_files;
+done
+
+for stig_folders in `find "compliance/Puppet/STIG" -path '*.svn*' -prune -o -type d -print`; do
+	install -m 0755 -d ${stig_folders/compliance/$RPM_BUILD_ROOT\/usr\/libexec\/aqueduct};
+done
+
+for stig_files in `find "compliance/Puppet/STIG" -type f`; do 
+	file_name=`echo $stig_files| grep -Po "\/[^\/]*$"`
+	folder_name=${stig_files%${file_name}}
+	install -m 0750 -t ${folder_name/compliance/$RPM_BUILD_ROOT\/usr\/libexec\/aqueduct} $stig_files;
+done
+
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -157,6 +196,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir /etc/aqueduct
 %dir /etc/aqueduct/profiles
 %dir /usr/libexec/aqueduct
+%dir /usr/libexec/aqueduct/Puppet
+
 %doc /usr/share/man/man1/aqueduct.1.gz
 /etc/aqueduct/aqueduct.conf
 /usr/bin/aqueduct
@@ -215,9 +256,53 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/aqueduct/SSG/scripts
 /usr/libexec/aqueduct/SSG/tools
 
+%files bash
+
+ #aqueduct-bash files copied from aqueduct-CIS
+%dir /etc/aqueduct/profiles/CIS
+%dir /etc/aqueduct/profiles/CIS/rhel-5
+/usr/libexec/aqueduct/CIS/rhel-5/scripts
+
+ #aqueduct-bash files copied from aqueduct-DISA
+%dir /etc/aqueduct/profiles/DISA
+%dir /etc/aqueduct/profiles/DISA/rhel-5-beta
+%dir /etc/aqueduct/profiles/DISA/firefox
+/etc/aqueduct/profiles/DISA/rhel-5-beta/default.profile
+/etc/aqueduct/profiles/DISA/firefox/default.profile
+/usr/libexec/aqueduct/DISA/rhel-5/scripts
+/usr/libexec/aqueduct/DISA/firefox/scripts
+
+ #aqueduct-bash files copied from aqueduct-DHS
+%dir /etc/aqueduct/profiles/DHS
+%dir /etc/aqueduct/profiles/DHS/rhel-6
+/usr/libexec/aqueduct/DHS/rhel-6/scripts/basic
+/usr/libexec/aqueduct/DHS/rhel-6/scripts/enhanced
+
+ #aqueduct-bash files copied from aqueduct-NISPOM
+%dir /etc/aqueduct/profiles/NISPOM
+%dir /etc/aqueduct/profiles/NISPOM/rhel-6
+/usr/libexec/aqueduct/NISPOM/rhel-6/scripts
+
+ #aqueduct-bash files copied from aqueduct-PCI
+%dir /etc/aqueduct/profiles/PCI
+%dir /etc/aqueduct/profiles/PCI/rhel-6
+/usr/libexec/aqueduct/PCI/rhel-6/scripts
+/usr/libexec/aqueduct/PCI/firefox/scripts
+
+ #aqueduct-bash files copied from aqueduct-SSG
+/usr/libexec/aqueduct/SSG/scripts
+/usr/libexec/aqueduct/SSG/tools
+
+%files puppet
+
+/usr/libexec/aqueduct/Puppet/DCID-6-3-PL4-HIGH-HIGH
+/usr/libexec/aqueduct/Puppet/STIG
+
 %post
 
 %changelog
+* Mon Nov 26 2012 Mike Palmiotto <mpalmiotto@tresys.com>
+- Added support for generation of separate aqueduct-bash and aqueduct-puppet packages.
 * Mon Sep 10 2012 Ted Brunell <tbrunell@redhat.com>
  - Fixed spec file to reflect recent changes in standard status
 * Fri Jul 13 2012 Mike Palmiotto <mpalmiotto@tresys.com>
