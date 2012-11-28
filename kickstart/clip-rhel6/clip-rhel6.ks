@@ -334,3 +334,15 @@ fi
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
 %end
+
+%post --nochroot
+
+# DO NOT REMOVE THE FOLLOWING LINE. NON-EXISTENT WARRANTY VOID IF REMOVED.
+#CONFIG-BUILD-PLACEHOLDER
+
+if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
+    echo "Deleting anaconda-ks.cfg as this is a production build" >> /mnt/sysimage/root/clip_post_install.log
+    rm /mnt/sysimage/root/anaconda-ks.cfg
+fi
+
+%end
