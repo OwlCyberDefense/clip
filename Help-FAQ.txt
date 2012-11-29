@@ -44,7 +44,7 @@ CLIP for RHEL 6 Frequently Asked Questions
     The default password for GRUB is "neutronbass".  You can change this in 
     the kickstart (./kickstarts/ciip-rhel6/clip-rhel6.ks).
 
-4. How do I clone yum repos?
+4. How do I set up local yum repos?
    Setup a machine that has all the appropriate yum repos in /etc/yum/repos.d.
    Ensure the yum-utils package is installed.  If it is a RHEL machine you must
    visit RHN and ensure the system is associated with the channel you wish to 
@@ -67,11 +67,21 @@ CLIP for RHEL 6 Frequently Asked Questions
    # reposync --norepopath -m -p /opt/epel-6/ --repoid=epel  -l
    # createrepo -d /opt/epel-6/
 
-5. Why do I get prompted for so many passwords the first time I login?
+5. An EXCEPTION was thrown during the build.  What do I do?
+   The likely culprit is an RPM that failed to roll properly. Open 
+   ./repos/my-repo/build.log.  A good option for debugging the issue
+   is to roll the RPM outside of mock.  Go into packages/<PACKAGENAME>
+   and run "make rpm".  It should fail to build again.  This time go into
+   ./tmp/src/redhat/BUILD/<PACKAGENAME>-<PACKAGEVERSION>.  This is where the 
+   build occurred.  You can now poke around in this directory to see what 
+   went wrong.
+
+
+6. Why do I get prompted for so many passwords the first time I login?
    The default user's password is immediately expired when the account is 
    created.  This means you have to login and choose a new password.
 
-6a. How do I add a user?
+7a. How do I add a user?
    Use these commands (change <USERNAME> to the appropriate username): 
      # semanage user -a -R staff_r -R sysadm_r <USERNAME>_u
      # useradd -Z <USERNAME>_u -m <USERNAME>
@@ -83,7 +93,7 @@ CLIP for RHEL 6 Frequently Asked Questions
          useradd where it doesn't honor login mappings when creating and
          populating user home directories.
 
-6b. Walk me through 6a again?
+7b. Walk me through 7a again?
    CLIP for RHEL 6 uses user-based access controls in SELinux.  The first 
    command, semanage, adds an SELinux user facilitating this separation and
    provides a set of roles that user is authorized to assume.  The second 
@@ -92,7 +102,7 @@ CLIP for RHEL 6 Frequently Asked Questions
    password.  The fourth command causes the password to immediately expire 
    thus forcing the user to set a new password on their first login.
 
-7. How do I add categories to a user?
+8. How do I add categories to a user?
 
    After the clip installation completes, you will want to set the SELinux
    categories for privileged users.  This can be accomplished by running the
@@ -110,26 +120,17 @@ CLIP for RHEL 6 Frequently Asked Questions
    
    # <username>_u:staff_r:staff_t:s0-s0:c0.c1023
 
-8. How do I become a privileged user?
+9. How do I become a privileged user?
    Use "sudo -s".  Make the user has a line in sudoers like this:
     echo "<USERNAME>        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
    Note: You will have to adjust the ROLE and TYPE fields as appropriate. For
          example, ROLE=auditadm_r TYPE=auditadm_t. 
 
-9. Why am I getting "permission denied" when adding a user?
+10. Why am I getting "permission denied" when adding a user?
    You probably removed user_u from your SELinux policy.  Due to a bug in
    useradd this SELinux user *must* be present.  CLIP uses SELinux constraints 
    to strip all access from that user ID so leaving it present isn't a real
    issue.
-
-10. An EXCEPTION was thrown during the build.  What do I do?
-   The likely culprit is an RPM that failed to roll properly. Open 
-   ./repos/my-repo/build.log.  A good option for debugging the issue
-   is to roll the RPM outside of mock.  Go into packages/<PACKAGENAME>
-   and run "make rpm".  It should fail to build again.  This time go into
-   ./tmp/src/redhat/BUILD/<PACKAGENAME>-<PACKAGEVERSION>.  This is where the 
-   build occurred.  You can now poke around in this directory to see what 
-   went wrong.
 
 11. Why do I have to have local yum repos?
     One of the reasons we wrote this new build and integration system is to
