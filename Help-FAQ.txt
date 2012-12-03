@@ -121,7 +121,7 @@ CLIP for RHEL 6 Frequently Asked Questions
    # <username>_u:staff_r:staff_t:s0-s0:c0.c1023
 
 9. How do I become a privileged user?
-   Use "sudo -s".  Make the user has a line in sudoers like this:
+   Use "sudo -s".  Make sure the user has a line in sudoers like this:
     echo "<USERNAME>        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
    Note: You will have to adjust the ROLE and TYPE fields as appropriate. For
          example, ROLE=auditadm_r TYPE=auditadm_t. 
