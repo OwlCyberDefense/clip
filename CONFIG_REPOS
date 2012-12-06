@@ -25,7 +25,7 @@
 
 # A RHEL/CentOS repo must be available. Must be a local path (we use NFS mounts).
 rhel = /mnt/repos-6-3/rhel-6-3-x86_64/rhel-x86_64-server-6/getPackage
-#centos = /mnt/centos-6.2-x86_64/Packages
+#centos = /mnt/centos-6.3-x86_64/Packages
 
 # NOTE: If using RHEL, *not CentOS*, you must provide the Optional repo. 
 # An RHEL Optional repo must be available. Must be a local path (we use NFS 

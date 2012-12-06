@@ -1,5 +1,6 @@
-If you are tracking an upstream repo via a git hash (ie you aren't tracking a
-release, rather a git revision) this is the general workflow:
+If you are tracking an upstream repo via a SVN revision 
+(ie you aren't tracking a release, rather a SVN revision). This is the 
+general workflow:
 
 1. Create a dir for the upstream.
 2. Go into that dir.

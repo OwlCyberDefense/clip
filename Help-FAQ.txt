@@ -226,7 +226,7 @@ CLIP for RHEL 6 Frequently Asked Questions
 
 16. How do I get the dependencies for the host?
   RHEL:
-       sudo rhn-channel --add --channel=rhel-x86_64-server-optional-6.2.z
+       sudo rhn-channel --add --channel=rhel-x86_64-server-optional-6.3.z
        sudo yum install rpm-build mock createrepo repoview
   CentOS:
        sudo yum install rpm-build mock createrepo repoview

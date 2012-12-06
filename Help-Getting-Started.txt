@@ -3,7 +3,7 @@ Here is a quick list of the things you need to do to get started.
 1. If you're using RHEL you need to subscribe you system to the "Optional"
 software channel (if you're using CentOS for your build host you can ignore
 this step):
-"sudo rhn-channel --add --channel=rhel-x86_64-server-optional-6.2.z"
+"sudo rhn-channel --add --channel=rhel-x86_64-server-optional-6.3.z"
 
 2. Install the necessary packages via yum:
 "sudo yum install rpm-build mock createrepo repoview" 
