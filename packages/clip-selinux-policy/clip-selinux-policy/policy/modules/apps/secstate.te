@@ -7,9 +7,7 @@ policy_module(secstate, 0.5.0)
 
 type secstate_t;
 type secstate_exec_t;
-domain_type(secstate_t)
 application_domain(secstate_t, secstate_exec_t)
-domain_entry_file(secstate_t, secstate_exec_t)
 role system_r types secstate_t;
 
 type secstate_var_t;
@@ -68,7 +66,7 @@ sysnet_read_config(secstate_t)
 #### DO THIS STUFF WHEN OSCAP PROBES ARE ENABLED 
 tunable_policy(`secstate_enable_oscap_probes',`
         oscap_probe_domtrans(secstate_t)
-	userdom_manage_user_home_content_files(secstate_t)
+        userdom_manage_user_home_content_files(secstate_t)
 ')
 #### STOP DOING THIS STUFF WHEN OSCAP PROBES ARE DISABLED 
 
@@ -79,6 +77,7 @@ tunable_policy(`secstate_enable_oscap_probes',`
 # You also cant put optional blocks in tunable blocks.
 # Bleh.
 tunable_policy(`secstate_enable_remediation',`
+    # We need to remove shadow_t, audit_t, and var_log_t access
 	files_manage_all_files(secstate_t)
 	dev_getattr_all_blk_files(secstate_t)
 	dev_getattr_all_chr_files(secstate_t)
@@ -93,6 +92,7 @@ optional_policy(`
 		rpm_exec(secstate_t)
 	')
 ')
+
 optional_policy(`
 	tunable_policy(`secstate_enable_remediation',`
 		gpg_domtrans(secstate_t)

@@ -131,6 +131,7 @@ interface(`oscap_probe_run',`
 ##	</summary>
 ## </param>
 #
+# TODO rename or remove
 interface(`oscap_role',`
 	gen_require(`
 		type oscap_t;
