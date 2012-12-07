@@ -44,28 +44,46 @@ CLIP for RHEL 6 Frequently Asked Questions
     The default password for GRUB is "neutronbass".  You can change this in 
     the kickstart (./kickstarts/ciip-rhel6/clip-rhel6.ks).
 
-4. How do I set up local yum repos?
-   Setup a machine that has all the appropriate yum repos in /etc/yum/repos.d.
-   Ensure the yum-utils package is installed.  If it is a RHEL machine you must
-   visit RHN and ensure the system is associated with the channel you wish to 
-   clone.  Now run these commands changing the paths and repoids as
-   appropriate.
+4a. How do I set up local yum repos?
+    Setup a machine that has all the appropriate yum repos in /etc/yum/repos.d.
+    Ensure the yum-utils package is installed.  If it is a RHEL machine you must
+    visit RHN and ensure the system is associated with the channel you wish to 
+    clone.  
 
-   # reposync --norepopath -m -p /opt/rhel-6-3-x86_64/rhel-x86_64-server-6 --repoid=rhel-x86_64-server-6.3.z -l
-   # reposync --norepopath -m -p /opt/rhel-6-3-x86_64/rhel-x86_64-server-optional-6 --repoid=rhel-x86_64-server-optional-6.3.z -l
+    Now run these commands changing the paths and repoids as appropriate to
+    synchronize the yum repositories locally.
 
-   You can then create the repos:
-   # createrepo -d /opt/rhel-6-3-x86_64/rhel-x86_64-server-6/getPackage
-   # createrepo -d /opt/rhel-6-3-x86_64/rhel-x86_64-server-optional-6/getPackage
+    # reposync --norepopath -m -p /opt/rhel-6-3-x86_64/rhel-x86_64-server-6 --repoid=rhel-x86_64-server-6.3.z -l
+    # reposync --norepopath -m -p /opt/rhel-6-3-x86_64/rhel-x86_64-server-optional-6 --repoid=rhel-x86_64-server-optional-6.3.z -l
 
-   To mirror EPEL you will need to ensure the system performing the mirroring
-   is already capable of pulling from EPEL. Refer to this page for help with
-   that:
+4b. What if I don't have access to a yum repo, but have a RHEL iso?
+    You can mount the iso and copy the packages by hand to the appropriate
+    directory. In order for the install to properly work, some RHEL optional 
+    packages are required by the build system. If you do not have access to RHN
+    then you will need to aquire a copy of the optional rpms that are relevant
+    for your version of RHEL.
+
+    # mkdir /mnt/rhel-iso
+    # mkdir /mnt/rhel-opt-iso
+    # mount -o loop <path-to-RHEL-iso> /mnt/rhel-iso
+    # mount -o loop <path-to-RHEL-opt-iso> /mnt/rhel-opt-iso
+    # cp /mnt/rhel-iso/Packages/* /opt/rhel-6-3-x86_64/rhel-x86_64-server6/getPackage/
+    # cp /mnt/rhel-opt-iso/Packages/* /opt/rhel-6-3-x86_64/rhel-x86_64-server-optional-6/getPackage/
+
+4c. How do I create the local yum repos?
+    You can then create the repos:
+    # createrepo -d /opt/rhel-6-3-x86_64/rhel-x86_64-server-6/getPackage
+    # createrepo -d /opt/rhel-6-3-x86_64/rhel-x86_64-server-optional-6/getPackage
+
+4d. How do I mirror EPEL?
+    To mirror EPEL you will need to ensure the system performing the mirroring
+    is already capable of pulling from EPEL. Refer to this page for help with
+    that:
         http://fedoraproject.org/wiki/EPEL/FAQ#How_can_I_install_the_packages_from_the_EPEL_software_repository.3F
-   Once that is complete you can mirror EPEL.  This is how we do it:
+    Once that is complete you can mirror EPEL.  This is how we do it:
 
-   # reposync --norepopath -m -p /opt/epel-6/ --repoid=epel  -l
-   # createrepo -d /opt/epel-6/
+    # reposync --norepopath -m -p /opt/epel-6/ --repoid=epel  -l
+    # createrepo -d /opt/epel-6/
 
 5. An EXCEPTION was thrown during the build.  What do I do?
    The likely culprit is an RPM that failed to roll properly. Open 
