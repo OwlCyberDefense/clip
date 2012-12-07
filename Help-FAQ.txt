@@ -85,6 +85,27 @@ CLIP for RHEL 6 Frequently Asked Questions
     # reposync --norepopath -m -p /opt/epel-6/ --repoid=epel  -l
     # createrepo -d /opt/epel-6/
 
+4e. I want to use CentOS instead of RHEL. What do I need to do?
+    CLIP officially supports RHEL.  That is what we test against. CentOS 
+    may work but there are known issues.  For example, you will get 
+    misleading results from interpreting SCAP content with SecState
+    since the SCAP content uses a <platform> tag to bind the checks
+    to RHEL-only.
+
+    If you are using CentOS here is what I recommend:
+
+    1. Mount a CentOS ISO. 
+    2. Copy the contents of Packages/* to a location you put in CONFIG_REPOS.
+    3. Repeat steps 1 & 2 for each ISO image (eg 2 for the DVD images).
+    4. Change into the directory you copied the packages to.
+    5. Run "createrepo -d ."
+    6. You are ready to roll your installable image.
+
+    Note: CentOS archives previous releases.  Currently Tresys is testing against
+    RHEL 6.2 (this may have changed though).  To get a specific archived ISO from
+    the CentOS mirrors use their "vault" sub-domain.  Eg:
+    - http://vault.centos.org/6.2/isos/x86_64/
+
 5. An EXCEPTION was thrown during the build.  What do I do?
    The likely culprit is an RPM that failed to roll properly. Open 
    ./repos/my-repo/build.log.  A good option for debugging the issue
