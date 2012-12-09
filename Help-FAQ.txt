@@ -58,17 +58,23 @@ CLIP for RHEL 6 Frequently Asked Questions
 
 4b. What if I don't have access to a yum repo, but have a RHEL iso?
     You can mount the iso and copy the packages by hand to the appropriate
-    directory. In order for the install to properly work, some RHEL optional 
-    packages are required by the build system. If you do not have access to RHN
-    then you will need to aquire a copy of the optional rpms that are relevant
-    for your version of RHEL.
+    directory. 
 
     # mkdir /mnt/rhel-iso
-    # mkdir /mnt/rhel-opt-iso
     # mount -o loop <path-to-RHEL-iso> /mnt/rhel-iso
-    # mount -o loop <path-to-RHEL-opt-iso> /mnt/rhel-opt-iso
     # cp /mnt/rhel-iso/Packages/* /opt/rhel-6-3-x86_64/rhel-x86_64-server6/getPackage/
-    # cp /mnt/rhel-opt-iso/Packages/* /opt/rhel-6-3-x86_64/rhel-x86_64-server-optional-6/getPackage/
+
+    In order for the install to properly work, some RHEL optional 
+    packages are required by the build system. If you do not have access to RHN
+    then you will need to aquire the following RPMs and copy them to
+    the local optional RHEL repo.
+   
+    List of RPMs:
+    openscap-content-0.8.0-2.el6.x86_64.rpm
+    libxslt-python-1.1.26-2.el6_3.1.x86_64.rpm
+    hunspell-en-0.20090216-7.1.el6.noarch.rpm
+
+    # cp <location-of-opt-rpms>/* /opt/rhel-6-3-x86_64/rhel-x86_64-server-optional-6/getPackage/
 
 4c. How do I create the local yum repos?
     You can then create the repos:
