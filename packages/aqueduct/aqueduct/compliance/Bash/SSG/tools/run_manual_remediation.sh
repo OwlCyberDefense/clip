@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 secstate remove RHEL-6
 secstate import /usr/local/scap-security-guide/RHEL6/output/ssg-rhel6-xccdf.xml --profile=manual
@@ -20,7 +20,7 @@ for items in $(secstate list -ar| grep "\[X\]Rule"); do
 	prompt=$(echo $items| awk '{$1=$2=$3=$4=$5=""; print $0}'| grep -Po "\'[^\']+\'")
 	
 	if [ -f $script ]; then
-		while true; do
+		while /bin/true; do
 			read -p "Do you want to ${prompt}?" yn
 			case $yn in
 				[Yy]* ) sh $script; break;;

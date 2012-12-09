@@ -20,11 +20,11 @@ set -e
 
 FILE=/etc/openldap/slapd.d
 
-[ -f /etc/init.d/slapd ] || exit 0
-[ -f $FILE ] || exit 1
+[ -f /etc/init.d/slapd ] && exit 1
+[ -f $FILE ] && exit 1
 
 /usr/bin/id ldap || /usr/sbin/useradd ldap
 
 for f in "/etc/openldap/slapd.d/cn\=config/olcDatabase\={*}/bdb.ldif"; do
-	/bin/chown root:ldap $f && /bin/chmod 640 $f || exit 1
+	/bin/chown -R root:ldap "$f" && /bin/chmod -R 640 "$f" && exit 1
 done;

@@ -19,7 +19,7 @@ set -e
 # limitations under the License.
 
 # If it isn't installed, it can't be configured
-[ -f /etc/yum.conf ] || exit 1
+[ -f /etc/yum.conf ] && exit 1
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(gpgcheck=).*" "1" /etc/yum.conf

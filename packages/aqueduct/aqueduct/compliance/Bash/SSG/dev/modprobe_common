@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_modprobe_entries() {
 # Adds an entry or uncomments the specified entry if it exists.
 # 
 #  arguments:
@@ -24,13 +23,12 @@ add_modprobe_entries() {
 #		does not exist, the file should be created with the entry as
 #		it's only contents.
 #
+add_modprobe_entries() {
 	entry=$1 FILE=$2
 	
 	. $(dirname $0)/set_general_entry
 	
-	if /bin/grep -r "$entry" /etc/modprobe.d; then
-		exit 0
-	fi
+	/bin/grep -qr "$entry" /etc/modprobe.d && return 0
 
 	if [ -f $FILE ]; then
 		safe_add_field "($entry)" "" $FILE

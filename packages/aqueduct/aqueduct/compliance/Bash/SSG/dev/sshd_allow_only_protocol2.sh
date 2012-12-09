@@ -22,7 +22,7 @@ FILE=/etc/ssh/sshd_config
 
 # If the file doesn't exist, it can't have the "Protocol 2" line.
 
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
 . $(dirname $0)/set_general_entry
 

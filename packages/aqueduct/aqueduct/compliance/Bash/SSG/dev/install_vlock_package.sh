@@ -18,7 +18,4 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/usr/bin/yum install -q -y vlock || exit 0
-
-/bin/echo "Use the vlock command whenever necessary, to prevent passersby from abusing your login."
-/bin/echo "The -a option can be used to prevent switching to other virtual consoles."
+/bin/rpm -qi vlock && /usr/bin/yum install -q -y vlock

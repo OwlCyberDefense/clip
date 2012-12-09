@@ -20,7 +20,7 @@ set -e
 
 FILES=/etc/httpd/conf/
 
-/sbin/service --status-all | /bin/grep httpd || exit 0
-[ -f $FILE ] || exit 1
+/sbin/service --status-all | /bin/grep httpd && exit 1
+[ -d $FILES ] && exit 1
 
-/bin/chmod -R 750 $FILE
+/bin/chmod -R 750 $FILES

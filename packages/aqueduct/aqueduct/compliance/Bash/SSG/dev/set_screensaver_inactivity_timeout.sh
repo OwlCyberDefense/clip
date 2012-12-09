@@ -21,10 +21,10 @@ set -e
 # set_screensaver_inactivity_timeout
 #
 
-[ -f $FILE ] || exit 0
+[ -f $FILE ] && exit 1
 
 /usr/bin/gconftool-2 \
 	 --direct \
 	 --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
    --type int \
-   --set /apps/gnome-screensaver/idle_delay 15 || exit 1
+   --set /apps/gnome-screensaver/idle_delay 15 && exit 1

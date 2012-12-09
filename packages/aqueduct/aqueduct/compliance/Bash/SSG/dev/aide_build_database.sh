@@ -18,6 +18,6 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/usr/sbin/aide --init || exit 1
+/usr/sbin/aide --init && exit 1
 
-/bin/cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz || exit 1
+/bin/cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz && exit 1

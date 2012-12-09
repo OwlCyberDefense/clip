@@ -21,7 +21,7 @@ set -e
 CONFIG=/etc/ssh/sshd_config
 
 # No sshd - exit
-[ -f $CONFIG ] || exit 0
+[ -f $CONFIG ] && exit 1
 
 # PermitUserEnvironment is no - exit
 . $(dirname $0)/set_general_entry

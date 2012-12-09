@@ -21,7 +21,7 @@ set -e
 CONFIG=/etc/ssh/sshd_config
 
 # No sshd - exit
-[ -f $CONFIG ] || exit 0
+[ -f $CONFIG ] && exit 1
 
 # Banner is set - exit
 /bin/grep -qi "^Banner" $CONFIG && exit 0

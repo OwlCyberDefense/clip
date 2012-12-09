@@ -15,7 +15,6 @@
 # # limitations under the License.
 # #
 
-function set_mount_opt {
 # Adds the specified mount option in fstab.
 #
 # arguments:
@@ -24,7 +23,8 @@ function set_mount_opt {
 #     LOC   - Location of the mounted device
 #     OPT   - Option to search for and set in /etc/fstab
 # 
-       	#DEV=$1 LOC=$2 OPT=$3
+# DEV=$1 LOC=$2 OPT=$3
+function set_mount_opt {
 	str=""
         str=$(/bin/awk -v STR=$str -v DEV=$1 -v LOC=$2 -v OPT=$3 '{
 		if ($1~DEV && $2==LOC && $4!~OPT)
@@ -35,7 +35,6 @@ function set_mount_opt {
 			print $0
 	}' /etc/fstab)
 	
-	
-	echo -e "$str" > /etc/fstab
-        return
+	echo -e "$str" > /etc/fstab || exit 1
+    return 0
 }

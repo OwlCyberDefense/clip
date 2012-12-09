@@ -20,7 +20,7 @@ set -e
 
 FILE="/etc/sysconfig/iptables"
 
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
 PATTERN='-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 25 -j ACCEPT'
 INSERTPOS='RH-Firewall-1-INPUT\s+.*\s+LOG'

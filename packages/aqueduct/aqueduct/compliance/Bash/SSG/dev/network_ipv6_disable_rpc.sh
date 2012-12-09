@@ -20,7 +20,7 @@ set -e
 
 FILE=/etc/netconfig
 
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
-/bin/sed -i -r -e "/udp6\s+tpi_clts\s+v\s+inet6\s+udp\s+\-\s+\-/d" $FILE
-/bin/sed -i -r -e "/tcp6\s+tpi_cots_ord\s+v\s+inet6\s+tcp\s+\-\-/d" $FILE
+/bin/sed -i -r -e "/udp6\s+tpi_clts\s+v\s+inet6\s+udp\s+\-\s+\-/d" $FILE && exit 1
+/bin/sed -i -r -e "/tcp6\s+tpi_cots_ord\s+v\s+inet6\s+tcp\s+\-\-/d" $FILE && exit 1

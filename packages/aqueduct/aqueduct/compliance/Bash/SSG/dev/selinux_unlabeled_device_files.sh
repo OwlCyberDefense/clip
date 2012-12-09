@@ -22,3 +22,4 @@ set -e
 # the problem after a reboot
 /bin/find /dev -type d -context \*unlabeled_t\* -exec restorecon -F {} \;
 /bin/find /dev -type c -context \*unlabeled_t\* -exec restorecon -F {} \;
+/bin/find /dev -type b -context \*unlabeled_t\* -exec restorecon -F {} \;

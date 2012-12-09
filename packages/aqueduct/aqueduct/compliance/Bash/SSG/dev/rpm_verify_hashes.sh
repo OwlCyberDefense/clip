@@ -19,7 +19,7 @@ set -e
 # limitations under the License.
 
 # Check file hashes against /bin/rpm database
-/bin/rpm -Va | /bin/grep '^..5' || exit 0
+/bin/rpm -Va | /bin/grep '^..5' && exit 1
 
 # Otherwise, fail for verification
 exit 1

@@ -21,9 +21,9 @@ set -e
 # enable_screensaver_after_idle
 #
 
-[ -f /usr/bin/gconftool-2 ] || exit 0
+[ -f /usr/bin/gconftool-2 ] && exit 1
 
 /usr/bin/gconftool-2 --direct \
  --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
  --type bool \
- --set /apps/gnome-screensaver/idle_activation_enabled true || exit 1
+ --set /apps/gnome-screensaver/idle_activation_enabled true && exit 1

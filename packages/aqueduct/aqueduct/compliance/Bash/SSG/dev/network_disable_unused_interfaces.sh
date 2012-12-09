@@ -22,12 +22,13 @@ set -e
 
 IFCFG_INTERFACES="/etc/sysconfig/network-scripts/ifcfg-*"
 
-[ -f /etc/init.d/network ] || exit 0
+[ -f /etc/init.d/network ] && exit 1
 
 for interfaces in ${IFCFG_INTERFACES}; do
-	if [ $interfaces != "/etc/sysconfig/network-scripts/ifcfg-lo" ]; then
-		/bin/rm $interfaces
+	if [ "$interfaces" != "/etc/sysconfig/network-scripts/ifcfg-lo" ]; then
+		/bin/rm "$interfaces"
 	fi
 done	
 
 /sbin/chkconfig --level 0123456 network off
+/sbin/service network stop

@@ -15,6 +15,7 @@ set -e
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-[ -f /etc/init.d/rhnsd  ] || exit 0
+[ -f /etc/init.d/rhnsd  ] && exit 1
 
 /sbin/chkconfig --level 0123456 rhnsd off
+/sbin/service rhnsd stop

@@ -20,7 +20,7 @@ set -e
 
 FILE=/etc/security/console.perms
 
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(<console>\s*=).*" "tty[0-9][0-9]* vc/[0-9][0-9]* :0\\\\.[0-9] :0" $FILE

@@ -38,17 +38,8 @@ set_pam_passwdqc() {
 \1/' "$items"
 		fi;
 	done
-
-#	if /bin/grep -Pq "^password\s+requisite\s+pam_passwdqc.so\s+.*$OPTION=$DESIRED\b" "$SYSTEM_AUTH"; then
-#		exit 0
-#	else
-#		/bin/sed -i -r -e "s/^(password\s+requisite\s+pam_passwdqc\.so.*)\s+$OPTION=[^\s]*\s*(.*$)/\1 \2/" "$SYSTEM_AUTH"
-#		/bin/sed -i -r -e "s/^(password\s+requisite\s+pam_passwdqc\.so.*)\s+$/\1/" "$SYSTEM_AUTH"
-#		/bin/sed -i -r -e "s/^(password\s+requisite\s+pam_passwdqc\.so\s+.*)/\1 $OPTION=$DESIRED/" "$SYSTEM_AUTH"
-#	fi
 }
 
-set_pam_unix_option() {
 # Sets the specified pam unix option to the desired value.
 #
 #  arguments:
@@ -56,12 +47,12 @@ set_pam_unix_option() {
 #      OPTION  - pam unix option to be changed.
 #      DESIRED - Desired value of pam unix option
 #
-
+set_pam_unix_option() {
 	OPTION=$1 DESIRED=$2
 	
 	for items in $AUTH_FILES; do
 		if /bin/grep -Pq "^password\s+(?:sufficient|required)\s+pam_unix\.so\s+.*$OPTION=$DESIRED\b" ""; then
-			exit 0
+            continue
 		else
 			/bin/sed -i -r -e "s/^(password\s+(sufficient|required)\s+pam_unix\.so.*)\s+$OPTION=[^\s]*\s*(.*$)/\1 \3/" "$items"
 			/bin/sed -i -r -e "s/^(password\s+(sufficient|required)\s+pam_unix\.so.*)\s+$/\1/" "$items"
@@ -70,19 +61,18 @@ set_pam_unix_option() {
 	done
 }
 
-set_pam_unix_flag() {
 # Adds the desired pam unix flag if it does not already exist.
 #
 #  arguments:
 #    set_pam_unix_flag(OPTION)
 #      OPTION  - pam unix flag to add.
 #
-
+set_pam_unix_flag() {
 	OPTION=$1
 	
 	for items in $AUTH_FILES; do
 		if /bin/grep -Pq "^password\s+(?:sufficient|required)\s+pam_unix\.so\s+.*$OPTION\b" "$items"; then
-			exit 0
+            continue
 		else
 			/bin/sed -i -r -e "s/^(password\s+(sufficient|required)\s+pam_unix\.so\s+.*)/\1 $OPTION/" "$items"
 		fi

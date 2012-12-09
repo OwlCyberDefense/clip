@@ -18,12 +18,12 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FILE=/etc/grub.conf
+FILE=/boot/grub/grub.conf
 
 # Can't set the password in grub.conf if it doesn't exist
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
-var=$( /sbin/grub-crypt --sha-512 ) || exit 1
+var=$( /sbin/grub-crypt --sha-512 ) && exit 1
 var=$var' --encrypted password-hash'
 
 . $(dirname $0)/set_general_entry

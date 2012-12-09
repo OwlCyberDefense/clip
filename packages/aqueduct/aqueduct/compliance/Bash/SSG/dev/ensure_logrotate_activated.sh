@@ -18,9 +18,9 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/sbin/chkconfig --list | /bin/grep logrotate || exit 1
+FILE="/etc/logrotate.conf"
+[ -f $FILE ] && exit 1
 
-/usr/sbin/logrotate	/etc/logrotate.conf
+/sbin/chkconfig --list | /bin/grep -q logrotate && exit 1
 
-
-
+/usr/sbin/logrotate	$FILE

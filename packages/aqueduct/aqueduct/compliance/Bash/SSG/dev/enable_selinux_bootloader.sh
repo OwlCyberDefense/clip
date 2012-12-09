@@ -19,7 +19,7 @@ set -e
 # limitations under the License.
 
 # If it isn't installed, it can't be configured
-[ -f /boot/grub/grub.conf ] || exit 1
+[ -f /boot/grub/grub.conf ] && exit 1
 
 /sbin/grubby --update-kernel=ALL --args=selinux=1
 /sbin/grubby --update-kernel=ALL --args=enforcing=1

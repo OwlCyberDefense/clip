@@ -1,3 +1,7 @@
+#!/bin/bash -u
+
+set -e
+
 #Aqueduct - Compliance Remediation Content
 #Copyright (C) 2011,2012  Vincent C. Passaro (vincent.passaro@gmail.com)
 #
@@ -16,12 +20,4 @@
 #Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #Boston, MA  02110-1301, USA.
 
-#!/bin/bash -u
-set -e
-
-# Copied from GEN006575 script
-
-if /bin/rpm -qi aide > /dev/null; then
-	/usr/bin/yum install aide -y
-	[ $? -eq 0 ] || exit 1
-fi
+/bin/rpm -qi aide && /usr/bin/yum install aide -y

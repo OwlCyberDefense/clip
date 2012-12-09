@@ -20,7 +20,7 @@ set -e
 
 CONFIG=/etc/ssh/sshd_config
 
-[ -f $CONFIG ] || exit 1
+[ -f $CONFIG ] && exit 1
 
 # bail if already done
  /bin/grep -q "Ciphers aes128-ctr,aes192-ctr,aes256-ctr" $CONFIG && \

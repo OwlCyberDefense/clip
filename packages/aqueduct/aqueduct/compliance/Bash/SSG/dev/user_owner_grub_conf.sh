@@ -21,9 +21,9 @@ set -e
 # user_owner_grub_conf
 # 
 
-FILE=/etc/grub.conf
+FILE=/boot/grub/grub.conf
 
 # If it doesn't exist, no user owner can be specified.
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
 /bin/chown root $FILE

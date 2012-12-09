@@ -20,9 +20,9 @@ set -e
 
 SOURCE_FILE=/etc/gconf/gconf.xml.mandatory
 
-[ -f $SOURCE_FILE ] || exit 1 
+[ -f $SOURCE_FILE ] && exit 1
                                                                  
 /usr/bin/gconftool-2 --direct \
   --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
   --type bool \
-  --set /desktop/gnome/thumbnailers/disable_all true || exit 1
+  --set /desktop/gnome/thumbnailers/disable_all true && exit 1

@@ -19,6 +19,7 @@ set -e
 # limitations under the License.
 
  # If it's not installed, it's not running
-[ -f /etc/init.d/telnet ] || exit 0
+[ -f /etc/init.d/telnet ] && exit 1
 
 /sbin/chkconfig --level 0123456 telnet off
+/sbin/service telnet stop

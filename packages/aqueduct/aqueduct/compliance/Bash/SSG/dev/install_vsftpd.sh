@@ -18,4 +18,4 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/usr/bin/yum install -q -y vsftpd || exit 0
+/bin/rpm -qi vsftpd &> /dev/null && /usr/bin/yum install -q -y vsftpd

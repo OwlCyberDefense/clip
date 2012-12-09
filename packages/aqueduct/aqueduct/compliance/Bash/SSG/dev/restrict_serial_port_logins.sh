@@ -67,11 +67,6 @@ set -e
 # /bin/echo tty1 > /etc/securetty 
 #######################DISA INFORMATION###############################
 
-#Global Variables#
-PDI=GEN001000
-
-#Start-Lockdown
-
 # If multiple lines exist default to console
 TTYCOUNT=`/bin/cat /etc/securetty | /usr/bin/wc -l`
 if [ $TTYCOUNT -gt 1 ]
@@ -85,5 +80,3 @@ else
     /bin/echo tty1 > /etc/securetty
   fi
 fi
-
-

@@ -18,4 +18,4 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/bin/rm -r /lib/modules/`/bin/uname -r`/kernel/drivers/net/wireless || exit 0
+/bin/rm -r /lib/modules/`/bin/uname -r`/kernel/drivers/net/wireless && exit 1

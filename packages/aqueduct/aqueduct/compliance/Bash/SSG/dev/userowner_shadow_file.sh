@@ -24,6 +24,6 @@ set -e
 FILE=/etc/shadow
 
 # Can't set ownership of this file if it doesn't exist
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
-/bin/chown -v root $FILE
+/bin/chown root $FILE

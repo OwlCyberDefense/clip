@@ -21,7 +21,7 @@ set -e
 FILE=/etc/rsyslog.conf
 
 # Can't edit this file if it doesn't exist
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
 . $(dirname $0)/set_general_entry
 

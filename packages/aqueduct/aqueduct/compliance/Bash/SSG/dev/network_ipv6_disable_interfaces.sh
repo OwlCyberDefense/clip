@@ -20,9 +20,9 @@ set -e
 
 FILE=/etc/sysconfig/network
 
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
-[ -f /etc/init.d/network ] || exit 0
+[ -f /etc/init.d/network ] && exit 1
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(NETWORKING_IPV6=).*" "no" $FILE
@@ -30,12 +30,4 @@ safe_add_field "(IPV6INIT=).*" "no" $FILE
 
 IFCFG_INTERFACES="/etc/sysconfig/network-scripts/ifcfg-*"
 
-for interfaces in ${IFCFG_INTERFACES}; do
-        if [ $interfaces != "/etc/sysconfig/network-scripts/ifcfg-lo" ]
-        then
-                rm $interfaces
-        fi
-done
-
-/sbin/chkconfig --level 0123456 network off
-
+find $IFCFG_INTERFACES -type -f -exec safe_add_field "(IPV6INIT\s*=).*" "no" {} \;

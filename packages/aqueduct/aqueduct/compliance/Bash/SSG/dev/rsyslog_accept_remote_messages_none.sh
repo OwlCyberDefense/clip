@@ -21,12 +21,11 @@ set -e
 FILE=/etc/rsyslog.conf
 
 # Can't set ownership of this file if it doesn't exist
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
-/bin/sed -i -r -e "/ModLoad imtcp.so/d" $FILE
+/bin/sed -i -r -e "/ModLoad\s+imtcp.so/d" $FILE
 /bin/sed -i -r -e "/InputTCPServerRun.*/d" $FILE
-/bin/sed -i -r -e "/ModLoad imudp.so/d" $FILE
+/bin/sed -i -r -e "/ModLoad\s+imudp.so/d" $FILE
 /bin/sed -i -r -e "/InputUDPServerRun.*/d" $FILE
-/bin/sed -i -r -e "/ModLoad imrelp.so/d" $FILE
+/bin/sed -i -r -e "/ModLoad\s+imrelp.so/d" $FILE
 /bin/sed -i -r -e "/InputRELPServerRun.*/d" $FILE
-

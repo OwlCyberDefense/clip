@@ -21,6 +21,6 @@ set -e
 FILE=/etc/securetty
 
 # If /etc/securetty doesn't exist, we can't check for virtual console entries.
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
 /bin/sed -i -r -e '/^(\s*)vc\/[0-9]+/d' $FILE

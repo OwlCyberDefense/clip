@@ -20,7 +20,7 @@ set -e
 
 FILE=/etc/X11/xinit/xserverrc
 
-[ -f $FILE ] || exit 0
+[ -f $FILE ] && exit 1
 
 if /bin/grep -q 'exec X :0 -nolisten tcp $@' "$FILE"; then
  	exit 0

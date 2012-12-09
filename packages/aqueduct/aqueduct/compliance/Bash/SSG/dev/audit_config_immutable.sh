@@ -20,7 +20,7 @@ set -e
 
 FILE=/etc/audit/audit.rules
 
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
 # -e 2 needs to be the last line in the file
 

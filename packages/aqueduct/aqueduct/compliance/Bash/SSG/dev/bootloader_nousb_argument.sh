@@ -20,8 +20,8 @@ set -e
 
 # bootloader_nousb_argument
 # 
-FILE=/etc/grub.conf
+FILE=/boot/grub/grub.conf
 
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
 /sbin/grubby --update-kernel=ALL --args=nousb

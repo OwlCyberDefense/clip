@@ -20,15 +20,15 @@ set -e
 
 RSYS=/etc/rsyslog.conf
 
-[ -f $RSYS ] || exit 1
-[ -f /etc/init.d/slapd ] || exit 0
+[ -f $RSYS ] && exit 1
+[ -f /etc/init.d/slapd ] && exit 1
 
 . $(dirname $0)/set_general_entry
 safe_add_field "()local4.*" "# Configure logging for LDAP\nlocal4.*\n"	$RSYS
 
 /bin/touch /var/log/ldap.log
-/bin/chown root:root /var/log/ldap.log
-/bin/chmod 0600 /var/log/ldap.log
+/bin/chown -R root:root /var/log/ldap.log
+/bin/chmod -R 0600 /var/log/ldap.log
 
 add_entry "/var/log/ldap.log" /etc/logrotate.d/syslog
 add_entry "loglevel stats2" /etc/openldap/slapd.conf

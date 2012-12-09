@@ -19,6 +19,4 @@ set -e
 # limitations under the License.
 
 # Remediation should not be installing packages.  We may have to remove this.
-/bin/rpm -q rsyslog || exit 0
-
-/usr/bin/yum install -q -y rsyslog || exit 0
+/bin/rpm -q rsyslog && /usr/bin/yum install -q -y rsyslog

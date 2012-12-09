@@ -20,7 +20,7 @@ set -e
 
 CONFIG=/etc/logwatch/conf/logwatch.conf
 
-[ -f $CONFIG ] || exit 0
+[ -f $CONFIG ] && exit 1
 
 # ClientAliveCountMax is set - exit
 . $(dirname $0)/set_general_entry

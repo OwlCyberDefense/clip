@@ -20,8 +20,8 @@ set -e
 
 FILE=/etc/xinetd.d/tftp
 
-[ -f /etc/init.d/tftp ] || exit 0
-[ -f "$FILE" ] || exit 1
+[ -f /etc/init.d/tftp ] && exit 1
+[ -f "$FILE" ] && exit 1
 
 if /bin/grep -Pq "server_args\s+\=\s+\-s\s+\/var\/lib\/tftpboot" "$FILE"; then
     /bin/sed -i -r -e "s/server_args\s+\=.*\/var\/lib\/tftpboot/server_args = -s \/var\/lib\/tftpboot/g" "$FILE"

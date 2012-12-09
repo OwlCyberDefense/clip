@@ -20,7 +20,7 @@ set -e
 
 FILE=/etc/X11/xinit/xserverrc
 
-[ -f $FILE ] || exit 0
+[ -f $FILE ] && exit 1
 
 . $(dirname $0)/set_general_entry
 

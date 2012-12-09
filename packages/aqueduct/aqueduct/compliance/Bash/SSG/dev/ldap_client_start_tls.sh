@@ -17,10 +17,8 @@ set -e
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-[ -f /etc/pam_ldap.conf ] || exit 1
+FILE="/etc/pam_ldap.conf"
+[ -f $FILE ] && exit 1
 
 . $(dirname $0)/set_general_entry
-add_entry "ssl start_tls" /etc/pam_ldap.conf
-
-
+add_entry "ssl start_tls" $FILE

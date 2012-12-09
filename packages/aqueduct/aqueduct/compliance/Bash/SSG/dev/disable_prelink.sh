@@ -20,9 +20,9 @@ set -e
 
 FILE=/etc/sysconfig/prelink
 
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(PRELINKING=).*" "no" $FILE
 
-/usr/sbin/prelink -ua || exit 1
+/usr/sbin/prelink -ua && exit 1

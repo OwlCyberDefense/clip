@@ -18,7 +18,7 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/bin/rpm -Va | /bin/grep '^.M' || exit 0
+/bin/rpm -Va | /bin/grep '^.M' && exit 1
 
 # Otherwise, fail for verification
 exit 1

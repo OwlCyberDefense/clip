@@ -20,10 +20,12 @@ set -e
 
 . $(dirname $0)/audit_rules_common
 
-add_rule '-a exit,always -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications'
+add_rule '-a exit,always -F arch=b32 -S sethostname -S setdomainname -k audit_network_modifications'
+if /bin/uname -m|/bin/grep -q 64; then
+    add_rule '-a exit,always -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications'
+fi
 add_rule '-w /etc/issue -p wa -k audit_network_modifications'
 add_rule '-w /etc/issue.net -p wa -k audit_network_modifications'
 add_rule '-w /etc/hosts -p wa -k audit_network_modifications'
 add_rule '-w /etc/sysconfig/network -p wa -k audit_network_modifications'
 add_rule ''
-

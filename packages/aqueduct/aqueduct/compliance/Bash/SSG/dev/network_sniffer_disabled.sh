@@ -18,6 +18,6 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/sbin/ip link | /bin/grep PROMISC || exit 0
+/sbin/ip link | /bin/grep PROMISC && exit 1
 
 exit 1

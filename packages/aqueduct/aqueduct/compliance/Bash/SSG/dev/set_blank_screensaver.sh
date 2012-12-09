@@ -21,9 +21,9 @@ set -e
 # set_blank_screensaver
 #
 
-[ -f $FILE ] || exit 0
+[ -f $FILE ] && exit 1
 
 /usr/bin/gconftool-2 --direct \
 --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
 --type string \
---set /apps/gnome-screensaver/mode blank-only  || exit 1
+--set /apps/gnome-screensaver/mode blank-only  && exit 1

@@ -24,7 +24,7 @@ set -e
 
 FILE=/etc/profile
 
-[ -f $FILE ] || exit 0
+[ -f $FILE ] && exit 1
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(umask\s+).*" "077" $FILE

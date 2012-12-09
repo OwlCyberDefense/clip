@@ -21,7 +21,7 @@ set -e
 FILE=/etc/login.defs
 PARAM=PASS_MIN_DAYS
 
-[ -f $FILE ] || exit 1
+[ -f $FILE ] && exit 1
 
 . $(dirname $0)/set_general_entry
 safe_add_field "($PARAM\s+).*" "7" $FILE

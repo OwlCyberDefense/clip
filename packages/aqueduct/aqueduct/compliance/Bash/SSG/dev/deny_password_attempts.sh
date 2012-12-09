@@ -22,7 +22,7 @@ set -e
 
 FOLDER="/etc/pam.d"
 
-[ -f /etc/pam.d/system-auth ] || [ -f /etc/pam.d/password-auth ] || exit 1
+[ -f ${FOLDER}/system-auth ] || [ -f ${FOLDER}/password-auth ] && exit 1
 
 # Pattern for pam_unix.so and its replacement line
 P1="auth\s+.*\s+pam\_unix\.so\s+nullok\s+try\_first\_pass"
@@ -49,13 +49,13 @@ P6="auth\s+sufficient\s+pam\_faillock\.so\s+authsucc\s+audit\s+deny\=5\s+unlock\
 R6='auth        sufficient    pam_faillock.so authsucc audit deny=5 unlock_time=900'
 
 . $(dirname $0)/set_general_entry
-safe_add_field "()$P1" "$R1" /etc/pam.d/system-auth
-safe_add_field "()$P1" "$R1" /etc/pam.d/password-auth
+safe_add_field "()$P1" "$R1" ${FOLDER}/system-auth
+safe_add_field "()$P1" "$R1" ${FOLDER}/password-auth
 
-add_entry_before "$R3" "$R1" /etc/pam.d/system-auth
-add_entry_before "$R3" "$R1" /etc/pam.d/password-auth
+add_entry_before "$R3" "$R1" ${FOLDER}/system-auth
+add_entry_before "$R3" "$R1" ${FOLDER}/password-auth
 
-add_entry_before "$R4" "$R1" /etc/pam.d/system-auth
-add_entry_after "$R1" "$R5" /etc/pam.d/password-auth
+add_entry_before "$R4" "$R1" ${FOLDER}/system-auth
+add_entry_after "$R1" "$R5" ${FOLDER}/password-auth
 
-add_entry_before "$R5" "$R6" /etc/pam.d/system-auth
+add_entry_before "$R5" "$R6" ${FOLDER}/system-auth

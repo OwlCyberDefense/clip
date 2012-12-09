@@ -20,5 +20,7 @@ set -e
 
 . $(dirname $0)/audit_rules_common
 
-add_rule '-a always,exit -F path=/bin/ping -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged'
-
+add_rule '-a always,exit -F arch=b32 -F path=/bin/ping -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged'
+if /bin/uname -m|/bin/grep -q 64; then
+    add_rule '-a always,exit -F arch=b64 -F path=/bin/ping -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged'
+fi

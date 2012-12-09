@@ -22,5 +22,5 @@ IFCFG_INTERFACES="/etc/sysconfig/network-scripts/ifcfg-*"
 
 . $(dirname $0)/set_general_entry
 for interfaces in ${IFCFG_INTERFACES}; do
-	safe_add_field "(IPV6_PRIVACY=).*" "rfc3041" $interfaces
+	safe_add_field "(IPV6_PRIVACY=).*" "rfc3041" "$interfaces"
 done	

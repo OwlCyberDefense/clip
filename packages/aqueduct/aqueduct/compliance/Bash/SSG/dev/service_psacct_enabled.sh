@@ -16,6 +16,7 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[ -f /etc/init.d/psacct  ] || exit 1
+[ -f /etc/init.d/psacct  ] && exit 1
 
 /sbin/chkconfig --level 0123456 psacct on
+/sbin/service psacct start

@@ -18,7 +18,6 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#no_unpackaged_suid_files
 # the sgid bit should not be set for all files
 
-/bin/find / -type f -perm g+s || exit 1
+/bin/find / -type f -perm g+s -not -path "/proc*" && exit 1

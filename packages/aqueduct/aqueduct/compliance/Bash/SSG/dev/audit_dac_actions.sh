@@ -20,6 +20,12 @@ set -e
 
 . $(dirname $0)/audit_rules_common
 
-add_rule '-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=500 -F auid!=4294967295 -k perm_mod'
-add_rule '-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=500 -F auid!=4294967295 -k perm_mod'
-add_rule '-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid<=500 -F auid!=4294967295 -k perm_mod'
+add_rule '-a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=500 -F auid!=4294967295 -k perm_mod'
+add_rule '-a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=500 -F auid!=4294967295 -k perm_mod'
+add_rule '-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid<=500 -F auid!=4294967295 -k perm_mod'
+
+if /bin/uname -m|/bin/grep -q 64; then
+    add_rule '-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=500 -F auid!=4294967295 -k perm_mod'
+    add_rule '-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=500 -F auid!=4294967295 -k perm_mod'
+    add_rule '-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid<=500 -F auid!=4294967295 -k perm_mod'
+fi

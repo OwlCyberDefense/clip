@@ -20,5 +20,7 @@ set -e
 
 . $(dirname $0)/audit_rules_common
 
-add_rule '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete'
-
+add_rule '-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete'
+if /bin/uname -m|/bin/grep -q 64; then
+    add_rule '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete'
+fi

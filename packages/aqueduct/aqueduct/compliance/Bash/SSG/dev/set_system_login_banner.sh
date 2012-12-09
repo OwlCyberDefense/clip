@@ -18,10 +18,9 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-LINES=$( /bin/cat /etc/issue | /usr/bin/wc -l )
+FILE="/etc/issue"
 
-# Assume if <= 5 line the lawyers can't be happy
-if [ $LINES -le 5 ]; then
+if /bin/grep "authorized" $FILE; then
 	/bin/cat <<EOF >/etc/issue
 -- WARNING --
 This system is for the use of authorized users only. Individuals

@@ -19,6 +19,7 @@ set -e
 # limitations under the License.
 
  # If it's not installed, it's not running
-[ -f /etc/init.d/vsftpd ] || exit 0
+[ -f /etc/init.d/vsftpd ] && exit 1
 
 /sbin/chkconfig --level 0123456 vsftpd off
+/sbin/service vsfptd stop

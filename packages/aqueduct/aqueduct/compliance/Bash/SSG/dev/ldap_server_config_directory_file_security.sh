@@ -18,6 +18,8 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[ -f /etc/init.d/slapd ] || exit 0
+FILE="/etc/init.d/slapd"
+
+[ -f $FILE ] && exit 1
 /usr/bin/id ldap || /usr/sbin/useradd ldap
-/bin/chown ldap:root /var/lib/ldap/* || exit 1
+/bin/chown -R ldap:root /var/lib/ldap/* && exit 1

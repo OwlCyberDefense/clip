@@ -19,16 +19,6 @@ set -e
 # limitations under the License.
 
 FILE=/etc/sysconfig/init
-STRING='PROMPT=no'
 
-# bail if already done
-/bin/grep -q "^$STRING$" $FILE && exit 0
-
-# fix if wrong
-/bin/sed -i -e "s#^PROMPT=.*#$STRING#" $FILE
-
-# bail if now done
-/bin/grep -q "^$STRING$" $FILE && exit 0
-
-# add if missing
-/bin/echo $STRING >> $FILE
+. $(dirname $0)/set_general_entry
+safe_add_field "(PROMPT=).*" no $FILE
