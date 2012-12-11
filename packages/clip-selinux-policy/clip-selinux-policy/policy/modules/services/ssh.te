@@ -241,6 +241,7 @@ manage_files_pattern(sshd_t, sshd_tmp_t, sshd_tmp_t)
 manage_sock_files_pattern(sshd_t, sshd_tmp_t, sshd_tmp_t)
 files_tmp_filetrans(sshd_t, sshd_tmp_t, { dir file sock_file })
 
+kernel_dontaudit_request_load_module(sshd_t)
 kernel_search_key(sshd_t)
 kernel_link_key(sshd_t)
 

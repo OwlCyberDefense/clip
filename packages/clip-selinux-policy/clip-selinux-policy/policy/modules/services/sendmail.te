@@ -47,6 +47,7 @@ files_tmp_filetrans(sendmail_t, sendmail_tmp_t, { file dir })
 allow sendmail_t sendmail_var_run_t:file manage_file_perms;
 files_pid_filetrans(sendmail_t, sendmail_var_run_t, file)
 
+kernel_dontaudit_request_load_module(sendmail_t)
 kernel_read_network_state(sendmail_t)
 kernel_read_kernel_sysctls(sendmail_t)
 # for piping mail to a command

@@ -67,6 +67,9 @@ miscfiles_manage_fonts_cache(plymouthd_t)
 init_stream_connect_script(plymouthd_t)
 term_use_unallocated_ttys(plymouthd_t)
 
+term_dontaudit_use_console(plymouthd_t)
+init_dontaudit_use_fds(plymouthd_t)
+
 ########################################
 #
 # Plymouth private policy

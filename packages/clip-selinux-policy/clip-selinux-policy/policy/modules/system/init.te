@@ -576,6 +576,10 @@ ifdef(`distro_suse',`
 ')
 
 optional_policy(`
+	plymouthd_stream_connect(initrc_t)
+')
+
+optional_policy(`
 	amavis_search_lib(initrc_t)
 	amavis_setattr_pid_files(initrc_t)
 ')
