@@ -54,6 +54,8 @@ ifdef(`direct_sysadm_daemon',`
 	')
 ')
 
+logging_read_generic_logs(sysadm_t)
+
 # SRS: removed for CLIP
 #ifndef(`enable_mls',`
 #	logging_manage_audit_log(sysadm_t)

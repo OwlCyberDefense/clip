@@ -1043,3 +1043,23 @@ interface(`logging_admin',`
 	logging_admin_audit($1, $2)
 	logging_admin_syslog($1, $2)
 ')
+
+########################################
+## <summary>
+##	Allow a domain getattr access to dirs
+##	in the auditd_log_t domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`logging_getattr_dirs',`
+	gen_require(`
+                type auditd_log_t;
+        ')
+	
+	allow $1 auditd_log_t:dir getattr;
+')

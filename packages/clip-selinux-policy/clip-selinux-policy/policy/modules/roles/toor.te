@@ -4,7 +4,6 @@ policy_module(toor, 2.3.0)
 #
 # Declarations
 #
-
 role toor_r;
 
 userdom_admin_user_template(toor)
@@ -51,6 +50,10 @@ ifdef(`direct_toor_daemon',`
 optional_policy(`
 	secstate_run(toor_t, toor_r)
 ')
+
+logging_dontaudit_send_audit_msgs(toor_t)
+logging_getattr_dirs(toor_t)
+#allow toor_t auditd_log_t:{ dir file } getattr;
 
 # SRS: removed for CLIP
 #ifndef(`enable_mls',`
