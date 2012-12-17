@@ -77,8 +77,8 @@ tunable_policy(`secstate_enable_oscap_probes',`
 # You also cant put optional blocks in tunable blocks.
 # Bleh.
 tunable_policy(`secstate_enable_remediation',`
-    # We need to remove shadow_t, audit_t, and var_log_t access
-	files_manage_all_files(secstate_t)
+	secstate_manage_all_files_except(secstate_t)
+
 	dev_getattr_all_blk_files(secstate_t)
 	dev_getattr_all_chr_files(secstate_t)
 	kernel_rw_all_sysctls(secstate_t)

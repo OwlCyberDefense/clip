@@ -5,6 +5,7 @@ policy_module(oscap, 1.0.0)
 # Declarations
 #
 
+
 type oscap_t;
 type oscap_exec_t;
 application_domain(oscap_t, oscap_exec_t)
@@ -51,24 +52,19 @@ allow oscap_probe_t self:udp_socket create_socket_perms;;
 
 
 # probe_system_info
-# TODO possibly revoke create access for stream_socket_perms.
-# possibly will need to be r/w
-allow oscap_probe_t oscap_t:unix_stream_socket create_stream_socket_perms;
+allow oscap_probe_t oscap_t:unix_stream_socket { rw_stream_socket_perms };
+
 
 # probe_selinuxsecuritycontext
 logging_send_syslog_msg(oscap_probe_t)
 kernel_getattr_core_if(oscap_probe_t)
 
 # probe_file, probe_textfilecontent
-# TODO See if we can revoke access to shadow_t, log_t, and audit_log_t 
-files_read_all_files(oscap_probe_t)
-files_read_all_symlinks(oscap_probe_t)
-files_read_all_tmp_files(oscap_probe_t)
-# TODO This might just need to be a get_attr for chr and blk files
+
+oscap_read_all_files_except(oscap_probe_t)
+ 
 dev_getattr_all_blk_files(oscap_probe_t)
 dev_getattr_all_chr_files(oscap_probe_t)
-files_read_all_chr_files(oscap_probe_t)
-files_read_all_blk_files(oscap_probe_t)
 
 fs_list_all(oscap_probe_t)
 
