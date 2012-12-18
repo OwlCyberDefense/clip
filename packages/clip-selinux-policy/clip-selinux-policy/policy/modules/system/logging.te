@@ -354,11 +354,11 @@ optional_policy(`
 # chown fsetid for syslog-ng
 # sys_admin for the integrated klog of syslog-ng and metalog
 # cjp: why net_admin!
-allow syslogd_t self:capability { dac_override sys_resource sys_tty_config net_admin sys_admin chown fsetid };
+allow syslogd_t self:capability { dac_override sys_resource sys_tty_config net_admin sys_admin chown fsetid sys_nice };
 dontaudit syslogd_t self:capability sys_tty_config;
 # setpgid for metalog
 # setrlimit for syslog-ng
-allow syslogd_t self:process { signal_perms setpgid setrlimit };
+allow syslogd_t self:process { signal_perms setpgid setrlimit getsched setsched };
 # receive messages to be logged
 allow syslogd_t self:unix_dgram_socket create_socket_perms;
 allow syslogd_t self:unix_stream_socket create_stream_socket_perms;
@@ -366,6 +366,7 @@ allow syslogd_t self:unix_dgram_socket sendto;
 allow syslogd_t self:fifo_file rw_fifo_file_perms;
 allow syslogd_t self:udp_socket create_socket_perms;
 allow syslogd_t self:tcp_socket create_stream_socket_perms;
+kernel_request_load_module(syslogd_t)
 
 allow syslogd_t syslog_conf_t:file read_file_perms;
 
