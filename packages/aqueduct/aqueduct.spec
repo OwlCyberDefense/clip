@@ -162,31 +162,12 @@ install -m 0750 -t $RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools compliance/Bas
 
 # Files used in the aqueduct-puppet rpm.
 
-# To avoid syntactical confusion, `find -print` was employed when copying
-# puppet files and folders. `find -exec` proved to be a bit too messy.  The
-# following loops carry out the necessary string substitutions for setting up
-# target directories and then proceed to copy the appropriate files over.
+cd compliance;
+find "Puppet/DCID-6-3-PL4-HIGH-HIGH" -path '*.svn*' -prune -o -type d -printf "install -m 0755 -d ${RPM_BUILD_ROOT}/usr/libexec/aqueduct/%p;\n" | sh
+find "Puppet/DCID-6-3-PL4-HIGH-HIGH" -type f -printf "install -m 0750 -t ${RPM_BUILD_ROOT}/usr/libexec/aqueduct/%h %h/%f;\n" | sh
 
-for dcid_folders in `find "compliance/Puppet/DCID-6-3-PL4-HIGH-HIGH" -path '*.svn*' -prune -o -type d -print`; do
-	install -m 0755 -d ${dcid_folders/compliance/$RPM_BUILD_ROOT\/usr\/libexec\/aqueduct};
-done
-
-for dcid_files in `find "compliance/Puppet/DCID-6-3-PL4-HIGH-HIGH" -type f`; do
-        file_name=`echo $dcid_files| grep -Po "\/[^\/]*$"`
-        folder_name=${dcid_files%${file_name}}
-        install -m 0750 -t ${folder_name/compliance/$RPM_BUILD_ROOT\/usr\/libexec\/aqueduct} $dcid_files;
-done
-
-for stig_folders in `find "compliance/Puppet/STIG" -path '*.svn*' -prune -o -type d -print`; do
-	install -m 0755 -d ${stig_folders/compliance/$RPM_BUILD_ROOT\/usr\/libexec\/aqueduct};
-done
-
-for stig_files in `find "compliance/Puppet/STIG" -type f`; do 
-	file_name=`echo $stig_files| grep -Po "\/[^\/]*$"`
-	folder_name=${stig_files%${file_name}}
-	install -m 0750 -t ${folder_name/compliance/$RPM_BUILD_ROOT\/usr\/libexec\/aqueduct} $stig_files;
-done
-
+find "Puppet/STIG" -path '*.svn*' -prune -o -type d -printf "install -m 0755 -d ${RPM_BUILD_ROOT}/usr/libexec/aqueduct/%p;\n" | sh
+find "Puppet/STIG" -type f -printf "install -m 0750 -t ${RPM_BUILD_ROOT}/usr/libexec/aqueduct/%h %h/%f;\n" | sh
 
 %clean
 rm -rf $RPM_BUILD_ROOT
