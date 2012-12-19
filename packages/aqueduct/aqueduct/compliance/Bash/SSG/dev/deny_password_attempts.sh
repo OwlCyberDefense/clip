@@ -22,7 +22,7 @@ set -e
 
 FOLDER="/etc/pam.d"
 
-[ -f ${FOLDER}/system-auth ] || [ -f ${FOLDER}/password-auth ] && exit 1
+[ -f ${FOLDER}/system-auth ] || [ -f ${FOLDER}/password-auth ] || exit 0
 
 # Pattern for pam_unix.so and its replacement line
 P1="auth\s+.*\s+pam\_unix\.so\s+nullok\s+try\_first\_pass"

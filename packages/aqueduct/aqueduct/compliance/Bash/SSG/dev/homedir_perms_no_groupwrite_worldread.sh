@@ -21,7 +21,7 @@ set -e
 FILE=/etc/passwd
 
 # If /etc/passwd doesn't exist we can't identify system accounts from this listing.
-[ -f  $FILE ] && exit 1
+[ -f  $FILE ] || exit 1
 
 # Check each user in /etc/passwd for a file and change the permisssions if it
 # exists

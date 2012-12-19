@@ -19,54 +19,6 @@
 #!/bin/bash -u
 set -e
 
-######################################################################
-#By Tummy a.k.a Vincent C. Passaro				     #
-#Vincent[.]Passaro[@]gmail[.]com	         		     #
-#www.vincentpassaro.com						     #
-######################################################################
-#_____________________________________________________________________
-#|  Version |   Change Information  |      Author        |    Date    |
-#|__________|_______________________|____________________|____________|
-#|    1.0   |   Initial Script      | Vincent C. Passaro | 20-oct-2011|
-#|	    |   Creation	    |                    |            |
-#|__________|_______________________|____________________|____________|
-#
-#
-#  - Updated by Shannon Mitchell(shannon.mitchell@fusiontechnology-llc.com)
-# on 03-jan-2011 to allow for either console or tty1 and default to console if
-# no match is found.
-								     
-
-#######################DISA INFORMATION###############################
-#Group ID (Vulid): V-4298
-#Group Title: Remote Consoles
-#Rule ID: SV-27151r1_rule
-#Severity: CAT II
-#Rule Version (STIG-ID): GEN001000
-#Rule Title: Remote consoles must be disabled or protected from 
-#unauthorized access.
-#
-#Vulnerability Discussion: The remote console feature provides an 
-#additional means of access to the system which could allow unauthorized 
-#access if not disabled or properly secured. With virtualization 
-#technologies, remote console access is essential as there is no physical 
-#console for virtual machines. Remote console access must be protected 
-#in the same manner as any other remote privileged access method.
-#
-#Responsibility: System Administrator
-#IAControls: ECSC-1
-#
-#Check Content: 
-#Check /etc/securetty
-# more /etc/securetty
-#If the file does not exist, or contains other than "console" or a 
-#single tty device, this is a finding.
-#
-#Fix Text: Create if needed and set the contents of /etc/securetty 
-#to "tty1".
-# /bin/echo tty1 > /etc/securetty 
-#######################DISA INFORMATION###############################
-
 # If multiple lines exist default to console
 TTYCOUNT=`/bin/cat /etc/securetty | /usr/bin/wc -l`
 if [ $TTYCOUNT -gt 1 ]

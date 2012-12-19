@@ -21,7 +21,7 @@ set -e
 CONFIG=/etc/ssh/sshd_config
 
 # No sshd - exit
-[ -f $CONFIG ] && exit 1
+[ -f $CONFIG ] || exit 0
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(PermitEmptyPasswords\s+).*" "no" $CONFIG

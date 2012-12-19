@@ -21,14 +21,14 @@ set -e
 FILE="/etc/rsyslog.conf"
 LOGROT="/etc/logrotate.d/syslog"
 
-[ -f "$FILE" ] && exit 1
+[ -f "$FILE" ] || exit 1
 
 PATTERN="(mail\.\*)(\s+)(.*)(\/var\/log\/maillog)"
 
 . $(dirname $0)/set_general_entry
 safe_add_field "$PATTERN" "\t\t\t\-/var/log/maillog" "$FILE"
 
-[ -f /var/log/maillog ] && exit 1
+[ -f /var/log/maillog ] || exit 1
 
 /bin/chown root:root /var/log/maillog
 /bin/chmod 600 /var/log/maillog

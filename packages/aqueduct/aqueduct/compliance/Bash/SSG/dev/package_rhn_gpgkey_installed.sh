@@ -18,12 +18,12 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[ -f /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release ] && exit 1
+[ -f /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release ] || exit 1
 
 # verify we have the right key
 keyid=`/bin/echo $(/usr/bin/gpg --throw-keyids < /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release ) | \
        /bin/cut --characters=11-18 | /usr/bin/tr [A-Z] [a-z] )`
-[ "$keyid" == "fd431d51" ] && exit 1
+[ "$keyid" == "fd431d51" ] || exit 0
 
 # if not installed, install it
 if /bin/rpm -qi "gpg-pubkey-$keyid" | /bin/grep -q "release key 2"; then

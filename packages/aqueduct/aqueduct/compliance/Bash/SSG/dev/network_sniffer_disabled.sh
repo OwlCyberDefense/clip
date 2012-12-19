@@ -19,5 +19,3 @@ set -e
 # limitations under the License.
 
 /sbin/ip link | /bin/grep PROMISC && exit 1
-
-exit 1

@@ -16,7 +16,7 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[ -f /etc/init.d/restorecond ] && exit 1
+[ -f /etc/init.d/restorecond ] || exit 1
 
 /sbin/chkconfig --level 0123456 restorecond on
 /sbin/service restorecond start

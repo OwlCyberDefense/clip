@@ -19,7 +19,7 @@ set -e
 # limitations under the License.
 
 # If it isn't installed, it can't be running
-[ -f /etc/init.d/rhnsd ] && exit 1
+[ -f /etc/init.d/rhnsd ] || exit 0
 
 # Return status of /sbin/chkconfig
 /sbin/chkconfig --level 0123456 rhnsd off

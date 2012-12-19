@@ -21,7 +21,7 @@ set -e
 # set_blank_screensaver
 #
 
-[ -f $FILE ] || exit 1
+[ -f $FILE ] || exit 0
 
 /usr/bin/gconftool-2 --direct \
 --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \

@@ -19,7 +19,7 @@ set -e
 # limitations under the License.
 
  # If it's not installed, it's not running
-[ -f /etc/init.d/iptables ] && exit 1
+[ -f /etc/init.d/iptables ] || exit 1
 
 /sbin/chkconfig --level 0123456 iptables on
 /sbin/service iptables start

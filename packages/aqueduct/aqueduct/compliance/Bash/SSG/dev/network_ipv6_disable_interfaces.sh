@@ -22,7 +22,7 @@ FILE=/etc/sysconfig/network
 
 [ -f $FILE ] || exit 1
 
-[ -f /etc/init.d/network ] && exit 1
+[ -f /etc/init.d/network ] || exit 0
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(NETWORKING_IPV6=).*" "no" $FILE

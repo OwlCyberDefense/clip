@@ -21,7 +21,7 @@ set -e
 FILE=/etc/cups/cupsd.conf
 
 # If it's not installed, it's not running
-[ -f /etc/init.d/cupsd ] && exit 1
+[ -f /etc/init.d/cupsd ] || exit 0
 
 . $(dirname $0)/set_general_entry
 safe_add_field "()Port 631" "Listen localhost:631" 

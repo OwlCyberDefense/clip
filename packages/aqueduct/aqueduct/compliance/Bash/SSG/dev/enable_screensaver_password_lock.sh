@@ -21,7 +21,7 @@ set -e
 # enable_screensaver_password_lock
 #
 
-[ -f /usr/bin/gconftool-2 ] && exit 1
+[ -f /usr/bin/gconftool-2 ] || exit 0
 
 /usr/bin/gconftool-2 --direct \
  --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \

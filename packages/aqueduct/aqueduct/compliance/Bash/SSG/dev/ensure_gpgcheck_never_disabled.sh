@@ -19,7 +19,7 @@ set -e
 # limitations under the License.
 
 # If there is no yum repos directory, the configuration files can't be set
-[ -d /etc/yum.repos.d ] && exit 1
+[ -d /etc/yum.repos.d ] || exit 1
 
 . $(dirname $0)/set_general_entry
 

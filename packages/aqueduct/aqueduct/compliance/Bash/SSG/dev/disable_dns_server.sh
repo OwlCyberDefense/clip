@@ -19,7 +19,7 @@ set -e
 # limitations under the License.
 
  # If it's not installed, it's not running
-[ -f /etc/init.d/named ] && exit 1
+[ -f /etc/init.d/named ] || exit 0
 
 /sbin/chkconfig --level 0123456 named off
 /sbin/service named stop

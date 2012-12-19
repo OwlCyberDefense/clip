@@ -20,7 +20,7 @@ set -e
 
 # Remove rsh host trust files if they exists.
 
-[[ -f ~/.rhosts  ||  -f /etc/hosts.equiv ]] && exit 1
+[ -f ~/.rhosts ] || [ -f /etc/hosts.equiv ] || exit 0
 
 for USERS in `/bin/awk -F: '{print $1}' /etc/passwd`; do
 	/bin/rm -f /home/${USERS}/.rhosts

@@ -22,7 +22,7 @@ set -e
 
 FILE=/etc/group
 
-[ -f "$FILE" ] && exit 1
+[ -f "$FILE" ] || exit 1
 
 . $(dirname $0)/no_nis_inclusions_common
 delete_nis_lines "$FILE"

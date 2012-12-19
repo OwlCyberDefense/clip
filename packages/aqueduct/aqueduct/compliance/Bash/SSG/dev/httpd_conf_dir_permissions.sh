@@ -21,6 +21,6 @@ set -e
 HTTPD_DIR=/etc/httpd/conf/
 
 /sbin/service --status-all | /bin/grep httpd && exit 1
-[ -f $FILE ] || exit 1
+[ -d $HTTPD_DIR ] || exit 1
 
 /bin/chmod 750 $HTTPD_DIR

@@ -20,8 +20,8 @@ set -e
 
 CONFIG_FILE=/etc/gconf/gconf.xml.mandatory
 
-[ -f /usr/bin/gconftool-2 ] && exit 1
-[ -f $FILE ] || exit 1
+[ -f /usr/bin/gconftool-2 ] || exit 1
+[ -f $CONFIG_FILE ] || exit 1
 
 # Disable automount
 /usr/bin/gconftool-2 --direct \

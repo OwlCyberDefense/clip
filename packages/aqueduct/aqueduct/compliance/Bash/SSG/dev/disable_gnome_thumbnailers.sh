@@ -20,7 +20,7 @@ set -e
 
 SOURCE_FILE=/etc/gconf/gconf.xml.mandatory
 
-[ -f $SOURCE_FILE ] && exit 1
+[ -f $SOURCE_FILE ] || exit 0
                                                                  
 /usr/bin/gconftool-2 --direct \
   --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \

@@ -20,8 +20,8 @@ set -e
 
 RSYS=/etc/rsyslog.conf
 
-[ -f $RSYS ] && exit 1
-[ -f /etc/init.d/slapd ] && exit 1
+[ -f /etc/init.d/slapd ] || exit 0
+[ -f $RSYS ] || exit 1
 
 . $(dirname $0)/set_general_entry
 safe_add_field "()local4.*" "# Configure logging for LDAP\nlocal4.*\n"	$RSYS

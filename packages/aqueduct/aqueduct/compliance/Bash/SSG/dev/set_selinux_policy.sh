@@ -18,7 +18,7 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[ -f /etc/selinux/config ] && exit 1
+[ -f /etc/selinux/config ] || exit 1
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(SELINUXTYPE\s*=).*" "targeted" /etc/selinux/config

@@ -22,7 +22,7 @@ set -e
 
 IFCFG_INTERFACES="/etc/sysconfig/network-scripts/ifcfg-*"
 
-[ -f /etc/init.d/network ] && exit 1
+[ -f /etc/init.d/network ] || exit 0
 
 for interfaces in ${IFCFG_INTERFACES}; do
 	if [ "$interfaces" != "/etc/sysconfig/network-scripts/ifcfg-lo" ]; then

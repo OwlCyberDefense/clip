@@ -20,7 +20,8 @@ set -e
 
 FILE="/etc/postfix/main.cf"
 
-[ -f /etc/init.d/postfix ] && exit 1
+[ -f /etc/init.d/postfix ] || exit 0
+[ -f $FILE ] || exit 1
 
 . ($dirname $0)/set_general_entry
 safe_add_field "(default_process_limit\s+=\s+).*" 100 $FILE

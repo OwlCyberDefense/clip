@@ -19,7 +19,7 @@ set -e
 # limitations under the License.
 
  # If it's not installed, it's not running
-[ -f /etc/init.d/ip6tables ] && exit 1
+[ -f /etc/init.d/ip6tables ] || exit 0
 
 /sbin/chkconfig --level 0123456 ip6tables off
 /sbin/service ip6table stop

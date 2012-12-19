@@ -20,7 +20,7 @@ set -e
 
 FILE="/etc/postfix/main.cf"
 
-[ -f /etc/init.d/postfix ] && exit 1
+[ -f /etc/init.d/postfix ] || exit 0
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(inet_interfaces\s+=\s+).*" localhost $FILE
