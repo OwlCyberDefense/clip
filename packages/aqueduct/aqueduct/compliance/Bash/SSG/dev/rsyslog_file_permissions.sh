@@ -23,7 +23,7 @@ set -e
  
 FILE=/etc/rsyslog.conf
 
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 # For every LOGFILE entry in rsyslog.conf, change the permissions
 for LOGFILE in `/bin/grep -E -o "(\s)*.*(\s+)(\-|\+)*(\/[^\/]*)+(\s)*$" $FILE`; do

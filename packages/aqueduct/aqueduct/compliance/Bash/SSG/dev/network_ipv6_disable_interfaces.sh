@@ -20,7 +20,7 @@ set -e
 
 FILE=/etc/sysconfig/network
 
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 [ -f /etc/init.d/network ] && exit 1
 

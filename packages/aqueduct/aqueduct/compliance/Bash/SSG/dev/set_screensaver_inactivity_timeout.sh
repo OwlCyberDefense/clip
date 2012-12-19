@@ -21,7 +21,7 @@ set -e
 # set_screensaver_inactivity_timeout
 #
 
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 /usr/bin/gconftool-2 \
 	 --direct \

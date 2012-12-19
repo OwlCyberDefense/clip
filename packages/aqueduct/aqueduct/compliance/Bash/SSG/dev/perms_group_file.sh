@@ -22,6 +22,6 @@ set -e
 FILE=/etc/group
 
 # Can't set ownership of this file if it doesn't exist
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 /bin/chmod 644 $FILE

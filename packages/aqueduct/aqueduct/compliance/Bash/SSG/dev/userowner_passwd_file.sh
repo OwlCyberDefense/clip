@@ -24,6 +24,6 @@ set -e
 FILE=/etc/passwd
 
 # Can't set ownership of this file if it doesn't exist
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 /bin/chown root $FILE

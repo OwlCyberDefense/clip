@@ -20,6 +20,6 @@ set -e
 
 FILE=/etc/sysconfig/network
 
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 safe_add_field "(FORWARD_IPV4=).*" "no" $FILE

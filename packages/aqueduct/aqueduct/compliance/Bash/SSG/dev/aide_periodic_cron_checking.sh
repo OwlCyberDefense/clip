@@ -20,7 +20,7 @@ set -e
 
 FILE=/etc/crontab
 
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 PATTERN="((\d*|\*)\s+)*\s+root\s+\/usr\/sbin\/aide\s+\-\-check"
 

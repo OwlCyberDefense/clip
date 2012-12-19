@@ -19,7 +19,7 @@ set -e
 # limitations under the License.
 
 FILE="/etc/logrotate.conf"
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 /sbin/chkconfig --list | /bin/grep -q logrotate && exit 1
 

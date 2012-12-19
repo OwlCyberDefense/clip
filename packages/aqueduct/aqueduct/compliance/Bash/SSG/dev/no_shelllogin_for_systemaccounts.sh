@@ -21,7 +21,7 @@ set -e
 FILE=/etc/passwd
 
 # If /etc/passwd doesn't exist we can't identify system accounts from this listing.
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 # Find all system accounts and disable their login shells. 
 /bin/awk -F: '{

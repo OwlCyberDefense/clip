@@ -22,6 +22,6 @@ set -e
 # 
 FILE=/boot/grub/grub.conf
 
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 /sbin/grubby --update-kernel=ALL --args=audit=1

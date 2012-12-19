@@ -20,6 +20,6 @@ set -e
 
 FILE="/etc/init.d/slapd"
 
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 /usr/bin/id ldap || /usr/sbin/useradd ldap
 /bin/chown -R ldap:root /var/lib/ldap/* && exit 1

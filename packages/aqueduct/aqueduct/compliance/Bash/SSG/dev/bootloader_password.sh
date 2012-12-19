@@ -21,7 +21,7 @@ set -e
 FILE=/boot/grub/grub.conf
 
 # Can't set the password in grub.conf if it doesn't exist
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 var=$( /sbin/grub-crypt --sha-512 ) && exit 1
 var=$var' --encrypted password-hash'

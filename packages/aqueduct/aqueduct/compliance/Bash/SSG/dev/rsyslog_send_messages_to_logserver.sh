@@ -22,7 +22,7 @@ set -e
 FILE=/etc/rsyslog.conf
 
 # if no rsyslog, exit
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 # prompt for central logserver and put entry in rsyslog.conf
 /bin/echo ""

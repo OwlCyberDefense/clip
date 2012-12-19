@@ -18,7 +18,7 @@ set -e
 # See the License for the specific language governing permissions and
 # limitations under the License.
 FILE="/etc/pam_ldap.conf"
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry
 add_entry "ssl start_tls" $FILE

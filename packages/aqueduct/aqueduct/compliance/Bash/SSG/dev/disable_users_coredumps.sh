@@ -20,7 +20,7 @@ set -e
 
 FILE=/etc/security/limits.conf
 
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry
 

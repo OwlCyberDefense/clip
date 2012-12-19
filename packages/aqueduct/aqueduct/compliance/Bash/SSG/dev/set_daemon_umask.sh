@@ -23,7 +23,7 @@ set -e
 
 FILE=/etc/sysconfig/init
 
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(umask\s+).*" "027" $FILE

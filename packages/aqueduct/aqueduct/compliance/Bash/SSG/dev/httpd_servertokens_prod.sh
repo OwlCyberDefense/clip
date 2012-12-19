@@ -21,7 +21,7 @@ set -e
 FILE=/etc/httpd/conf/httpd.conf
 
 /sbin/service --status-all | /bin/grep httpd && exit 1
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry
 safe_add_field "(ServerTokens\s+).*" "Prod" *

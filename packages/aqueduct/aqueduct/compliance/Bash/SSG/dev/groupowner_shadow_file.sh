@@ -23,6 +23,6 @@ set -e
 
 FILE=/etc/shadow
 
-[ -f $FILE ] && exit 1
+[ -f $FILE ] || exit 1
 
 /bin/chown root $FILE
