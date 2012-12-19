@@ -23,4 +23,4 @@ FILE="/etc/selinux/config"
 [ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry
-safe_add_field "(^\s*SELINUX\s*=).*" "enforcing" $FILE
+safe_add_field "(SELINUX\s*=)permissive|disabled" "enforcing" $FILE
