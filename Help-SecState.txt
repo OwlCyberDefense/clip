@@ -20,4 +20,9 @@ The following steps illustrate proper use of `secstate remediate`:
 
 --Manual Content-- (to be executed at run-time)
 # setsebool secstate_enable_remediation 1
+
+# If your use-case requires you to write to the AIDE database, you will
+# need to enable the corresponding SELinux boolean:
+# setsebool aide_enable_write_db 1
+
 # /usr/libexec/aqueduct/SSG/tools/run_manual_remediation.sh
