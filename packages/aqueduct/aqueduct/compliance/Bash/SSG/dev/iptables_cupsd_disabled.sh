@@ -22,11 +22,11 @@ IP="/etc/sysconfig/iptables"
 IP6="/etc/sysconfig/ip6tables"
 
 # If there are no iptables, panic.
-[ -f "$IP" ] || [ -f "$IP" ] || exit 1
+[ -f "$IP" ] || [ -f "$IP6" ] || exit 1
 
 P1="-A RH-Firewall-1-INPUT -p udp -m udp --dport 631 -j ACCEPT"
 
 P2="-A RH-Firewall-1-INPUT -p tcp -m tcp --dport 631 -j ACCEPT"
 
-/bin/sed -i -r -e "/($P1|$P2)/d" $IP
-/bin/sed -i -r -e "/($P1|$P2)/d" $IP6
+[ -f "$IP" ] && /bin/sed -i -r -e "/($P1|$P2)/d" $IP
+[ -f "$IP6" ] && /bin/sed -i -r -e "/($P1|$P2)/d" $IP6

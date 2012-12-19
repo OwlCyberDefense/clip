@@ -41,7 +41,7 @@ set_sysctl_param() {
 			/bin/echo "$PARAM = $DESIRED"                       >> /etc/sysctl.conf
 		fi
 
-		if ! sysctl -q -w $PARAM=$DESIRED; then
+		if ! /sbin/sysctl -q -w $PARAM=$DESIRED; then
 			/bin/echo "sysctl -w $PARAM=$DESIRED failed"
         	fi
 	else
@@ -50,5 +50,5 @@ set_sysctl_param() {
 
 	. $(dirname $0)/set_general_entry
 	safe_add_field "($PARAM\s+=\s+).*" "$DESIRED" /etc/sysctl.conf
-	sysctl -e -q -p
+	/sbin/sysctl -e -q -p
 }

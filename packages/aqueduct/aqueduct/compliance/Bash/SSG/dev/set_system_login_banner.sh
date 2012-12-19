@@ -20,7 +20,7 @@ set -e
 
 FILE="/etc/issue"
 
-if /bin/grep "authorized" $FILE; then
+if ! /bin/grep -q "authorized" $FILE; then
 	/bin/cat <<EOF >/etc/issue
 -- WARNING --
 This system is for the use of authorized users only. Individuals
