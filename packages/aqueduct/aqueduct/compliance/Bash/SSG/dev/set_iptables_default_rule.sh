@@ -19,10 +19,19 @@ set -e
 # limitations under the License.
 
 FILE=/etc/sysconfig/iptables
+IPTABLES=/etc/init.d/iptables
+
+[ -f $IPTABLES ] || exit 1
 
 if [ -f $FILE ]; then
-    . $(dirname $0)/set_general_entry
-    safe_add_field "(:INPUT\s+).*" "DROP [0:0]" $FILE
+    # Remove all existing INPUT rules
+    /bin/sed -i -r -e "/.*INPUT.*/d" $FILE
+    # Append INPUT drop rule
+    /bin/sed -i -r -e "/\*filter/a :INPUT DROP [0:0]" $FILE
 else
-    echo ":INPUT DROP [0:0]" > $FILE
+    /bin/cat <<EOF > $FILE
+*filter
+:INPUT DROP [0:0]
+COMMIT
+EOF
 fi

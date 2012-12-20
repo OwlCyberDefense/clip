@@ -2,7 +2,7 @@ diff --git a/packages/scap-security-guide/scap-security-guide/RHEL6/input/profil
 index 93642aa..18e6043 100644
 --- a/RHEL6/input/profiles/common.xml
 +++ b/RHEL6/input/profiles/common.xml
-@@ -1,292 +1,766 @@
+@@ -1,292 +1,769 @@
  <Profile id="common" xmlns="http://checklists.nist.gov/xccdf/1.1" >
 -<title>Common Profile for General-Purpose Systems</title>
 -<description>This profile contains items common to general-purpose desktop and server installations.</description>
@@ -502,6 +502,9 @@ index 93642aa..18e6043 100644
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="enable_iptables" selected="true"/>
++
++<!-- DCID Chapters: dcid="4.B.3.a(1)(b), 4.B.1.a(1)(b), 4.B.2.a(1)(b), 4.B.5.a(1)(b), 4.B.4.a(1)(b)" -->
++<select idref="set_iptables_default_rule_forward" selected="true"/>
 +
 +<!-- DCID Chapters: dcid="4.B.3.a(12), 4.B.5.a(17), 4.B.2.a(10), 7.D.2.b, 4.B.4.a(17)" -->
 +<select idref="disable_protocol_dccp" selected="true"/>

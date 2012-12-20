@@ -19,8 +19,19 @@ set -e
 # limitations under the License.
 
 FILE=/etc/sysconfig/iptables
+IPTABLES=/etc/init.d/iptables
 
-[ -f $FILE ] || /sbin/iptables-save > /etc/sysconfig/iptables
+[ -f $IPTABLES ] || exit 1
 
-. $(dirname $0)/set_general_entry
-safe_add_field "(:FORWARD\s+).*" "DROP [0:0]" $FILE
+if [ -f $FILE ]; then
+    # Remove all existing FORWARD rules
+    /bin/sed -i -r -e "/.*FORWARD.*/d" $FILE
+    # Append FORWARD drop rule
+    /bin/sed -i -r -e "/\*filter/a :FORWARD DROP [0:0]" $FILE
+else
+    /bin/cat <<EOF > $FILE
+*filter
+:FORWARD DROP [0:0]
+COMMIT
+EOF
+fi
