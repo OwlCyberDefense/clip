@@ -263,6 +263,16 @@ fi
 
 chage -d 0 "$USERNAME"
 
+# Remove sshd if it in a production build
+# If not, just chkconfig it off
+if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
+    echo "Removing sshd from the system"
+    /bin/rpm -e openssh openssh-clients openssh-server
+else
+    echo "Turning sshd off"
+    /sbin/chkconfig --level 0123456 sshd off
+fi
+
 # Add the user to sudoers and setup an SELinux role/type transition.
 # This line enables a transition via sudo instead of requiring sudo and newrole.
 if [ x"$CONFIG_BUILD_UNCONFINED_TOOR" == "xy" ]; then
