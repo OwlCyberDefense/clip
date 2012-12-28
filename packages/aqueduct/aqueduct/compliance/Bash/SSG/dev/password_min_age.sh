@@ -19,9 +19,9 @@ set -e
 # limitations under the License.
 
 FILE=/etc/login.defs
-PARAM=PASS_MIN_DAYS
+PARAM=PASS_MIN_AGE
 
 [ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry
-safe_add_field "($PARAM\s+).*" "7" $FILE
+safe_add_field "($PARAM\s+).*" $var_password_min_age $FILE
