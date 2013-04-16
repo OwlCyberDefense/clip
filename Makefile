@@ -15,7 +15,9 @@ export RHEL_VER := 6
 
 ######################################################
 # BEGIN MAGIC
+ifneq ($(QUIET),y)
 $(info Boot strapping build system...)
+endif
 
 # NOTE: DO NOT REMOVE THIS CHECK. RUNNING MOCK AS ROOT *WILL* BREAK THINGS.
 ifeq ($(shell id -u),0)
@@ -146,7 +148,9 @@ endef
 # BEGIN RPM GENERATION RULES (BEWARE OF DRAGONS)
 # This define directive is used to generate build rules.
 define RPM_RULE_template
+ifneq ($(QUIET),y)
 $(info Generating rules for rolling package $(1).)
+endif
 $(1): $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
 	$(call CHECK_DEPS)
 	$(call MKDIR,$(MY_REPO_DIR))
@@ -187,8 +191,9 @@ $(eval REPO_ID := $(call GET_REPO_ID, $(1)))
 ifneq ($(strip $(1)),)
 $(eval REPO_PATH := $(call GET_REPO_PATH,$(1)))
 $(eval REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1))))
+ifneq ($(QUIET),y)
 $(info Generating rules based on configured yum repository ID="$(REPO_ID)" PATH=$(REPO_PATH))
-
+endif
 $(eval setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo)
 
 $(eval YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
