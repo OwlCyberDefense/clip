@@ -1,7 +1,7 @@
-diff --git a/packages/scap-security-guide/scap-security-guide/RHEL6/transforms/xccdf-addfixes.xslt b/packages/scap-security-guide/scap-security-guide/RHEL6/transforms/xccdf-addfixes.xslt
+diff --git a/RHEL6/transforms/xccdf-addfixes.xslt b/RHEL6/transforms/xccdf-addfixes.xslt
 index 26a14bd..810477e 100644
---- a/packages/scap-security-guide/scap-security-guide/RHEL6/transforms/xccdf-addfixes.xslt
-+++ b/packages/scap-security-guide/scap-security-guide/RHEL6/transforms/xccdf-addfixes.xslt
+--- a/RHEL6/transforms/xccdf-addfixes.xslt
++++ b/RHEL6/transforms/xccdf-addfixes.xslt
 @@ -18,7 +18,7 @@
          <xsl:if test="@rule=$rule_id">
            <xsl:element name="fix" namespace="http://checklists.nist.gov/xccdf/1.1">
