@@ -311,9 +311,9 @@ if [ x"$CONFIG_BUILD_SECSTATE_REMEDIATE" == "xy" ]; then
 	secstate remediate -y --verbose
 	echo "About to use secstate to do a post-remediation audit using SSG content..."
 	secstate audit
+	echo "All done with secstate :)  Now go play with your freshly remediated system!"
 fi
 
-echo "All done with secstate :)  Now go play with your freshly remediated system!"
 ###### END SECSTATE AUDIT AND REMEDIATE ###########
 
 ###### START - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
