@@ -275,3 +275,16 @@ CLIP for RHEL 6 Frequently Asked Questions
        sudo yum install rpm-build mock createrepo repoview
   CentOS:
        sudo yum install rpm-build mock createrepo repoview
+
+17. I am getting warnings at install time stating "some of the packages you
+have selected for install are missing dependencies."  What's up?
+   The tools don't do a full dep check at build time.  That is because you could
+   be pointing to additional yum repos at install time via the command-line
+   (etc).  If anyone knows of a method to verify deps at build time please shoot
+   us an email.
+
+   The way you fix it is by making sure the referenced package is present in
+   the repos in CONFIG_REPOS.  A common cause is lacking the Optional channel
+   repo when building on RHEL.  This typically results in libxslt-python dep
+   errors.
+
