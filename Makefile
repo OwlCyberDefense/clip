@@ -197,7 +197,7 @@ endif
 $(eval setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo)
 
 $(eval YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
-$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)$(YUM_CONF))
+$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=file://$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
 $(eval MY_REPO_DEPS += $(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo/last-updated)
 $(eval REPO_LINES := $(REPO_LINES)repo --name=my-$(REPO_ID)$(RHEL_VER) --baseurl=file://$(REPO_DIR)/my-$(REPO_ID)$(RHEL_VER)-repo\n)
 
