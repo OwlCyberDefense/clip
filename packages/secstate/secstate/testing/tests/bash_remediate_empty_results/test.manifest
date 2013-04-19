@@ -1,0 +1,8 @@
+[requires]
+bash_import_passreqs
+
+[test]
+remediate
+
+[verify]
+

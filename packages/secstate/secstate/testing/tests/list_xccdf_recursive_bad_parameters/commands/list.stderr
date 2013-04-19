@@ -1,0 +1,3 @@
+usage: secstate list [options] [ContentID] [groupid|ruleid|profileid]
+
+secstate: error: no such option: -q

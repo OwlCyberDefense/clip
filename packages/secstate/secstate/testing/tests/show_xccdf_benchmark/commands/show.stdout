@@ -1,0 +1,6 @@
+PassComp:
+	Title:  'Password Complexity'
+	Selected:  True
+	Profiles:
+		[ ]emptyProfile - 'An empty profile'
+		[X]None - 'None'

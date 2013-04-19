@@ -1,0 +1,13 @@
+[requires]
+import_passreqs
+
+[test]
+select
+list.1
+deselect
+list.2
+select
+list.1
+
+[verify]
+
