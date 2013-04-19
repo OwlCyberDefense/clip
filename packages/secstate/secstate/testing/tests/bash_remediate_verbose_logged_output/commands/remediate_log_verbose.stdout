@@ -1,0 +1,222 @@
+####################/root/passreqs.sh####################
+executed "/bin/bash /root/passreqs.sh"
+environment: {'login_defs_min_days': '1', 'shadow_min_days': '1'}
+returned: 0
+------------------ output: ------------------
+remediating shadow_min_days='1'
+adjusting aging data for user root.
+passwd: success
+adjusting aging data for user bin.
+passwd: success
+adjusting aging data for user daemon.
+passwd: success
+adjusting aging data for user adm.
+passwd: success
+adjusting aging data for user lp.
+passwd: success
+adjusting aging data for user sync.
+passwd: success
+adjusting aging data for user shutdown.
+passwd: success
+adjusting aging data for user halt.
+passwd: success
+adjusting aging data for user mail.
+passwd: success
+adjusting aging data for user news.
+passwd: success
+adjusting aging data for user uucp.
+passwd: success
+adjusting aging data for user operator.
+passwd: success
+adjusting aging data for user games.
+passwd: success
+adjusting aging data for user gopher.
+passwd: success
+adjusting aging data for user ftp.
+passwd: success
+adjusting aging data for user nobody.
+passwd: success
+adjusting aging data for user nscd.
+passwd: success
+adjusting aging data for user vcsa.
+passwd: success
+adjusting aging data for user oprofile.
+passwd: success
+adjusting aging data for user pcap.
+passwd: success
+adjusting aging data for user rpc.
+passwd: success
+adjusting aging data for user mailnull.
+passwd: success
+adjusting aging data for user smmsp.
+passwd: success
+adjusting aging data for user dbus.
+passwd: success
+adjusting aging data for user avahi.
+passwd: success
+adjusting aging data for user sshd.
+passwd: success
+adjusting aging data for user rpcuser.
+passwd: success
+adjusting aging data for user nfsnobody.
+passwd: success
+adjusting aging data for user haldaemon.
+passwd: success
+adjusting aging data for user xfs.
+passwd: success
+adjusting aging data for user avahi-autoipd.
+passwd: success
+adjusting aging data for user jdana.
+passwd: success
+adjusting aging data for user gdm.
+passwd: success
+adjusting aging data for user ntp.
+passwd: success
+adjusting aging data for user test.
+passwd: success
+remediating login_defs_min_days='1'
+####################end /root/passreqs.sh################
+
+
+####################/root/passreqs.sh####################
+executed "/bin/bash /root/passreqs.sh"
+environment: {'login_defs_min_len': '8'}
+returned: 0
+------------------ output: ------------------
+remediating login_defs_min_len='8'
+####################end /root/passreqs.sh################
+
+
+####################/root/passreqs.sh####################
+executed "/bin/bash /root/passreqs.sh"
+environment: {'cracklib_args': 'minlen=8'}
+returned: 0
+------------------ output: ------------------
+remediating cracklib_args='minlen=8'
+####################end /root/passreqs.sh################
+
+
+####################/root/passreqs.sh####################
+executed "/bin/bash /root/passreqs.sh"
+environment: {'cracklib_args': 'ucredit=1'}
+returned: 0
+------------------ output: ------------------
+remediating cracklib_args='ucredit=1'
+####################end /root/passreqs.sh################
+
+
+####################/root/passreqs.sh####################
+executed "/bin/bash /root/passreqs.sh"
+environment: {'cracklib_args': 'ocredit=1'}
+returned: 0
+------------------ output: ------------------
+remediating cracklib_args='ocredit=1'
+####################end /root/passreqs.sh################
+
+
+####################/root/passreqs.sh####################
+executed "/bin/bash /root/passreqs.sh"
+environment: {'cracklib_args': 'maxrepeat=1'}
+returned: 0
+------------------ output: ------------------
+remediating cracklib_args='maxrepeat=1'
+####################end /root/passreqs.sh################
+
+
+####################/root/passreqs.sh####################
+executed "/bin/bash /root/passreqs.sh"
+environment: {'login_defs_max_days': '90'}
+returned: 0
+------------------ output: ------------------
+remediating login_defs_max_days='90'
+####################end /root/passreqs.sh################
+
+
+####################/root/passreqs.sh####################
+executed "/bin/bash /root/passreqs.sh"
+environment: {'shadow_max_days': '90'}
+returned: 0
+------------------ output: ------------------
+remediating shadow_max_days='90'
+adjusting aging data for user root.
+passwd: success
+adjusting aging data for user bin.
+passwd: success
+adjusting aging data for user daemon.
+passwd: success
+adjusting aging data for user adm.
+passwd: success
+adjusting aging data for user lp.
+passwd: success
+adjusting aging data for user sync.
+passwd: success
+adjusting aging data for user shutdown.
+passwd: success
+adjusting aging data for user halt.
+passwd: success
+adjusting aging data for user mail.
+passwd: success
+adjusting aging data for user news.
+passwd: success
+adjusting aging data for user uucp.
+passwd: success
+adjusting aging data for user operator.
+passwd: success
+adjusting aging data for user games.
+passwd: success
+adjusting aging data for user gopher.
+passwd: success
+adjusting aging data for user ftp.
+passwd: success
+adjusting aging data for user nobody.
+passwd: success
+adjusting aging data for user nscd.
+passwd: success
+adjusting aging data for user vcsa.
+passwd: success
+adjusting aging data for user oprofile.
+passwd: success
+adjusting aging data for user pcap.
+passwd: success
+adjusting aging data for user rpc.
+passwd: success
+adjusting aging data for user mailnull.
+passwd: success
+adjusting aging data for user smmsp.
+passwd: success
+adjusting aging data for user dbus.
+passwd: success
+adjusting aging data for user avahi.
+passwd: success
+adjusting aging data for user sshd.
+passwd: success
+adjusting aging data for user rpcuser.
+passwd: success
+adjusting aging data for user nfsnobody.
+passwd: success
+adjusting aging data for user haldaemon.
+passwd: success
+adjusting aging data for user xfs.
+passwd: success
+adjusting aging data for user avahi-autoipd.
+passwd: success
+adjusting aging data for user jdana.
+passwd: success
+adjusting aging data for user gdm.
+passwd: success
+adjusting aging data for user ntp.
+passwd: success
+adjusting aging data for user test.
+passwd: success
+####################end /root/passreqs.sh################
+
+
+####################/root/passreqs.sh####################
+executed "/bin/bash /root/passreqs.sh"
+environment: {'pam_unix_args': 'remember=9'}
+returned: 0
+------------------ output: ------------------
+remediating pam_unix_args='remember=9'
+####################end /root/passreqs.sh################
+
+

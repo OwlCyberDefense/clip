@@ -1,0 +1,11 @@
+[requires]
+deselect_group
+
+[test]
+save1
+select
+save2
+
+[verify]
+save2
+

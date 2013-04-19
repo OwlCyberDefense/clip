@@ -1,0 +1,16 @@
+
+/usr/sbin/secstate <sub-command> [options]
+Sub-commands:
+    import          --  Validates and imports a benchmark and its associated OVAL into the system
+    remove          --  Removes content that had been added via the 'import' command
+    export          --  Exports imported content along with any changes that have been made
+    select          --  Sets a portion of the benchmark (group/rule) to be selected
+    deselect        --  Sets a portion of the benchmark (group/rule) to be deselected
+    save            --  Saves changes made to the current benchmark to a named profile
+    list            --  List the imported benchmarks
+    show            --  Shows the information associated with a group, rule, or definition id
+    search          --  Search through imported content
+    mitigate        --  Mark a rule as mitigated and provide an explanation (beta - use at own risk)
+    remediate       --  Bring the local system into compliance with a benchmark
+    version         --  Provides current version information for secstate
+    audit           --  Audit the local system based the specified XCCDF/OVAL content

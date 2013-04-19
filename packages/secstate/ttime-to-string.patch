@@ -1,0 +1,21 @@
+diff -urN a/src/secstate/util.py b/src/secstate/util.py
+--- a/src/secstate/util.py	2012-11-14 18:39:20.000000000 -0500
++++ b/src/secstate/util.py	2013-04-19 15:09:10.809452582 -0400
+@@ -137,7 +137,7 @@
+     title = oscap.common.text_new()
+     title.text = "Secstate Audit Result"
+     ritem.add_title(title)
+-    ritem.start_time = time.time()
++    ritem.start_time = time.asctime()
+     if policy != None:
+         if policy.profile != None:
+             ritem.set_profile(policy.profile.id)
+@@ -165,7 +165,7 @@
+             rule_res.add_override(override)
+             rule_res.result = override.new_result
+ 
+-    ritem.end_time = time.time()
++    ritem.end_time = time.asctime()
+ 
+     # Print results in beautiful manner, using ljust instead of tabs
+     left_col = ["Passed:",

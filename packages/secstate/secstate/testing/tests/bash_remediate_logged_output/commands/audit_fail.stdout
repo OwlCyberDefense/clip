@@ -1,0 +1,15 @@
+--Results for 'password-req' (Profile: 'None')--
+Passed:         0
+Mitigated:      0
+Failed:         9
+Fixed:          0
+Not Selected:   0
+Not Checked:    0
+Not Applicable: 0
+Error:          0
+Informational:  0
+Unknown:        0
+Parse Error:    0
+Total:          9
+
+Generating HTML output...

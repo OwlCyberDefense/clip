@@ -1,0 +1,9 @@
+[requires]
+list_multiple_xccdf
+
+[test]
+deselect
+
+[verify]
+list
+
