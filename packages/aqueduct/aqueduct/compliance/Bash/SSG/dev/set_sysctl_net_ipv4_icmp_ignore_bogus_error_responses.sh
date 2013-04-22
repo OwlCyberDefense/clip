@@ -20,4 +20,4 @@ set -e
 
 . $(dirname $0)/set_sysctl_common
 
-set_sysctl_param net.ipv4.icmp_ignore_bogus_error_responses $sysctl_net_ipv4_icmp_ignore_bogus_error_responses_value
+set_sysctl_param net.ipv4.icmp_ignore_bogus_error_responses 1

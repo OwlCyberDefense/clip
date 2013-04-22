@@ -20,4 +20,4 @@ set -e
 
 . $(dirname $0)/set_sysctl_common
 
-set_sysctl_param net.ipv6.conf.default.accept_redirects $sysctl_net_ipv6_conf_default_accept_redirects_value
+set_sysctl_param net.ipv6.conf.default.accept_redirects 0

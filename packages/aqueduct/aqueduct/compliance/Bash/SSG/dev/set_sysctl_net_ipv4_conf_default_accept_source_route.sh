@@ -20,4 +20,4 @@ set -e
 
 . $(dirname $0)/set_sysctl_common
 
-set_sysctl_param net.ipv4.conf.default.accept_source_route $sysctl_net_ipv4_conf_all_accept_source_route_value
+set_sysctl_param net.ipv4.conf.default.accept_source_route 0

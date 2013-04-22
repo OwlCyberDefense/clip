@@ -16,7 +16,6 @@ Patch3:		httpd-dependency-checking.patch
 Patch4:		sysctl-module-dependency-checking.patch
 Patch5:		add-dcid-profile.patch
 Patch6:		add-manual-profile.patch
-Patch7:		fixes-with-variables.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 
@@ -48,7 +47,6 @@ involved in the SCAP Security Guide community.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
 
 %build
 #configure
@@ -77,16 +75,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0750,root,root)/usr/local/scap-security-guide/
 
 %post
-$RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools/fix_mapper.py $RPM_BUILD_ROOT/usr/local/scap-security-guide/RHEL6
+$RPM_BUILD_ROOT/usr/libexec/aqueduct/SSG/tools/fix_mapper.py
 cd $RPM_BUILD_ROOT/usr/local/scap-security-guide/RHEL6
 # Prevent clock drift from breaking the make.
 find ./ -exec touch '{}' \;
 make clean && make all
 
 %changelog
-* Fri Dec 21 2012 Mike Palmiotto <mpalmiotto@tresys.com> 1.0-6
-- Add a patch to map variables from profiles into fix tags.
-
 * Thu Nov 08 2012 Mike Palmiotto <mpalmiotto@tresys.com> 1.0-5
 - Add some patches for dependency checking in OVAL checks
 

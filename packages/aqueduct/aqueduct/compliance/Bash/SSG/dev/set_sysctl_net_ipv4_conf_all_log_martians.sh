@@ -20,4 +20,4 @@ set -e
 
 . $(dirname $0)/set_sysctl_common
 
-set_sysctl_param net.ipv4.conf.all.log_martians $sysctl_net_ipv4_conf_all_log_martians_value
+set_sysctl_param net.ipv4.conf.all.log_martians 1

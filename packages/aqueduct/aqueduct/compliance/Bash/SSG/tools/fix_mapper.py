@@ -17,14 +17,16 @@
 # limitations under the License.
 
 import sys, re, os
-from var_mapper import map_rule2check
 
 def map_fixes():
-	global BASEDIR
-
 	FIXDIR = "scap-security-guide/RHEL6/input/fixes/"
 	PROFILES = "scap-security-guide/RHEL6/input/profiles/"
 
+	if len(sys.argv) != 2:
+		BASEDIR="/usr/local/"
+	else:
+		BASEDIR=sys.argv[1]
+	
 	MANUAL = "/usr/libexec/aqueduct/SSG/tools/manual.xml"
 	FIXDIR = BASEDIR+FIXDIR
 	PROFILES = BASEDIR+PROFILES
@@ -41,40 +43,24 @@ def map_fixes():
 
 	with open(FIX_FILE, "w") as fixes:
 		fixes.write('<fix-group id="bash" system="urn:xccdf:fix:script:bash" xmlns="http://checklists.nist.gov/xccdf/1.1">\n')
+		fixes.write('<!-- TODO: Add environment variables to each script. -->\n')
 
 		with open(COMMON_PROFILE, "r") as profile:
 			for line in profile:
 				inclusion = re.search("idref\=\"[^\"]*\"", line)
 				
-				if inclusion:
+				if inclusion and (str.find(exclusions, line) < 0):
 					inclusion = re.sub("(idref\=\"|\")", "", inclusion.group(0))
-                                        
-					fix_string = "<fix rule=\"%s\"> {\"script\"" %inclusion +\
-						" : \"/usr/libexec/aqueduct/SSG/scripts/%s.sh\"" %inclusion +\
-						" }</fix>\n"
-
+					
 					if (inclusion+".sh" in legit_scripts):
-						var_set = map_rule2check(BASEDIR, inclusion)
-						
-						if var_set and var_set[1] != "":
-							var_string = ".sh\",\n\"environment-variables\"" +\
-							" : { \"%s\"" %var_set[1] +\
-							" : \"<sub idref=\"%s\" />\" }" %var_set[1]
-
-							fix_string = re.sub("\.sh\"", var_string, fix_string)							
-						fixes.write(fix_string)
+						fixes.write("<fix rule=\"%s\"> {\"script\" : \"/usr/libexec/aqueduct/SSG/scripts/%s.sh\"} </fix>\n" %(inclusion, inclusion))
 			
+                fixes.write('<!-- Manual content. -->\n')
+		
+		exclusions = re.sub("(<.*Profile.*)|(<title.*)|(<description.*)", "", exclusions)
+		manual_content = re.sub("(<select idref=)\"([^\"]*)\".*", "<fix rule=\"\\2\"> {\"script\" : \"/usr/libexec/aqueduct/SSG/scripts/\\2.sh\"} </fix>", exclusions)
+	
+		fixes.write(manual_content)
 		fixes.write("</fix-group>")
 
-def main():
-	global BASEDIR
-	
-	if len(sys.argv) != 2:
-                BASEDIR="/usr/local/"
-        else:
-                BASEDIR=sys.argv[1]
-
-	map_fixes()
-
-if __name__ == "__main__":
-	main()
+map_fixes()

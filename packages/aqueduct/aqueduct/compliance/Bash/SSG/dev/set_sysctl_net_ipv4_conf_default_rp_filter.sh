@@ -20,4 +20,4 @@ set -e
 
 . $(dirname $0)/set_sysctl_common
 
-set_sysctl_param net.ipv4.conf.default.rp_filter $sysctl_net_ipv4_conf_default_rp_filter_value
+set_sysctl_param net.ipv4.conf.default.rp_filter 1

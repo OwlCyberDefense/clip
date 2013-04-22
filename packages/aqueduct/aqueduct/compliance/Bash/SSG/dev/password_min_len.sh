@@ -24,4 +24,4 @@ PARAM=PASS_MIN_LEN
 [ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry
-safe_add_field "($PARAM\s+).*" $var_password_min_len $FILE
+safe_add_field "($PARAM\s+).*" "14" $FILE
