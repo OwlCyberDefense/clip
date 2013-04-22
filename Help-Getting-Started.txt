@@ -1,20 +1,17 @@
 Here is a quick list of the things you need to do to get started.
 
-1. Modify CONFIG_REPOS to point to your *local* RHEL, Opt, or CentOS repos.  
-Refer to Help-FAQ.txt for help setting up local yum repos.
-
-2. Add your user to /etc/sudoers (required since mock and livecd creator use
+1. Add your user to /etc/sudoers (required since mock and livecd creator use
 chroots)
 
-3. CHANGE THE DEFAULT PASSWORD IN YOUR KICKSTART (kickstarts/clip-rhel6/clip-rhel6.ks)!
+2. CHANGE THE DEFAULT PASSWORD IN YOUR KICKSTART (kickstarts/clip-rhel6/clip-rhel6.ks)!
 CLIP intentionally ships with an unencrypted default password!  It is "neutronbass".  
 DO NOT LEAVE THIS PASSWORD LINE INTACT!
 
-4. Go back and re-read #4.
+3. Go back and re-read #2.
 
-5. Run "./bootstrap.sh". 
+4. Run "./bootstrap.sh". 
 
-6. After you have run bootstrap once you do not have to run it again. 
+5. After you have run bootstrap once you do not have to run it again. 
 Roll an ISO by running "$ make clip-rhel6-iso".
 Note: for a complete list of targets available please run "$ make help".
 
