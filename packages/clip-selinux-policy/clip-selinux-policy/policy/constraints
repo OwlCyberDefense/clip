@@ -54,15 +54,6 @@ define(`exempted_ubac_constraint',`
 	')
 ')
 
-define(`constrain_user_u',`
-	ifdef(`enable_ubac',`
-		constrain $1 all_$1_perms
-		(
-			u1 != user_u
-			or u2 != user_u
-		);
-	')
-')
 #
 ########################################
 #
@@ -116,29 +107,96 @@ constrain process { transition noatsecure siginh rlimitinh }
 );
 
 # SRS: Added for CLIP - there is a bug in useradd that necessitates user_u to be present in policy.  But we dont really want that ID being used for anything so lets neuter this via constraints.
+define(`constrain_user_u',`
+	ifdef(`enable_ubac',`
+		constrain $1 all_$1_perms
+		(
+			u1 != user_u
+			and u2 != user_u
+		);
+	')
+')
+constrain_user_u(security)
+constrain_user_u(system)
+constrain_user_u(capability)
+constrain_user_u(memprotect)
+constrain_user_u(passwd)
+constrain_user_u(node)
+constrain_user_u(netif)
+constrain_user_u(packet)
+constrain_user_u(capability2)
+constrain_user_u(nscd)
+constrain_user_u(context)
 constrain_user_u(process)
 constrain_user_u(sock_file)
 constrain_user_u(lnk_file)
 constrain_user_u(chr_file)
 constrain_user_u(blk_file)
+constrain_user_u(fd)
+constrain_user_u(fd)
+constrain_user_u(ipc)
 constrain_user_u(sem)
 constrain_user_u(msg)
 constrain_user_u(msgq)
 constrain_user_u(tcp_socket)
 constrain_user_u(udp_socket)
 constrain_user_u(rawip_socket)
+constrain_user_u(netlink_socket)
+constrain_user_u(packet_socket)
+constrain_user_u(key_socket)
+constrain_user_u(unix_stream_socket)
+constrain_user_u(unix_dgram_socket)
+constrain_user_u(netlink_route_socket)
+constrain_user_u(netlink_firewall_socket)
+constrain_user_u(netlink_tcpdiag_socket)
+constrain_user_u(netlink_nflog_socket)
+constrain_user_u(netlink_xfrm_socket)
+constrain_user_u(netlink_selinux_socket)
+constrain_user_u(netlink_audit_socket)
+constrain_user_u(netlink_ip6fw_socket)
+constrain_user_u(netlink_dnrt_socket)
+constrain_user_u(netlink_kobject_uevent_socket)
+constrain_user_u(appletalk_socket)
+constrain_user_u(dccp_socket)
+constrain_user_u(tun_socket)
+constrain_user_u(association)
+constrain_user_u(peer)
+constrain_user_u(key)
+constrain_user_u(x_drawable)
+constrain_user_u(x_screen)
+constrain_user_u(x_gc)
+constrain_user_u(x_font)
+constrain_user_u(x_colormap)
+constrain_user_u(x_property)
+constrain_user_u(x_selection)
+constrain_user_u(x_cursor)
+constrain_user_u(x_client)
+constrain_user_u(x_device)
+constrain_user_u(x_server)
+constrain_user_u(x_extension)
+constrain_user_u(x_resource)
+constrain_user_u(x_event)
+constrain_user_u(x_synthetic_event)
+constrain_user_u(x_application_data)
+constrain_user_u(dbus)
+constrain_user_u(db_database)
+constrain_user_u(db_table)
+constrain_user_u(db_column)
+constrain_user_u(db_tuple)
+constrain_user_u(db_blob)
+constrain_user_u(db_procedure)
 
 #constrain_user_u(file)
 #constrain_user_u(dir)
 constrain dir { all_dir_perms }
 (
 	# Only constrain u1 so useradd etc can still create files w/ this user ID
-	u1 != user_u
+	u1 != user_u or ( t1 == semanage_t or t1 == useradd_t )
 );
 constrain file { all_file_perms }
 (
 	# Only constrain u1 so useradd etc can still create files w/ this user ID
-	u1 != user_u
+	u1 != user_u or ( t1 == semanage_t or t1 == useradd_t )
 );
 # SRS: END user_u stuff
 
