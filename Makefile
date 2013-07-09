@@ -25,8 +25,9 @@ $(error Never run "make" as root! Try again as an unprivileged user with sudo ac
 endif
 
 # Unfortunately there is a package we need that isn't in RHEL/EPEL/Opt.
+# Or they are packages from upstream we have to patch.
 # So we will roll it ourselves inside of mock :)
-HOST_REQD_PKGS := pungi
+HOST_REQD_PKGS := pungi livecd-tools
 
 HOST_RPM_DEPS := rpm-build createrepo mock repoview
 
