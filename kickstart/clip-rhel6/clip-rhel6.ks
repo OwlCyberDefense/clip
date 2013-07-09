@@ -218,6 +218,7 @@ yum
 exec >/root/clip_post_install.log 2>&1
 # Print the log to tty7 so that the user know what's going on
 tail -f /root/clip_post_install.log >/dev/tty7 &
+TAILPID=$!
 chvt 7
 # DO NOT REMOVE THE FOLLOWING LINE. NON-EXISTENT WARRANTY VOID IF REMOVED.
 #CONFIG-BUILD-PLACEHOLDER
@@ -346,6 +347,9 @@ if [ x"$CONFIG_BUILD_ENFORCING_MODE" != "xy" ]; then
 fi
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 echo "Done with post install scripts..."
+
+# If we don't kill our tail above, livecd creator can't unmount stuff and fails in quite an amazing manner.
+kill $TAILPID
 
 %end
 
