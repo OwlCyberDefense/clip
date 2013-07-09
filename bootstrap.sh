@@ -74,7 +74,12 @@ fi
 # install packages from epel that we carry in CLIP
 pushd . >/dev/null
 cd host_packages 
-for i in `find ./ -iname *.rpm`; do
+for i in `find ./ -iname *.noarch.rpm`; do
+	NAME=`/bin/rpm -qp --queryformat '%{NAME}' $i 2>/dev/null`
+	/bin/rpm -q "$NAME" > /dev/null|| sudo /usr/bin/yum localinstall -y $i
+done
+arch=`rpm --eval %_host_cpu`
+for i in `find ./ -iname *.$arch.rpm`; do
 	NAME=`/bin/rpm -qp --queryformat '%{NAME}' $i 2>/dev/null`
 	/bin/rpm -q "$NAME" > /dev/null|| sudo /usr/bin/yum localinstall -y $i
 done
