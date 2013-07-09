@@ -1,0 +1,12 @@
+index 345c638..09f5ed3 100644
+--- a/imgcreate/kickstart.py
++++ b/imgcreate/kickstart.py
+@@ -425,7 +425,7 @@ class SelinuxConfig(KickstartConfig):
+ 
+     def apply(self, ksselinux):
+         if os.path.exists(self.path("/usr/sbin/lokkit")):
+-            args = ["/usr/sbin/lokkit", "-f", "--quiet", "--nostart"]
++            args = ["/usr/sbin/lokkit", "--quiet", "--nostart"]
+ 
+             if ksselinux.selinux == ksconstants.SELINUX_ENFORCING:
+                 args.append("--selinux=enforcing")
