@@ -39,7 +39,7 @@ REPO_LINES ?= repo --name=centos --baseurl=http://mirror.centos.org/centos/6.2/o
 DEPS := $(PUNGI) $(LIVECD_CREATOR)
 SETUP_DEPS := $(CURDIR)/Makefile $(CURDIR)/$(KS)
 
-all: iso livecd setup-ks
+all: iso live-iso setup-ks
 
 iso: $(DEPS) $(ADDTL_DEPS) setup-ks
 	@echo "Gathering things with pungi..."
@@ -65,7 +65,7 @@ setup-ks: $(SETUP_DEPS)
 	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-PLACEHOLDER;$(CONFIG_BUILD_BASH_VARS);' $(BUILD_DIR)/$(KS) || true
 	$(VERBOSE)sed -e 's/^repo/#repo/' $(BUILD_DIR)/$(KS) > $(PUNGI_OS_DIR)/$(KS)
 
-livecd: $(DEPS) $(ADDTL_DEPS) setup-ks
+live-iso: $(DEPS) $(ADDTL_DEPS) setup-ks
 	$(VERBOSE)cp --force $(MAYFLOWER) $(BUILD_DIR)/mayflower
 	$(VERBOSE)cp --force $(LIVECD_CREATOR) $(BUILD_DIR)/livecd-creator
 	$(VERBOSE)sed -i -e 's;CDLABEL;live:CDLABEL;g' $(BUILD_DIR)/livecd-creator
@@ -79,4 +79,4 @@ clean:
 bare: clean
 	rm -rf $(TMP_DIR)
 
-.PHONY: all livecd iso clean bare setup-ks
+.PHONY: all live-iso iso clean bare setup-ks

@@ -245,10 +245,10 @@ help:
 	@echo "	all (roll all packages and generate all installation ISOs)"
 	@for cd in $(INSTISOS); do echo "	$$cd"; done
 	@echo
-	@#echo "The following make targets are available for generating Live CDs:"
-	@#echo "	all (generate all installation ISOs and Live CDs)"
-	@#for cd in $(LIVECDS); do echo "	$$cd"; done
-	@#echo
+	@echo "The following make targets are available for generating Live CDs:"
+	@echo "	all (generate all installation ISOs and Live CDs)"
+	@for cd in $(LIVECDS); do echo "	$$cd"; done
+	@echo
 	@echo "The following make targets are available for generating RPMs in mock:"
 	@echo "	rpms (generate all rpms in mock)"
 	@for pkg in $(PACKAGES); do echo "	$$pkg-rpm"; done
@@ -266,9 +266,9 @@ help:
 	@echo "The following make targets are available for generating yum repos used for mock and ISO generation:"
 	@for repo in $(setup_all_repos); do echo "	$$repo"; done
 	@echo
-	@#echo "To burn a livecd image to a thumbdrive:"
-	@#echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
-	@#echo
+	@echo "To burn a livecd image to a thumbdrive:"
+	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
+	@echo
 	@echo "The following make targets are available for cleaning:"
 	@for pkg in $(PACKAGES); do echo "	$$pkg-clean (remove rpm and srpm)"; done
 	@echo "	clean (cleans transient files)"
@@ -320,9 +320,7 @@ srpms: $(SRPMS)
 
 $(LIVECDS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(call CHECK_DEPS)
-	@if [ x"$(RHEL_VER)" == "x6" ]; then echo "Sorry but at this time RHEL 6 LiveCDs won't boot due to dracut issues.";\
-echo "Press enter to continue anyway or ctrl-c to exit."; read; fi
-	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-livecd/\1/'`" livecd
+	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-live-iso/\1/'`" live-iso
 
 $(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(call CHECK_DEPS)
