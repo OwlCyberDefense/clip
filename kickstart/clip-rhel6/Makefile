@@ -25,7 +25,6 @@ PUNGI ?= $(SUPPORT_DIR)/pungi
 DEBUG ?= y
 
 PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(ISO_VERSION)" --name="$(NAME)" --nosource --force
-#LIVECD_ARGS := --skip-compress --extra-space=104857600 --config="$(BUILD_DIR)/$(NAME).ks" --fslabel="$(NAME)"
 LIVECD_ARGS := --config="$(BUILD_DIR)/$(NAME).ks"
 
 # These variables are usually passed in from CONFIG_BUILD to the top level Makefile.
@@ -67,13 +66,10 @@ setup-ks: $(SETUP_DEPS)
 	$(VERBOSE)sed -e 's/^repo/#repo/' $(BUILD_DIR)/$(KS) > $(PUNGI_OS_DIR)/$(KS)
 
 live-iso: $(DEPS) $(ADDTL_DEPS) setup-ks
-	#$(VERBOSE)cp --force $(MAYFLOWER) $(BUILD_DIR)/mayflower
-	#$(VERBOSE)cp --force $(LIVECD_CREATOR) $(BUILD_DIR)/livecd-creator
-	#$(VERBOSE)sed -i -e 's;CDLABEL;live:CDLABEL;g' $(BUILD_DIR)/livecd-creator
 	@echo "Live CD Creator needs root permissions - please enter your sudo password if prompted."
 	$(VERBOSE)sudo /usr/bin/livecd-creator  $(LIVECD_ARGS)
 	$(VERBOSE)mv --force livecd-*.iso $(OUTPUT_DIR)/$(NAME)-$(ISO_VERSION)-live.iso
-	# livecd-creator creates cruft in the curdir
+	@# livecd-creator creates cruft in the curdir
 	@rm -rf my-*
 
 clean:
