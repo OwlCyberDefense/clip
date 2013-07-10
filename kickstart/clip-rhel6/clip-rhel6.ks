@@ -124,6 +124,7 @@ ruby
 setup
 setools-console
 shadow-utils
+sudo
 util-linux-ng
 vim-minimal
 vlock
