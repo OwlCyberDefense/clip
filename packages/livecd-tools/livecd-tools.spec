@@ -18,6 +18,8 @@ URL: http://git.fedorahosted.org/git/livecd
 Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}.tar.bz2
 Patch0: lokkit-fw-no-reset.patch
 Patch1: dracut-live-fix.patch
+Patch2: boot-menu-cleanup.patch
+Patch3: setfiles-force-all-bits.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{epoch}:%{version}-%{release}
 Requires: mkisofs
@@ -65,6 +67,8 @@ like live image or appliances.
 %setup -q
 %patch0 -p1 -b .fwfix
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
 make
