@@ -16,7 +16,7 @@ diff -urN a/imgcreate/live.py b/imgcreate/live.py
          f.write('filesystems+="' + self.__extra_filesystems() + ' "\n')
          f.write('drivers+="' + self.__extra_drivers() + ' "\n')
 +        # SRS: fix for https://bugzilla.redhat.com/show_bug.cgi?id=766955
-+        f.write('add_dracutmodules+=" dmsquash-live "')
++        f.write('add_dracutmodules+=" dmsquash-live clip "')
          f.close()
  
      def __create_iso(self, isodir):
