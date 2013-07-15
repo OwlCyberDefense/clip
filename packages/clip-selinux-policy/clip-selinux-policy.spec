@@ -14,6 +14,7 @@ Group: System Environment/Base
 Source: %{pkgname}-%{version}.tar.gz
 Url: http://oss.tresys.com/repos/refpolicy/
 BuildArch: noarch
+Requires: coreutils
 
 %description 
 Certifiable Linux Integration Platform SELinux core, non-policy components. 
