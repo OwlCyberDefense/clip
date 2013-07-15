@@ -253,6 +253,9 @@ dev_mounton(kernel_t)
 
 # SRS: in dracut init opens kmsg as kernel_t
 dev_write_kmsg(kernel_t)
+domain_unconfined(kernel_t)
+dev_relabel_all_dev_nodes(kernel_t)
+selinux_set_enforce_mode(kernel_t)
 
 # Mount root file system. Used when loading a policy
 # from initrd, then mounting the root filesystem
@@ -279,6 +282,10 @@ files_read_usr_files(kernel_t)
 files_manage_mounttab(kernel_t)
 files_manage_generic_spool_dirs(kernel_t)
 
+# SRS: no idea why this wasnt here in the first place...
+#      discovered when dracut in a livecd environment couldnt use the ext3 img
+kernel_unconfined(kernel_t)
+
 mcs_process_set_categories(kernel_t)
 mcs_file_read_all(kernel_t)
 mcs_file_write_all(kernel_t)  
@@ -296,7 +303,7 @@ ifdef(`distro_redhat',`
 	# Problem is that the script is still running in kernel_t at that point, not init_t.
 	# This didnt use to occur since init was execd before restorecon thus is was *not* in kernel_t.
 	# So transition from kernel into setfiles.
-	seutil_domtrans_setfiles(kernel_t)
+	#seutil_domtrans_setfiles(kernel_t)
 ')
 
 optional_policy(`
