@@ -80,6 +80,8 @@ m4
 scap-security-guide
 aqueduct
 aqueduct-SSG
+dracut
+clip-dracut-module
 #aqueduct-ssg-bash
 secstate
 
