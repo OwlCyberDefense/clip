@@ -19,7 +19,7 @@ OUTPUT_DIR ?= $(ROOT_DIR)
 PUNGI_OS_DIR := $(BUILD_DIR)/$(ISO_VERSION)/$(shell uname -i)/os/
 PUNGI_ISO_DIR := $(BUILD_DIR)/$(ISO_VERSION)/$(shell uname -i)/iso/
 
-LIVECD_CREATOR ?= $(SUPPORT_DIR)/livecd-creator
+LIVECD_CREATOR ?= /usr/bin/livecd-creator
 PUNGI ?= $(SUPPORT_DIR)/pungi
 
 DEBUG ?= y
@@ -36,7 +36,7 @@ CONFIG_BUILD_BASH_VARS ?= export CONFIG_BUILD_PRODUCTION=n CONFIG_BUILD_ENFORCIN
 # probably just ignore this.
 REPO_LINES ?= repo --name=centos --baseurl=http://mirror.centos.org/centos/6.2/os/$$basearch\nrepo --name=epel   --baseurl=http://download.fedora.redhat.com/pub/epel/$(RHEL_VER)/$$basearch
 
-DEPS := $(PUNGI) $(LIVECD_CREATOR)
+DEPS := $(PUNGI)
 SETUP_DEPS := $(CURDIR)/Makefile $(CURDIR)/$(KS)
 
 all: iso live-iso setup-ks
@@ -67,7 +67,7 @@ setup-ks: $(SETUP_DEPS)
 
 live-iso: $(DEPS) $(ADDTL_DEPS) setup-ks
 	@echo "Live CD Creator needs root permissions - please enter your sudo password if prompted."
-	$(VERBOSE)sudo /usr/bin/livecd-creator  $(LIVECD_ARGS)
+	$(VERBOSE)sudo $(LIVECD_CREATOR)  $(LIVECD_ARGS)
 	$(VERBOSE)mv --force livecd-*.iso $(OUTPUT_DIR)/$(NAME)-$(ISO_VERSION)-live.iso
 	@# livecd-creator creates cruft in the curdir
 	@rm -rf my-*

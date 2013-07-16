@@ -80,7 +80,7 @@ export REPO_LINES := repo --name=my-repo --baseurl=file://$(MY_REPO_DIR)\n
 
 export SRPM_OUTPUT_DIR ?= $(MY_SRPM_REPO_DIR)
 
-export LIVECD_CREATOR := $(SUPPORT_DIR)/livecd-creator
+export LIVECD_CREATOR := /usr/bin/livecd-creator
 export MAYFLOWER := $(SUPPORT_DIR)/mayflower
 
 SED = /bin/sed
@@ -350,7 +350,7 @@ iso-to-disk:
 	$(VERBOSE)sudo /sbin/mkdosfs -n CLIP $(USB_DEV)1
 	$(VERBOSE)sudo umount $(USB_DEV)1 2>&1 > /dev/null || true
 	@echo "Writing image..."
-	$(VERBOSE)sudo $(CURDIR)/support/livecd-iso-to-disk --resetmbr $(ISO_FILE) $(USB_DEV)1
+	$(VERBOSE)sudo /usr/bin/livecd-iso-to-disk --resetmbr $(ISO_FILE) $(USB_DEV)1
 
 clean-mock: $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
 	$(VERBOSE)$(RM) $(YUM_CONF_FILE)
