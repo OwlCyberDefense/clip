@@ -57,7 +57,7 @@ Requires: system-config-keyboard >= 1.3.0
 Requires: python-urlgrabber
 Requires: libselinux-python
 Requires: dbus-python
-Requires: dracut clip-dracut-module
+Requires: dracut
 
 %description -n python-imgcreate
 Python modules that can be used for building images for things
