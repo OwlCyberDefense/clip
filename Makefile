@@ -144,6 +144,10 @@ define CHECK_MOCK
 	@if ps -eo comm= | grep -q mock; then echo "ERROR: Another instance of mock is running.  Please hangup and try your build again later." && exit 1; fi
 endef
 
+define CHECK_LIVE_TOOLS
+	if [ x"`rpm -q livecd-tools --queryformat '%{version}-%{release}'`" != x"$$( rpm --eval `sed -n -e 's/Release: \(.*\)/\1/p' -e 's/Version: \(.*\)/\1/p' packages/livecd-tools/livecd-tools.spec| sed 'N;s/\n/-/'` )" ]; then echo "Error: you have to use our version of livecd-tools.  Refer to Help-LiveCDs.txt for instructions."; exit 1; fi
+endef
+
 ######################################################
 # BEGIN RPM GENERATION RULES (BEWARE OF DRAGONS)
 # This define directive is used to generate build rules.
@@ -321,6 +325,7 @@ srpms: $(SRPMS)
 
 $(LIVECDS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(call CHECK_DEPS)
+	$(call CHECK_LIVE_TOOLS)
 	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-live-iso/\1/'`" live-iso
 
 $(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)

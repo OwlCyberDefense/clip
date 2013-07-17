@@ -1,27 +1,8 @@
-LiveCD Creator has numerous issues between 0.13 and 0.14, and each vendor appears to
-be carrying a unique patch set but fails to provide versions of these packages which are
-compatible with each other:
-* pykickstart
-* livecd-tools
-* syslinux
+livecd-tools from EPEL has problems.  We have a patched version we're using.
+To generate Live Media you're going to have to install our version.
 
-So we're going to use the patched versions that CentOS uses to roll LiveCDs. Their
-repo provides patched versions of both of those tools.  Here are the commands to
-get this setup (run as root):
-
-'''
-echo <<EOF > /etc/yum.repos.d/centos-livecd.repo
-# Name: CentOS LiveCD repository
-[livecd]
-name = CentOS $releasever - LiveCD
-baseurl = http://www.nanotechnologies.qc.ca/propos/linux/centos-live/$basearch/live
-enabled=1
-protect=0
-gpgkey = http://www.nanotechnologies.qc.ca/propos/linux/RPM-GPG-KEY-PGuay2010
-EOF
-
-yum install livecd-tools syslinux
-'''
-
-Original guidance here:
-https://projects.centos.org/trac/livecd/wiki/GetToolset
+1. "$ make livecd-tools-rpm"
+2. "$ cd repos/my-repo"
+3. "$ sudo yum remove livecd-tools python-imgcreate -y"  <= don't worry if
+this fails, it just means you don't have the bad versions installed.
+4. "$ sudo yum localinstall livecd-tools*.noarch.rpm python-imgcreate* -y"
