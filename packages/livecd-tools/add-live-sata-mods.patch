@@ -1,0 +1,12 @@
+diff -purN a/imgcreate/live.py b/imgcreate/live.py
+--- a/imgcreate/live.py	2013-07-16 17:11:24.709055038 -0400
++++ b/imgcreate/live.py	2013-07-16 17:40:33.120675899 -0400
+@@ -232,7 +232,7 @@ class LiveImageCreatorBase(LoopImageCrea
+         return "squashfs ext4 ext3 ext2 vfat msdos ";
+ 
+     def __extra_drivers(self):
+-        retval = "sr_mod sd_mod ide-cd cdrom "
++        retval = "sr_mod sd_mod ide-cd cdrom ata_generic ata_piix sg pata_acpi dm_mod dm_log dm_region_hash dm_mirror mptbase mptscsih mptspi "
+         for module in self.__modules:
+             if module == "=usb":
+                 retval = retval + "ehci_hcd uhci_hcd ohci_hcd "

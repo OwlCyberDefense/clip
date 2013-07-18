@@ -20,6 +20,7 @@ Patch0: lokkit-fw-no-reset.patch
 Patch1: dracut-live-fix.patch
 Patch2: boot-menu-cleanup.patch
 Patch3: setfiles-force-all-bits.patch
+Patch4: add-live-sata-mods.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{epoch}:%{version}-%{release}
 Requires: mkisofs
@@ -70,6 +71,7 @@ like live image or appliances.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 make
