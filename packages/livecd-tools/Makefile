@@ -1,6 +1,8 @@
 # Copyright (C) 2012 Tresys Technology, LLC
+# Copyright (C) 2013 Cubic Corporation
 #
 # Authors: Spencer Shimko <sshimko@tresys.com>
+#          Spencer Shimko <spencer@quarksecurity.com>
 #
 
 # The name of the package

@@ -1,9 +1,7 @@
+# Copyright (C) 2013 Cubic Corporation
 #
+# Authors: Spencer Shimko <spencer@quarksecurity.com>
 #
-#
-#
-#
-
 PREFIX ?= $(DESTDIR)/usr/share/dracut/modules.d
 INSTDIR := $(PREFIX)/96clip
 
