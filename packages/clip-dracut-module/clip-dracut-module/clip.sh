@@ -1,4 +1,8 @@
 #!/bin/sh
+# Copyright (C) 2013 Cubic Corporation
+#
+# Authors: Spencer Shimko <spencer@quarksecurity.com>
+#
 rm "$NEWROOT"/.autorelabel
 
 # If SELinux is disabled exit now

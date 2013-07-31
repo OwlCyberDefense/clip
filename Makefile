@@ -1,6 +1,9 @@
 # Copyright (C) 2011-2012 Tresys Technology, LLC
-#
+# Copyright (C) 2011-2012 Quark Security, Inc
+# Copyright (C) 2013 Cubic Corporation
+# 
 # Authors: Spencer Shimko <sshimko@tresys.com>
+#          Spencer Shimko <spencer@quarksecurity.com>
 #
 
 ######################################################
