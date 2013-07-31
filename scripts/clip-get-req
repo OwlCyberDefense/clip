@@ -1,3 +1,0 @@
-#!/bin/bash
-
-find ../packages/clip-puppet -name \*pp -exec $PWD/get-req {} \; | sort
