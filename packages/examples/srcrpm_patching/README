@@ -1,0 +1,21 @@
+This Makefile has a special target to make patching easier.
+
+Typical RPM workflow for patching an existing package goes like this:
+1. Get the src RPM.
+2. rpmbuild -bp <srcrpm>
+That unpacks the sources and applies all existing patches.
+3. Go find the BUILD/ where the patched sources reside.
+4. mv <srcdir> a
+5. cp -r a b
+6. Make changes
+7. diff -purN a b > diff
+8. Add diff to the spec so it is applied.
+
+This Makefile has a target that automates steps 1-5.  Run:
+1. $ rpm2cpio <srcrpm>|cpio -idmv
+2. Update Makefile based on this src RPM setting PKGNAME VERSION and RELEASE
+3. $ make patchy
+4. Make modifications in b/
+5. Create your diff
+6. Add it to the spec file.
+
