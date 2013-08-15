@@ -50,6 +50,11 @@ CLIP for RHEL 6 Frequently Asked Questions
     visit RHN and ensure the system is associated with the channel you wish to 
     clone.  
 
+    RHEL can be installed without subscribing the system to RHN channels.
+    To subscribe a system after installation you can use the rhn-channel command.
+    E.g., to subscribe a system to the Optional channel you can use this command:
+    /usr/bin/sudo rhn-channel --add --channel=rhel-x86_64-server-optional-`/bin/awk '{ print $7; }' /etc/redhat-release`.z
+
     Now run these commands changing the paths and repoids as appropriate to
     synchronize the yum repositories locally.
 
@@ -111,6 +116,19 @@ CLIP for RHEL 6 Frequently Asked Questions
     RHEL 6.2 (this may have changed though).  To get a specific archived ISO from
     the CentOS mirrors use their "vault" sub-domain.  Eg:
     - http://vault.centos.org/6.2/isos/x86_64/
+
+    
+4f. Do I have to subscribe to the RHEL optional channel? 
+    If you don't have credentials or you're out of entitlements there is a work-around.
+    We *NEED* packages from Opt to be installed on the build host *and* need to pull
+    packages from there to put on the generated installable media.  If you're using
+    RHEL want to work-around this issue (hack):
+        1. Grab a CentOS ISO.
+        2. Mount it.
+        3. Add it as a yum repo:
+            http://docs.oracle.com/cd/E37670_01/E37355/html/ol_create_repo.html
+        4. Re-run this script and pick CentOS.
+        5. Refer to the same path in the CONFIG_REPOS file.
 
 5. An EXCEPTION was thrown during the build.  What do I do?
    The likely culprit is an RPM that failed to roll properly. Open 
