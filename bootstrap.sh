@@ -41,9 +41,11 @@ if [ x"$tmpfile" != "x" ]; then
 fi
 
 # install packages that we need but aren't commonly present on default RHEL installs.
-for i in createrepo rpm-build; do
+for i in createrepo rpm-build make; do
 	/bin/rpm -q "$i" >/dev/null || sudo /usr/bin/yum install -y $i
 done;
+
+arch=`rpm --eval %_host_cpu`
 
 # if we're on RHEL add the Opt channel
 if [ "$distro" == "r" ]; then
@@ -60,8 +62,8 @@ RHEL want to work-around this issue (hack):
 5. Refer to the same path in the CONFIG_REPOS file.
 Press enter to continue.
 "
-	read
-	sudo rhn-channel --add --channel=rhel-x86_64-server-optional-`/bin/awk '{ print $7; }' /etc/redhat-release`.z
+	read foo
+	/usr/bin/sudo rhn-channel --add --channel=rhel-$arch-server-optional-`/bin/awk '{ print $7; }' /etc/redhat-release`.z
 fi
 /bin/rpm -q "python-kid" >/dev/null || sudo /usr/bin/yum install -y python-kid || if [ "$?" != "0" ]; then
 	/bin/echo "WARNING: we couldn't find a package we need to install on the build 
