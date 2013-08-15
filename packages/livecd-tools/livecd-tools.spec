@@ -18,7 +18,7 @@ URL: http://git.fedorahosted.org/git/livecd
 Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}.tar.bz2
 Patch0: lokkit-fw-no-reset.patch
 Patch1: dracut-live-fix.patch
-Patch2: boot-menu-cleanup.patch
+Patch2: kargs-and-boot-menu.patch
 Patch3: setfiles-force-all-bits.patch
 Patch4: add-live-sata-mods.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root

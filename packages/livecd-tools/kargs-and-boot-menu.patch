@@ -8,7 +8,7 @@ diff -urN a/imgcreate/kickstart.py b/imgcreate/kickstart.py
 -def get_kernel_args(ks, default = "ro liveimg quiet"):
 +# SRS: drop quiet since we really want noisy boot info
 +#def get_kernel_args(ks, default = "ro liveimg quiet"):
-+def get_kernel_args(ks, default = "ro liveimg"):
++def get_kernel_args(ks, default = "ro liveimg live_ram"):
      if not hasattr(ks.handler.bootloader, "appendLine"):
          return default
      if ks.handler.bootloader.appendLine is None:
