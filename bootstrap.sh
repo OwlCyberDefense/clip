@@ -65,7 +65,7 @@ Press enter to continue.
 	read foo
 	/usr/bin/sudo rhn-channel --add --channel=rhel-$arch-server-optional-`/bin/awk '{ print $7; }' /etc/redhat-release`.z
 fi
-/bin/rpm -q "python-kid" >/dev/null || sudo /usr/bin/yum install -y python-kid || if [ "$?" != "0" ]; then
+/bin/rpm -q "python-kid" >/dev/null || /usr/bin/sudo /usr/bin/yum install -y python-kid || if [ "$?" != "0" ]; then
 	/bin/echo "WARNING: we couldn't find a package we need to install on the build 
 host.  This is usually the result of using RHEL without a subscription to RHN. Try this:
 1. Grab a CentOS ISO.
@@ -80,24 +80,31 @@ fi
 # install packages from epel that we carry in CLIP
 pushd . >/dev/null
 cd host_packages 
+rpm -q pigz > /dev/null || /usr/bin/sudo /usr/bin/yum localinstall -y epel/pigz*
 for i in `find ./ -iname *.noarch.rpm`; do
 	NAME=`/bin/rpm -qp --queryformat '%{NAME}' $i 2>/dev/null`
-	/bin/rpm -q "$NAME" > /dev/null|| sudo /usr/bin/yum localinstall -y $i
+	/bin/rpm -q "$NAME" > /dev/null || /usr/bin/sudo /usr/bin/yum localinstall -y $i
 done
-arch=`rpm --eval %_host_cpu`
 for i in `find ./ -iname *.$arch.rpm`; do
 	NAME=`/bin/rpm -qp --queryformat '%{NAME}' $i 2>/dev/null`
-	/bin/rpm -q "$NAME" > /dev/null|| sudo /usr/bin/yum localinstall -y $i
+	/bin/rpm -q "$NAME" > /dev/null || /usr/bin/sudo /usr/bin/yum localinstall -y $i
 done
 popd > /dev/null
-sudo /usr/sbin/usermod -aG mock `id -un`
+/usr/bin/sudo /usr/sbin/usermod -aG mock `id -un`
+
+/bin/echo -e "This is embarassing but due to a bug (bz #861281) you must do builds in permissive.\nhttps://bugzilla.redhat.com/show_bug.cgi?id=861281"
+/bin/echo "So this is a heads-up we're going to configure your system to run in permissive mode.  Sorry!"
+/bin/echo "You can bail by pressing ctrl-c or hit enter to continue."
+read foo
+/usr/bin/sudo /usr/sbin/setenforce 0
+/usr/bin/sudo /bin/sed -i -e 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config
 
 # Fourth, roll pungi
 if ! rpm -q pungi >/dev/null; then
 	/usr/bin/make pungi-rpm
 	pushd . > /dev/null  
 	cd repos/my-repo
-	sudo /usr/bin/yum localinstall -y pungi*
+	/usr/bin/sudo /usr/bin/yum localinstall -y pungi*
 	popd > /dev/null
 fi
 
@@ -108,23 +115,20 @@ fixes for generating live media.  We will compile our version and replace your
 version free of charge.
 Press the any key to continue or ctrl-c to exit.
 "
-		read
-		/usr/bin/make livecd-tools
-		pushd . > /dev/null
-		cd repos/my-repo
-		sudo /usr/bin/yum remove livecd-tools || true
-		sudo /usr/bin/yum remove python-imgcreate || true
-		sudo /usr/bin/yum localinstall -y livecd-tools* and python-imgcreate*
-		popd > /dev/null
+		read foo
+		/usr/bin/sudo /usr/bin/yum remove livecd-tools 2>/dev/null || true
+		/usr/bin/sudo /usr/bin/yum remove python-imgcreate 2>/dev/null || true
 	else 
-		/usr/bin/make livecd-tools
-		pushd . > /dev/null
-		cd repos/my-repo
-		sudo /usr/bin/yum localinstall -y livecd-tools* python-imgcreate*
-		popd > /dev/null
+		/usr/bin/make livecd-tools-rpm
+		/usr/bin/sudo /usr/bin/yum localinstall -y livecd-tools* python-imgcreate*
 	fi
+	/usr/bin/make livecd-tools-rpm
+	pushd . > /dev/null
+	cd repos/my-repo
+	/usr/bin/sudo /usr/bin/yum localinstall -y livecd-tools* and python-imgcreate*
+	popd > /dev/null
 fi
 
 /bin/echo -e "Basic bootstrapping of build host is complete.\nPress 'enter' to run 'make clip-rhel6-iso' or ctrl-c to quit."
-read
+read foo
 /usr/bin/make clip-rhel6-iso
