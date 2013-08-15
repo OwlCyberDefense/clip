@@ -276,6 +276,7 @@ help:
 	@echo
 	@echo "To burn a livecd image to a thumbdrive:"
 	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
+	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB>"
 	@echo
 	@echo "The following make targets are available for cleaning:"
 	@for pkg in $(PACKAGES); do echo "	$$pkg-clean (remove rpm and srpm)"; done
@@ -358,7 +359,7 @@ iso-to-disk:
 	$(VERBOSE)sudo /sbin/mkdosfs -n CLIP $(USB_DEV)1
 	$(VERBOSE)sudo umount $(USB_DEV)1 2>&1 > /dev/null || true
 	@echo "Writing image..."
-	$(VERBOSE)sudo /usr/bin/livecd-iso-to-disk --resetmbr $(ISO_FILE) $(USB_DEV)1
+	@if [ x"$(OVERLAY_SIZE)" == "x" ]; then $(VERBOSE)sudo /usr/bin/livecd-iso-to-disk --resetmbr $(ISO_FILE) $(USB_DEV)1; else $(VERBOSE)sudo /usr/bin/livecd-iso-to-disk --overlay-size-mb $(OVERLAY_SIZE) --resetmbr $(ISO_FILE) $(USB_DEV)1 ; fi 
 
 clean-mock: $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
 	$(VERBOSE)$(RM) $(YUM_CONF_FILE)

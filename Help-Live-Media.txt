@@ -1,0 +1,15 @@
+We can take a live CD ISO, write it to non-optical media like a 
+hard drive or USB device.  This can be done with the following make 
+commands:
+
+$ make clip-rhel6-live-iso
+
+That generates the live ISO image.  Now you can write that image
+to a hard drive or USB device.
+
+$ make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel6-*-live.iso
+
+This will generate stateless live media.  If you want to retain state
+across reboots specify an overlay size (in MB) as well:
+
+$ make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel6-*-live.iso OVERLAY_SIZE=256MB
