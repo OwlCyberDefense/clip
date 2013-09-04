@@ -55,7 +55,7 @@ iso: $(DEPS) $(ADDTL_DEPS) setup-ks
 	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
 	@# Don't remove the "cd $(BUILD_DIR)" below b/c a bug in pungi ends up creating empty dirs in curdir.  This avoids confusion.
 	$(VERBOSE)cd $(BUILD_DIR);sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(BUILD_DIR)/$(KS)
-	$(VERBOSE)sudo mv --force $(PUNGI_ISO_DIR)/$(NAME)-$(ISO_VERSION)-x86_64.iso $(OUTPUT_DIR)/
+	$(VERBOSE)sudo mv --force $(PUNGI_ISO_DIR)/$(NAME)-$(ISO_VERSION)-*.iso $(OUTPUT_DIR)/
 
 setup-ks: $(SETUP_DEPS)
 	$(VERBOSE)test -d $(PUNGI_OS_DIR) || mkdir -p $(PUNGI_OS_DIR)
