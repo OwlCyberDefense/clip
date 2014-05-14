@@ -59,6 +59,7 @@ define rpm-prep
 	$(call MKDIR,$(RPM_TOPDIR)/SRPMS)
 endef
 
+
 # Note: due to remediation content, overriding this may not work the way you expect.
 # Look at the bottom of the stock clip-rhel6--ks %post for an example.
 ifneq ($(CONFIG_BUILD_ENFORCING_MODE),n)
@@ -72,6 +73,16 @@ else
 	ENABLE_MODULES := %{nil}
 endif
 ENABLE_MODULES := toor
+
+RPMQ_DEFS := --query --define 'pkgname $(PKGNAME)' --define '_sysconfdir /etc' --define 'version $(VERSION)' --define 'release $(RELEASE)' --define 'vendor $(VENDOR)' --define 'packager $(PACKAGER)' --qf '%{NAME}\n'
+
+ifneq ($(ENABLE_MODULES),)
+RPM_DEFS := --define 'enable_modules $(ENABLE_MODULES)' $(RPM_DEFS)
+endif
+
+ifneq ($(ENFORCING_MODE),)
+RPM_DEFS := --define 'enforcing_mode $(ENFORCING_MODE)' $(RPM_DEFS)
+endif
 
 all: $(PKGNAME)-rpm $(PKGNAME)-srpm
 
@@ -91,7 +102,8 @@ $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm: $(SRPM_OUTPUT_DIR)/$
 	@echo "Building $(PKGNAME) RPM..."
 	$(call rpm-prep)
 	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild --target=$(ARCH) $(RPMBUILD_ARGS) --buildroot $(RPM_BUILDROOT) -bb $<
-	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/$(PKGNAME)-$(VERSION)-$(RELEASE)*.rpm $(OUTPUT_DIR)
+	if [ $(ARCH) != "noarch" ]; then cp $(RPM_TOPDIR)/RPMS/noarch/* $(OUTPUT_DIR)/ 2>&1 >/dev/null; exit 0; fi
+	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/*.rpm $(OUTPUT_DIR)
 
 $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm: $(RPM_DEPS)
 	@echo "Building $(PKGNAME) SRPM..."
@@ -106,6 +118,7 @@ clean:
 	$(RM) -r $(RPM_TMPDIR)
 
 bare: clean
+	$(foreach f,$(shell rpm $(RPMQ_DEFS) --specfile $(RPM_SPEC)),$(RM) $(OUTPUT_DIR)/$(f)*.rpm;)
 	$(RM) $(TARBALL) $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
 
 .PHONY: all rpm srpm $(PKGNAME)-rpm $(PKGNAME)-srpm clean bare
