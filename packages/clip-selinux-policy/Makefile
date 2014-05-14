@@ -72,7 +72,6 @@ ifneq ($(CONFIG_BUILD_UNCONFINED_TOOR),n)
 else
 	ENABLE_MODULES := %{nil}
 endif
-ENABLE_MODULES := toor
 
 RPMQ_DEFS := --query --define 'pkgname $(PKGNAME)' --define '_sysconfdir /etc' --define 'version $(VERSION)' --define 'release $(RELEASE)' --define 'vendor $(VENDOR)' --define 'packager $(PACKAGER)' --qf '%{NAME}\n'
 
