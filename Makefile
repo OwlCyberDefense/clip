@@ -51,6 +51,7 @@ MOCK_REL := rhel-$(RHEL_VER)-$(ARCH)
 
 # This directory contains all of our packages we will be building.
 PKG_DIR += $(CURDIR)/packages
+PACKAGES := $(shell ls $(PKG_DIR) | grep -v examples)
 
 # This is the directory that will contain all of our yum repos.
 REPO_DIR := $(CURDIR)/repos
@@ -148,7 +149,9 @@ define CHECK_MOCK
 endef
 
 define CHECK_LIVE_TOOLS
-	if [ x"`rpm -q livecd-tools --queryformat '%{version}-%{release}'`" != x"$$( rpm --eval `sed -n -e 's/Release: \(.*\)/\1/p' -e 's/Version: \(.*\)/\1/p' packages/livecd-tools/livecd-tools.spec| sed 'N;s/\n/-/'` )" ]; then echo "Error: you have to use our version of livecd-tools.  Refer to Help-LiveCDs.txt for instructions."; exit 1; fi
+	@if [ x"`rpm -q livecd-tools --queryformat '%{version}-%{release}'`" != x"$$( rpm --eval `sed -n -e 's/Release: \(.*\)/\1/p' -e 's/Version: \(.*\)/\1/p' packages/livecd-tools/livecd-tools.spec| sed 'N;s/\n/-/'` )" ]; then echo "Error: you have to use our version of livecd-tools.  We will attempt to install them now.  Refer to Help-Live-CD-Tools.txt for instructions."; fi
+	sudo yum remove livecd-tools python-imgcreate -y 2>&1 >/dev/null || true
+	make livecd-tools-rpm;	cd repos/my-repo; sudo yum localinstall livecd-tools*.noarch.rpm python-imgcreate* -y
 endef
 
 ######################################################
@@ -298,7 +301,6 @@ $(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 # So we will generate them just like we always do.
 HOST_RPMS := $(addprefix $(MY_REPO_DIR)/,$(foreach PKG,$(HOST_REQD_PKGS),$(call RPM_FROM_PKG_NAME,$(strip $(PKG)))))
 SRPMS := $(addprefix $(SRPM_OUTPUT_DIR)/,$(foreach RPM,$(HOST_RPMS),$(call SRPM_FROM_RPM,$(notdir $(RPM)))))
-$(foreach RPM, $(HOST_RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 
 create-repos: $(setup_all_repos)
 
