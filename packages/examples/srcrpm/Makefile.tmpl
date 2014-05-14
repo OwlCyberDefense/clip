@@ -39,6 +39,8 @@ MKDIR = test -d $(1) || mkdir -p $(1)
 
 RPMBUILD_ARGS := --define '_topdir $(RPM_TOPDIR)'  --define '_tmppath $(RPM_TMPDIR)' --buildroot $(RPM_BUILDROOT)
 
+RPMQ_DEFS := --query --define 'pkgname $(PKGNAME)' --define '_sysconfdir /etc' --define 'version $(VERSION)' --define 'release $(RELEASE)' --define 'vendor $(VENDOR)' --define 'packager $(PACKAGER)' --qf '%{NAME}\n'
+
 define rpm-prep
 	$(call MKDIR,$(RPM_TOPDIR)/SOURCES);\
 $(call MKDIR,$(RPM_TOPDIR)/SPECS);\
@@ -65,10 +67,10 @@ $(OUTPUT_DIR)/$(RPM): $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rp
 	@echo "Building $(PKGNAME) RPM..."
 	$(call rpm-prep)
 	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild $(RPMBUILD_ARGS) -bb $<
-	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/$(PKGNAME)-$(VERSION)-$(RELEASE)*.rpm $(OUTPUT_DIR)
+	if [ $(ARCH) != "noarch" ]; then cp $(RPM_TOPDIR)/RPMS/noarch/* $(OUTPUT_DIR)/ 2>&1 >/dev/null; exit 0; fi
+	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/*.rpm $(OUTPUT_DIR)
 
 $(SRPM_OUTPUT_DIR)/$(SRPM): $(RPM_DEPS)
-	echo "DEBUG: $@ $^"
 	@if [ ! "$@" -ef "$(SRPM)" ]; then\
 		@echo "Copying SRPM into place...";\
 		$(call rpm-prep)\
@@ -79,6 +81,10 @@ clean:
 	$(RM) -r $(RPM_TMPDIR)
 
 bare: clean
-	$(RM) $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
+	# TODO: this needs testing
+	export TMP=$( mktemp ); cd $$TMP; rpm2cpio $(SRPM) | cpio -mi \*.spec;  $(foreach f,$(shell rpm $(RPMQ_DEFS) --specfile *.spec), $(RM) $(OUTPUT_DIR)/$(f)*.rpm;)cd ..; rm -f $$TMP
+	@if [ ! "$(SRPM_OUTPUT_DIR)/$(SRPM)" -ef "$(SRPM)" ]; then\
+		$(RM) $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm\
+	fi
 
 .PHONY: all $(PKGNAME)-rpm $(PKGNAME)-srpm clean bare rpm srpm

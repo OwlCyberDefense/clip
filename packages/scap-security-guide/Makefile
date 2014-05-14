@@ -51,6 +51,8 @@ MKDIR = test -d $(1) || mkdir -p $(1)
 
 RPMBUILD_ARGS := --define '_topdir $(RPM_TOPDIR)'  --define '_tmppath $(RPM_TMPDIR)'
 
+RPMQ_DEFS := --query --define 'pkgname $(PKGNAME)' --define '_sysconfdir /etc' --define 'version $(VERSION)' --define 'release $(RELEASE)' --define 'vendor $(VENDOR)' --define 'packager $(PACKAGER)' --qf '%{NAME}\n'
+
 define rpm-prep
 	$(call MKDIR,$(RPM_TOPDIR)/SOURCES)
 	$(call MKDIR,$(RPM_TOPDIR)/SPECS)
@@ -92,6 +94,7 @@ clean:
 	$(RM) -r $(RPM_TMPDIR)
 
 bare: clean
-	$(RM) $(TARBALL) $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
+	$(foreach f,$(shell rpm $(RPMQ_DEFS) --specfile $(RPM_SPEC)),$(RM) $(OUTPUT_DIR)/$(f)*.rpm;)
+	$(RM) $(TARBALL) $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 
 .PHONY: all rpm srpm $(PKGNAME)-rpm $(PKGNAME)-srpm clean bare
