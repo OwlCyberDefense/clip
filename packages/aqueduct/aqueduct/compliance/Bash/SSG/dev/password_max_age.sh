@@ -19,9 +19,9 @@ set -e
 # limitations under the License.
 
 FILE=/etc/login.defs
-PARAM=PASS_MAX_AGE
+PARAM=PASS_MAX_DAYS
 
 [ -f $FILE ] || exit 1
 
 . $(dirname $0)/set_general_entry
-safe_add_field "($PARAM\s+).*" $var_password_max_age $FILE
+safe_add_field "($PARAM\s+).*" "60" $FILE

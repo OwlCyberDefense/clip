@@ -20,4 +20,4 @@ set -e
 
 . $(dirname $0)/set_sysctl_common
 
-set_sysctl_param net.ipv4.conf.all.accept_redirects $sysctl_net_ipv4_conf_all_accept_redirects_value
+set_sysctl_param net.ipv4.conf.all.accept_redirects 0

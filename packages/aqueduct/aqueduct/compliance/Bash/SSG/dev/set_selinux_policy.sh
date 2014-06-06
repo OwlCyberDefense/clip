@@ -21,4 +21,4 @@ set -e
 [ -f /etc/selinux/config ] || exit 1
 
 . $(dirname $0)/set_general_entry
-safe_add_field "(SELINUXTYPE\s*=).*" $var_selinux_policy_name /etc/selinux/config
+safe_add_field "(SELINUXTYPE\s*=).*" "targeted" /etc/selinux/config

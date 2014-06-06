@@ -19,4 +19,4 @@ set -e
 # limitations under the License.
 
 . $(dirname $0)/set_pam_common
-set_pam_unix_option difok $var_password_pam_cracklib_difok
+set_pam_unix_option difok 3

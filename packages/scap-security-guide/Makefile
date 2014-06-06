@@ -26,7 +26,7 @@ ARCH := noarch
 
 # This file will be created by tar'ing up $(PKGNAME)/
 TARBALL = $(SRPM_OUTPUT_DIR)/scap-security-guide-$(VERSION).tar.gz
-PATCHES = ssg-fix-fixes-tags.patch replace-pam-cracklib-with-pam-passwdqc.patch ldap-dependency-checking.patch postfix-package-dependency-checking.patch httpd-dependency-checking.patch sysctl-module-dependency-checking.patch add-dcid-profile.patch add-manual-profile.patch fixes-with-variables.patch
+PATCHES = ssg-fix-fixes-tags.patch replace-pam-cracklib-with-pam-passwdqc.patch ldap-dependency-checking.patch postfix-package-dependency-checking.patch httpd-dependency-checking.patch sysctl-module-dependency-checking.patch add-dcid-profile.patch add-manual-profile.patch
 
 # All sources for the package.
 

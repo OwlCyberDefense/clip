@@ -20,4 +20,4 @@ set -e
 
 . $(dirname $0)/set_sysctl_common
 
-set_sysctl_param net.ipv4.tcp_syncookies $sysctl_net_ipv4_tcp_syncookies_value
+set_sysctl_param net.ipv4.tcp_syncookies 1

@@ -19,4 +19,4 @@ set -e
 # limitations under the License.
 
 . $(dirname $0)/set_pam_common
-set_pam_unix_option remember $password_history_retain_number
+set_pam_unix_option remember 5
