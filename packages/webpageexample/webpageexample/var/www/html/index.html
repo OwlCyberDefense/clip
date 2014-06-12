@@ -1,0 +1,30 @@
+<html>
+<body><div style="width:100%; text-align:center;">
+        <h2 style="margin-bottom: 0px; "><a href="https://quarksecurity.com">Quark Security</a></h2>
+<br/><h3 style="margin-top: 5px;">If you need some help with CLIP feel free to contact us!</h3></div>
+
+<p>This is where all of your webcontent will be hosted. &nbsp;</p>
+
+<p>Here are the steps to creating a proper RPM:</p>
+
+<ul>
+        <li>Copy the Makefile from the packages/webpageexample/Makefile to your new package directory.</li>
+
+        <li>Edit the Makefile to have your package name instead of "webpageexample".</li>
+
+        <li>Copy the workingexample.spec from the /packages/webpageexample/webpageexample.spec to your new package directory.</li>
+
+        <li>Change the name of the spec file and the name listed in the spec file to accomodate your package's name.</li>
+
+        <li>Run make rpm in the packages/yournewpackagedirectory/.</li>
+
+        <li>Run make bare in the packages/yournewpackagedirectory/.</li>
+
+        <li>In /etc/httpd/conf/httpd.conf, change the ipaddresses to the ipaddress that you are using.</li>
+
+        <li>In the kickstart file (kickstart/apache-webserver/apache-webserver.ks), change webpageexample to your package's name.</li>
+
+        <li>Then build an ISO from the top-level: make apache-webserver-iso
+</ul>
+</body>
+</html>
