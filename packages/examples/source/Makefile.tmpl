@@ -72,6 +72,7 @@ $(PKGNAME)-srpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 
 # Note: if you're carrying a tarball already (e.g., you are using an officially released tarball), just copy it from here to $(TARBALL)
 #      	Something like this should work: "cp $@ $(RPM_TOPDIR)/SOURCES/"
+# 	ALSO, remove the $(RM) $(TARBALL) from the bare target below.
 $(TARBALL): $(TAR_DEPS)
 	@echo "Building $(PKGNAME) source tarball..."
 	tar -czf $@ $(PKGNAME)/

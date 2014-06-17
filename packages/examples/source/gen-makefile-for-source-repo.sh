@@ -12,6 +12,10 @@ if [ $# -ne 3 ]; then
         exit 1
 fi
 
+PKGNAME=$1
+VERSION=$2
+RELEASE=$3
+
 echo "Name: $PKGNAME"
 echo "Version: $VERSION"
 echo "Release: $RELEASE"
