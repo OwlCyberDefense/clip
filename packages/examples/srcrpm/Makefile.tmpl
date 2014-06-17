@@ -72,7 +72,7 @@ $(OUTPUT_DIR)/$(RPM): $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rp
 
 $(SRPM_OUTPUT_DIR)/$(SRPM): $(RPM_DEPS)
 	@if [ ! "$@" -ef "$(SRPM)" ]; then\
-		@echo "Copying SRPM into place...";\
+		echo "Copying SRPM into place...";\
 		$(call rpm-prep)\
 		cp  $(SRPM) $(SRPM_OUTPUT_DIR) 2>&1 1>/dev/null;\
 	fi
