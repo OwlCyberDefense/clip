@@ -31,6 +31,10 @@ LIVECD_ARGS := --config="$(BUILD_DIR)/$(NAME).ks"
 # This will only be set here if we are running setup-ks by hand.
 CONFIG_BUILD_BASH_VARS ?= export CONFIG_BUILD_PRODUCTION=n CONFIG_BUILD_ENFORCING_MODE=y CONFIG_BUILD_UNCONFINED_TOOR=y CONFIG_BUILD_SECSTATE_REMEDIATE=y ISO_VERSION=debug
 
+ifneq (, $(filter live-iso,$(MAKECMDGOALS)))
+CONFIG_BUILD_BASH_VARS := $(CONFIG_BUILD_BASH_VARS) CONFIG_BUILD_LIVE_MEDIA=y
+endif
+
 # This is only useful for building out of this subdir.  The top-level Makefile passes this variable down
 # pointing to the yum repos CLIP creates and manages in repos/*.  What this means is that you should
 # probably just ignore this.
