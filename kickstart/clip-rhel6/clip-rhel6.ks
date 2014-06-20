@@ -97,6 +97,7 @@ bind-utils
 chkconfig
 coreutils
 cpio
+device-mapper
 e2fsprogs
 filesystem
 glibc
