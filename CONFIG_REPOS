@@ -23,14 +23,17 @@
 # because we lose the benefit of rigorously versioning the packages used.
 # Anywho, we're thinking about it, but no timeline yet ;)
 
+# NOTE: this is the right path for Quark Security's build VM
+centos = /opt/repos/centos6.4
+
 # A RHEL/CentOS repo must be available. Must be a local path (we use NFS mounts).
-rhel = /mnt/repos-6-3/rhel-6-3-x86_64/rhel-x86_64-server-6/getPackage
-#centos = /mnt/centos-6.3-x86_64/Packages
+# rhel = /mnt/repos-6-3/rhel-6-3-x86_64/rhel-x86_64-server-6/getPackage
+#
 
 # NOTE: If using RHEL, *not CentOS*, you must provide the Optional repo. 
 # An RHEL Optional repo must be available. Must be a local path (we use NFS 
 # mounts).
-opt = /mnt/repos-6-3/rhel-6-3-x86_64/rhel-x86_64-server-optional-6/getPackage
+#opt = /mnt/repos-6-3/rhel-6-3-x86_64/rhel-x86_64-server-optional-6/getPackage
 
 # It is fairly common to pull in packages from EPEL but having EPEL is not a requirement!
 #epel = /mnt/repos/epel-pinned-revisions
