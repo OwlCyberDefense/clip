@@ -323,21 +323,19 @@ fi
 
 ###### END SECSTATE AUDIT AND REMEDIATE ###########
 
-###### START - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
-
 # Disable all that GUI stuff during boot so we can actually see what is going on during boot.
-if [ x"$CONFIG_BUILD_PRODUCTION" != "xy" ]; then
-	# The first users of a CLIP system will be devs. Lets make things a little easier on them.
-	# by getting rid of the framebuffer effects, rhgb, and quiet.
-	grubby --update-kernel=ALL --remove-args="rhgb quiet"
-	sed -i -e 's/^\(splashimage.*\)/#\1/' -e 's/^\(hiddenmenu.*\)/#\1/' /boot/grub/grub.conf
-	# This is ugly but when plymouth re-rolls the initrd it creates a new entry in grub.conf that is redundant.
-	# Actually rather benign but may impact developers using grubby who think there is only one kernel to work with.
-	title="$(sed 's/ release.*$//' < /etc/redhat-release) ($(uname -r))"
-	sed -i -e "s;title.*;title $title;" /boot/grub/grub.conf
-    echo "Modifying splash screen with plymouth..."
-	plymouth-set-default-theme details --rebuild-initrd &> /dev/null
-fi
+# The first users of a CLIP system will be devs. Lets make things a little easier on them.
+# by getting rid of the framebuffer effects, rhgb, and quiet.
+grubby --update-kernel=ALL --remove-args="rhgb quiet"
+sed -i -e 's/^\(splashimage.*\)/#\1/' -e 's/^\(hiddenmenu.*\)/#\1/' /boot/grub/grub.conf
+# This is ugly but when plymouth re-rolls the initrd it creates a new entry in grub.conf that is redundant.
+# Actually rather benign but may impact developers using grubby who think there is only one kernel to work with.
+title="$(sed 's/ release.*$//' < /etc/redhat-release) ($(uname -r))"
+sed -i -e "s;title.*;title $title;" /boot/grub/grub.conf
+echo "Modifying splash screen with plymouth..."
+plymouth-set-default-theme details --rebuild-initrd &> /dev/null
+
+###### START - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
 # Set permissive mode
 export POLNAME=`sestatus |awk '/Policy from config file:/ { print $5; }'`
