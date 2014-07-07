@@ -4,6 +4,7 @@
 # 
 # Authors: Spencer Shimko <sshimko@tresys.com>
 #          Spencer Shimko <spencer@quarksecurity.com>
+#	   John Feehley <jfeehley@quarksecurity.com>
 #
 
 ######################################################
@@ -280,6 +281,7 @@ help:
 	@echo "To burn a livecd image to a thumbdrive:"
 	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
 	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB>"
+	@echo " iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB> OVERLAY_HOME_SIZE=<size in MB>"
 	@echo
 	@echo "The following make targets are available for cleaning:"
 	@for pkg in $(PACKAGES); do echo "	$$pkg-clean (remove rpm and srpm)"; done
@@ -344,6 +346,13 @@ $(MOCK_CONF_DIR)/$(MOCK_REL).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl $(CONF_
 	$(VERBOSE)echo -e $(MOCK_YUM_CONF) >> $@
 	$(VERBOSE)echo '"""' >> $@
 
+ifneq ($(OVERLAY_HOME_SIZE),)
+OVERLAYS += --home-size-mb $(OVERLAY_HOME_SIZE)
+endif
+ifneq ($(OVERLAY_SIZE),)
+OVERLAYS += --overlay-size-mb $(OVERLAY_SIZE)
+endif
+
 iso-to-disk:
 	@if [ x"$(ISO_FILE)" = "x" -o x"$(USB_DEV)" = "x" ]; then echo "Error: set ISO_FILE=<filename> and USB_DEV=<dev> on command line to generate a bootable thumbdrive." && exit 1; fi
 	@if echo "$(USB_DEV)" | $(GREP) -q "^.*[0-9]$$"; then echo "Error: it looks like you gave me a partition.  Set USB_DEV to a device root, eg /dev/sdb." && exit 1; fi
@@ -361,8 +370,7 @@ iso-to-disk:
 	$(VERBOSE)sudo /sbin/mkdosfs -n CLIP $(USB_DEV)1
 	$(VERBOSE)sudo umount $(USB_DEV)1 2>&1 > /dev/null || true
 	@echo "Writing image..."
-	@if [ x"$(OVERLAY_SIZE)" == "x" ]; then $(VERBOSE)sudo /usr/bin/livecd-iso-to-disk --resetmbr $(ISO_FILE) $(USB_DEV)1; else $(VERBOSE)sudo /usr/bin/livecd-iso-to-disk --overlay-size-mb $(OVERLAY_SIZE) --resetmbr $(ISO_FILE) $(USB_DEV)1 ; fi 
-
+	$(VERBOSE)sudo /usr/bin/livecd-iso-to-disk $(OVERLAYS) --resetmbr $(ISO_FILE) $(USB_DEV)1
 clean-mock: $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
 	$(VERBOSE)$(RM) $(YUM_CONF_FILE)
 	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
@@ -390,3 +398,4 @@ FORCE:
 
 # END RULES
 ######################################################
+

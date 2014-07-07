@@ -12,4 +12,9 @@ $ make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel6-*-live.iso
 This will generate stateless live media.  If you want to retain state
 across reboots specify an overlay size (in MB) as well:
 
-$ make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel6-*-live.iso OVERLAY_SIZE=256MB
+$ make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel6-*-live.iso OVERLAY_SIZE=256
+
+If you want to retain state in the home directory across boots, specify a home
+overlay size (in MB) and an overlay size (in MB) as well:
+
+$ make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel6-*-live.iso OVERLAY_SIZE=256 OVERLAY_HOME=128
