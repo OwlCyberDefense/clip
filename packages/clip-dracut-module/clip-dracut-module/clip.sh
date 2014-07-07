@@ -12,6 +12,6 @@ SELINUX="enforcing"
 [ -e "$NEWROOT/etc/selinux/config" ] && . "$NEWROOT/etc/selinux/config"
 
 getarg "enforcing=0" > /dev/null
-if [ $? -eq 1 -o "$SELINUX" = "enforcing" ]; then
+if [ $? -eq 1 -a "$SELINUX" = "enforcing" ]; then
 	echo 1 > "$NEWROOT"/selinux/enforce
 fi
