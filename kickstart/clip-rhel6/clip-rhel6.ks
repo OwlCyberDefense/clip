@@ -219,15 +219,15 @@ yum
 %end
 
 %post --interpreter=/bin/bash
-exec >/root/clip_post_install.log 2>&1
-# Print the log to tty7 so that the user know what's going on
-tail -f /root/clip_post_install.log >/dev/tty7 &
-TAILPID=$!
 # DO NOT REMOVE THE FOLLOWING LINE. NON-EXISTENT WARRANTY VOID IF REMOVED.
 #CONFIG-BUILD-PLACEHOLDER
 export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
 if [ x"$CONFIG_BUILD_LIVE_MEDIA" != "y" ]; then
-chvt 7
+	exec >/root/clip_post_install.log 2>&1
+	# Print the log to tty7 so that the user know what's going on
+	tail -f /root/clip_post_install.log >/dev/tty7 &
+	TAILPID=$!
+	chvt 7
 fi
 
 echo "Installation timestamp: `date`" > /root/clip-info.txt
@@ -357,16 +357,17 @@ echo "Done with post install scripts..."
 # we're rolling Live Media.  First, kill the known 
 # problems cleanly, then just kill them all and let
 # <deity> sort them out.
-if [ x"$CONFIG_BUILD_LIVE_MEDIA" != "y" ]; then
+if [ x"$CONFIG_BUILD_LIVE_MEDIA" == "xy" ]; then
 	service restorecond stop
 	service auditd stop
 	service rsyslog stop
+	service crond stop
 	[ -f /etc/init.d/vmtoolsd ] && service vmtoolsd stop
 
 	# this one isn't actually due to remediation, but needs to be done too
-	kill $TAILPID 2>/dev/null 1>/dev/null
 	kill $(jobs -p) 2>/dev/null 1>/dev/null
 fi
+kill $TAILPID 2>/dev/null 1>/dev/null
 
 %end
 
