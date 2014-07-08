@@ -166,9 +166,6 @@ endef
 # BEGIN RPM GENERATION RULES (BEWARE OF DRAGONS)
 # This define directive is used to generate build rules.
 define RPM_RULE_template
-ifneq ($(QUIET),y)
-$(info Generating rules for rolling package $(1).)
-endif
 $(1): $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
 	$(call CHECK_DEPS)
 	$(call MKDIR,$(MY_REPO_DIR))
@@ -209,9 +206,6 @@ $(eval REPO_ID := $(call GET_REPO_ID, $(1)))
 ifneq ($(strip $(1)),)
 $(eval REPO_PATH := $(call GET_REPO_PATH,$(1)))
 $(eval REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1))))
-ifneq ($(QUIET),y)
-$(info Generating rules based on configured yum repository ID="$(REPO_ID)" PATH=$(REPO_PATH))
-endif
 $(eval setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo)
 
 $(eval YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
@@ -259,7 +253,6 @@ endef
 
 help:
 	$(call CHECK_DEPS)
-	@echo -e "\n\n################################################################################"
 	@echo "The following make targets are available for generating installable ISOs:"
 	@echo "	all (roll all packages and generate all installation ISOs)"
 	@for cd in $(INSTISOS); do echo "	$$cd"; done
@@ -267,6 +260,11 @@ help:
 	@echo "The following make targets are available for generating Live CDs:"
 	@echo "	all (generate all installation ISOs and Live CDs)"
 	@for cd in $(LIVECDS); do echo "	$$cd"; done
+	@echo
+	@echo "To burn a livecd image to a thumbdrive:"
+	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
+	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB>"
+	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB> OVERLAY_HOME_SIZE=<size in MB>"
 	@echo
 	@echo "The following make targets are available for generating RPMs in mock:"
 	@echo "	rpms (generate all rpms in mock)"
@@ -285,18 +283,12 @@ help:
 	@echo "The following make targets are available for generating yum repos used for mock and ISO generation:"
 	@for repo in $(setup_all_repos); do echo "	$$repo"; done
 	@echo
-	@echo "To burn a livecd image to a thumbdrive:"
-	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
-	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB>"
-	@echo " iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB> OVERLAY_HOME_SIZE=<size in MB>"
-	@echo
 	@echo "The following make targets are available for cleaning:"
 	@for pkg in $(PACKAGES); do echo "	$$pkg-clean (remove rpm and srpm)"; done
 	@echo "	clean (cleans transient files)"
 	@echo "	bare-repos (deletes local repos)"
 	@echo "	clean-mock (deletes the yum and mock configuration we generate)"
 	@echo "	bare (deletes everything except ISOs)"
-	@echo -e "\n\n################################################################################"
 
 all: create-repos $(INSTISOS)
 
