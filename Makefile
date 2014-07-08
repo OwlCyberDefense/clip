@@ -150,9 +150,16 @@ define CHECK_MOCK
 endef
 
 define CHECK_LIVE_TOOLS
-	@if [ x"`rpm -q livecd-tools --queryformat '%{version}-%{release}'`" != x"$$( rpm --eval `sed -n -e 's/Release: \(.*\)/\1/p' -e 's/Version: \(.*\)/\1/p' packages/livecd-tools/livecd-tools.spec| sed 'N;s/\n/-/'` )" ]; then echo "Error: you have to use our version of livecd-tools.  We will attempt to install them now.  Refer to Help-Live-CD-Tools.txt for instructions."; fi
-	sudo yum remove livecd-tools python-imgcreate -y 2>&1 >/dev/null || true
-	make livecd-tools-rpm;	cd repos/my-repo; sudo yum localinstall livecd-tools*.noarch.rpm python-imgcreate* -y
+	if [ x"`rpm -q livecd-tools --queryformat '%{version}-%{release}\n'`" \
+		!= x"$$( rpm --eval `sed -n -e 's/Release: \(.*\)/\1/p' -e 's/Version: \(.*\)/\1/p' \
+		 packages/livecd-tools/livecd-tools.spec| sed 'N;s/\n/-/'` )" ]; then \
+		echo "Error: you have to use our version of livecd-tools."; \
+		echo "We will attempt to install them now.  Refer to Help-Live-CD-Tools.txt for instructions."; \
+		sudo yum remove livecd-tools python-imgcreate -y 2>&1 >/dev/null || true ; \
+		$(MAKE) livecd-tools-rpm; \
+		cd repos/my-repo; \
+		sudo yum localinstall livecd-tools*.noarch.rpm python-imgcreate* -y; \
+	fi
 endef
 
 ######################################################
