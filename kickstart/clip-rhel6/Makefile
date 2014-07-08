@@ -33,6 +33,7 @@ CONFIG_BUILD_BASH_VARS ?= export CONFIG_BUILD_PRODUCTION=n CONFIG_BUILD_ENFORCIN
 
 ifneq (, $(filter live-iso,$(MAKECMDGOALS)))
 CONFIG_BUILD_BASH_VARS := $(CONFIG_BUILD_BASH_VARS) CONFIG_BUILD_LIVE_MEDIA=y
+CONFIG_BUILD_ADDTL_PACKAGES += eject
 endif
 
 # This is only useful for building out of this subdir.  The top-level Makefile passes this variable down
@@ -67,6 +68,7 @@ setup-ks: $(SETUP_DEPS)
 	@echo "Modifying kickstart with build variables..."
 	$(VERBOSE)sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(BUILD_DIR)/$(KS)
 	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-PLACEHOLDER;$(CONFIG_BUILD_BASH_VARS);' $(BUILD_DIR)/$(KS) || true
+	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-ADDTL-PACKAGES;$(CONFIG_BUILD_ADDTL_PACKAGES);' $(BUILD_DIR)/$(KS)
 	$(VERBOSE)sed -e 's/^repo/#repo/' $(BUILD_DIR)/$(KS) > $(PUNGI_OS_DIR)/$(KS)
 
 live-iso: $(DEPS) $(ADDTL_DEPS) setup-ks
