@@ -207,42 +207,42 @@ $(eval REPO_ID := $(call GET_REPO_ID, $(1)))
 ifneq ($(strip $(1)),)
 $(eval REPO_PATH := $(call GET_REPO_PATH,$(1)))
 $(eval REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1))))
-$(eval setup_all_repos += setup-$(REPO_ID)$(RHEL_VER)-repo)
+$(eval setup_all_repos += setup-$(REPO_ID)-repo)
 
-$(eval YUM_CONF := [$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
-$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)$(RHEL_VER)]\\nname=$(REPO_ID)$(RHEL_VER)\\nbaseurl=file://$(REPO_DIR)/$(REPO_ID)$(RHEL_VER)-repo\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
-$(eval MY_REPO_DEPS += $(REPO_DIR)/$(REPO_ID)$(RHEL_VER)-repo/last-updated)
-$(eval REPO_LINES := $(REPO_LINES)repo --name=$(REPO_ID)$(RHEL_VER) --baseurl=file://$(REPO_DIR)/-$(REPO_ID)$(RHEL_VER)-repo\n)
+$(eval YUM_CONF := [$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
+$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=file://$(REPO_DIR)/$(REPO_ID)-repo\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
+$(eval MY_REPO_DEPS += $(REPO_DIR)/$(REPO_ID)-repo/last-updated)
+$(eval REPO_LINES := $(REPO_LINES)repo --name=$(REPO_ID) --baseurl=file://$(REPO_DIR)/$(REPO_ID)-repo\n)
 
-$(eval CLIP_REPO_DIRS += "$(REPO_DIR)/$(REPO_ID)$(RHEL_VER)-repo")
-$(eval PKG_LISTS += "./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)$(RHEL_VER)")
+$(eval CLIP_REPO_DIRS += "$(REPO_DIR)/$(REPO_ID)-repo")
+$(eval PKG_LISTS += "./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)")
 
-setup-$(REPO_ID)$(RHEL_VER)-repo:  $(REPO_DIR)/$(REPO_ID)$(RHEL_VER)-repo/last-updated $(CONFIG_BUILD_DEPS)
+setup-$(REPO_ID)-repo:  $(REPO_DIR)/$(REPO_ID)-repo/last-updated $(CONFIG_BUILD_DEPS)
 
 # This is the key target for managing yum repos.  If the pkg list for the repo
 # is more recent then our private repo regen the repo by symlink'ing the packages into our repo.
-$(REPO_DIR)/$(REPO_ID)$(RHEL_VER)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER) $(CONFIG_BUILD_DEPS)
+$(REPO_DIR)/$(REPO_ID)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID) $(CONFIG_BUILD_DEPS)
 	@echo "Cleaning $(REPO_ID) yum repo, this could take a few minutes..."
-	$(VERBOSE)$(RM) -r $(REPO_DIR)/$(REPO_ID)$(RHEL_VER)-repo
+	$(VERBOSE)$(RM) -r $(REPO_DIR)/$(REPO_ID)-repo
 	@echo "Populating $(REPO_ID) yum repo, this could take a few minutes..."
 	@if [ ! -d $(REPO_PATH) ]; then echo -e "\nError yum repo path doesn't exist: $(REPO_PATH)\n"; exit 1; fi
-	$(call MKDIR,$(REPO_DIR)/$(REPO_ID)$(RHEL_VER)-repo)
-	$(VERBOSE)while read fil; do $(REPO_LINK) $(REPO_PATH)/$$$$fil $(REPO_DIR)/$(REPO_ID)$(RHEL_VER)-repo/$$$$fil; done < $(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
+	$(call MKDIR,$(REPO_DIR)/$(REPO_ID)-repo)
+	$(VERBOSE)while read fil; do $(REPO_LINK) $(REPO_PATH)/$$$$fil $(REPO_DIR)/$(REPO_ID)-repo/$$$$fil; done < $(CONF_DIR)/pkglist.$(REPO_ID)
 	@echo "Generating $(REPO_ID) yum repo metadata, this could take a few minutes..."
-	$(VERBOSE)cd $(REPO_DIR)/$(REPO_ID)$(RHEL_VER)-repo && $(REPO_CREATE) .
-	$(VERBOSE)touch $(REPO_DIR)/$(REPO_ID)$(RHEL_VER)-repo/last-updated
+	$(VERBOSE)cd $(REPO_DIR)/$(REPO_ID)-repo && $(REPO_CREATE) .
+	$(VERBOSE)touch $(REPO_DIR)/$(REPO_ID)-repo/last-updated
 
 # If a pkglist is missing then assume we should generate one ourselves.
 # Note that the recommended method here is to commit your pkglist file to your own dev repo.
 # Then you can consistently rebuild an ISO using the exact same package versions as the last time.
 # Effectively versioning the packages you use when rolling RPMs and ISOs.
-$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER) ./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)$(RHEL_VER): $(filter-out $(ROOT_DIR)/CONFIG_BUILD,$(CONFIG_BUILD_DEPS))
+$(CONF_DIR)/pkglist.$(REPO_ID) ./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID): $(filter-out $(ROOT_DIR)/CONFIG_BUILD,$(CONFIG_BUILD_DEPS))
 	$(VERBOSE)$(RM) $(YUM_CONF_FILE)
 	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
 	@echo "Generating list of packages for $(call GET_REPO_ID,$(1))$(RHEL_VER)"
 	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
 	echo -e $(YUM_CONF) >> $(YUM_CONF_FILE)
-	$(VERBOSE)$(REPO_QUERY) --repoid=$(REPO_ID)$(RHEL_VER) |sort 1>$(CONF_DIR)/pkglist.$(REPO_ID)$(RHEL_VER)
+	$(VERBOSE)$(REPO_QUERY) --repoid=$(REPO_ID) |sort 1>$(CONF_DIR)/pkglist.$(REPO_ID)
 
 endif
 endef
@@ -300,8 +300,6 @@ $(foreach REPO,$(strip $(shell cat CONFIG_REPOS|$(GREP) -E '^[a-zA-Z].*=.*'|$(SE
 $(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 
 # We need some packages on the build host that aren't available in EPEL, RHEL, Opt.
-# So we will generate them just like we always do.
-HOST_RPMS := $(addprefix $(CLIP_REPO_DIR)/,$(foreach PKG,$(HOST_REQD_PKGS),$(call RPM_FROM_PKG_NAME,$(strip $(PKG)))))
 SRPMS := $(SRPMS) $(addprefix $(SRPM_OUTPUT_DIR)/,$(foreach RPM,$(HOST_RPMS),$(call SRPM_FROM_RPM,$(notdir $(RPM)))))
 
 create-repos: $(setup_all_repos)
