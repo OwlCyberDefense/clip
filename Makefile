@@ -302,7 +302,7 @@ $(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 # We need some packages on the build host that aren't available in EPEL, RHEL, Opt.
 # So we will generate them just like we always do.
 HOST_RPMS := $(addprefix $(CLIP_REPO_DIR)/,$(foreach PKG,$(HOST_REQD_PKGS),$(call RPM_FROM_PKG_NAME,$(strip $(PKG)))))
-SRPMS := $(addprefix $(SRPM_OUTPUT_DIR)/,$(foreach RPM,$(HOST_RPMS),$(call SRPM_FROM_RPM,$(notdir $(RPM)))))
+SRPMS := $(SRPMS) $(addprefix $(SRPM_OUTPUT_DIR)/,$(foreach RPM,$(HOST_RPMS),$(call SRPM_FROM_RPM,$(notdir $(RPM)))))
 
 create-repos: $(setup_all_repos)
 
