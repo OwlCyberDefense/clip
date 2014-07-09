@@ -2,7 +2,7 @@ livecd-tools from EPEL has problems.  We have a patched version we're using.
 To generate Live Media you're going to have to install our version.
 
 1. "$ make livecd-tools-rpm"
-2. "$ cd repos/my-repo"
+2. "$ cd repos/clip-repo"
 3. "$ sudo yum remove livecd-tools python-imgcreate -y"  <= don't worry if
 this fails, it just means you don't have the bad versions installed.
 4. "$ sudo yum localinstall livecd-tools*.noarch.rpm python-imgcreate* -y"

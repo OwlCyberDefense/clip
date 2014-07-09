@@ -132,7 +132,7 @@ CLIP for RHEL 6 Frequently Asked Questions
 
 5. An EXCEPTION was thrown during the build.  What do I do?
    The likely culprit is an RPM that failed to roll properly. Open 
-   ./repos/my-repo/build.log.  A good option for debugging the issue
+   ./repos/clip-repo/build.log.  A good option for debugging the issue
    is to roll the RPM outside of mock.  Go into packages/<PACKAGENAME>
    and run "make rpm".  It should fail to build again.  This time go into
    ./tmp/src/redhat/BUILD/<PACKAGENAME>-<PACKAGEVERSION>.  This is where the 
