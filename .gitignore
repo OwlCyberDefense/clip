@@ -7,9 +7,6 @@ repos/yumcache/*
 repodata
 repos/*-repo/*
 repos/*/last-updated
-repos/my-srpm-repo/*.tgz
-repos/my-srpm-repo/*.tar.gz
-repos/my-srpm-repo/*.bz2
+repos/clip-srpms/*
 conf/yum/yum.conf
-ports/repo/*
 *CHECKSUM
