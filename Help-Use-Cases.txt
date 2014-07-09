@@ -57,7 +57,7 @@ number of problems in those tools.
 If the developer chooses to only use the remediation and audit content as
 described in the third scenario, the developer must roll the needed RPMs by
 running "$ make scap-security-guide-rpm" and "$ make aqueduct-rpm".  The
-generated RPMs will be placed in repos/my-repo.  You can then copy the RPMs
+generated RPMs will be placed in repos/clip-repo.  You can then copy the RPMs
 into into the build environment and roll ISOs.
 
 

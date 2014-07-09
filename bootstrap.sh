@@ -103,7 +103,7 @@ read foo
 if ! rpm -q pungi >/dev/null; then
 	/usr/bin/make pungi-rpm
 	pushd . > /dev/null  
-	cd repos/my-repo
+	cd repos/clip-repo
 	/usr/bin/sudo /usr/bin/yum localinstall -y pungi*
 	popd > /dev/null
 fi
@@ -124,7 +124,7 @@ Press the any key to continue or ctrl-c to exit.
 	fi
 	/usr/bin/make livecd-tools-rpm
 	pushd . > /dev/null
-	cd repos/my-repo
+	cd repos/clip-repo
 	/usr/bin/sudo /usr/bin/yum localinstall -y livecd-tools* and python-imgcreate*
 	popd > /dev/null
 fi
