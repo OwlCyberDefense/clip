@@ -25,7 +25,7 @@ PUNGI ?= $(SUPPORT_DIR)/pungi
 DEBUG ?= y
 
 PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(ISO_VERSION)" --name="$(NAME)" --nosource --force
-LIVECD_ARGS := --config="$(BUILD_DIR)/$(NAME).ks"
+override LIVECD_ARGS := $(LIVECD_ARGS) --config="$(BUILD_DIR)/$(NAME).ks"
 
 # These variables are usually passed in from CONFIG_BUILD to the top level Makefile.
 # This will only be set here if we are running setup-ks by hand.

@@ -262,6 +262,9 @@ help:
 	@echo "	all (generate all installation ISOs and Live CDs)"
 	@for cd in $(LIVECDS); do echo "	$$cd"; done
 	@echo
+	@echo "	NOTE: if you need to debug a kickstart post script for Live CDs,"
+	@echo "	      add LIVECD_ARGS='--shell' to the make command-line."
+	@echo
 	@echo "To burn a livecd image to a thumbdrive:"
 	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
 	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB>"
