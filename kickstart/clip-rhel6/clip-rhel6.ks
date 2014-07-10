@@ -114,6 +114,7 @@ openscap-content
 openscap-utils
 openswan
 passwd
+pam_passwdqc
 perl
 policycoreutils
 policycoreutils-newrole
