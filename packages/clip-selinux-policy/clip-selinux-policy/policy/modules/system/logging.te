@@ -105,6 +105,7 @@ files_read_etc_files(auditctl_t)
 kernel_read_kernel_sysctls(auditctl_t)
 kernel_read_proc_symlinks(auditctl_t)
 kernel_setsched(auditctl_t)
+kernel_use_fds(auditctl_t)
 
 domain_read_all_domains_state(auditctl_t)
 domain_use_interactive_fds(auditctl_t)
