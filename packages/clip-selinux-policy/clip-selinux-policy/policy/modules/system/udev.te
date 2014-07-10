@@ -113,6 +113,8 @@ dev_manage_generic_symlinks(udev_t)
 domain_read_all_domains_state(udev_t)
 domain_dontaudit_ptrace_all_domains(udev_t) #pidof triggers these
 
+# console_init manages files in /etc/sysconfig
+files_manage_etc_files(udev_t)
 files_read_usr_files(udev_t)
 files_read_etc_runtime_files(udev_t)
 files_read_etc_files(udev_t)
