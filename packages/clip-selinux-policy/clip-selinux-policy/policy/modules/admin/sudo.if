@@ -92,6 +92,23 @@ template(`sudo_role_template',`
 	dev_rw_generic_usb_dev($1_sudo_t)
 	dev_read_sysfs($1_sudo_t)
 
+	# SRS: I am not sure if this is the correct
+	# approach but at least it errs on the side
+	# of caution.
+	dev_dontaudit_getattr_generic_files($1_sudo_t)
+	dev_dontaudit_getattr_all_blk_files($1_sudo_t)
+	dev_dontaudit_getattr_all_chr_files($1_sudo_t)
+	dev_dontaudit_getattr_generic_pipes($1_sudo_t)
+	dev_dontaudit_getattr_nvram_dev($1_sudo_t)	
+	dev_dontaudit_getattr_usbfs_dirs($1_sudo_t)	
+	dev_dontaudit_getattr_video_dev($1_sudo_t)	
+	dev_dontaudit_getattr_memory_dev($1_sudo_t)	
+	dev_dontaudit_getattr_autofs_dev($1_sudo_t)	
+	dev_dontaudit_getattr_misc_dev($1_sudo_t)	
+	dev_dontaudit_getattr_smartcard_dev($1_sudo_t)	
+	dev_dontaudit_getattr_apm_bios_dev($1_sudo_t)	
+	dev_dontaudit_getattr_scanner_dev($1_sudo_t)	
+
 	domain_use_interactive_fds($1_sudo_t)
 	domain_sigchld_interactive_fds($1_sudo_t)
 	domain_getattr_all_entry_files($1_sudo_t)
@@ -113,6 +130,7 @@ template(`sudo_role_template',`
 	term_getattr_pty_fs($1_sudo_t)
 	term_relabel_all_ttys($1_sudo_t)
 	term_relabel_all_ptys($1_sudo_t)
+	term_getattr_unallocated_ttys($1_sudo_t)
 
 	auth_run_chk_passwd($1_sudo_t, $2)
 	# sudo stores a token in the pam_pid directory
