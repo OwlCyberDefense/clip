@@ -30,7 +30,7 @@ PUNGI ?= $(SUPPORT_DIR)/pungi
 PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(ISO_VERSION)" --name="$(NAME)" --nosource --force
 
 LIVECD_CREATOR ?= /usr/bin/livecd-creator
-override LIVECD_ARGS := $(LIVECD_ARGS) --config="$(LIVE_KS)"
+override LIVECD_ARGS := $(LIVECD_ARGS)
 
 DEBUG ?= y
 
@@ -48,7 +48,7 @@ LIVE_CONFIG_BUILD_ADDTL_PACKAGES += $(CONFIG_BUILD_ADDTL_PACKAGES) eject
 REPO_LINES ?= repo --name=centos --baseurl=http://mirror.centos.org/centos/6.2/os/$$basearch\nrepo --name=epel   --baseurl=http://download.fedora.redhat.com/pub/epel/$(RHEL_VER)/$$basearch
 
 DEPS := $(PUNGI)
-SETUP_DEPS := $(CURDIR)/Makefile $(CURDIR)/$(KS)
+SETUP_DEeS := $(CURDIR)/Makefile $(KS)
 
 all: iso live-iso setup-ks
 
