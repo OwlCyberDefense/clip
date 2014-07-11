@@ -7,7 +7,7 @@
 #
 
 NAME := $(shell basename $(CURDIR))
-KS := $(NAME).ks
+KS := $(CURDIR)/$(NAME).ks
 
 TARGET_ARCH ?= $(shell uname -i)
 
@@ -68,23 +68,23 @@ iso: $(DEPS) $(ADDTL_DEPS) setup-inst-ks
 
 live-iso: $(DEPS) $(ADDTL_DEPS) setup-live-ks
 	@echo "Live CD Creator needs root permissions - please enter your sudo password if prompted."
-	$(VERBOSE)cd $(BUILD_DIR);sudo $(LIVECD_CREATOR)  $(LIVECD_ARGS)
+	$(VERBOSE)cd $(BUILD_DIR);sudo $(LIVECD_CREATOR)  $(LIVECD_ARGS) --config="$(LIVE_KS)"
 	$(VERBOSE)mv --force $(BUILD_DIR)/livecd-*.iso $(OUTPUT_DIR)/$(NAME)-$(ISO_VERSION)-live.iso
 
 
 setup-inst-ks: $(SETUP_DEPS)
 	$(VERBOSE)test -d $(BUILD_DIR) || mkdir -p $(BUILD_DIR)
 	$(VERBOSE)test -d $(PUNGI_OS_DIR) || mkdir -p $(PUNGI_OS_DIR)
-	$(VERBOSE)cp --force $(CURDIR)/$(KS) $(INST_KS)
+	$(VERBOSE)cp --force $(KS) $(INST_KS)
 	@echo "Modifying kickstart with build variables..."
 	$(VERBOSE)sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(INST_KS)
-	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-PLACEHOLDER;$(CONFIG_BUILD_BASH_VARS);' $(INST_KS) || true
+	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-PLACEHOLDER;$(CONFIG_BUILD_BASH_VARS);' $(INST_KS)
 	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-ADDTL-PACKAGES;$(CONFIG_BUILD_ADDTL_PACKAGES);' $(INST_KS)
 	$(VERBOSE)sed -e 's/^repo/#repo/' $(INST_KS) > $(PUNGI_OS_DIR)/$(notdir $(INST_KS))
 
 setup-live-ks: $(SETUP_DEPS)
 	$(VERBOSE)test -d $(BUILD_DIR) || mkdir -p $(BUILD_DIR)
-	$(VERBOSE)cp --force $(CURDIR)/$(KS) $(LIVE_KS)
+	$(VERBOSE)cp --force $(KS) $(LIVE_KS)
 	@echo "Modifying kickstart with build variables..."
 	$(VERBOSE)sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(LIVE_KS)
 	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-PLACEHOLDER;$(LIVE_CONFIG_BUILD_BASH_VARS);' $(LIVE_KS)
