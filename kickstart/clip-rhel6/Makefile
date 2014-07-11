@@ -1,11 +1,15 @@
 # Copyright (C) 2011-2012 Tresys Technology, LLC
+# Copyright (C) 2014 Quark Security, Inc
 #
 # Authors: Francisco Slavin <fslavin@tresys.com>
 #          Spencer Shimko <sshimko@tresys.com>
+#          Spencer Shimko <spencer@quarksecurity.com>
 #
 
 NAME := $(shell basename $(CURDIR))
 KS := $(NAME).ks
+
+TARGET_ARCH ?= $(shell uname -i)
 
 ISO_VERSION ?= 1
 
@@ -16,8 +20,8 @@ SUPPORT_DIR ?= $(ROOT_DIR)/support
 
 OUTPUT_DIR ?= $(ROOT_DIR)
 
-PUNGI_OS_DIR := $(BUILD_DIR)/$(ISO_VERSION)/$(shell uname -i)/os/
-PUNGI_ISO_DIR := $(BUILD_DIR)/$(ISO_VERSION)/$(shell uname -i)/iso/
+PUNGI_OS_DIR := $(BUILD_DIR)/$(ISO_VERSION)/$(TARGET_ARCH)/os/
+PUNGI_ISO_DIR := $(BUILD_DIR)/$(ISO_VERSION)/$(TARGET_ARCH)/iso/
 
 LIVECD_CREATOR ?= /usr/bin/livecd-creator
 PUNGI ?= $(SUPPORT_DIR)/pungi

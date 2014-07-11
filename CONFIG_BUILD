@@ -69,9 +69,9 @@ CONFIG_BUILD_BASH_VARS := export CONFIG_BUILD_PRODUCTION=$(strip $(CONFIG_BUILD_
 
 # Typically we are rolling builds on the target arch.  Changing this may have dire consequences.
 # (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
-ARCH := $(shell uname -i)
+TARGET_ARCH := $(shell uname -i)
 
 # Quiet down the build output a bit.
 QUIET := n
 
-export ARCH PACKAGES ADDTL_DEPS QUIET PRE_ROLLED_PACKAGES CONFIG_BUILD_BASH_VARS CONFIG_BUILD_ENFORCING_MODE CONFIG_BUILD_UNCONFINED_TOOR CONFIG_BUILD_PRODUCTION ISO_VERSION CONFIG_BUILD_SECSTATE_REMEDIATE
+export TARGET_ARCH PACKAGES ADDTL_DEPS QUIET PRE_ROLLED_PACKAGES CONFIG_BUILD_BASH_VARS CONFIG_BUILD_ENFORCING_MODE CONFIG_BUILD_UNCONFINED_TOOR CONFIG_BUILD_PRODUCTION ISO_VERSION CONFIG_BUILD_SECSTATE_REMEDIATE
