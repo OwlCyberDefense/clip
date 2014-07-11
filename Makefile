@@ -44,12 +44,8 @@ export CONF_DIR ?= $(ROOT_DIR)/conf
 # Config deps
 CONFIG_BUILD_DEPS = $(ROOT_DIR)/CONFIG_BUILD $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
 
-# Typically we are rolling builds on the target arch.  Changing this may have dire consequences
-# (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
-ARCH := $(shell uname -i)
-
 # MOCK_REL must be configured in MOCK_CONF_DIR/MOCK_REL.cfg
-MOCK_REL := rhel-$(RHEL_VER)-$(ARCH)
+MOCK_REL := rhel-$(RHEL_VER)-$(TARGET_ARCH)
 
 # This directory contains all of our packages we will be building.
 PKG_DIR += $(CURDIR)/packages
