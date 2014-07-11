@@ -66,6 +66,12 @@ iso: $(DEPS) $(ADDTL_DEPS) setup-inst-ks
 	$(VERBOSE)cd $(BUILD_DIR);sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(INST_KS)
 	$(VERBOSE)sudo mv --force $(PUNGI_ISO_DIR)/$(NAME)-$(ISO_VERSION)-*.iso $(OUTPUT_DIR)/
 
+live-iso: $(DEPS) $(ADDTL_DEPS) setup-live-ks
+	@echo "Live CD Creator needs root permissions - please enter your sudo password if prompted."
+	$(VERBOSE)cd $(BUILD_DIR);sudo $(LIVECD_CREATOR)  $(LIVECD_ARGS)
+	$(VERBOSE)mv --force $(BUILD_DIR)/livecd-*.iso $(OUTPUT_DIR)/$(NAME)-$(ISO_VERSION)-live.iso
+
+
 setup-inst-ks: $(SETUP_DEPS)
 	$(VERBOSE)test -d $(BUILD_DIR) || mkdir -p $(BUILD_DIR)
 	$(VERBOSE)test -d $(PUNGI_OS_DIR) || mkdir -p $(PUNGI_OS_DIR)
@@ -83,11 +89,6 @@ setup-live-ks: $(SETUP_DEPS)
 	$(VERBOSE)sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(LIVE_KS)
 	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-PLACEHOLDER;$(LIVE_CONFIG_BUILD_BASH_VARS);' $(LIVE_KS)
 	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-ADDTL-PACKAGES;$(LIVE_CONFIG_BUILD_ADDTL_PACKAGES);' $(LIVE_KS)
-
-live-iso: $(DEPS) $(ADDTL_DEPS) setup-live-ks
-	@echo "Live CD Creator needs root permissions - please enter your sudo password if prompted."
-	$(VERBOSE)cd $(BUILD_DIR);sudo $(LIVECD_CREATOR)  $(LIVECD_ARGS)
-	$(VERBOSE)mv --force $(BUILD_DIR)/livecd-*.iso $(OUTPUT_DIR)/$(NAME)-$(ISO_VERSION)-live.iso
 
 clean:
 	$(VERBOSE)sudo rm -rf $(BUILD_DIR)
