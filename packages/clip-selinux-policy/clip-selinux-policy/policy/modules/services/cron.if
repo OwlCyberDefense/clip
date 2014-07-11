@@ -523,6 +523,24 @@ interface(`cron_use_system_job_fds',`
 
 ########################################
 ## <summary>
+##	Dont audit searh on system cron job keys.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain donut audited.
+##	</summary>
+## </param>
+#
+interface(`cron_dontaudit_search_system_job_keys',`
+	gen_require(`
+		type system_cronjob_t;
+	')
+
+	dontaudit $1 system_cronjob_t:key search;
+')
+
+########################################
+## <summary>
 ##	Write a system cron job unnamed pipe.
 ## </summary>
 ## <param name="domain">

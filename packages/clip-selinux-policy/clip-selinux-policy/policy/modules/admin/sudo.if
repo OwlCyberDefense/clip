@@ -80,6 +80,8 @@ template(`sudo_role_template',`
 	allow $3 $1_sudo_t:fifo_file rw_fifo_file_perms;
 	allow $3 $1_sudo_t:process signal_perms;
 
+	kernel_dontaudit_getattr_core_if($1_sudo_t)
+
 	kernel_read_kernel_sysctls($1_sudo_t)
 	kernel_read_system_state($1_sudo_t)
 	kernel_link_key($1_sudo_t)
@@ -179,6 +181,10 @@ template(`sudo_role_template',`
 
 	optional_policy(`
 		fprintd_dbus_chat($1_sudo_t)
+	')
+
+	optional_policy(`
+		cron_dontaudit_search_system_job_keys($1_sudo_t)
 	')
 
 ')
