@@ -9,6 +9,8 @@ role staff_r;
 
 userdom_unpriv_user_template(staff)
 
+dontaudit staff_t self:netlink_audit_socket nlmsg_relay;
+
 ########################################
 #
 # Local policy

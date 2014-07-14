@@ -68,7 +68,8 @@ fs_list_inotifyfs(iptables_t)
 
 mls_file_read_all_levels(iptables_t)
 
-term_dontaudit_use_console(iptables_t)
+term_write_console(iptables_t)
+term_write_generic_ptys(iptables_t)
 
 domain_use_interactive_fds(iptables_t)
 

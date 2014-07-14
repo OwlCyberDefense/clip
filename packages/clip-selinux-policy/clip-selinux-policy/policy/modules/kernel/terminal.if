@@ -579,13 +579,13 @@ interface(`term_dontaudit_setattr_generic_ptys',`
 
 ########################################
 ## <summary>
-##	Read and write the generic pty
-##	type.  This is generally only used in
+##	read and write the generic pty
+##	type.  this is generally only used in
 ##	the targeted policy.
 ## </summary>
 ## <param name="domain">
 ##	<summary>
-##	Domain allowed access.
+##	domain allowed access.
 ##	</summary>
 ## </param>
 #
@@ -597,6 +597,27 @@ interface(`term_use_generic_ptys',`
 	dev_list_all_dev_nodes($1)
 	allow $1 devpts_t:dir list_dir_perms;
 	allow $1 devpts_t:chr_file { rw_term_perms lock append };
+')
+
+########################################
+## <summary>
+##	Write tto he generic pty
+##	type. 
+## </summary>
+## <param name="domain">
+##	<summary>
+##	domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`term_write_generic_ptys',`
+	gen_require(`
+		type devpts_t;
+	')
+
+	dev_list_all_dev_nodes($1)
+	allow $1 devpts_t:dir list_dir_perms;
+	allow $1 devpts_t:chr_file write;
 ')
 
 ########################################
