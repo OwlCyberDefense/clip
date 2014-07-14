@@ -395,6 +395,10 @@ selinux_get_enforce_mode(initrc_t)
 storage_getattr_fixed_disk_dev(initrc_t)
 storage_setattr_fixed_disk_dev(initrc_t)
 storage_setattr_removable_dev(initrc_t)
+storage_dontaudit_getattr_removable_dev(initrc_t)
+# lsblk, which has a bug in RHEL 6, attempts to read raw blk devs
+# https://bugzilla.redhat.com/show_bug.cgi?id=818621
+storage_dontaudit_read_removable_device(initrc_t)
 
 term_use_all_terms(initrc_t)
 term_reset_tty_labels(initrc_t)

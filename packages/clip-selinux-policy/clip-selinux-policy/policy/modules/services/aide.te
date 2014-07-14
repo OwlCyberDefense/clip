@@ -51,3 +51,7 @@ seutil_use_newrole_fds(aide_t)
 
 userdom_use_user_terminals(aide_t)
 
+
+optional_policy(`
+cron_system_entry(aide_t, aide_exec_t)
+')

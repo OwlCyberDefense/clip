@@ -191,6 +191,24 @@ template(`sudo_role_template',`
 
 ########################################
 ## <summary>
+##	Link to sudo domain keys.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`sudo_link_sudo_keys',`
+	gen_require(`
+		attribute sudodomain;
+	')
+
+	allow $1 sudodomain:key link;
+')
+
+########################################
+## <summary>
 ##	Send a SIGCHLD signal to the sudo domain.
 ## </summary>
 ## <param name="domain">
