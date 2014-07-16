@@ -11,12 +11,6 @@
 # to CONFIG_REPOS.
 # PRE_ROLLED_PACKAGES := "/home/joeuser/lha-1.14i-19.2.2.el6.rf.x86_64.rpm"
 
-# This is a list of kickstarts that can be used to generate systems.  Each name here must have a matching directory
-# in kickstarts/<name>.  That directory must contain a Makefile (see kickstarts/clip-rhel6/Makefile) and a <name.ks>.
-# The idea here is that you can generate multiple system variants all from one the CLIP build environment.  E.g.
-# you could generate chat-server and jboss-server from this build environment sharing everything expect the kickstart.
-SYSTEMS := clip-rhel6
-
 # The ISO_VERSION field doesn't alter functionality at all.  The variable name and value will appear in /root/clip-info.txt.
 # This provides a way to figure out what version of your repo was used to generate the ISO once it is installed.  E.g. 
 #   Tester: "My install is busted."
