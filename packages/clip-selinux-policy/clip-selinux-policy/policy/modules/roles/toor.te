@@ -32,7 +32,7 @@ init_exec(toor_t)
 userdom_manage_user_home_dirs(toor_t)
 userdom_home_filetrans_user_home_dir(toor_t)
 
-files_manage_all_files(toor_t)
+files_unconfined(toor_t)
 domain_unconfined(toor_t)
 
 ifdef(`direct_toor_daemon',`
