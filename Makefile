@@ -120,6 +120,8 @@ endif
 
 MKDIR = $(VERBOSE)test -d $(1) || mkdir -p $(1)
 
+SYSTEMS := $(shell ls $(KICKSTART_DIR))
+
 # These are targets supported by the kickstart/Makefile that will be used to generate LiveCD images.
 LIVECDS := $(foreach SYSTEM,$(SYSTEMS),$(addsuffix -live-iso,$(SYSTEM)))
 
