@@ -16,7 +16,7 @@
 include CONFIG_BUILD
 
 # This is the RHEL version supported by this release of CLIP.  Do not alter.
-export RHEL_VER := 6
+export RHEL_VER := 7
 
 ######################################################
 # BEGIN MAGIC
