@@ -24,7 +24,7 @@
 # Anywho, we're thinking about it, but no timeline yet ;)
 
 # NOTE: this is the right path for Quark Security's build VM
-centos6.5 = /opt/repos/centos6.5
+centos7.0 = /opt/repos/centos7.0-1406
 
 # A RHEL/CentOS repo must be available. Must be a local path (we use NFS mounts).
 # rhel = /mnt/repos-6-3/rhel-6-3-x86_64/rhel-x86_64-server-6/getPackage
