@@ -353,9 +353,9 @@ fi
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 echo "Done with post install scripts..."
 
-# This is rather unfortunate, but the remediation content 
+# This is rather unfortunate, but the remediation content
 # starts services, which need to be killed/shutdown if
-# we're rolling Live Media.  First, kill the known 
+# we're rolling Live Media.  First, kill the known
 # problems cleanly, then just kill them all and let
 # <deity> sort them out.
 if [ x"$CONFIG_BUILD_LIVE_MEDIA" == "xy" ]; then
