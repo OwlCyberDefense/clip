@@ -1,14 +1,16 @@
 # Copyright (C) 2011 Tresys Technology, LLC
+# Copyright (C) 2014 QuarkSecurity, Inc
 #
 # Authors: Spencer Shimko <sshimko@tresys.com>
+# Authors: Spencer Shimko <spencer@quarksecurity.com>
 #
 
 # The name of the package
-PKGNAME := example
+PKGNAME := example 
 
 # This is the version number of the RPM that will be
 # generated.  Typically you bump this for delivery.
-VERSION := 1
+VERSION := 1.0
 
 # bump this if creating multiple releases from the same
 # version (think about this... why are you doing this?)
@@ -18,7 +20,7 @@ RELEASE := 1
 ARCH ?= $(shell uname -i)
 
 # srpm file name
-SRPM := $(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
+SRPM := example-1.0-1.src.rpm
 RPM := $(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
 
 ####################################################
@@ -29,7 +31,7 @@ SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
 
 # Exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
 # The filter-out function is called to drop a circular dep when doing non-mock builds (ie SRPM_OUTPUT_DIR = CURDIR)
-RPM_DEPS :=  Makefile $(filter-out $(SRPM_OUTPUT_DIR)/$(SRPM), $(shell /bin/readlink -f $(SRPM)))
+RPM_DEPS :=  $(strip Makefile $(filter-out $(SRPM_OUTPUT_DIR)/$(SRPM),$(shell /bin/readlink -f $(SRPM))))
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
 RPM_TOPDIR ?= $(RPM_TMPDIR)/src/redhat
@@ -38,8 +40,6 @@ RPM_BUILDROOT ?= $(RPM_TMPDIR)/rpm-buildroot
 MKDIR = test -d $(1) || mkdir -p $(1)
 
 RPMBUILD_ARGS := --define '_topdir $(RPM_TOPDIR)'  --define '_tmppath $(RPM_TMPDIR)' --buildroot $(RPM_BUILDROOT)
-
-RPMQ_DEFS := --query --define 'pkgname $(PKGNAME)' --define '_sysconfdir /etc' --define 'version $(VERSION)' --define 'release $(RELEASE)' --define 'vendor $(VENDOR)' --define 'packager $(PACKAGER)' --qf '%{NAME}\n'
 
 define rpm-prep
 	$(call MKDIR,$(RPM_TOPDIR)/SOURCES);\
@@ -67,10 +67,9 @@ $(OUTPUT_DIR)/$(RPM): $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rp
 	@echo "Building $(PKGNAME) RPM..."
 	$(call rpm-prep)
 	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild $(RPMBUILD_ARGS) -bb $<
-	if [ $(ARCH) != "noarch" ]; then cp $(RPM_TOPDIR)/RPMS/noarch/* $(OUTPUT_DIR)/ 2>&1 >/dev/null; exit 0; fi
-	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/*.rpm $(OUTPUT_DIR)
+	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/$(PKGNAME)-$(VERSION)-$(RELEASE)*.rpm $(OUTPUT_DIR)
 
-$(SRPM_OUTPUT_DIR)/$(SRPM): $(RPM_DEPS)
+$(SRPM_OUTPUT_DIR)/$(SRPM): $(filter-out Makefile,$(RPM_DEPS))
 	@if [ ! "$@" -ef "$(SRPM)" ]; then\
 		echo "Copying SRPM into place...";\
 		$(call rpm-prep)\
@@ -81,10 +80,6 @@ clean:
 	$(RM) -r $(RPM_TMPDIR)
 
 bare: clean
-	# TODO: this needs testing
-	export TMP=$( mktemp ); cd $$TMP; rpm2cpio $(SRPM) | cpio -mi \*.spec;  $(foreach f,$(shell rpm $(RPMQ_DEFS) --specfile *.spec), $(RM) $(OUTPUT_DIR)/$(f)*.rpm;)cd ..; rm -f $$TMP
-	@if [ ! "$(SRPM_OUTPUT_DIR)/$(SRPM)" -ef "$(SRPM)" ]; then\
-		$(RM) $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm\
-	fi
+	$(RM) $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
 
 .PHONY: all $(PKGNAME)-rpm $(PKGNAME)-srpm clean bare rpm srpm
