@@ -1,6 +1,8 @@
 # Copyright (C) 2011 Tresys Technology, LLC
+# Copyright (C) 2014 QuarkSecurity, Inc
 #
 # Authors: Spencer Shimko <sshimko@tresys.com>
+# Authors: Spencer Shimko <spencer@quarksecurity.com>
 #
 
 # The name of the package
@@ -29,7 +31,7 @@ SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
 
 # Exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
 # The filter-out function is called to drop a circular dep when doing non-mock builds (ie SRPM_OUTPUT_DIR = CURDIR)
-RPM_DEPS :=  Makefile $(filter-out $(SRPM_OUTPUT_DIR)/$(SRPM), $(shell /bin/readlink -f $(SRPM)))
+RPM_DEPS :=  $(strip Makefile $(filter-out $(SRPM_OUTPUT_DIR)/$(SRPM),$(shell /bin/readlink -f $(SRPM))))
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
 RPM_TOPDIR ?= $(RPM_TMPDIR)/src/redhat
@@ -67,10 +69,9 @@ $(OUTPUT_DIR)/$(RPM): $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rp
 	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild $(RPMBUILD_ARGS) -bb $<
 	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/$(PKGNAME)-$(VERSION)-$(RELEASE)*.rpm $(OUTPUT_DIR)
 
-$(SRPM_OUTPUT_DIR)/$(SRPM): $(RPM_DEPS)
-	echo "DEBUG: $@ $^"
+$(SRPM_OUTPUT_DIR)/$(SRPM): $(filter-out Makefile,$(RPM_DEPS))
 	@if [ ! "$@" -ef "$(SRPM)" ]; then\
-		@echo "Copying SRPM into place...";\
+		echo "Copying SRPM into place...";\
 		$(call rpm-prep)\
 		cp  $(SRPM) $(SRPM_OUTPUT_DIR) 2>&1 1>/dev/null;\
 	fi
