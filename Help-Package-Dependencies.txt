@@ -1,0 +1,16 @@
+Occasionally you might introduce a package
+that must be built before another package.  
+This occurs when one package references 
+another package in the BuildRequires: block
+in the RPM spec file.  To ensure the
+dependent package is built first, edit the 
+Makefile for the other package, that is
+the one with the relevant BuildRequires:
+block, and add the other package to 
+the srpm Makefil target dependency list.
+
+E.g. this line:
+srpm: $(PKGNAME)-srpm
+
+becomes:
+srpm: $(PKGNAME)-srpm dependent-package-rpm
