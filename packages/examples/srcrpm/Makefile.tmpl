@@ -19,6 +19,9 @@ RELEASE := 1
 # snag the architecture, hard code an arch if cross-compiling or going noarch
 ARCH ?= $(shell uname -i)
 
+
+PACKAGER := Quark Security, Inc
+
 # srpm file name
 SRPM := example-1.0-1.src.rpm
 RPM := $(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
@@ -31,11 +34,15 @@ SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
 
 # Exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
 # The filter-out function is called to drop a circular dep when doing non-mock builds (ie SRPM_OUTPUT_DIR = CURDIR)
-RPM_DEPS :=  $(strip Makefile $(filter-out $(SRPM_OUTPUT_DIR)/$(SRPM),$(shell /bin/readlink -f $(SRPM))))
+RPM_DEPS :=  $(strip $(filter-out $(SRPM_OUTPUT_DIR)/$(SRPM),$(shell /bin/readlink -f $(SRPM))))
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
 RPM_TOPDIR ?= $(RPM_TMPDIR)/src/redhat
 RPM_BUILDROOT ?= $(RPM_TMPDIR)/rpm-buildroot
+
+RPMQ_DEFS := --query --define 'pkgname $(PKGNAME)' --define '_sysconfdir /etc' --define 'version $(VERSION)' --define 'release $(RELEASE)' --define 'packager $(PACKAGER)' --qf '%{NAME}\n'
+
+RPM_SPEC := $(RPM_TMPDIR)/$(PKGNAME).spec
 
 MKDIR = test -d $(1) || mkdir -p $(1)
 
@@ -51,7 +58,7 @@ endef
 
 all: $(PKGNAME)-rpm $(PKGNAME)-srpm
 
-Makefile: Makefile.tmpl $(SRPM)
+Makefile: Makefile.tmpl $(CURDIR)/$(SRPM)
 	$(CURDIR)/gen-makefile-from-src-rpm.sh $(SRPM)
 	@echo "$(CURDIR)/Makefile has been updated.  Please re-run 'make'" && exit 1
 
@@ -69,17 +76,26 @@ $(OUTPUT_DIR)/$(RPM): $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rp
 	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild $(RPMBUILD_ARGS) -bb $<
 	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/$(PKGNAME)-$(VERSION)-$(RELEASE)*.rpm $(OUTPUT_DIR)
 
-$(SRPM_OUTPUT_DIR)/$(SRPM): $(filter-out Makefile,$(RPM_DEPS))
-	@if [ ! "$@" -ef "$(SRPM)" ]; then\
+$(SRPM_OUTPUT_DIR)/$(SRPM): $(filter-out $(CURDIR)/$(SRPM),$(RPM_DEPS))
+	@if [ ! "$@" -ef "$(CURDIR)/$(SRPM)" ]; then\
 		echo "Copying SRPM into place...";\
 		$(call rpm-prep)\
-		cp  $(SRPM) $(SRPM_OUTPUT_DIR) 2>&1 1>/dev/null;\
+		cp  $(CURDIR)/$(SRPM) $(SRPM_OUTPUT_DIR) 2>&1 1>/dev/null;\
 	fi
+
+$(RPM_SPEC): $(CURDIR)/$(SRPM)
+	$(call MKDIR,$(RPM_TMPDIR))
+	( cd $(RPM_TMPDIR); rpm2cpio $< | cpio --quiet -i ${PKGNAME}.spec ) 2>&1 >/dev/null
 
 clean:
 	$(RM) -r $(RPM_TMPDIR)
 
-bare: clean
-	$(RM) $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
+# This is slightly undesirable, but in order to cleanup *all& RONs peroperly we need
+# to query the spec file, so in the bare target we have to extract the spec file :(
+bare: $(RPM_SPEC) FORCE
+	$(foreach f,$(shell rpm $(RPMQ_DEFS) --specfile $(RPM_SPEC)),export GLOBIGNORE='$(CURDIR)/$(SRPM)'; $(RM) $(OUTPUT_DIR)/$(f)*.rpm;)
+	$(RM) -r $(RPM_TMPDIR)
 
-.PHONY: all $(PKGNAME)-rpm $(PKGNAME)-srpm clean bare rpm srpm
+FORCE:
+
+.PHONY: all $(PKGNAME)-rpm $(PKGNAME)-srpm clean bare rpm srpm FORCE
