@@ -22,6 +22,7 @@ rm -f ${PKGNAME}.spec
 # is the 99& case.
 VERSION=`rpmquery -q --specfile --queryformat '%{VERSION}\n' ${PKGNAME}.spec | head -n 1`
 RELEASE=`rpmquery -q --specfile --queryformat '%{RELEASE}\n' ${PKGNAME}.spec | head -n 1`
+ARCH=`rpmquery -q --specfile --queryformat '%{ARCH}\n' ${PKGNAME}.spec | head -n 1`
 cd ../
 
 rm -rf tmp
@@ -30,4 +31,9 @@ echo "Name: $PKGNAME"
 echo "Version: $VERSION"
 echo "Release: $RELEASE"
 
-sed -e "s;SRPM :=.*;SRPM := $1;" -e "s;^PKGNAME :=.*;PKGNAME := $PKGNAME;" -e "s;^VERSION :=.*;VERSION := $VERSION;" -e "s;^RELEASE :=.*;RELEASE := $RELEASE;" Makefile.tmpl > Makefile 
+sed -e "s;SRC_SRPM :=.*;SRC_SRPM := \$(CURDIR)/$1;" -e "s;^PKGNAME :=.*;PKGNAME := $PKGNAME;" -e "s;^VERSION :=.*;VERSION := $VERSION;" -e "s;^RELEASE :=.*;RELEASE := $RELEASE;" Makefile.tmpl > Makefile 
+
+if [ x"$ARCH" == "xnoarch" ]; then
+	echo "Arch: $ARCH"
+	sed -i -e  "s;ARCH .*;ARCH := $ARCH;" Makefile 
+fi
