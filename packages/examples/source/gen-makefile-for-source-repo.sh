@@ -23,4 +23,4 @@ echo "Release: $RELEASE"
 
 sed -i -e 's/^\s*Name:.*$/Name: %{pkgname}/' -e 's/^\s*Version:.*$/Version: %{version}/' -e 's/^\s*Release:.*$/Release: %{release}/' -e 's/^\s*Arch:.*$/Arch: %{arch}/' -e 's/^\s*%setup -q\s*$/%setup -q -n %{pkgname}/' $1.spec
 
-sed -e -e "s;^PKGNAME :=.*;PKGNAME := $PKGNAME;" -e "s;^VERSION :=.*;VERSION := $VERSION;" -e "s;^RELEASE :=.*;RELEASE := $RELEASE;" Makefile.tmpl > Makefile
+sed -e "s;^PKGNAME :=.*;PKGNAME := $PKGNAME;" -e "s;^VERSION :=.*;VERSION := $VERSION;" -e "s;^RELEASE :=.*;RELEASE := $RELEASE;" Makefile.tmpl > Makefile
