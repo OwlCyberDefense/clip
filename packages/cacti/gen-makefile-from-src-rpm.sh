@@ -5,10 +5,26 @@ if [ $# -ne 1 ]; then
 	echo "Usage: `basename $0` <src rpm filename>"
 	exit 1
 fi
+
 echo "Extracting information from src rpm..."
-PKGNAME=`rpmquery -qp --queryformat '%{NAME}' $1`
-VERSION=`rpmquery -qp --queryformat '%{VERSION}' $1`
-RELEASE=`rpmquery -qp --queryformat '%{RELEASE}' $1`
+PKGNAME=`rpmquery -qp --queryformat '%{NAME}' $1 2>/dev/null`
+
+# We've seen cases from, e.g., rpmforge, where the src.rpm ver/release
+# don't match the contained package ver/release.  So extract the spec
+# the spec file and get it from there.
+test -d tmp || mkdir tmp
+cd tmp
+rm -f ${PKGNAME}.spec
+( rpm2cpio ../$1 | cpio --quiet -i ${PKGNAME}.spec ) 2>&1 >/dev/null
+
+# Spec files can roll multiple packages which results in the query 
+# returning dupe versions, just go with the first.  *Hopefully* this
+# is the 99& case.
+VERSION=`rpmquery -q --specfile --queryformat '%{VERSION}\n' ${PKGNAME}.spec | head -n 1`
+RELEASE=`rpmquery -q --specfile --queryformat '%{RELEASE}\n' ${PKGNAME}.spec | head -n 1`
+cd ../
+
+rm -rf tmp
 
 echo "Name: $PKGNAME"
 echo "Version: $VERSION"
