@@ -108,7 +108,7 @@ if ! rpm -q pungi >/dev/null; then
 	popd > /dev/null
 fi
 
-if ! rpm -q "livecd-tools-13.4.4-99.el6.noarch" > /dev/null; then 
+if ! rpm -q "livecd-tools-13.4.4-99.el7.noarch" > /dev/null; then 
 	if rpm -q "livecd-tools" > /dev/null; then
 		/bin/echo "You have livecd-tools installed, but not our version. Our version contains 
 fixes for generating live media.  We will compile our version and replace your 
