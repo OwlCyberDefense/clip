@@ -26,7 +26,7 @@ LIVE_KS := $(BUILD_DIR)/$(NAME)-live.ks
 PUNGI_OS_DIR := $(BUILD_DIR)/$(ISO_VERSION)/$(TARGET_ARCH)/os/
 PUNGI_ISO_DIR := $(BUILD_DIR)/$(ISO_VERSION)/$(TARGET_ARCH)/iso/
 
-PUNGI ?= $(SUPPORT_DIR)/pungi
+PUNGI ?= /usr/bin/pungi
 PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(ISO_VERSION)" --name="$(NAME)" --nosource --force
 
 LIVECD_CREATOR ?= /usr/bin/livecd-creator
