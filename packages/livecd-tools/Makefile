@@ -14,7 +14,7 @@ VERSION := 13.4.4
 
 # Bump this if creating multiple releases from the same
 # version.
-RELEASE := 99.el6
+RELEASE := 99.el7
 
 # The name of the Vendor
 VENDOR := null
