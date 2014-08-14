@@ -20,9 +20,9 @@ rm -f ${PKGNAME}.spec
 # Spec files can roll multiple packages which results in the query 
 # returning dupe versions, just go with the first.  *Hopefully* this
 # is the 99& case.
-VERSION=`rpmquery -q --specfile --queryformat '%{VERSION}\n' ${PKGNAME}.spec | head -n 1`
-RELEASE=`rpmquery -q --specfile --queryformat '%{RELEASE}\n' ${PKGNAME}.spec | head -n 1`
-ARCH=`rpmquery -q --specfile --queryformat '%{ARCH}\n' ${PKGNAME}.spec | head -n 1`
+VERSION=`rpm -q --specfile --queryformat '%{VERSION}\n' ${PKGNAME}.spec | head -n 1`
+RELEASE=`rpm -q --specfile --queryformat '%{RELEASE}\n' ${PKGNAME}.spec | head -n 1`
+ARCH=`rpm -q --specfile --queryformat '%{ARCH}\n' ${PKGNAME}.spec | head -n 1`
 cd ../
 
 rm -rf tmp
