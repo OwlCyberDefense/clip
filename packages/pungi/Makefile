@@ -17,7 +17,7 @@ VERSION := 2.13
 RELEASE := 2.el7
 
 # snag the architecture, hard code an arch if cross-compiling or going noarch
-ARCH ?= $(shell uname -i)
+ARCH := noarch
 
 
 PACKAGER := Quark Security, Inc
