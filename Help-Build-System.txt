@@ -109,8 +109,8 @@ NOTE: the string #REPO-REPLACEDMENT-PLACEHOLDER *must* appear in the
 kickstart for this to work appropriately.
 
 If you choose to use a hostable kickstart script rather than rebuilding an
-iso, you can run the following from ./kickstart/clip-rhel6:
+iso, you can run the following from ./kickstart/clip-rhel7:
 # make setup-ks
 
 A hostable kickstart is then located in
-./tmp/clip-iso-build/1/x86_64/os/clip-rhel6.ks 
+./tmp/clip-iso-build/1/x86_64/os/clip-rhel7.ks 

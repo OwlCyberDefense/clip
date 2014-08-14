@@ -30,7 +30,7 @@ CLIP for RHEL 6 Frequently Asked Questions
    and accreditation process.
 
 1. How do I roll an installation ISO?
-   Run "make clip-rhel6-iso"
+   Run "make clip-rhel7-iso"
 
 2. What other things can I make?
    Run "make help"
@@ -38,11 +38,11 @@ CLIP for RHEL 6 Frequently Asked Questions
 3a. What is the default username and password for CLIP?
     The username is "toor" and the password is "neutronbass".  You can 
     change this in the %post of the kickstart
-    (./kickstarts/clip-rhel6/clip-rhel6.ks).
+    (./kickstarts/clip-rhel7/clip-rhel7.ks).
 
 3b. What is the default bootloader password for GRUB?
     The default password for GRUB is "neutronbass".  You can change this in 
-    the kickstart (./kickstarts/ciip-rhel6/clip-rhel6.ks).
+    the kickstart (./kickstarts/ciip-rhel7/clip-rhel7.ks).
 
 4a. How do I set up local yum repos?
     Setup a machine that has all the appropriate yum repos in /etc/yum/repos.d.

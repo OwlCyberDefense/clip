@@ -129,6 +129,6 @@ Press the any key to continue or ctrl-c to exit.
 	popd > /dev/null
 fi
 
-/bin/echo -e "Basic bootstrapping of build host is complete.\nPress 'enter' to run 'make clip-rhel6-iso' or ctrl-c to quit."
+/bin/echo -e "Basic bootstrapping of build host is complete.\nPress 'enter' to run 'make clip-rhel7-iso' or ctrl-c to quit."
 read foo
-/usr/bin/make clip-rhel6-iso
+/usr/bin/make clip-rhel7-iso
