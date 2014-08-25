@@ -14,7 +14,7 @@ VERSION := 0.8.8b
 
 # bump this if creating multiple releases from the same
 # version (think about this... why are you doing this?)
-RELEASE := 1.el6
+RELEASE := 1.el7
 
 # snag the architecture, hard code an arch if cross-compiling or going noarch
 ARCH := noarch
