@@ -1,4 +1,4 @@
-# Copyright (C) 2011-2012 Tresys Technology, LLC
+# Copyright (C) 2011-2012,2014 Tresys Technology, LLC
 # Copyright (C) 2014 Quark Security, Inc
 #
 # Authors: Francisco Slavin <fslavin@tresys.com>
