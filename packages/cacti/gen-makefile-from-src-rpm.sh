@@ -8,7 +8,7 @@ if [ $# -ne 1 ]; then
 fi
 
 echo "Extracting information from src rpm..."
-PKGNAME=`rpmquery --queryformat '%{NAME}' $1 --nosignature 2>/dev/null`
+PKGNAME=`rpmquery -qp --queryformat '%{NAME}' $1 --nosignature 2>/dev/null`
 
 # We've seen cases from, e.g., rpmforge, where the src.rpm ver/release
 # don't match the contained package ver/release.  So extract the spec
