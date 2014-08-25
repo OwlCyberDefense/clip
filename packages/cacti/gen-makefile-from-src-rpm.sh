@@ -1,4 +1,5 @@
 #!/bin/bash -u
+# Copyright (C) 2011-2012,2014 Tresys Technology, LLC
 set -e
 
 if [ $# -ne 1 ]; then
