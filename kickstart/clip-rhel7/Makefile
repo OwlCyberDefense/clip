@@ -52,7 +52,7 @@ LIVE_CONFIG_BUILD_ADDTL_PACKAGES += $(CONFIG_BUILD_ADDTL_PACKAGES) eject
 REPO_LINES ?= repo --name=centos --baseurl=http://mirror.centos.org/centos/6.2/os/$$basearch\nrepo --name=epel   --baseurl=http://download.fedora.redhat.com/pub/epel/$(RHEL_VER)/$$basearch
 
 DEPS := $(PUNGI)
-SETUP_DEeS := $(CURDIR)/Makefile $(KS)
+SETUP_DEPS := $(CURDIR)/Makefile $(KS)
 
 all: iso live-iso setup-ks
 
