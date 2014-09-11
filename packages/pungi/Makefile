@@ -1,4 +1,4 @@
-# Copyright (C) 2011,2014 Tresys Technology, LLC
+# Copyright (C) 2011 Tresys Technology, LLC
 # Copyright (C) 2014 QuarkSecurity, Inc
 #
 # Authors: Spencer Shimko <sshimko@tresys.com>
