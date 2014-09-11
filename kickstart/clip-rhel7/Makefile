@@ -61,7 +61,7 @@ iso: $(DEPS) $(ADDTL_DEPS) setup-inst-ks
 	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
 	@echo "Pungi needs a patched version of Lorax's treebuilder class."
 	$(VERBOSE)cd $(BUILD_DIR); sudo patch -N -p1 $(LORAX_TB) < $(TB_PATCH) || \
-                                   sudo patch -R -p1 $(LORAX_TB) < $(TB_PATCH) && \
+                                   sudo patch -R -p1 $(LORAX_TB) < $(TB_PATCH) ; \
                                    sudo patch -N -p1 $(LORAX_TB) < $(TB_PATCH)
 	$(VERBOSE)cd $(BUILD_DIR); sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(INST_KS)"
 	@echo "Fixing the boot menu..."
