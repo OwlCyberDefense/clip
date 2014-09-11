@@ -1,4 +1,4 @@
-# Copyright (C) 2011-2012 Tresys Technology, LLC
+# Copyright (C) 2011-2012,2014 Tresys Technology, LLC
 # Copyright (C) 2011-2012 Quark Security, Inc
 # Copyright (C) 2013 Cubic Corporation
 # 
@@ -34,7 +34,7 @@ endif
 # So we will roll it ourselves inside of mock :)
 HOST_REQD_PKGS := pungi livecd-tools
 
-HOST_RPM_DEPS := rpm-build createrepo mock repoview
+HOST_RPM_DEPS := rpm-build createrepo mock repoview lorax pungi
 
 export ROOT_DIR ?= $(CURDIR)
 export OUTPUT_DIR ?= $(ROOT_DIR)
@@ -204,11 +204,12 @@ define REPO_RULE_template
 $(eval REPO_ID := $(call GET_REPO_ID, $(1)))
 ifneq ($(strip $(1)),)
 $(eval REPO_PATH := $(call GET_REPO_PATH,$(1)))
-$(eval REPO_URL := $(call GET_REPO_URL,$(call GET_REPO_PATH,$(1))))
+# puts the url into clip-repo.cfg
+$(eval REPO_URL := file://$(REPO_DIR)/$(REPO_ID)-repo)
 $(eval setup_all_repos += setup-$(REPO_ID)-repo)
 
-$(eval YUM_CONF := [$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
-$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=file://$(REPO_DIR)/$(REPO_ID)-repo\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
+$(eval YUM_CONF := [$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=file://$(REPO_PATH)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
+$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
 $(eval MY_REPO_DEPS += $(REPO_DIR)/$(REPO_ID)-repo/last-updated)
 $(eval REPO_LINES := $(REPO_LINES)repo --name=$(REPO_ID) --baseurl=file://$(REPO_DIR)/$(REPO_ID)-repo\n)
 
@@ -238,7 +239,7 @@ $(REPO_DIR)/$(REPO_ID)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID) $(CONFI
 $(CONF_DIR)/pkglist.$(REPO_ID) ./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID): $(filter-out $(ROOT_DIR)/CONFIG_BUILD,$(CONFIG_BUILD_DEPS))
 	$(VERBOSE)$(RM) $(YUM_CONF_FILE)
 	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
-	@echo "Generating list of packages for $(call GET_REPO_ID,$(1))$(RHEL_VER)"
+	@echo "Generating list of packages for $(call GET_REPO_ID,$(1))"
 	$(VERBOSE)cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE)
 	echo -e $(YUM_CONF) >> $(YUM_CONF_FILE)
 	$(VERBOSE)$(REPO_QUERY) --repoid=$(REPO_ID) |sort 1>$(CONF_DIR)/pkglist.$(REPO_ID)
