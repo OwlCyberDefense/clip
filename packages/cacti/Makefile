@@ -56,7 +56,6 @@ all: $(PKGNAME)-rpm $(PKGNAME)-srpm
 
 Makefile: Makefile.tmpl $(SRC_SRPM)
 	$(CURDIR)/gen-makefile-from-src-rpm.sh $(notdir $(SRC_SRPM))
-	@echo "$(CURDIR)/Makefile has been updated.  Please re-run 'make'" && exit 1
 
 rpm: $(PKGNAME)-rpm
 
