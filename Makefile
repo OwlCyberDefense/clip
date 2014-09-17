@@ -49,7 +49,10 @@ MOCK_REL := rhel-$(RHEL_VER)-$(TARGET_ARCH)
 
 # This directory contains all of our packages we will be building.
 PKG_DIR += $(CURDIR)/packages
-PACKAGES := $(shell ls $(PKG_DIR) | grep -v examples)
+# List of packages not to build in the packages directory
+EXCLUDE_PKGS := secstate aqueduct examples webpageexample
+PACKAGES := $(shell ls $(PKG_DIR))
+PACKAGES := $(filter-out $(EXCLUDE_PKGS),$(PACKAGES))
 
 # This is the directory that will contain all of our yum repos.
 REPO_DIR := $(CURDIR)/repos
