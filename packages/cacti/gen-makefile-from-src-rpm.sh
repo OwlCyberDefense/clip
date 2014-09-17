@@ -32,9 +32,19 @@ echo "Name: $PKGNAME"
 echo "Version: $VERSION"
 echo "Release: $RELEASE"
 
-sed -e "s;SRC_SRPM :=.*;SRC_SRPM := \$(CURDIR)/$1;" -e "s;^PKGNAME :=.*;PKGNAME := $PKGNAME;" -e "s;^VERSION :=.*;VERSION := $VERSION;" -e "s;^RELEASE :=.*;RELEASE := $RELEASE;" Makefile.tmpl > Makefile 
+sed -e "s;SRC_SRPM :=.*;SRC_SRPM := \$(CURDIR)/$1;" -e "s;^PKGNAME :=.*;PKGNAME := $PKGNAME;" -e "s;^VERSION :=.*;VERSION := $VERSION;" -e "s;^RELEASE :=.*;RELEASE := $RELEASE;" Makefile.tmpl > Makefile.tmp
 
 if [ x"$ARCH" == "xnoarch" ]; then
 	echo "Arch: $ARCH"
-	sed -i -e  "s;ARCH .*;ARCH := $ARCH;" Makefile 
+	sed -i -e  "s;ARCH .*;ARCH := $ARCH;" Makefile.tmp
+fi
+
+RC=0
+diff Makefile Makefile.tmp || RC=1
+if [ $RC -eq 1 ]; then
+    mv Makefile.tmp Makefile
+	echo "Makefile has been updated.  Please re-run 'make'"
+    exit 1
+else
+    exit 0
 fi
