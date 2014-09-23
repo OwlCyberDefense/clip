@@ -83,7 +83,7 @@ sudo yum install -y $PACKAGES
 /bin/echo -e "This is embarassing but due to a bug (bz #861281) you must do builds in permissive.\nhttps://bugzilla.redhat.com/show_bug.cgi?id=861281"
 /bin/echo "So this is a heads-up we're going to configure your system to run in permissive mode.  Sorry!"
 /bin/echo "You can bail by pressing ctrl-c or hit enter to continue."
-read foo
+read user_input
 /usr/bin/sudo /usr/sbin/setenforce 0
 /usr/bin/sudo /bin/sed -i -e 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config
 
@@ -103,7 +103,7 @@ fixes for generating live media.  We will compile our version and replace your
 version free of charge.
 Press the any key to continue or ctrl-c to exit.
 "
-		read foo
+		read user_input
 		/usr/bin/sudo /usr/bin/yum remove livecd-tools 2>/dev/null || true
 		/usr/bin/sudo /usr/bin/yum remove python-imgcreate 2>/dev/null || true
 	else 
@@ -118,5 +118,5 @@ Press the any key to continue or ctrl-c to exit.
 fi
 
 /bin/echo -e "Basic bootstrapping of build host is complete.\nPress 'enter' to run 'make clip-rhel7-iso' or ctrl-c to quit."
-read foo
+read user_input
 /usr/bin/make clip-rhel7-iso
