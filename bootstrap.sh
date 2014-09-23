@@ -40,31 +40,29 @@ if [ x"$tmpfile" != "x" ]; then
 	mv $tmpfile CONFIG_REPOS
 fi
 
-# install packages that we need but aren't commonly present on default RHEL installs.
-for i in createrepo rpm-build make; do
-	/bin/rpm -q "$i" >/dev/null || sudo /usr/bin/yum install -y $i
-done;
-
 arch=`rpm --eval %_host_cpu`
+# TODO Using the yum variable $releasever evaluates to 7Server which is incorrect.
+# For now, this variable needs to be incremented during each major RHEL release until we
+# find a better way to get the release version to set for EPEL
+releasever="7"
 
-# if we're on RHEL add the Opt channel
-if [ "$distro" == "r" ]; then
-	/bin/echo "We're going to try to subscribe to the RHEL Optional channel for your distro.
-This might not work if you don't have credentials or you're out of entitlements.
-We *NEED* packages from Opt to be installed on the build host *and* need to pull
-packages from there to put on the generated installable media.  If you're using
-RHEL want to work-around this issue (hack): 
-1. Grab a CentOS ISO.
-2. Mount it.
-3. Add it as a yum repo:
-	http://docs.oracle.com/cd/E37670_01/E37355/html/ol_create_repo.html
-4. Re-run this script and pick CentOS.
-5. Refer to the same path in the CONFIG_REPOS file.
-Press enter to continue.
-"
-	read foo
-	/usr/bin/sudo rhn-channel --add --channel=rhel-$arch-server-optional-`/bin/awk '{ print $7; }' /etc/redhat-release`.z
+# always have the latest epel rpm
+if ! rpm -q epel-release > /dev/null; then
+	echo "***epel rpm not installed - install and enable repo"
+	# if the epel-bootstrap.repo file does not exist touch it and enable the repo
+	if [ ! -f /etc/yum.repos.d/epel-bootstrap.repo ]; then
+		echo "
+[epel]
+name=Bootstrap EPEL
+mirrorlist=https://mirrors.fedoraproject.org/mirrorlist?repo=epel-$releasever&arch=$arch
+failovermethod=priority
+enabled=1
+gpgcheck=0
+		" | sudo tee --append /etc/yum.repos.d/epel-bootstrap.repo
+		sudo yum --enablerepo=epel -y install epel-release
+	fi
 fi
+
 /bin/rpm -q "python-kid" >/dev/null || /usr/bin/sudo /usr/bin/yum install -y python-kid || if [ "$?" != "0" ]; then
 	/bin/echo "WARNING: we couldn't find a package we need to install on the build 
 host.  This is usually the result of using RHEL without a subscription to RHN. Try this:
@@ -77,19 +75,9 @@ host.  This is usually the result of using RHEL without a subscription to RHN. T
 "
 fi
 
-# install packages from epel that we carry in CLIP
-pushd . >/dev/null
-cd host_packages 
-rpm -q pigz > /dev/null || /usr/bin/sudo /usr/bin/yum localinstall -y epel/pigz*
-for i in `find ./ -iname *.noarch.rpm`; do
-	NAME=`/bin/rpm -qp --queryformat '%{NAME}' $i 2>/dev/null`
-	/bin/rpm -q "$NAME" > /dev/null || /usr/bin/sudo /usr/bin/yum localinstall -y $i
-done
-for i in `find ./ -iname *.$arch.rpm`; do
-	NAME=`/bin/rpm -qp --queryformat '%{NAME}' $i 2>/dev/null`
-	/bin/rpm -q "$NAME" > /dev/null || /usr/bin/sudo /usr/bin/yum localinstall -y $i
-done
-popd > /dev/null
+PACKAGES="mock pigz createrepo repoview rpm-build lorax make"
+sudo yum install -y $PACKAGES
+
 /usr/bin/sudo /usr/sbin/usermod -aG mock `id -un`
 
 /bin/echo -e "This is embarassing but due to a bug (bz #861281) you must do builds in permissive.\nhttps://bugzilla.redhat.com/show_bug.cgi?id=861281"

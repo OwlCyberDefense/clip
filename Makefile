@@ -34,7 +34,7 @@ endif
 # So we will roll it ourselves inside of mock :)
 HOST_REQD_PKGS := pungi livecd-tools
 
-HOST_RPM_DEPS := rpm-build createrepo mock repoview lorax pungi
+HOST_RPM_DEPS := rpm-build createrepo mock repoview lorax
 
 export ROOT_DIR ?= $(CURDIR)
 export OUTPUT_DIR ?= $(ROOT_DIR)
