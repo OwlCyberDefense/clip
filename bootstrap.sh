@@ -49,8 +49,8 @@ releasever="7"
 # always have the latest epel rpm
 if ! rpm -q epel-release > /dev/null; then
 	echo "***epel rpm not installed - install and enable repo"
-	# if the epel-bootstrap.repo file does not exist touch it and enable the repo
-	if [ ! -f /etc/yum.repos.d/epel-bootstrap.repo ]; then
+	# if the epel.repo file does not exist write it and enable the repo
+	if [ ! -f /etc/yum.repos.d/epel.repo ]; then
 		echo "
 [epel]
 name=Bootstrap EPEL
@@ -58,7 +58,7 @@ mirrorlist=https://mirrors.fedoraproject.org/mirrorlist?repo=epel-$releasever&ar
 failovermethod=priority
 enabled=1
 gpgcheck=0
-		" | sudo tee --append /etc/yum.repos.d/epel-bootstrap.repo
+		" | sudo tee --append /etc/yum.repos.d/epel.repo
 		sudo yum --enablerepo=epel -y install epel-release
 	fi
 fi
