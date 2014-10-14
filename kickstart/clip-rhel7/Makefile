@@ -33,6 +33,8 @@ TB_PATCH := $(SUPPORT_DIR)/treebuilder-kver.patch
 PUNGI ?= /usr/bin/pungi
 PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(ISO_VERSION)" --name="$(NAME)" --nosource --force
 
+ISOLINUX_CFG=$(PUNGI_OS_DIR)/isolinux/isolinux.cfg
+
 LIVECD_CREATOR ?= /usr/bin/livecd-creator
 override LIVECD_ARGS := $(LIVECD_ARGS)
 
@@ -65,10 +67,9 @@ iso: $(DEPS) $(ADDTL_DEPS) setup-inst-ks
                                    sudo patch -N -p1 $(LORAX_TB) < $(TB_PATCH) || echo "Patched lorax"
 	$(VERBOSE)cd $(BUILD_DIR); sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(INST_KS)"
 	@echo "Fixing the boot menu..."
-	$(VERBOSE)sudo sed -i -e "s/^label linux$$/label $(NAME)/" \
-	       -e "s/append initrd=initrd.img$$/append initrd=initrd.img ks=cdrom:$(notdir $(INST_KS))/" \
-	       -e "s/or upgrade an existing system/$(NAME)/" \
-	$(PUNGI_OS_DIR)/isolinux/isolinux.cfg
+	$(VERBOSE)sudo sed -i "s/^label linux$$/label $(NAME)/" $(ISOLINUX_CFG)
+	$(VERBOSE)sudo sed -i "s/append initrd=initrd.img/append initrd=initrd.img ks=cdrom:\/$(notdir $(INST_KS))/" $(ISOLINUX_CFG)
+	$(VERBOSE)sudo sed -i "s/or upgrade an existing system/$(NAME)/" $(ISOLINUX_CFG)
 	@echo "Building ISO with pungi..."
 	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
 	$(VERBOSE)cd $(BUILD_DIR);sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(INST_KS)
