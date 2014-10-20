@@ -47,7 +47,7 @@ endif
 # the values controlled by CONFIG_BUILD_PRODUCTION above.
 #CONFIG_BUILD_UNCONFINED_TOOR := y
 CONFIG_BUILD_SECSTATE_REMEDIATE := y
-CONFIG_BUILD_ENFORCING_MODE := y
+CONFIG_BUILD_ENFORCING_MODE := n
 
 ################################################
 ### STOP USER CONFIG 
