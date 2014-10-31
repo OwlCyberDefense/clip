@@ -1,9 +1,8 @@
-#!/bin/bash -u
+#!/bin/bash -ue
 # Copyright (C) 2013 Quark Security, Inc
 # Copyright (C) 2013 Cubic Corporation
 #
 # Authors: Spencer Shimko <spencer@quarksecurity.com>
-set -e
 /bin/echo -e "Creating an environment for building software and ISOs can be a little 
 complicated.  This script will automate some of those tasks.  Keep in mind that 
 this script isn't exhaustive; depending on a variety of factors you may have to
