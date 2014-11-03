@@ -3,6 +3,45 @@
 # Copyright (C) 2013 Cubic Corporation
 #
 # Authors: Spencer Shimko <spencer@quarksecurity.com>
+
+prompt_to_enter_repo_path ()
+{
+    local originalname=${1-}
+    local originalpath=${2-}
+    if [ -z $originalpath ]; then
+            /bin/echo -e "
+There is no default path set for the $originalname repo.  You must provide a path for the $originalname repo or the script will
+exit immediately."
+            /bin/echo -e "
+Enter a fully qualified path for the $originalname repo.\n"
+            read path
+            if [ x"$path" == "x" ]; then
+                /bin/echo -e"
+No default path exists for the $originalname repo and none provided - Exiting"
+                exit
+            else
+                tmpfile=`/bin/mktemp`
+                /bin/sed -r "s/^($originalname.*)$/#\1/" CONFIG_REPOS > $tmpfile
+                /bin/echo "$originalname = $path" >> $tmpfile
+                /bin/mv $tmpfile CONFIG_REPOS
+            fi
+    else
+            /bin/echo -e "
+Enter a fully qualified path for the $originalname repo.  If you do not enter a path then the default path
+will be used in CONFIG_REPOS.  The default path for the $originalname yum repo is $originalpath\n"
+            /bin/echo -e "
+Enter a fully qualified path for this yum repo\n"
+            read path
+            if [ ! x"$path" == "x" ]; then
+                tmpfile=`/bin/mktemp`
+                /bin/sed -r "s/^($originalname.*)$/#\1/" CONFIG_REPOS > $tmpfile
+                /bin/echo "$originalname = $path" >> $tmpfile
+                /bin/mv $tmpfile CONFIG_REPOS
+            fi
+    fi
+
+}
+
 /bin/echo -e "Creating an environment for building software and ISOs can be a little 
 complicated.  This script will automate some of those tasks.  Keep in mind that 
 this script isn't exhaustive; depending on a variety of factors you may have to
@@ -17,7 +56,19 @@ These must be directories of packages, not RHN channels.  E.g. a directory with
 a bunch of packages and a repodata/ sub-directory.  If you do not have yum 
 repositories like this available CLIP will not work!  Please see Help-FAQ.txt!\n\n"
 
-tmpfile=''
+# get the name/path for any existing yum repos from CONFIG_REPO
+rhelreponame=rhel
+rhelrepopath=`/bin/sed -rn 's/^rhel = (.*)/\1/p' CONFIG_REPOS`
+optreponame=opt
+optrepopath=`/bin/sed -rn 's/^opt = (.*)/\1/p' CONFIG_REPOS`
+
+# prompt user for rhel/opt path
+prompt_to_enter_repo_path $rhelreponame $rhelrepopath
+prompt_to_enter_repo_path $optreponame $optrepopath
+
+# prompt the user to add additional yum repos if necessary
+/bin/echo -e "
+Adding additional yum repos if necessary"
 while :; do
 	/bin/echo -e "
 Enter a name for this yum repo.  Just leave empty if you are done adding, or don't wish to change, the repositories.\n"
@@ -25,18 +76,31 @@ Enter a name for this yum repo.  Just leave empty if you are done adding, or don
 	[ x"$name" == "x" ] && break
 	/bin/echo -e "
 Enter a fully qualified path for this yum repo.  Just leave empty if you are done adding, or don't wish to change, the repositories.\n"
-	read path
-	[ x"$path" == "x" ] && break
-
-	if [ x"$tmpfile" == "x" ]; then
-		tmpfile=`/bin/mktemp`
-		/bin/cat CONFIG_REPOS | /bin/sed -e 's/^\([a-zA-Z0-9].*\)$/#\1/' > $tmpfile
-	fi
-	/bin/echo -e "# INSERTED BY BOOTSTRAP.SH\n$name = $path" >> $tmpfile
+    read path
+    [ x"$path" == "x" ] && break
+    /bin/echo -e "# INSERTED BY BOOTSTRAP.SH\n$name = $path" >> CONFIG_REPOS
 done
 
-if [ x"$tmpfile" != "x" ]; then
-	mv $tmpfile CONFIG_REPOS
+# refresh the path var for the opt repo before checking for subscription to optional channel
+optrepopath=`sed -rn 's/^opt = (.*)/\1/p' CONFIG_REPOS`
+# subscribe to the rhel optional channel repo, create a local repo, and pull in required packages
+OPT_PACKAGES="anaconda-dracut"
+if [ ! -d $optrepopath ]; then
+	/bin/echo "Optional channel repo directory: $optrepopath does not exist. Creating the directory."
+	/bin/mkdir -p $optrepopath
+fi
+sudo /bin/yum repolist enabled | /usr/bin/grep -q rhel-7-server-optional-rpms && OPT_SUBSCRIBED=1 || OPT_SUBSCRIBED=0
+if [ $OPT_SUBSCRIBED -eq 0 ]; then
+	/bin/echo "RHEL optional channel is disabled...enabling"
+	sudo /bin/subscription-manager repos --enable=rhel-7-server-optional-rpms
+else
+	/bin/echo "RHEL optional channel is already enabled"
+fi
+# download the required rpms from the rhel optional channel
+sudo /bin/yumdownloader --destdir $optrepopath $OPT_PACKAGES
+if [ ! -d $optrepopath/repodata ]; then
+	/bin/echo "Repo dir in place but repo not initialized - run createrepo!!!"
+	createrepo -d $optrepopath
 fi
 
 arch=`rpm --eval %_host_cpu`
@@ -47,10 +111,10 @@ releasever="7"
 
 # always have the latest epel rpm
 if ! rpm -q epel-release > /dev/null; then
-	echo "***epel rpm not installed - install and enable repo"
+	/bin/echo "***epel rpm not installed - install and enable repo"
 	# if the epel.repo file does not exist write it and enable the repo
 	if [ ! -f /etc/yum.repos.d/epel.repo ]; then
-		echo "
+		/bin/echo "
 [epel]
 name=Bootstrap EPEL
 mirrorlist=https://mirrors.fedoraproject.org/mirrorlist?repo=epel-$releasever&arch=$arch
