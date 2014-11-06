@@ -30,7 +30,7 @@ No default path exists for the $originalname repo and none provided - Exiting"
 Enter a fully qualified path for the $originalname repo.  If you do not enter a path then the default path
 will be used in CONFIG_REPOS.  The default path for the $originalname yum repo is $originalpath\n"
             /bin/echo -e "
-Enter a fully qualified path for this yum repo\n"
+Enter a fully qualified path for the [ $originalname ] repo [ default: $originalpath ]\n"
             read path
             if [ ! x"$path" == "x" ]; then
                 tmpfile=`/bin/mktemp`
