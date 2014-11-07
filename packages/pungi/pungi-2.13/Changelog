@@ -1,0 +1,4388 @@
+commit 4ae5a8c18b691fee28f5df41db45abc9f6b0a957
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Sat Dec 22 02:23:42 2012 -0600
+
+    dont use uname when working out the arch it breaks arm basearch detection
+
+commit d978ca3fa8914dcdd5760d09e6e998ab30576087
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Fri Dec 21 14:57:01 2012 -0600
+
+    2.13 release
+
+commit 45bb97ba9720d66f23f9f6c02b7e78c442d79df3
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Fri Dec 21 14:54:45 2012 -0600
+
+    get ppc images for ppc and ppc64 bz#888517
+
+commit b7c6c80949bfe93ccd2c928a423f4bcdd0e6fc5c
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Fri Dec 21 09:25:26 2012 -0600
+
+    reset the arch to ppc64 when making lorax calls so that the iso will run everywhere
+
+commit 8d54c4be1bbc92b3dbbae6dfd4731d7cbfd3abc4
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Fri Dec 21 09:23:14 2012 -0600
+
+    there is no point making isos on arm, lets log and move on.
+
+commit 6cbf093f8e18bf00497382f6d1f995648a7ab34f
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Tue Dec 18 15:57:09 2012 -0600
+
+    Only include groups that are specified in the kickstart. Remove any environments that use groups not on the media.
+    patch from notting http://lists.fedoraproject.org/pipermail/buildsys/2012-December/004033.html
+    include langpack in comps
+
+commit feadeaadb80a3578aaf937896413ea6705b3afa9
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Sat Sep 22 08:51:52 2012 -0500
+
+    We need to reset the arch to ppc64p7 for both ppc and ppc64
+
+commit ee88779bb60592c3af8872e2dc8300d37d69a424
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Fri Aug 31 00:43:51 2012 -0500
+
+    prep 2.12 release
+
+commit 5cd88a47e659127b650cb6b42ffe125648e64312
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Fri Aug 31 00:41:12 2012 -0500
+
+    add 32 bit arm base arches
+
+commit 4b7685daaa4c316793d8f4bfe7a366c2c205c7aa
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Fri Aug 31 00:39:48 2012 -0500
+
+    ppc fixes for bz#849731 also set the arch to ppc64p7 so that power7 optimised rpms get included on the install disk
+
+commit 2d37fb2fa98113241c048ab435ca53684ea99d1d
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Fri May 25 09:31:01 2012 -0500
+
+    do not run isohybrid on the source iso it doesnt work so well
+
+commit 989462bf8628473917f2162bf7e887689bb2a381
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Mon Apr 16 15:54:08 2012 -0500
+
+    don't include s390 packages when composing s390x image
+    
+    Signed-off-by: Dan Horák <dan@danny.cz>
+
+commit cd1ec8f6ede21d12d7de0669742090caf2d128d6
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Mon Apr 16 14:59:45 2012 -0500
+
+    Prep 2.11 release
+
+commit 8ed9aafb7805e63eedceec5be2f5d4f0df2d901a
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Mon Apr 16 14:54:24 2012 -0500
+
+    fix up doing hashed directories for Packages
+
+commit 72b9333abde2399e66d54bd19cf4f7d14d9c311c
+Author: Daniel Mach <dmach@redhat.com>
+Date:   Tue Apr 3 07:36:53 2012 -0400
+
+    Run yumbase.arch.setup_arch() to set arch correctly.
+
+commit aa401cc49b874bfe33bf705e5ad075ce86e40278
+Author: Daniel Mach <dmach@redhat.com>
+Date:   Mon Apr 2 08:26:49 2012 -0400
+
+    Find %name-debuginfo-common-%arch debuginfo files.
+
+commit 9d7f82d91a6db224e802939b4df595b43521afb7
+Author: Daniel Mach <dmach@redhat.com>
+Date:   Mon Mar 5 06:10:17 2012 -0500
+
+    Handle excludes during depsolving.
+    
+    Prefiously, packages were excluded from the initial package list,
+    but could have been pulled in during depsolving. This patch excludes
+    selected packages for good. Supported syntax is -$name or -%name.%arch
+    including wildchars.
+
+commit 8ccc24e106f82438638c284f5875eda9a47b22f7
+Author: Daniel Mach <dmach@redhat.com>
+Date:   Fri Mar 2 03:33:00 2012 -0500
+
+    Improve --nogreedy behaviour to select only the best packages for target arch. Also exact package arch can be selected by specifying $name.$arch in the config file.
+
+commit 80454a89b2110f8a800e62e062b44afbb7f021d5
+Author: Daniel Mach <dmach@redhat.com>
+Date:   Tue Nov 1 14:12:24 2011 -0400
+
+    Revamp optparse error handling.
+
+commit 1623bbe9363f1415eb11284c449a5945f3a1d3f7
+Author: Daniel Mach <dmach@redhat.com>
+Date:   Tue Nov 1 14:08:15 2011 -0400
+
+    Implement arch override.
+    
+    Using the --arch option, it is possible to run depsolving
+    (Gather stage) on any host regardless the architecture.
+
+commit 83a22bd5ea603335907e20155110305d758fa0df
+Author: Daniel Mach <dmach@redhat.com>
+Date:   Tue Nov 1 11:21:58 2011 -0400
+
+    Add --full-archlist option to include i686 packages in x86_64 trees.
+    
+    Pungi limits x86_64 package architectures to x86_64 and noarch only,
+    which renders depsolving in multiarch repos impossible.
+    This patch adds --full-archlist option which removes the limitation.
+
+commit 44cda032615c675181e3fc6fcbf583a1893d8827
+Author: Tomas Mlcoch <tmlcoch@redhat.com>
+Date:   Tue Nov 1 08:51:28 2011 +0100
+
+    Fix indentation.
+
+commit cd9797de717e74cb0758f66148797f6abda9321f
+Author: Tomas Mlcoch <tmlcoch@redhat.com>
+Date:   Mon Oct 31 12:10:22 2011 +0100
+
+    Add --norelnotes option to skip getting release notes.
+
+commit 249efe1d75d504036bc243aed501b47c8e3e1f72
+Author: Daniel Mach <dmach@redhat.com>
+Date:   Thu Aug 18 12:29:10 2011 +0200
+
+    Add --nodownload option to print packages instead of downloading them.
+    
+    This allows other tools to use Pungi for depsolving and process
+    packages in their own way.
+
+commit 9cf7418cd577c07506ef14f17e6f12458718fec8
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Mon Mar 12 10:50:20 2012 -0500
+
+    Build in the Mac el-torito if present
+    Patch from Matthew Garrett <mjg@redhat.com>
+
+commit 0857d30f8205a73d6e4c611c840c66db40fdd553
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Thu Feb 9 18:06:46 2012 -0600
+
+    prep 2.10 release
+
+commit 7ab8ee1443dbe4775961a9e1c47f716ca4e41b9b
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Thu Feb 9 14:44:37 2012 -0600
+
+    set the default for nohash to False
+
+commit 45964282afc6a662d325df7955414d01803177dd
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Thu Feb 9 09:12:55 2012 -0600
+
+    hash the Packages tree by default, adding a --nohash option for old style layout
+
+commit 32eacf5eec235edde8fac34cff3aa06774b4a640
+Author: Will Woods <wwoods@redhat.com>
+Date:   Thu Oct 20 15:38:25 2011 -0400
+
+    Use a predictable ISO Volume ID (#732298)
+    
+    Since the new lorax branch needs to know the iso Volume ID to be able to
+    boot, we need to make sure we're using the same Volume ID that lorax
+    sets up the bootloaders to expect.
+
+commit 0ff7275349ba3493feee5f9f505dc30f7c5566dc
+Author: Will Woods <wwoods@redhat.com>
+Date:   Thu Oct 20 15:38:24 2011 -0400
+
+    Fix DVD building on ppc64
+    
+    ppc64 systems used to have arch == 'ppc', so pungi was only checking to
+    see if arch == 'ppc'. Now that ppc64 is separate from ppc, we need to
+    check if arch.startswith('ppc') instead.
+
+commit 59ff9f90687c702018cbc73b14ebf8a251656e4e
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Wed Jul 27 11:48:13 2011 -0500
+
+    prep for 2.9 release
+
+commit e70fa6c60f62be4c65527f681011fa35947f3b32
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Wed Jul 27 11:40:57 2011 -0500
+
+    lorax and anaconda now use isfinal, it simplifies things for us.
+
+commit e215694a6be545ad481fd282948d956c9cd68084
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Jul 18 15:23:26 2011 -0700
+
+    Prep for 2.8 release
+
+commit d6490ebf6e3c781e1a0beaef3c5d33f2ab1dd528
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Jul 18 15:11:19 2011 -0700
+
+    Always re-init the yum object (#717089)
+
+commit 7e65e60fc654dee3411a406a6212e4672e115b6a
+Author: Tom "spot" Callaway <tcallawa@redhat.com>
+Date:   Thu May 26 11:01:43 2011 -0400
+
+    proper isohybrid support
+
+commit 76c3cd9309670d2922ecd1bfadce57ec5630d203
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Thu May 26 10:08:43 2011 -0500
+
+    bump to 2.7
+
+commit ebedace49d0a68f90ce8f3a6ded98692d6ef0c3c
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Mon May 16 18:04:03 2011 -0500
+
+    2.7 release
+
+commit 80120d1e5355adc6a7c66213ef31e19b51a80cf6
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Mon May 16 17:59:23 2011 -0500
+
+    add commandline option --isfinal for ga releases. defaulting to a beta
+    for https://bugzilla.redhat.com/show_bug.cgi?id=703815
+
+commit 6e05f8162f0ea6937b13b02e4ce4663d34c1644d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Apr 29 01:44:53 2011 -0700
+
+    New release
+
+commit 0c8b9d268e7411fcf87ea185099b40a9214683e5
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Apr 29 00:08:39 2011 -0700
+
+    Only init yum if we haven't already
+    
+    And fix where the import goes
+
+commit e3a59fe484eca15844f1b21924edae50fb71a4e6
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Apr 28 23:35:42 2011 -0700
+
+    Add the repo from topdir to our yumobject for lorax.
+    
+    This allows lorax to make use of the local low cost repo to fetch
+    packages from.  Buildinstall would previously get passed this repo as a
+    runtime argument.
+
+commit 7a8ab8817a69a0b5421e59cd74edde6689b9e1aa
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Apr 28 23:22:12 2011 -0700
+
+    Add a function for adding repos to the yum object.
+    
+    This allows us to re-use the code if we add repos later, like the repo
+    we just gathered and createrepod
+
+commit 4002565f530269f54b0d669d5e678d0fff1a2bd3
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Mon Apr 11 14:03:01 2011 -0500
+
+    only filter the arch list on x86_64 we cant do it on sparc and ppc.
+    it really only makes sense on x86_64.
+
+commit 4bc181ed4a9adb933e6e8cce2a21f15ac351d5a4
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Mon Feb 21 18:28:39 2011 -0600
+
+    allow source isos to be generated,  there is no split media support
+
+commit b4e40a079e918d95d3e59553375b945661b911df
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Thu Feb 10 15:30:02 2011 -0500
+
+    Add an option to allow only grabbing the best provides for a particular depenedency, instead of all.
+
+commit 27cf6a26b45fe567f3e026ac27b4ffa49509fd3f
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Jan 12 13:52:34 2011 -0800
+
+    Release 2.5
+
+commit 7deae5840c2acd055cb0953831af7f3b7b3ec581
+Author: Martin Gracik <mgracik@redhat.com>
+Date:   Wed Dec 22 10:34:07 2010 +0100
+
+    Lorax patch
+    
+    Use lorax instead of buildinstall
+
+commit 6d480f0896168e713405afe154e57902803a29e8
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Dec 21 14:26:25 2010 -0800
+
+    Prep for release
+
+commit 5b0c9715a5715e42684b3e089f22469871c05466
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Dec 20 13:54:38 2010 -0800
+
+    Enable efi booting on x86_64 isos
+    
+    This was requested by Peter Jones.
+
+commit 19993ef780d7a0d93bb6e7d56407b03b92a58e11
+Author: Martin Gracik <mgracik@redhat.com>
+Date:   Tue Nov 16 18:40:34 2010 +0100
+
+    Let the yumconf.persistdir be as the default
+    
+    This path gets appended to the installroot every time,
+    even if it's an absolute path, so it ends up being inside
+    the installroot everytime. We don't want it to be in some
+    path depending on a temporary workdir. This will put all
+    the yum files in a standard /var/lib/yum directory inside
+    the installroot.
+
+commit 31d6c3d6ef0ad3b125f13dd4f661747712de0119
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Nov 15 16:44:47 2010 -0800
+
+    Prep for release
+
+commit 6e284665608a18c99d407c029ae6d5a1133929cd
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Nov 15 16:39:27 2010 -0800
+
+    Remove code to generate media:// repodata
+    
+    This is no longer necessary when doing single media composes
+
+commit cbba0e4cd771f2851c73ef010a8ae0aa8cb7dc05
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Nov 12 09:28:15 2010 -0800
+
+    Remove unneeded files now that we don't split
+
+commit d5ef2c25ff01b532d0abd88fbc205f58608db191
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Nov 12 09:27:10 2010 -0800
+
+    Remove ability to generate split media
+
+commit 9976438e318e3484db58eed3149d7c08c0ffdf14
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Nov 12 09:18:04 2010 -0800
+
+    Remove options to do split media composes
+
+commit 9b221ec535bbc5a7737051ef35e44cd29a1eb2d1
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Oct 14 10:52:44 2010 -0700
+
+    Prep for release and further fix pkgorder issue
+
+commit 95a8aaa0c1180a84270d5217fd92c2d2666d6a60
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Oct 14 10:52:02 2010 -0700
+
+    Add the full boat of possible initrd items
+
+commit 18143a47a1e22a21cc2047f0203eaf0b85a648e9
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Oct 13 15:40:40 2010 -0700
+
+    Prep for release
+
+commit 17070c08871113473f5123f192d0476f7883295a
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Oct 13 15:39:02 2010 -0700
+
+    Make sure lvm shows up on the first disk (#642557)
+
+commit 06c5a94b5b69430660d27cc14f513de00f750fd9
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jun 29 16:00:34 2010 -0700
+
+    prep for release
+
+commit a7a43e413b0524af18a830f9156042f3d29fbd64
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jun 29 15:58:55 2010 -0700
+
+    Fix a traceback (#609247)
+
+commit 39326ef54ad21a3775d19df32b2bcea9b4bc9494
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Jun 11 08:29:31 2010 -0700
+
+    Clean up white space.
+
+commit f3dafc4446cadd6e06882f02fc541102d8aba3ff
+Author: npetrov <npetrov@redhat.com>
+Date:   Fri Jun 11 16:37:36 2010 +0200
+
+    adding support to exclude groups (-@fonts) from a default ks file.
+
+commit 6703e700bae22d89c8b78d89bd55869f27361836
+Author: npetrov <npetrov@redhat.com>
+Date:   Wed Jun 9 17:27:09 2010 +0200
+
+    check for broken symlinks when using --force
+
+commit c6f01468c332003941c2216dcf9d0d8fcd8965ba
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Jun 4 11:32:05 2010 -0700
+
+    Prep for release
+
+commit 7099d39f24da93c87ebccde269f705d2d24e38a7
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Jun 4 10:29:01 2010 -0700
+
+    Don't do multilib gathering.
+    
+    Anaconda won't install them, so why gather them?  Thanks to Seth Vidal
+    for the code.
+
+commit 7dd898cbad710e1998d8681c39ae372157a9f8ec
+Author: npetrov <npetrov@redhat.com>
+Date:   Wed May 12 17:30:17 2010 +0200
+
+    fixes --force when compose fails during split-tree process.
+
+commit 9f6fe74826620c32ddcd37bf68c190aded07e9dd
+Author: npetrov <npetrov@npetrov.englab.brq.redhat.com>
+Date:   Fri Apr 23 16:15:03 2010 +0200
+
+    remove anaconda_log
+
+commit ab0b3aa369972e2a9aef118d2d8afada8882c6f0
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Apr 14 16:14:43 2010 -0700
+
+    Prep for release
+
+commit 6ed01b885232453696bc357d28db8534800d7176
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Apr 14 16:11:10 2010 -0700
+
+    Patch for new anaconda path
+    
+    This patch came from Chris Lumens via RHBZ 579873
+
+commit be078f98503a2bd033e5504196905d676cb1f22e
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Apr 14 16:01:17 2010 -0700
+
+    Leave some breadcrumbs about the checksum.
+
+commit 38d41ad0be2a84f7d99b84d2f63a99fad8cd92d1
+Author: Brian C. Lane <bcl@redhat.com>
+Date:   Thu Mar 4 10:41:28 2010 -0800
+
+    Add proxy support from the repo line in the kickstart file
+
+commit d4fc805857448db26e336101841880d522c71926
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Dec 22 12:08:22 2009 -0800
+
+    Catch all kernel packages (#505420)
+
+commit b79b50b669dac571212df72941615106b6035df5
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Sep 15 16:55:12 2009 -0700
+
+    Prep for release
+
+commit 9aed6d9656bce6a9b8f862d54c60c375d26fdc55
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Sep 15 16:54:27 2009 -0700
+
+    rhpl is no longer forced by anaconda
+
+commit d30edb8b6a56e8299b8bb9b30297cfbff223748b
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Sep 15 14:50:51 2009 -0700
+
+    Prep for release
+
+commit d9a294aee5e487c4e32f35a3a4d4f05209384547
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Sep 15 14:49:13 2009 -0700
+
+    Be tolerant of missing package names in pkgorder, helps with small composes
+
+commit fe23e1f65a419a6d334d4d8613083603160ac762
+Author: Dennis Gilmore <dennis@ausil.us>
+Date:   Tue Sep 15 16:36:33 2009 -0500
+
+    setthe yum arch to sparc64v when making sparc images. We need this since we only have a sparc64 kernel
+
+commit f8865c35e2da4194e272e044ad164ee8d0b5b89b
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Tue Sep 15 11:22:03 2009 -0400
+
+    pungi: Fix dependency resolution to recurse properly.
+    
+    It wasn't properly recusing in the --selfhosting or --fulltree cases
+    before, leading to potenial broken deps.
+    
+    Bill
+    
+    Signed-off-by: Bill Nottingham <notting@redhat.com>
+
+commit acdac6a2be57002aeead71682dea6f3e50f4240d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Sep 14 17:16:08 2009 -0700
+
+    Patch from dgregor for #522371 (no package left behind)
+
+commit 1991a09a48c6e4b4508bf17554b323c2239838a6
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Sep 14 17:05:42 2009 -0700
+
+    Prep for release
+
+commit 0ace77f6c6d418fa524f8c587800df098031fb3b
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Sep 14 16:56:45 2009 -0700
+
+    mkinitrd isn't being used anymore, dracut is.
+
+commit f099500663cbcbe44f36dd53852adf0ebaef6a2b
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Tue Sep 15 11:12:52 2009 -0400
+
+    Fix man page option listing.
+
+commit 51f03b32e4a34e0c3d3c43a509fc74a93d498baa
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Thu Sep 3 16:18:26 2009 -0400
+
+    Add corresponding RHEL version check to spec.
+
+commit e434cf487623af5462f2d9303631a23b0715fbcb
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Aug 10 15:00:03 2009 -0700
+
+    Prep for release
+
+commit 7f0cd87c4f48896016b95a48cd040c650d949786
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Aug 4 14:40:32 2009 -0700
+
+    pychecker clean up, don't overload 'file'
+
+commit 05c51e4b9627fd49567c95cbc982f2a8ede1074d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Aug 4 14:36:17 2009 -0700
+
+    Cleanup from pychecker, remove unused items.
+
+commit eb3caa416184926a19eab275980e2fa936fed04d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Aug 4 14:23:55 2009 -0700
+
+    Kill extra whitespace
+
+commit cd466ce546dd0c7bbfab47701bbbc659346a2c67
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Aug 4 14:21:59 2009 -0700
+
+    Remove unused functions in splittree
+
+commit af347fd6a343b5e310aeafb67d7849c0bfbbf69e
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Aug 4 14:03:40 2009 -0700
+
+    Avoid conflicting with yum internals
+
+commit 5d6fc5c54316ca0fcae9c17348141f9053d6f965
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu May 21 10:34:00 2009 -0700
+
+    Prepare for release
+
+commit 179d3cd678feeb9562393fc970a6680d50a82486
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu May 21 10:31:35 2009 -0700
+
+    Fix boot.iso showing up on DVD and potentially split media.
+
+commit a859efe4a9c3dcb597819c593a842fa265610c07
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue May 19 11:27:48 2009 -0700
+
+    Prep for release
+
+commit 8a15ecca80728681a21c5e6fcc6f1812cad98727
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon May 18 14:35:52 2009 -0700
+
+    Use the new splittree method of dynamic srpm cd splitting
+
+commit a73e976bc8f3abae82cb03442c3c79843b38e7bd
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon May 18 14:33:18 2009 -0700
+
+    Create a new function to create the splitSRPM dirs
+    Use this function to create split SRPM dirs on the fly
+
+commit ff3b72a97e47cfab041407e1df505c740ee3091b
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri May 15 13:00:40 2009 -0700
+
+    Don't set the number of discs we have until after splittree is done.
+    
+    Splittree now splits as needed, so we can't possible know how many
+    discs we'll be making until it is done.  This also means that
+    splittree requires less input from us.
+
+commit e377f015df8aaf248bc3a379b737c61c19bdc4ee
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri May 15 12:22:04 2009 -0700
+
+    Use the new function to create the first split dir only.
+
+commit 038a98a2d3bd7d843bfadc9318c680f99df90d2c
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri May 15 11:19:26 2009 -0700
+
+    Make splits on demand rather than pre-create a hard set of splits.
+
+commit 9012c9fd41747494be8969331c02d24838110bae
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri May 15 11:17:23 2009 -0700
+
+    Add two new functions to help with creating split dirs on demand.
+    
+    createFirstSplitDir is called for the first split.
+    createSplitDir is called for all other splits.
+
+commit 076ba206cb3df03c10bee8fe6870e14a820316da
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Apr 13 16:17:35 2009 -0700
+
+    Prep for release again
+
+commit 26f9fad9a51da9a515a9f7fd34c30d6b1b0a80ac
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Fri Apr 3 15:53:59 2009 -0400
+
+    Wire in support for composing 'full' trees with all subpackages.
+    
+    Since full trees and build-solved trees can affect each other, if we're
+    doing both we need to loop between them until there are no new packages
+    added.
+    
+    Signed-off-by: Bill Nottingham <notting@redhat.com>
+
+commit 0074f79e5d2968ee114192d55dab327310a8788a
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Fri Apr 3 15:53:58 2009 -0400
+
+    Add a method that completes the package set with all subpackages of currently used source rpms.
+    
+    In other places, this method could be called No Package Left Behind.
+    
+    Signed-off-by: Bill Nottingham <notting@redhat.com>
+
+commit 63adcfcc7c4b355bf4b2bf903f0d21d4332931e1
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Fri Apr 3 15:53:57 2009 -0400
+
+    Create dicts to map between source and binary packages.
+    
+    This avoids repeating the operation many times later if we do it
+    on demand each time.
+    
+    Signed-off-by: Bill Nottingham <notting@redhat.com>
+
+commit e437dd7f7fb5e2fc5a2689837eec0553f22ac361
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Fri Apr 3 15:53:56 2009 -0400
+
+    Remove obsolete code.
+    
+    Signed-off-by: Bill Nottingham <notting@redhat.com>
+
+commit 2c2a1178ae7b51b53c6df01238ca8375f14ab542
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Fri Apr 3 15:53:55 2009 -0400
+
+    Wire up a commandline option for selfhosting support.
+    
+    Signed-off-by: Bill Nottingham <notting@redhat.com>
+
+commit 28412ffc8fab5c457d9d056e684f76964ef90d17
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Fri Apr 3 15:53:54 2009 -0400
+
+    Resolve package build dependencies.
+    
+    Since each package we add for build dependencies may add a new source rpm
+    to our list, this needs to recurse.
+    
+    Signed-off-by: Bill Nottingham <notting@redhat.com>
+
+commit f46d84ed736651e20cb0dce89274f31c3ac0d3f6
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Fri Apr 3 15:53:53 2009 -0400
+
+    Operate on source rpm package objects, not a list that is then turned into package objects.
+    
+    Signed-off-by: Bill Nottingham <notting@redhat.com>
+
+commit 9ecb4c5dc380478a5f1514a316f9152a31018d73
+Author: Bill Nottingham <notting@redhat.com>
+Date:   Fri Apr 3 15:53:52 2009 -0400
+
+    Allow ignoring of group metadata from repos.
+    
+    Signed-off-by: Bill Nottingham <notting@redhat.com>
+
+commit b28d842bececdf75b63ebb741e9bf9266f84b3c2
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Apr 13 16:12:25 2009 -0700
+
+    Prep for release
+
+commit c484a26f4458c40f65d2c307dedd4439e297a908
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Apr 7 18:09:00 2009 -0700
+
+    Pad the ppc bootable disks by 15 megs, lots of isofs overhead.
+
+commit 44c4028447884828e01ff3769962011bc53c428d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Apr 7 15:03:46 2009 -0700
+
+    Add a function to deselect packages, stolen from Anaconda.
+    
+    Use deselectPackage to deslect things marked with - in kickstart.
+    More in line with how anaconda treats them.
+
+commit 979c0b5e9470b28d195262d0e2e664460bb9315d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Mar 24 10:04:00 2009 -0700
+
+    Prep for release
+
+commit db54e3dbfddd3307e4a7f023b7eda02c94249c53
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Mar 24 10:02:52 2009 -0700
+
+    Add the online-docs group into pkgorder so that they get properly ordered.
+
+commit 9d831bc470fedfb6ea264dc187ae10f389cff8ac
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Mar 11 17:51:57 2009 -0700
+
+    Prep for release
+
+commit 050c8da46b16e939d06c29fc8bccc58cfacb5b37
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Mar 11 17:50:51 2009 -0700
+
+    Use a more future proof doLoggingSetup override.
+
+commit ff70fea3ede3eedf3820c9455fa8909fc8825605
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Mar 9 15:34:59 2009 -0700
+
+    Remove the MANIFEST file so that it gets created fresh each time
+
+commit 2688d1c397acde865eabfe1cded2d4c92e1c7b0b
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Mar 9 15:22:44 2009 -0700
+
+    Fix the Changelog target
+
+commit ea148b8b1c70f0e4bd75aec52aa25d2a6e6c3ff0
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Mar 9 10:56:43 2009 -0700
+
+    Prep for release
+
+commit e3d6cf508d43799560151c6d99234dc4e1b0362c
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Mar 4 13:45:44 2009 -0800
+
+    Disable arch test for now, it was tripping i386/i586 for no good reason.
+
+commit bdf3b118aa84337afe394b647fbd9c229cf666a7
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Feb 12 11:26:48 2009 -0800
+
+    Fix size estimation in splittree.
+    
+    This while file needs a major rework, but this gets us correct
+    size estimations when building up discs.
+
+commit 923a0c9392080d4280183d8cbf671c23bededa56
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Feb 11 17:15:13 2009 -0800
+
+    Prep for release
+
+commit 5216793a6914d5b8f3f5e6dc00e614033753b9f5
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Feb 11 17:09:04 2009 -0800
+
+    Count all copies of a hardlink when determining CD size for now,
+    until bug #485167 is fixed.
+
+commit 6843a12485a57be4bddb59c7d5fa0d1c17e82e1c
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Feb 10 15:27:00 2009 -0800
+
+    Fix unique md file config setting.
+
+commit 7dc76be687e7d1fa2035db75a950a1f5f88d1203
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Feb 10 15:03:29 2009 -0800
+
+    Name the checksum file after the isos being generated.
+
+commit 9b77cea3b7b661fb8592215b406a8c9ab88783cb
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Feb 10 14:52:01 2009 -0800
+
+    Use sha256 in the treeinfo file
+
+commit 90ef65f192371ac801b9d41a2bcbd6bc2c309d28
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Feb 10 14:50:46 2009 -0800
+
+    Use sha256 for iso checksums
+
+commit e073e0a032b77b66954ff392355f646a4c710dbb
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Feb 10 14:49:59 2009 -0800
+
+    More generisizing of _doIsoChecksum
+
+commit c0e7d8afe539576846bd16a99321f1a943252c01
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Feb 10 14:47:37 2009 -0800
+
+    Rename _doIsoSha1 to _doIsoChecksum to future proof.
+
+commit 074879de5ce3bf6ec1cf5f2f57c1ad4abc91568a
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Feb 5 14:24:32 2009 -0800
+
+    Use unique md file names for repodata.
+
+commit dee9472d0ccd9ea6721fde62c2cfca7ca4c42b34
+Author: Jeroen van Meeuwen (Fedora Unity) <kanarip@fedoraunity.org>
+Date:   Fri Jan 30 02:32:35 2009 +0100
+
+    Do not include boot.iso on any disc
+
+commit c4004dd30780b2921b51ea8ae074a2b57d169124
+Author: Jeroen van Meeuwen (Fedora Unity) <kanarip@fedoraunity.org>
+Date:   Fri Jan 30 02:33:13 2009 +0100
+
+    Prevent errors from happening by accidently inserting a line between two extraargs.append() calls with options that belong together
+
+commit 972240b9729dc023dff6a5ea519f2a55944b8c08
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Jan 28 16:02:48 2009 -0800
+
+    Don't ship boot.iso on cd1 or the DVD.  It just wastes space.
+
+commit 353600eb987abf76cdc522d057e835deb212e3a3
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Jan 28 14:22:32 2009 -0800
+
+    Add the packages that anaconda forces to be installed into the pkgorder
+
+commit 5a00b479b7541c184291c721029780ebd8838d9d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Dec 4 16:39:12 2008 -0800
+
+    Update from ivasquez for python version changes.
+
+commit dbf82cce094bb6f458f09fcbcef92232de8e5e12
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Dec 4 16:36:14 2008 -0800
+
+    Prep for release
+
+commit 3ca7a26682c1aba325b5e577d3a8026d47c42b50
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Dec 4 15:44:34 2008 -0800
+
+    'default' is now a reserved config section.  We can't use it anymore.
+
+commit 208fe34cc58063b4904f7e2b0a67a16a14ce03ae
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Nov 24 15:49:44 2008 -0800
+
+    Make sure that split SRPMS have the right working size to match that
+    of the binary splits.
+
+commit a8a1aa0149b82edce26a85747c4f350a2b222ccd
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Nov 4 15:32:29 2008 -0800
+
+    Prep for another release
+
+commit 056cf18c10c83c0f34776e9041b2901b916e2695
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Nov 4 15:30:45 2008 -0800
+
+    Set the default disc size to 695 which is more appropriate given today's media
+    and the splittree bug that was just fixed.
+
+commit 14771fb5ef13cbe7b185887dd6bfbbadff05b593
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Nov 4 15:13:30 2008 -0800
+
+    Prep for release
+
+commit 3c30592dabe7cc4c2cf111971fc6e5cfe84817d7
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Nov 4 14:48:27 2008 -0800
+
+    Use disc_size in splittree as splittree.main() will reset target_size based on it.
+    Set comps size to 0 as we don't create a comps package anymore.
+    
+    Longer term we need to stop calling main() from splittree, and instead just
+    call the functions we need manually.  A bit late for that change for the F10
+    cycle though.
+
+commit 4d01eb478551b578c87bc1e71d01405d9ffb1070
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Oct 31 13:09:27 2008 -0800
+
+    Use the https url to bugzilla, otherwise people think they need to re-log in.
+
+commit d77a180f2935550bb06e689976cd9f03f6b0a965
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Oct 9 13:19:51 2008 -0700
+
+    Prep for release
+
+commit dc3dbc2bdf595a21bd2caec645fc5753428c45ce
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Oct 6 11:53:07 2008 -0700
+
+    Use --default in %packages to grab the default groups from the repos.
+
+commit b929b8983539a4c7e11e243463ed728bf7681319
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Oct 3 15:32:06 2008 -0700
+
+    Handle %packages --default to pick up the default groups.
+
+commit 15efef64fa06ceb0441ca2722b2f533cdf86d554
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Oct 3 14:23:30 2008 -0700
+
+    Fix a typo in a comment
+
+commit 2fca7f7405edf00c2201e0e14b0b6daa0b4dc94b
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Oct 3 11:35:50 2008 -0700
+
+    When setting name via /usr/bin/pungi, also set the iso basename.  Allow API
+    callers to still set them differently though.
+
+commit dcf4d90e6935fce6c3cf2d3594e4d1bd69fa6b2a
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Oct 3 10:11:00 2008 -0700
+
+    Subclass ConfigParser so that we can store path names as config options
+    verbatim and avoid having the files be lowercase.
+
+commit c550c16f62e839fed2aec01a77ad906e47803614
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Sep 30 15:46:59 2008 -0700
+
+    Make sure we don't include the 'sha1:' in the iso SHA1SUM file.
+
+commit a157c94252c5c866141317e3b481ebf91bdc628d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Sep 17 15:45:54 2008 -0700
+
+    Add more lang groups we support.
+
+commit 94828b34fb9518a74d0d3e35b67417842f547b3b
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Sep 12 14:07:35 2008 -0700
+
+    New release
+
+commit 08fc496a3621d5e24c63704c31d2f17b55e60154
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Sep 11 13:32:01 2008 -0700
+
+    Revert "Yum api changed with regard to adding conditionals.  Need to pass in just a name"
+    
+    This reverts commit bc18a1d4f3c0a1b39d02a94f677122468bd07a3e.
+    
+    Reverting because yum api reverted back to the way it was.
+
+commit a82d29ccaab916d0f0944edcd8228f38ef145ab8
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Sep 11 13:25:39 2008 -0700
+
+    Add input-methods.  It's a new group, need to get ordering right.
+
+commit e101067357390a4609e9e3f56ad1589405683f60
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Sep 10 15:36:49 2008 -0700
+
+    Make sure we output sha1sums in binary mode.  This helps windows.
+
+commit 9ca05af1e90d0c995304f3aba33397dd32fee131
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Aug 29 10:55:25 2008 -0700
+
+    Yum api changed, follow so that we don't break.
+
+commit bc18a1d4f3c0a1b39d02a94f677122468bd07a3e
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Aug 11 22:47:39 2008 -0400
+
+    Yum api changed with regard to adding conditionals.  Need to pass in just a name
+    rather than a package object.  Also call searchName since that's all we care about.
+
+commit 6fc3d4ff799be5fc6328b780b414a440a24d84a2
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Aug 11 11:24:13 2008 -0400
+
+    Prep for release
+
+commit 768ab66ee6227cb6b675e4d18ac668adab497d4b
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Aug 5 23:25:14 2008 -0400
+
+    isolist is already relative, there is no need to call mkrelative.
+
+commit 7326b388c33fd3d849223c94665b8a2f13186a56
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Aug 5 22:49:05 2008 -0400
+
+    Fix up some references due to moving the yum init into it's own function.
+
+commit e9e0a1880c0233deeb9b88a08d9e58a680cf4fb9
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Aug 5 15:36:08 2008 -0400
+
+    Move the yum object initialization to it's own function.
+    
+    This is necessary so that we can get a pypungi object without having to
+    init the repositories.
+
+commit bdaf3a662a5438cdabc002209ef02ee4e45af343
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Aug 5 14:34:37 2008 -0400
+
+    Grab ppc images checksums too for our info file.
+
+commit f253e2e8bb06ace2a8f128e40ffe18a232552cc7
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Aug 4 17:57:53 2008 -0400
+
+    Make sure we write out relative paths for the infofile
+
+commit 5beb34227ed7f4ed90dab36898795adba7507b4d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Aug 4 17:04:19 2008 -0400
+
+    Change slightly the output of _doCheckSum so that it's type:hash for easier parsing.
+
+commit be8b06d523706c84b7997e94d34b0beecea06983
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Aug 4 16:57:05 2008 -0400
+
+    Make sure we get relative paths to the images.
+
+commit 7d9274883865d75aa2fbc0d7b73a26aa34ac66ed
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Jul 16 13:31:17 2008 -0400
+
+    Don't try to make debuginfo repos for source arch.
+
+commit 8331ae9e0f049bc9ec9ed0a3304b3c580ca325c4
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jul 15 23:09:57 2008 -0400
+
+    Remove the unused discs option.  We determine disc number on the fly.
+
+commit 6ae28edb54099e9d5d0eb2d5792839d041cdc491
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jul 15 19:03:53 2008 -0400
+
+    Prep for release
+
+commit 2b5ed2646601cc90b2924b5954de29bf10ae60e9
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jul 15 18:36:07 2008 -0400
+
+    Remove some debugging code...
+
+commit 116a0df8987406e373dcfa02a7a5762149529b68
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jul 15 18:10:19 2008 -0400
+
+    Don't read the entire file at once.  This will run machines out of memory.
+    
+    Also, always use binary mode on the files, or else our hashes will be odd.
+
+commit 74e014707aeeeb0d6168a7bbed6777bdf604e6d9
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jul 15 15:53:11 2008 -0400
+
+    Checksum various files from buildinstall output and put them in .treeinfo
+    
+    This will be used by a verify-tree like tool that will ensure that the
+    content on disk matches what the compose tool thinks it should.
+
+commit ec8b64e6cf2a66ec60b132e6d15e813e8fff14ed
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Jul 14 23:27:40 2008 -0400
+
+    Use new hashsum utility to generate sha1sums of isos.
+    Call a generic function each time we create an iso file.
+
+commit 38bd19ea9a08beb73212dcaa5523f8b934a4237b
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Jul 14 23:26:52 2008 -0400
+
+    Add a utility to generate a hashsum of a file
+
+commit 0517ef0782205941089df1b487ebdf00a3149ed2
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Jul 11 14:31:28 2008 -0400
+
+    Prep for release
+
+commit 3e62130a6c929b6afa0fddcd2443e330c7aa60bc
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jul 8 18:00:01 2008 -0400
+
+    Create debuginfo metadata when creating metadata, if we've gathered debuginfo
+    
+    Move cachedir to a variable definition since we use it more than once.
+
+commit 7c2e8593c84e0635beba56b2ae5719eb600ff236
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jul 8 17:59:31 2008 -0400
+
+    Add a function to download the debuginfo packages we found.
+
+commit 26795667ac30bf38dcd089649624bc76b6a026c5
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jul 8 17:58:24 2008 -0400
+
+    Add a function to get debuginfo packages to match the other packages we've gathered.
+    
+    This has a couple hardcoded special cases for kernel and glibc for the -common debuginfo
+    Try to match the original po as close as possible.
+
+commit cbe47772c9a4d49027c12f375d4069b4beef4ce5
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jul 8 17:57:12 2008 -0400
+
+    Change _filtersrc to _filtersrcdebug and call it appropriately.
+    
+    We now need to filter out debuginfo packages so that we can add the
+    debuginfo repos to the ks file
+
+commit 3cc980b49d0fc91433e13618ddbcc47513e93b9d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jul 8 17:55:55 2008 -0400
+
+    Add a config item for debuginfo
+    
+    We need this as a config object so that we can use it later when
+    making repodata.
+
+commit 874853e78b3586bf7ed8665cf72cf2f9b54c879a
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jul 8 17:53:25 2008 -0400
+
+    Add a nodebuginfo option to handle gathering or not gathering of debuginfo packages
+    
+    Set a config item for it so that we can use it later when creating repodata
+    Discover and gather debuginfo packages if necessary.
+
+commit 3c979842b4321c64a4a2a86bfae5334c83584db1
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jun 24 10:30:41 2008 -0400
+
+    Prep for release
+
+commit af2d5a1e58214a65c6405d1c6feee34a142f4f97
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Jun 23 10:54:45 2008 -0400
+
+    Fix setup.py and pungi.spec for pkgorder.
+    
+    Test first, then commit.  *sigh*
+
+commit 0670212e143b2111c6b6e4ef046831e1fe0b89b2
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Jun 23 10:29:31 2008 -0400
+
+    Add pkgorder script to setup.py
+
+commit 15c5b80e87380deeb5a0ec0fc6b7f7624e176678
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Jun 23 10:27:30 2008 -0400
+
+    Take ownership of pkgorder and splittree.py; call appropriately
+    
+    These two files have been removed from anaconda sources, so we
+    are taking ownership of them.  We will likely rewrite some of these
+    but the plan is to keep them as 'utility' type tools so that they
+    can be used without creating full pungi objects.
+
+commit 897f97ee59efcda0515ae0708f24c91b3798eecb
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Jun 17 10:29:39 2008 -0400
+
+    Remove compose tools from manifest.  We don't need them any more now that anaconda
+    can get to the repos we use to get the things it needs.
+
+commit 953ee3addfec4d3325aac1be40e02135e47ad36a
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Jun 13 18:26:36 2008 -0400
+
+    Prepare for 2.0.0 release.  woo!
+
+commit 151e3b134e83fdc2192271a0faaba50e7d2e393f
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Jun 13 13:48:09 2008 -0400
+
+    We use sys here too
+
+commit 3b955cc823559d501bc1b9c7140539a22fc3d03b
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Jun 13 13:47:31 2008 -0400
+
+    Fix some typos and handle the fact that baseurl is a list, where as mirrorlist isn't.
+
+commit 379020e5c57d168e96418e31472a1f394c9596fe
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Fri Jun 13 12:56:45 2008 -0400
+
+    Add functionality to pass multiple repos, mirrorlists, and output directory to buildinstall.
+
+commit 64e573417836fe2746e55bce12fefd966215e401
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Jun 12 11:43:57 2008 -0400
+
+    Add our util.py file with all the "utility" functions.
+
+commit a81ead6181e277e8003cb6c9095b415a7d60d493
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Jun 12 11:36:47 2008 -0400
+
+    Move utility functions to util.py; call appropriately.
+    
+    Also fix some whitespace issues (hey, it's my project, I can do whitespace changes)
+
+commit a9249e3c315c4f508fad1668ab74457ca05e1b9a
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Jun 12 11:24:54 2008 -0400
+
+    Don't import the files that I've removed.
+
+commit 043a799b25430ad4f131d05582af2f6fe9104839
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Jun 12 09:06:19 2008 -0400
+
+    Adjust calls to the single class, only create the object once.
+
+commit 4627931835e1f3d87f70ce65f49cbaa37979c794
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Jun 12 09:00:53 2008 -0400
+
+    remove pungi.py
+
+commit 3b89e4586bbf1b582142fd852e6b2926e5800907
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Jun 12 09:00:43 2008 -0400
+
+    Collapse all of pungi.py to __init__.py
+
+commit 4ae0dc35e883e27f78f7dc8bbc1c5a7779a1113c
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Jun 12 08:56:43 2008 -0400
+
+    Change permissions on pungi.py, remove gather.py
+
+commit b45c700be80e89d3e039d2000628698bf509a2a1
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Jun 12 08:55:42 2008 -0400
+
+    Collapse all of Gather and Pungi into one class/file.
+
+commit 1b58d024a3357dda3d981c7210aca98f3a936dfa
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Jun 4 16:28:35 2008 -0400
+
+    Repo cost is now actually referenced as 'cost'.
+
+commit baa1ce8ee1bab3667e4bb2ce64a0c690eeea14c0
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed May 14 14:27:31 2008 -0400
+
+    Add admin-tools to the manifest.
+
+commit 203f152239add146025ffb2d61394ad70b24908d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue May 6 12:39:24 2008 -0400
+
+    Prep for release
+
+commit 554310a690e6e252c6a305bba5acd84ee7b5ca76
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue May 6 12:37:37 2008 -0400
+
+    Exclude syslog-ng from the media.  We don't want it.
+
+commit 58c08e04eb1234897f330c441af29369a6c7b43d
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu May 1 11:48:50 2008 -0400
+
+    prep for release
+
+commit 8aa4e5ce55a10d872f9cb647f3825ecd4d24c2b6
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu May 1 11:25:10 2008 -0400
+
+    Add a Fedora 9 config file
+
+commit 0befc4d3f337f2079ecfdf62bf3dfadb8febf882
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Apr 23 22:46:51 2008 -0400
+
+    Remove some items to make PPC DVD fit on a DVD
+
+commit 2455411091e2c5bc98f3a014fd9d9f2e6c601ceb
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Thu Apr 17 07:25:57 2008 -0400
+
+    Require a sufficient version of createrepo (Jeroen van Meeuwen)
+
+commit 24641ddfbea7e27165dabd70cc0fdded2c35f78e
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Apr 16 23:04:25 2008 -0400
+
+    Fix another problem with src repo generation, handle flavor.
+
+commit e7430529af668d05068c164e5606cb96153bfa76
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Apr 16 22:23:24 2008 -0400
+
+    Prep for release.
+
+commit b71ae43cc5e02deb144993e09ec8638e5f28e3f4
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Apr 16 22:22:14 2008 -0400
+
+    Add back changes I missed somehow:
+    Fix srpm repodata making
+
+commit c0d44a06a6df8b6615a5a09dd60229836726ee1a
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Apr 16 18:27:26 2008 -0400
+
+    Prepare for release.
+
+commit 178e217ecaa7b7ed58f3f7e9d9b28253ba735fc2
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Wed Apr 16 11:12:58 2008 -0400
+
+    Add new languages
+
+commit ed1e80c6daf64ce11b378b55b396ab56e66c1a3b
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Apr 15 07:09:02 2008 -0500
+
+    Adjust manifest, block the kernels we don't want, pull in the right flash stuff.
+
+commit b1bd3c7a46e1e6f16b56ea46def3ec9003317ddb
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Apr 15 07:08:35 2008 -0500
+
+    Support repo costs. (pykickstart calls this priority for now)
+
+commit 5d33519dbfe8ca46251d08c33fbcec5fb6ff8833
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Mon Apr 14 21:33:45 2008 -0500
+
+    Disable the comps cleanup until it works again.
+
+commit 2ddaea50a97ebeb16fcb473d03f36502792616c0
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Apr 1 14:58:38 2008 -0400
+
+    Fix output message from make archive, we do tar.bz2 not gz.
+
+commit 4b6916479751276c1845107abf2fe3a26956670f
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Apr 1 14:58:05 2008 -0400
+
+    Update Makefile for git.  Remove changelog, create it from git.
+
+commit ac609004b2ae404048b0b892af8d8f6c63674519
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Apr 1 14:34:38 2008 -0400
+
+    Prep for new release
+
+commit 13d6ed35ee6f8f1d404f8a73346ed4bc25fa3dd7
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Mar 25 17:14:11 2008 -0400
+
+    Correct the api call to comps.
+
+commit 65c7bdf6deac58bb69fc211eaf8ba54985deae94
+Author: Jesse Keating <jkeating@redhat.com>
+Date:   Tue Mar 25 17:06:21 2008 -0400
+
+    Use yum's method to write out a unified comps.
+
+commit 51f5969e491c55383185df71a42726289943e7e3
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Mar 21 15:56:22 2008 -0400
+
+    handle shared source dirs when gathering.
+
+commit ed5d17207fbc07e7345ec48c8b97cdb0f5930154
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Mar 14 16:56:37 2008 -0400
+
+    pungi-1.2.12-1.fc9
+
+commit 007effec74a521674328c37594990533fdf6f95a
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Mar 14 16:56:33 2008 -0400
+
+    Prep for release
+
+commit aa358c15177650addd547369b409d82d719f19ea
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Mar 14 16:55:28 2008 -0400
+
+    Fix srpm stuff
+
+commit bd4eea43d073c0a6208275b095c331396b9462ac
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Mar 14 13:12:12 2008 -0400
+
+    - Don't pass --prodpath to buildinstall.  It won't like it.
+
+commit 3f9479029c29750ff3aa49944f442bca4c2eb11c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 13 23:02:34 2008 -0400
+
+    pungi-1.2.11-1.fc9
+
+commit 6373d57d227044cf5399d121d49e3d834ff31ef3
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 13 23:02:29 2008 -0400
+
+    Make CDs fit again by default
+
+commit f29a4ca8b173d98ce7dee1d02ed4583d29732479
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Mar 12 16:46:23 2008 -0400
+
+    Make CDs fit again
+
+commit 5c106b05d8f765589963c6219c3fc8be7277999d
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Mar 12 16:44:03 2008 -0400
+
+    Use the right link call.
+
+commit ecc53ba2917e0efbd0f2e687a7340458cb0755cb
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Mar 11 14:42:44 2008 -0400
+
+    pungi-1.2.10-1.fc9
+
+commit 66a6d6eafd1e7536543f9c177c2453c7ad41d3b0
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Mar 11 14:42:41 2008 -0400
+
+    More chnages for netinst.iso/boot.iso
+
+commit 0a4fdfe767ff8d2b285f091d4e74e4ba6655ebeb
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Mar 5 22:28:04 2008 -0500
+
+    pungi-1.2.9-1.fc9
+
+commit 0a9dffe2a586d25191b490d7de6d0cb010701fc5
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Mar 5 22:27:59 2008 -0500
+
+    Prep for release
+
+commit a08871a741395644eefe4c2416158f12a8159710
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Mar 5 22:26:43 2008 -0500
+
+    Exclude repoview from isos.
+
+commit 7405122981be6e7af7823e7c2a358595165621d7
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Mar 5 13:45:17 2008 -0500
+
+    Fix ppc split iso generation
+
+commit e2f79e49f6ab331689a9827df0cf31d81c7f021d
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Mar 3 16:09:53 2008 -0500
+
+    Handle netinst.iso files.
+
+commit 8a892421005bc17c9ebe42bb6aafe1d9b3c710e7
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Feb 28 17:14:09 2008 -0500
+
+    pungi-1.2.8-1.fc8
+
+commit b623f31621f81b73590f76db91f08c5ec0bed147
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Feb 28 17:13:56 2008 -0500
+
+    Prep for release.
+
+commit 7b27cd5c8b1939e4b04b03fd122f236125bd2f09
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Feb 28 16:29:46 2008 -0500
+
+    Don't traceback when moving repodata out for split media.
+
+commit 706184a97fdac09ed716298981b84e8a3ab32aac
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Feb 28 12:23:33 2008 -0500
+
+    Don't force clean the repodata, some of it can be reused.
+    
+    Always make sure we get a clean repomd.xml to compare against the rest of the files.
+
+commit eb1a47579f915c516e74c2df060ae0c4e548bc50
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Feb 21 18:04:39 2008 -0500
+
+    Handle gzipped comps files.
+
+commit 1a5e874d84eb541122c71c89b14c343c83ad5834
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Feb 8 15:05:58 2008 -0500
+
+    Commit spec change that I forgot to a while ago.
+
+commit 923ea6fa1ac20ff94a1d49ac46eee7cf1fc4025c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Feb 8 15:04:56 2008 -0500
+
+    Fix comps issue for older repos.
+
+commit 4a557478327394fd40c6c775fe1df25e3c239e17
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jan 22 15:10:00 2008 -0500
+
+    pungi-1.2.7-1.fc8
+
+commit 6f8c7be932df4a17a9431a4e226543a3b901e208
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jan 22 15:06:43 2008 -0500
+
+    Prep for release
+
+commit b2cf9776ea2046250da7a53140c27f42ea2d1367
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jan 22 14:44:14 2008 -0500
+
+    Rework how repodata gets generated for media.
+    
+    Necessary as anaconda doesn't handle split metadata being on the
+    DVD anymore.
+
+commit 3ce7826b06961b370771eec8821597d407143c34
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Jan 21 17:32:37 2008 -0500
+
+    Don't try to close() a file that gets autoclosed due to readlines().
+
+commit 34bb3d57fc975706dd655f1e0a35e06275b3d3f9
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Jan 21 17:32:08 2008 -0500
+
+    Don't fiddle with editing the .discinfo file.  It's just confusing for no good reason.
+
+commit bbbcc1dff8735db8158014b729e9c9973da19c56
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Jan 21 17:13:54 2008 -0500
+
+    Always use the discinfo file from the exploaded tree.  It doesn't change.  Also, close the file when we're done.
+
+commit 7de5f1535600d6e51c0dd6179ceeada3d0de44f1
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Jan 21 17:09:02 2008 -0500
+
+    use createrepo api
+
+commit 202059224a6148b8e952795f06c1929a42794ba0
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jan 15 17:53:40 2008 -0500
+
+    Force cracklib-python to be pulled in.
+
+commit 59c189438a11717783f13e683f0a44aeae368a2c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Jan 2 17:42:07 2008 -0500
+
+    pungi-1.2.6-1.fc8
+
+commit 6d0d5e5839118c312d14594ff09407ce24cbc412
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Jan 2 17:41:54 2008 -0500
+
+    prep for dist.
+    Use bzip2 (so trac can see it)
+
+commit e81d4b8e51a82b729df1ebe200112390dbe8ad81
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Jan 2 17:19:31 2008 -0500
+
+    Add k3b to the manifest.
+
+commit d36d3a32e0d6808e2dbd52d92e1fd421ca09df74
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 17 15:13:09 2007 -0500
+
+    Add more eclipse files to be ignored.
+
+commit 1402ef4414f21e764842f8549e7931fa52f1b3b7
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 17 15:12:25 2007 -0500
+
+    - Always add the core comps group.
+
+commit 49eb1f853ec85ea4edb49fc923f3aca54225b26f
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Dec 14 23:16:10 2007 -0500
+
+    Ignore eclipse files.
+
+commit a18974c12c63a1f513be04f4ef395fa0ecf0346f
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Dec 14 23:14:21 2007 -0500
+
+    Fix up for file moves.
+
+commit 2cb4e338f73b4a65fa75a14eacd87881efc89136
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Dec 14 22:41:08 2007 -0500
+
+    Adjust layout, will help with using eclipse
+
+commit b94b37422acbeb16cf04a6d6bcab71f3c400ea89
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Dec 11 10:35:59 2007 -0500
+
+    We don't need relnote directories since relnotes aren't being used.
+
+commit 6299545b10f2ee08e9cc1b71a2a1916bd517ac00
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Dec 11 10:34:18 2007 -0500
+
+    Correct mistake with cache dir ensurance.
+
+commit c91524b39bdf9456e62e901377b2e51539b911b2
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 10 18:29:19 2007 -0500
+
+    pungi-1.2.4-1.fc8
+
+commit fa1fc86b8df5867199faa8db0ed27d781f6e5840
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 10 18:29:15 2007 -0500
+
+    Remove extra files from tarball
+
+commit 15f0b6b68254470911d352fe81f06e01f8fadb73
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 10 18:18:44 2007 -0500
+
+    pungi-1.2.3-1.fc8
+
+commit eb3083c94affd8a3e45ed6b006c0e572f63e864d
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 10 18:18:40 2007 -0500
+
+    Third time's the charm...
+
+commit cf2469d7fa5ff8a3d2fc88e85e99c846c9a5fe65
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 10 18:05:49 2007 -0500
+
+    pungi-1.2.2-1.fc8
+
+commit 1c76dd3722a739483988b385cc964afbf4d4e23b
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 10 18:04:55 2007 -0500
+
+    Handle egg generation in the spec file.
+
+commit 5bfbdb1a47b8a3cb5954feca206cc75a6b3b1055
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 10 17:20:15 2007 -0500
+
+    pungi-1.2.1-1.fc8
+
+commit 302a5ab5db465deb4b6ff45196ec0d164ebdde7b
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 10 17:17:19 2007 -0500
+
+    Prepare for release
+
+commit b7b45d59c15d4fa39ad013d51fd819512b680b8b
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 10 15:17:56 2007 -0500
+
+    Change path to isomd5sum
+
+commit 5abaa9b226513e56e9fddc2ad34d4120ba0da1f5
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 10 14:14:06 2007 -0500
+
+    Use a repoview cache.
+    
+    Make sure the cache dirs exist before using them.
+
+commit fb6c4402a29d23c8fc4f29c3d699d0c70e94ea91
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sat Dec 8 10:42:31 2007 -0500
+
+    Enable a createrepo cache.
+
+commit 8ca20d2fa73c04927d7e68b11d5eb639535d954c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Dec 7 17:44:35 2007 -0500
+
+    Remove all the release notes files that we don't display in the installer.
+
+commit 9c11eec79a433eaf31832b570b2d780c69032e0d
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Dec 4 10:06:18 2007 -0500
+
+    pungi-1.2.0-1.fc8
+
+commit 5e0fad17424f13e55c39d89b3e51b2e8e45422d7
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Dec 4 10:05:58 2007 -0500
+
+    Prepare for release
+    Drop the f8 file, add a rawhide ks file.
+
+commit 0d2d9e55f5373caecde7d32dac46d13a54e1c38a
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Dec 4 09:31:40 2007 -0500
+
+    Quiet down the selinux check.
+
+commit 591f65c982345b49e92489ec13865be3e1669437
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Dec 4 07:58:43 2007 -0500
+
+    Make the cd size a nice even number.
+
+commit 4929567859fe2b7c7f40128d57629ae46587f8c7
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 3 23:17:21 2007 -0500
+
+    Adjust the size so that we fit on all disks.  splittree kind of sucks this way.
+
+commit d9a840c863f3635aaecaae19c0fff3d23aefdc66
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 3 23:09:47 2007 -0500
+
+    Remove previous splittree workdirs when reusing a tree.
+
+commit 91a9edceb795c909b32e53b5e1d38a73cbe04c4c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 3 20:41:42 2007 -0500
+
+    Default to 690 for a cd size.
+
+commit 9be2c94dc602e47f01ff968c9908fe42ad0ad2cf
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 3 20:38:02 2007 -0500
+
+    Make the logged command output useable in a shell.
+
+commit 43c02674457446e9565f244cb93ce52bf94efa8d
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 3 15:37:15 2007 -0500
+
+    Support includes and excludes from repos.
+
+commit 3248639f9ba6f62d30bafbf9f0a2b858a9547503
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 3 14:52:47 2007 -0500
+
+    Disable TMPDIR use in buildinstall.  Still broken :/
+
+commit 8df58b56cb64552abb6df6c3692e61507ce7c54b
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 3 13:49:11 2007 -0500
+
+    Bump version to 1.2.0
+    Allow our default flavor of '' to be used.
+
+commit a9c124e7e0aa46004a72cbac8313ce8dc7934747
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 3 11:56:03 2007 -0500
+
+    Only allow alphanumeric in flavor.
+
+commit 33a2ec8508a8cfa3de24ef5127e7fcea895267bc
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Dec 3 11:40:41 2007 -0500
+
+    Check for selinux enforcing.  Warn if it is.
+
+commit 67df99833a2e899480ad6df58dc970140aa35aaa
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sun Dec 2 23:02:51 2007 -0500
+
+    Do release notes first.
+
+commit dcf069a017c3b146912cacc5444b6e5a4c1cacc9
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sun Dec 2 22:24:11 2007 -0500
+
+    Fix logging during _ensuredir.
+    Some fixups for re-using dirs
+
+commit 674813364633299f6861098c29f60fe961cfaeb1
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sun Dec 2 14:31:26 2007 -0500
+
+    Support re-using existing destdirs better, with a --force option.
+
+commit aef1db89aaa531c921cd77fb07c2ff371ab44083
+Author: jkeating <>
+Date:   Fri Nov 30 15:41:58 2007 -0500
+
+    Only check root when necessary.
+
+commit a09b885fd86ff96f636f88ff64c7d919ef6d6b05
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Nov 30 10:36:28 2007 -0500
+
+    Flip the default for nosource.
+
+commit 669fd7e62b05a166faadbd42edd9a98e1107d032
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Nov 29 17:49:23 2007 -0500
+
+    Add joe, tcsh, thunderbird to the manifest
+    exclude any debug kernels from winding up in the tree
+
+commit f499bc4f8d49a64cfd3c8a14deee0384da88fdd3
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Nov 29 17:46:58 2007 -0500
+
+    Add a split option to the iso creation function
+    Fix a SRPMS SRPMs typo
+    Handle source iso creation better
+
+commit 1116fcc4b01e48b7f642f7bba131e8a1296861a4
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Nov 28 22:14:20 2007 -0500
+
+    Call the logger correctly
+
+commit 1c6ac68a59699023f0d7cf608bb66a053c799343
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Nov 28 17:11:18 2007 -0500
+
+    Remove non-op checks in splittree and pkgorder.  They're only called now if we want more than one iso.
+    Make tree size check quiet.
+
+commit 8733a990ecf29333bb7ce87e880fa8a9b461c1c0
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Nov 28 17:10:02 2007 -0500
+
+    - Figure out number of isos on the fly, based on tree size
+    - Add command line option to disable creation of split media
+    - Remove -S -P options, as splittree and packageorder are now
+    called from createIsos, if needed.
+
+commit 3260c78f53a871cdb20113696a0d44dc8d32da02
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Nov 27 21:42:37 2007 -0500
+
+    - Use downloadPkgs() from yum instead of a homebrew download function.
+    - Add a callback to show download progress
+    - Add a force option to _link, removes existing target file
+
+commit d99c9048c495da6ea4a60fe92e3f9286126ffce3
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Nov 27 14:54:17 2007 -0500
+
+    Clarify package not found slightly
+
+commit 8e5e2617748250c6be3d5cac98aa6ec058051624
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Nov 27 14:40:36 2007 -0500
+
+    Enable TMPDIR again so that anconda-runtime working files go to the working dir.
+
+commit 333255c35c7b7e960d505fbdbe1407445fffa461
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Nov 22 09:31:22 2007 -0500
+
+    pungi-1.1.10-1.fc8
+
+commit c60c9b443ec75235df079d80ef7b2122f7d67232
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Nov 22 09:31:15 2007 -0500
+
+    Prep for release
+
+commit a621cdc5c5272367c3b24e2219f37181f2f6b9e5
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Nov 21 09:17:14 2007 -0500
+
+    Need to import shutil in order to use it.
+
+commit cf54262dee2f1e669c225ad0d3a506b634fe85c9
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Nov 20 20:31:28 2007 -0500
+
+    Use the released repos, not rawhide.
+
+commit 0334c92f1192086b00a83054762592746430b011
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Nov 20 17:44:11 2007 -0500
+
+    Correct a man page typo
+
+commit 87f914e814f852fabdb5e2fa4dee07d5b480fcc7
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Nov 20 17:29:57 2007 -0500
+
+    Fix up some tabs/spaces.
+
+commit 7bf5e3d458aedeefa61bc180192f37c4fb116275
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Nov 20 17:29:18 2007 -0500
+
+    Print usage if we don't have a correct option.  (Ticket #61)
+
+commit 47b32e3c2d6a7c3b77583f2ed1516bfd48bf14c3
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Nov 7 19:44:12 2007 -0500
+
+    Move the _link function to the __init__ of pypungi to be used by both gather and pungi.
+    Attempt to hardlink release note files instead of copy them. (helps preserve timestamps)
+
+commit ab3bcf6194b5b828f6b9521abf8f635a95868de5
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Oct 29 16:59:44 2007 -0400
+
+    pungi-1.1.9-1.fc8
+
+commit 33a28f0c0a787e0f78682d9326508316c781bbc7
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Oct 29 16:59:06 2007 -0400
+
+    Fix reget better.  Don't try to stat a nonexistant file
+
+commit 83aec9363ad2ba5233274eb180ae73da5ce78c48
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Oct 29 16:26:47 2007 -0400
+
+    pungi-1.1.9-1.fc8
+
+commit 930f0f2667696e03fbb417f8542df6365850e195
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Oct 29 16:26:42 2007 -0400
+
+    Fix regets.
+
+commit cc9bb727264eee249d3d183780b8b7d1af7f21c9
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sat Oct 27 12:17:56 2007 -0400
+
+    pungi-1.1.8-1.fc8
+
+commit 53301b53136fa643b1e5e1717bf2b1c2568f7306
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sat Oct 27 12:17:39 2007 -0400
+
+    Add eclipse
+
+commit c28af6c5ea9418f8832ea2462a78623070f631cc
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Oct 24 09:50:20 2007 -0400
+
+    Add eclipse group to the media.
+
+commit 2aeafff418978a5aecb28a5195a0f3923d4780c5
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Oct 23 17:20:10 2007 -0400
+
+    pungi-1.1.7-1.fc8
+
+commit 400ff52477a03ff8f4fac6487eeaa874ba814cdf
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Oct 23 17:20:01 2007 -0400
+
+    - Add java-development to the group set.
+
+commit 24a52f5cb62d29207c3ca4fd5c1656778aab7dc7
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Oct 19 14:33:46 2007 -0400
+
+    pungi-1.1.6-1.fc8
+
+commit 4b4a2d2f32bebfcc10bf9c44a6f2bf5df8da2791
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Oct 19 14:33:26 2007 -0400
+
+    Prep for release.
+
+commit 076706ead65b0d6c7ff7d197f0af3dc854d91480
+Author: notting@nostromo.devel.redhat.com <>
+Date:   Thu Oct 18 11:10:13 2007 -0400
+
+    sync langsupport with comps
+
+commit 06ace11bfd94308bf0893060a47ad8ef24d31adb
+Author: notting@nostromo.devel.redhat.com <>
+Date:   Thu Oct 18 10:52:06 2007 -0400
+
+    add java support for icedtea-plugin (#326911)
+
+commit 4ca3248d0a3fb6258367f5f90e74694845171741
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Oct 11 14:00:53 2007 -0400
+
+    pungi-1.1.5-1.fc8
+
+commit adbc4c787c7af8671ee6000a657e20ca96f9aee3
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Oct 11 14:00:47 2007 -0400
+
+    prep for release.
+
+commit 6119a75069a71a71cc0b4c52553e6f39b4df9628
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Oct 11 13:58:50 2007 -0400
+
+    Add a cost to the media repo file.
+
+commit 7795c25583b9f34e74d21722f46a1a21b018571e
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Oct 5 10:48:39 2007 -0400
+
+    Make sure esc gets into the media even though it's not default.
+
+commit 420f9a59aa3361f7428626ad57c9bb048eb58960
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Oct 2 15:50:13 2007 -0400
+
+    pungi-1.1.4-1.fc8
+
+commit 6c4913c1692be914b99767b1d64bffdf52afbcdf
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Oct 2 15:50:02 2007 -0400
+
+    Make a release
+
+commit 149a6a89292ff0aec308b5c984e3ff8c1bdca258
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Oct 2 08:35:30 2007 -0400
+
+    One more try.. *sigh*
+
+commit b80ab86a7a7c0998b5d4c912988b74691cd1aede
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Oct 2 08:34:37 2007 -0400
+
+    Use correct glob for pida stuff.
+
+commit db5c76a8078de727873e100223ca2f72a24b5685
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Oct 2 08:33:30 2007 -0400
+
+    Ignore pida related stuff.
+
+commit bd41b1c239f1a6ff8377ebe9c473c9cb070056f4
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Oct 2 08:30:46 2007 -0400
+
+    Update the log.
+
+commit 5e467d0cb5b2bd35c25de0628abc27641187edea
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Oct 2 08:29:11 2007 -0400
+
+    Make sure we are stuffing a string into the ConfigParser.
+
+commit ddab468b431e86ae2e9df0b247de32f89ac56041
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Sep 26 14:59:36 2007 -0400
+
+    Make a release
+
+commit 51d96f80e14a2b61cc9cc4abb4098b8db0901b84
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Sep 26 14:58:34 2007 -0400
+
+    don't expire metadata from the media.repo
+
+commit 00487ea9c805955a47e6dcbbed3783e6149afa13
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Sep 26 14:56:37 2007 -0400
+
+    Pull in the optional virt stuff
+
+commit dcb7376ff2b6c2022bcb568b88647e6ab6d4c4ff
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Sep 25 21:27:09 2007 -0400
+
+    pungi-1.1.2-1.fc8
+
+commit 835188ac2c0ee4e5ed0853f70501bada6f189609
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Sep 25 21:26:59 2007 -0400
+
+    - Fix location of media.repo file.
+
+commit c4b27ff70391d625acaad3419650138d837cc565
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Sep 18 16:32:01 2007 -0400
+
+    pungi-1.1.1-1.fc8
+
+commit 371c782b81729ac722c521239329468eb46cec60
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Sep 18 16:31:52 2007 -0400
+
+    prep for release
+
+commit c2d4e9ed34262b362f015dc1183d83bdd18b0724
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Sep 18 15:12:31 2007 -0400
+
+    Write out a repo file for the media
+
+commit ec1ecc368d80a77ec3f6130c7539e900431f5a3e
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Sep 17 17:31:09 2007 -0400
+
+    pungi-1.1.0-1.fc8
+
+commit 93ad1c3f5724dd94d9121b16a374491921335d68
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Sep 17 17:31:03 2007 -0400
+
+    Release 1.1.0
+
+commit 5fafe9c962c2ac799c5d4a9684d962601d87035b
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Sep 14 18:22:25 2007 -0400
+
+    - Move the .composeinfo file into the directory we actually publish
+
+commit ee22bb65ae2bbc5ee580a760613a334541d8b360
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Sep 14 17:48:56 2007 -0400
+
+    - Create repoview content in the tree
+
+commit f074a600de534c9e2324e89f796a9129b80994f8
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Sep 12 17:38:01 2007 -0400
+
+    Use a better method to get the ks method into a repo.
+    Requires a newer version of pykickstart, indicate such in the spec.
+
+commit 4cb923981494a2bd958a7d9ee1204149f92e1364
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Sep 12 16:42:06 2007 -0400
+
+    Use url line in kickstart files as a repo
+
+commit 788105f59b7709aa3a3f24f5e8c0d05f8b5ea126
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Sep 12 14:36:28 2007 -0400
+
+    - Create a config class that can make using pungi modules easier. (Mark McLoughlin)
+
+commit 28c0eca953237f04312df96d0c9e015b1744bdf1
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Sep 12 10:16:08 2007 -0400
+
+    Make base pungi class inherit from object, this makes things
+    better on older pythons.  (toshio)
+
+commit 9e4cc8ad1ab2e6e640155002c125bccd8f3b37f1
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Sep 12 10:11:38 2007 -0400
+
+    Update with things I'd like to ignore.
+
+commit 5af01719d36778fba2380cafc820d66aedd832ca
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Sep 12 10:08:04 2007 -0400
+
+    Consolidate the download code (Mark McLoughlin)
+    Some whitespace fixes.
+
+commit 180564aadc37314a234b54f1b78f9147ef10f56a
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Sep 12 09:57:54 2007 -0400
+
+    Remove python2.5 needs (Mark McLoughlin)
+
+commit 0d888052c4a855aaf376cddc8b197af1a67d7eec
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Sep 11 18:18:46 2007 -0400
+
+    Fix a bug with file:// repos.
+
+commit e7779582c39a94783e1d90873b32e547df03a0c8
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Sep 11 17:32:34 2007 -0400
+
+    Install the man page in the spec file
+    reference new README location
+
+commit 33d983e8b6a2a50b31dc1f6bba95eb5184023916
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Sep 11 17:07:37 2007 -0400
+
+    Fix a bug with default destdir
+    Add a man page
+    Move documentation into doc
+
+commit b3e10407989f7fc41686a920f95455fc756d0b1c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Sep 11 16:33:26 2007 -0400
+
+    We want vnc-server to do vnc installs.
+
+commit 2c785b0ba41f34e6d65b33aa80b71f591048d73f
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Aug 31 19:19:22 2007 -0400
+
+    pungi-1.0.2-1.fc8
+
+commit b428a139f2ba80816802aa1f22b53a0b7877fc0c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Aug 31 19:18:30 2007 -0400
+
+    Forgot to add this file to the scm
+
+commit 9322210a931c53c2b8e9f823245de4791637fbf4
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Aug 30 16:56:15 2007 -0400
+
+    pungi-1.0.2-1.fc8
+
+commit c88e50ee5e68d74a213d53e66beed9529473d303
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Aug 30 16:56:08 2007 -0400
+
+    Fix creation of source isos.
+    Add source repo to kickstart file
+    End %packages section with %end per new pykickstart api
+
+commit e6438b5daa2fc9cfd44cc9f01dcf24b36513ae36
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Aug 28 23:42:28 2007 -0400
+
+    pungi-1.0.1-1.fc8.1
+
+commit ae78aea67368c4b77166089e1f951d8bc9dc633e
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Aug 28 23:42:25 2007 -0400
+
+    Default the flavor to blank.
+
+commit 72fdba882147a368ca03f58b8ee75028fcba6546
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 17:12:32 2007 -0400
+
+    Unused code snippit
+
+commit 0a029cbb14fd8da19048c5b16e5baf46f0bd46c7
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 16:59:31 2007 -0400
+
+    Oops, wrong help output.
+
+commit 5321a6e321da9b9b03f470e6dd46d420d6f8652a
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 15:42:26 2007 -0400
+
+    pungi-1.0.0-2.fc8
+
+commit 9f1523cb7e2caf72f62082a4dfb5af17c6e26b8e
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 15:34:51 2007 -0400
+
+    pungi-1.0.0-1.fc8
+
+commit d8e95fffa34c6b185b9d3a19d98e4bc03c3a9c44
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 15:02:53 2007 -0400
+
+    Simplify the README file
+
+commit 736951231e73a0bbbbffe02e60dc3a375a06f544
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 14:21:14 2007 -0400
+
+    s/livecd-creator/pungi/.  Stole that code a little /too/ well.
+
+commit b8457e64d57a2f1dee249de151623a812eefa2bd
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 14:17:42 2007 -0400
+
+    1.0.0 release.  Woohoo!
+    
+    Remove dead config files.  No longer use an /etc directory.
+
+commit 29d033e8388253c35503369afd0f00640ecfed2c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 12:48:54 2007 -0400
+
+    Almost there now!
+
+commit 1357a05145b4a73b99ea406ad36b89907f24231e
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 12:41:26 2007 -0400
+
+    Fix issues with $basearch and mirrorlist usage.
+
+commit d5aea6b8b21f768cc5585a299321217b3a6c4f91
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 11:00:11 2007 -0400
+
+    Add a ks file for composing Fedora 8 "Fedora"
+
+commit 54737ebb70ad17a964c9d03b1ad9907200fa8994
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 10:39:12 2007 -0400
+
+    - Set arch using rpmUtils, and do it in /usr/bin/pungi
+
+commit c53ff26201d8bdedef29d77fc8c227dd03433a9c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 10:33:28 2007 -0400
+
+    - Add support for $releasever in repo uris.
+
+commit 5c70f43906eefaa32cd560a97faf7c009dfd9cfd
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Aug 27 10:02:03 2007 -0400
+
+    Move arch setup to __init__.py so that it is done if
+    gather is not used.
+
+commit a578d93a9ed8c74930accfacee8b2b516421ec44
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sun Aug 26 19:48:49 2007 -0400
+
+    Add a rootcheck, stolen from livecd-creator
+
+commit 85620199c0e8660a1a720584e41bfdc8f5b9fe5a
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sun Aug 26 19:45:23 2007 -0400
+
+    more done!
+
+commit b8b7d763f9fccf52fd76d410d88c773d65881268
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sun Aug 26 19:44:38 2007 -0400
+
+    - Add a cache dir for pungi (/var/cache/pungi) and a cli option to override
+    - Fix some typos
+    - Handle cache dir not being on same file system
+
+commit 666fb84064bf119aa52dd02cc1673ea4c26ec9cb
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sun Aug 26 14:42:59 2007 -0400
+
+    Use native pykickstart for %packages handling.
+
+commit 38ff3cef533284b0d631091c5c9c6f529230f09c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sun Aug 26 14:08:27 2007 -0400
+
+    - Pass gather a ksparser object instead, needed for yum repos
+      and more advanced package handling.
+    - Use ksparser to get repo(s) from kickstart config.
+    - Don't rely upon a yum conf, do all setup ourselves.
+
+commit 0b3221eafac25dac44737bfcb148f634dfd3a25d
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sat Aug 25 10:04:25 2007 -0400
+
+    - Pass gather a ksparser object instead, needed for yum repos
+      and more advanced package handling.
+
+commit c6986f49a89f1a10af64fa3ac0b033ed3afd9892
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sat Aug 25 08:56:49 2007 -0400
+
+    hurray for more things done.
+
+commit cc68ffa5d89fd82ceea4051e2272215bb11e9569
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sat Aug 25 08:56:16 2007 -0400
+
+    - Use a kickstart file as input now (for cdsize and package manifest)
+    - Turn pkglist into a pre-parsed package dictionary
+    - Arrange config setting logically
+    - Error out on usage if no config file passed
+
+commit cfdfdbbabe4b9061a30d349e6b0325e55969b523
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Aug 24 21:08:13 2007 -0400
+
+    Fix a typo.  Only supply logger once.
+
+commit 885dae0818f136aab66b5db8c96ca399c0f57ba5
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Aug 24 20:51:21 2007 -0400
+
+    More updates for reality
+
+commit 6feda083205121983f8361253365432544384fe9
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Aug 24 20:45:54 2007 -0400
+
+    - Get group files out of configured repos and create a mashup
+      of the comps.  Filter it and make use of it when creating repos.
+    - Move _doRunCommand into pypungi/__init__.py so that it can be
+      easily used by all modules.  Also pass in a logger for correct
+      logging
+    - Quiet down creatrepo calls
+
+commit 9c757202c2f9f0c717dc89764f00f1644d00db1f
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Aug 24 13:50:05 2007 -0400
+
+    Get group data from the repos instead of our own comps file.
+    
+    Update ToDo with status and remove things that don't belong
+
+commit e1d532cfc0cb2674507adf2cced7ae864cc7fb2c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Aug 24 09:41:06 2007 -0400
+
+    - hard set product_path to 'Packages'
+
+commit c8beac92158dfa9cdc80c7a62d981713a655dabf
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Aug 24 09:15:58 2007 -0400
+
+    product_name -> name.  KISS
+
+commit 54d3d6b80919e8b52949c7a17b89a92ccf3f035f
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Aug 24 09:13:53 2007 -0400
+
+    - Remove a lot of configurable items and hard set them
+    - Move some items to cli flags only (part of moving to pykickstart)
+
+commit 9c64c98c8f04b954804b14299b619cb79fa84a25
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Aug 23 23:02:09 2007 -0400
+
+    destdir needs to be a cli option.
+
+commit 6c313fe24a083e111c5e3ea2015d020b2e3107fa
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Aug 23 22:47:20 2007 -0400
+
+    Update the ToDo file to reflect reality
+
+commit af625b2b9c61785043cea5fceaa05bfd1c5b5c6c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Aug 23 12:59:11 2007 -0400
+
+    Add a source config for Fedora spins
+
+commit 27d0a9808f04e9b144f385bcac6fbd4587ba3231
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Aug 21 22:11:08 2007 -0400
+
+    Fix a tab/space issue
+
+commit fa3f75b16dc2c5bac89271a7401d8d857956f5bc
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Aug 21 22:07:19 2007 -0400
+
+    pungi-0.5.0-1.fc8
+
+commit edf13894434e621da8e6fb426b60f9735c1b5e7e
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Aug 21 22:07:16 2007 -0400
+
+    Whoops wrong version
+
+commit 0390e7d04eb00f2135f803c38d20913dde04b89c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Aug 21 22:06:49 2007 -0400
+
+    pungi-0.5.0-1.fc8
+
+commit 4d270948dd5e2d286e29007a563b3d71a72322e9
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Aug 21 22:04:07 2007 -0400
+
+    Prep for release
+
+commit 823e578ff058dc232e1a38c37d695f3923a01499
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Aug 21 12:47:40 2007 -0400
+
+    Hurray for line feed.
+
+commit 2221c0fb66ecb673fd57acd9e97337ea4ba224fa
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Aug 21 12:42:33 2007 -0400
+
+    Remove commented code that is not needed anymore.  Yay!
+
+commit c7e5e94eac7c3cd5d959aa408221c48a3b32f48e
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Aug 21 12:40:44 2007 -0400
+
+    - Rework how source rpms are pulled in
+    Always pull in 'src' packages, filter when not needed
+
+commit 6612ec39ba4f1a7f44780501197cd6b3e8832bc3
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Aug 17 09:14:18 2007 -0400
+
+    Move the stream handler to be in the named loggers, not the root logger
+    This prevents double messages to the stream coming from Pungi.
+
+commit 7aea97468c5d6a14e0dac8078d56c0247421d35e
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Aug 16 15:43:58 2007 -0400
+
+    workdir is defined in the parent PungiBase class
+
+commit 3abfe92500040c498b318b09759863d0da6f8d82
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Aug 16 14:16:48 2007 -0400
+
+    Fix indent issue.  We're not done downloading packages at each and every package (:
+
+commit 0a7c6f46831daf7fd28fef4a90e9d6b059cbfde0
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Aug 16 10:03:13 2007 -0400
+
+    Fix indentation issue.
+
+commit 25fa13f329ec73b8cf36d1c855cbfe3a228fa292
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Aug 16 10:02:43 2007 -0400
+
+    Drop some hints as to when we're done with various tasks
+
+commit a83f26efbd8780fd323e923af37676aa6d9dc06a
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Aug 15 22:14:46 2007 -0400
+
+    Only log debug output if there is content to log
+
+commit 55d398b5b46979482cc7d95b664d6a3968d320a5
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Aug 15 22:14:09 2007 -0400
+
+    set a proper format for the console output
+
+commit 1f85a11293a566b434da9d49147694b00fb13944
+Author: jkeating@localhost.localdomain <>
+Date:   Wed Aug 15 19:19:13 2007 -0400
+
+    Create a PungiBase class
+    Make Gather and Pungi subclasses of this base class
+    Adjust logging to use the facility in PungiBase
+    Adjust logging levels to be appropriate
+    Drop a note when the compose is finished.
+
+commit 9cb130eb8df3c0feeb8db849c2362dfe83b5374f
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Aug 8 23:50:33 2007 -0400
+
+    Create a subclass of yum to work around logging fun
+
+commit d98fe83e7a496729f26ad58ebdf4ca086e51b372
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Aug 8 21:03:11 2007 -0400
+
+    Be verbose about what we clean
+
+commit 33a542f60b110ad4d08c8960d639bb8b489a2251
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Aug 8 10:25:51 2007 -0400
+
+    We set debuglevel when creating the yum object.
+
+commit 24cb8d04cf04bb1332ef8914fe413df2b83b7b25
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Aug 8 10:08:47 2007 -0400
+
+    Make Gather() no longer a subclass of yum
+    Create an 'ayum' object to manipulate
+    rename source yum object to 'syum'
+
+commit 5fecaeb9dd836998165e82cd6a7f3adb0bdcd9ac
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Aug 1 16:39:06 2007 -0400
+
+    pungi-0.4.1-1.fc8
+
+commit 1b1a81b2c750730eef13a384b4d9beb17bc55556
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Aug 1 16:38:57 2007 -0400
+
+    - Create a new yum object for source downloads as yum
+    Fixes a problem where yum object resetting is not currently working
+
+commit eee5556f50a01ffe387a404ef6767ef84b4a0b0f
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sat Jul 28 11:19:07 2007 -0400
+
+    pungi-0.4.0-1.fc8
+
+commit 829f90aa5f33ad4e8b25da3efbae22db0ffe6d41
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sat Jul 28 11:02:20 2007 -0400
+
+    When reising an error, print the error too.
+    bump for release
+
+commit 36c629a262c38b07cae1c280fefb9bf7058d47a1
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sat Jul 28 10:59:14 2007 -0400
+
+    split createrepo to it's own call
+
+commit 99e2ac017ee625fe330b5cb343d74e1f60f20c98
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jul 24 14:37:39 2007 -0400
+
+    pungi-0.3.9-1.fc8
+
+commit 7eff6de180c7653b8c2cbfd8777b82fc0e1fee81
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jul 24 12:43:08 2007 -0400
+
+    release 0.3.9
+
+commit b04defc8e17fbfa965548f86c21b5574ff66a7b0
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jul 24 11:52:41 2007 -0400
+
+    Removed the version number from the wrong manifest
+
+commit 228ea17bdd20a144d81708e598c8bd65c2191d7e
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jul 24 10:54:31 2007 -0400
+
+    Remove the unused files
+
+commit 516bffb56b4b47ae6d2fb58fa89e1c3fbfbe5120
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jul 24 10:16:02 2007 -0400
+
+    Update content for F8 Test1 spin
+
+commit c6bc2d2de520499b4d137d0015ed07f76c92fa49
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jul 24 10:01:10 2007 -0400
+
+    Rename things for F8
+
+commit cabdee9e921d1759ec41e6436d48bfc300de4e43
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jul 24 09:40:49 2007 -0400
+
+    - Add a few more desktopy things to manifest
+
+commit 14e3a3922ba728a69b8350ce183cea41255efd8f
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Jul 20 16:59:09 2007 -0400
+
+    Always log stdout before checking for stderr output
+
+commit 8dd1c2aa9338d24d5675f7a1ab9f60ef8b0a7bda
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Jul 20 14:40:32 2007 -0400
+
+    - Don't quote things passed to mkisofs, not a shell
+
+commit 6e819ae0f13a84b6bfdaeb953ee64a9cc295f5dd
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Jul 6 13:02:00 2007 -0400
+
+    Add memtest86+ to manifest
+
+commit 5e4077d3eb69c5530d943ffc414d4f5abda4a77d
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Jun 20 14:04:11 2007 -0400
+
+    pungi-0.3.8-1.fc8
+
+commit d612ffdfb3a0b253d023f2370f9fb872e5330fb5
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Jun 20 14:04:02 2007 -0400
+
+    Release 0.3.8
+
+commit 7a16c58d83ce47200eca7f399ec5ae2c51cb97ca
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Jun 19 22:19:19 2007 -0400
+
+    Create a little package sack out of dep providers to grab just the newest ones
+
+commit 7c88b058e11e211c7722f98f52ca9cf8f09c69b6
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Jun 13 18:04:20 2007 -0400
+
+    Point to the right manifest file in pungi.conf
+
+commit 51b7c6d81a7ff873efa1bd398a10b84b7d4ff889
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Jun 13 18:03:29 2007 -0400
+
+    Don't use flavor for a log file if no flavor set (Trac #48)
+
+commit a5fdee3d55676b9530e5cccf7daf694fee0f856a
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Jun 11 20:45:32 2007 -0400
+
+    An empty list doesn't equate to None.  Who knew (:
+    Fixes broken dep logging
+
+commit d507bed1b20425e389f7a0aacdea96c27d343a32
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Jun 11 14:59:18 2007 -0400
+
+    Use universal newlines in getting process output (Trac #44)
+
+commit 02539d5d9e27171330f35425d19dcee599926ca4
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Jun 11 14:56:43 2007 -0400
+
+    Enable the source repo in yum configs (Trac #47)
+
+commit 20d68be58d88408af79d066927fd431daceffb01
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Jun 11 14:37:35 2007 -0400
+
+    Add a install target to make (Trac #37)
+
+commit ec285d1c32d869fddf76494333c0b3505a80c07e
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Jun 11 14:34:32 2007 -0400
+
+    Added tag f7 for changeset 49ffb6153da1
+
+commit 0487c7aadd43e8c9c88bf2541ce6caa6bc28ecbf
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed May 30 10:46:58 2007 -0400
+
+    pungi-0.3.7-1.fc7
+
+commit 1eb9ea938f86e596ec7998c7c909a7be1b834a5e
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed May 30 10:46:55 2007 -0400
+
+    prep for release and update comps file
+
+commit a3004316309c9216f195f107c576fa470334287c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri May 25 18:56:09 2007 -0400
+
+    When setting default cdsize, value must be string.
+
+commit c8e8f436b5c5bab24db55af55354de92a8aceed8
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri May 25 18:50:37 2007 -0400
+
+    Remove leftover size comparison code snippit.
+
+commit 55f643eb7d64cfe242269c36ff1126b61b6b741d
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri May 25 14:30:21 2007 -0400
+
+    pungi-0.3.6-1.fc7
+
+commit 0e7a34a453399358f8fbe72acb02231be5f82792
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri May 25 14:30:13 2007 -0400
+
+    prep for dist
+
+commit 69bf86d8a6cadad490401040a36e227afe7e8524
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri May 25 14:28:38 2007 -0400
+
+    Better handle CD size variable (float vs string and comments)
+
+commit 3ca782105d5c2ca548dbc720645497c773006742
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu May 24 08:56:22 2007 -0400
+
+    pungi-0.3.5-1.fc7
+
+commit 5c6905f6ff179d11b6d56585ead09ae66a30acb6
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu May 24 08:56:16 2007 -0400
+
+    Change the version correctly
+
+commit e111bec37b55351801a4f4c0cde9f5eb9b4c20e5
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu May 24 08:52:08 2007 -0400
+
+    pungi-0.3.4-1.fc7
+
+commit 1dfca44ec148c6d90b4b55b3ef0ae77b48572f60
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu May 24 08:52:02 2007 -0400
+
+    Prep for release
+
+commit c0f3f63202cdc24e463fc4ba9e723cd60cc37932
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu May 24 08:51:51 2007 -0400
+
+    - Use the right flavor in the Everything configs
+
+commit 30b9b6bfa632534efe1c1b101af2c15ade7365ca
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu May 24 02:06:48 2007 -0400
+
+    pungi-0.3.4-1.fc7
+
+commit defce836a2419b46609e7d5da2ff31c421bd5433
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu May 24 02:06:33 2007 -0400
+
+    Prep for release
+
+commit 804be3f018339743a3e26b5a07ce0ea8a941a2e7
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu May 24 02:06:25 2007 -0400
+
+    Use a packages checksum to validate cached download
+    
+    Using a package size is not good enough, fails to see
+    a changed gpg sig.
+
+commit 01d756a34a9e990d98e92fb03abaa8ae19826833
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed May 23 16:17:46 2007 -0400
+
+    Wireshark-gnome deserves to be optional on the Fedora spin
+
+commit f0500348f39289f0828a19caa66c096d50b1334c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed May 23 12:45:29 2007 -0400
+
+    pungi-0.3.3-1.fc7
+
+commit 7baf2399140914f89f80e0ce25f2e1ebc6f613ac
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed May 23 12:44:08 2007 -0400
+
+    Prepare for release
+
+commit c77150cc11837f8cb616b54a8ced949ba68fa58b
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed May 23 11:53:24 2007 -0400
+
+    Even more files, and a README because this is a lot of files.
+
+commit f3924cd7f98e9de18d28a00aa9a0c0aa146ae3ad
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed May 23 11:29:18 2007 -0400
+
+    Add some more files that we use
+
+commit 565938526e9cc5e3efe49968205ea8395c5f373d
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed May 23 11:20:17 2007 -0400
+
+    - Commit config files used for producing Fedora 7
+    - Default pungi.conf file to using Fedora 7 stuff
+
+commit ef38a79664e8c1ee31ae38c1e7aabd6c094083b3
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon May 21 12:09:00 2007 -0400
+
+    pungi-0.3.2-1.fc7
+
+commit 784bf5ec415b9cddad7b4778012c68a38a7dbbc7
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon May 21 12:08:30 2007 -0400
+
+    Release 0.3.2
+
+commit ff9fdd4a21caf3d9190cea6b0697daf5ff55d657
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon May 21 12:05:36 2007 -0400
+
+    Forgot to commit these with the last change
+
+commit a861bb2aaf703a496f622b9e01bdd150c991ea58
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue May 15 14:14:16 2007 -0400
+
+    - Handle config file missing better (jgranado)
+
+commit 0225de12488593af0490548b19d23da190d8dc28
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue May 15 14:10:20 2007 -0400
+
+    - Shorten 'development' to 'devel' in default config, more space for mkisofs
+
+commit 176f7ea5efd5b78afe5991f9f7c67c92005f9558
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue May 15 13:29:30 2007 -0400
+
+    pkgobj.packagesize is now an int, not a str.
+
+commit 59ce91800b4989648b704e629822acc2945f3261
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue May 15 13:06:34 2007 -0400
+
+    - Apply sparc patches (spot)
+
+commit df3900d9448b6a62db44b70f6a941ca502599740
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue May 15 11:37:37 2007 -0400
+
+    Don't quote ISO label, not running mkisofs in shell
+
+commit d7d904a13596be474180e49ce8f76373b7267b35
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Apr 6 08:02:00 2007 -0400
+
+    fix comments in conf file
+
+commit 9b69d9e0dde9542bf484a8036ceb0d1f6b897e21
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Apr 2 17:19:29 2007 -0400
+
+    pungi-0.3.0-1
+
+commit 813d06d88f53eec612260c20696be4a83474178b
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Apr 2 17:19:19 2007 -0400
+
+    Update for 0.3.0 release
+
+commit 0a0bbe6688667e626f27585aaaa35c4a59af17ac
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Mar 26 10:39:46 2007 -0400
+
+    Fix source iso building
+
+commit d2c9c76a55eb5ffa20614852328880acab2bedc1
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 22 17:48:41 2007 -0400
+
+    Rescue fix from Prarit
+
+commit ba6c7b1ae800c45f60af2d29ef21e882357af4d9
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 22 14:01:26 2007 -0400
+
+    Specify flavor for buildinstall
+
+commit c0ab3ad59c988c7bc738a0585f5d4db75f5bff03
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Mar 16 13:31:31 2007 -0400
+
+    - Fix a logic flaw in the depsolving loop
+
+commit aa0f72f352ce29d12c748a67d60e42a08405a2b5
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 15 16:40:01 2007 -0400
+
+    Remove extra whitespace. (jwilson)
+
+commit 003ceaa7bee4cafe9e85a8ea126127235c6eb38a
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 15 16:25:57 2007 -0400
+
+    - Change how depsolving is done
+      - Get all potential matches for a dep, instead of our 'best'
+        our 'best' may not be the same as install time best.
+      - Remove anaconda code, use direct yum functions to get deps
+      - Use a True/False flag to depsolve instead of iterating over
+        a dict.
+      - Log what packages are being added for which reasons.
+    
+    - Also fix a think-o with the false negative unmatched workaround.
+
+commit 23e40be9eecd5e5abed249de6f73ca32f9950e4c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 15 14:25:24 2007 -0400
+
+    - Work around false positive 'unmatched' packages (globs are fun)
+
+commit 997c6bdf15ce701d59262b5a5491f33dad88f198
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 15 14:17:53 2007 -0400
+
+    Get all potential matches for deps, let install time figure
+      the best one to use.
+    
+    Remove code stolen from anaconda as it isnt needed anymore.
+    This may bloat the compose, but we need the multiarch stuff
+    and potential matches so that install time can figure out what
+    to use.
+
+commit a0562d7c2014505a1c6cada24568585950b914ff
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 15 13:35:05 2007 -0400
+
+    - Use yum's built in conditional handling for things from comps
+    - Do excludes before group handling.
+
+commit 938113eebe2f393410aff39b58b4abbd0be1102a
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 15 13:29:57 2007 -0400
+
+    Use yum's built in exclude handling
+
+commit e2c43c0a9362e6e0ac10f605bbb1fd6a512e4d42
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Mar 14 17:57:09 2007 -0400
+
+    - Do things faster/smarter if we've only asked for one disc
+
+commit eae5edcb5678385b1d8887d7aec0084da2a0a5af
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Mar 14 17:56:03 2007 -0400
+
+    Move relnotes up to buildinstall section; We want those files then.
+
+commit 876cb98ba7177eac5d29c2869273cce8ce86a9de
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Mar 13 22:16:39 2007 -0400
+
+    - correctly capture errors from subprocess
+
+commit 1c45ac7dafb31fdbd4a99fc06d8d4be907575b4d
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Tue Mar 13 20:36:48 2007 -0400
+
+    - log the rpm2cpio stuff for release notes
+
+commit 1c54c7edfce493c167f5d7ed4c9a4a08ea0f23f4
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sat Mar 10 00:08:27 2007 -0500
+
+    pungi-0.2.8-1
+
+commit a3f74c1199df32566cfd0de6b61ed4a72ee7e17c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Sat Mar 10 00:08:13 2007 -0500
+
+    prep for 0.2.8 release
+
+commit dbc2db0a8bcbda1d787a7cc23e19a9392f0b388c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 8 10:58:13 2007 -0500
+
+    More clean up with using subprocess
+    
+    Have a function we call over and over
+    Log the output, trace on stderr
+
+commit 069f8f98a9f167e88531162f327618de97197bcb
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Mar 7 21:33:45 2007 -0500
+
+    Fix some typos and point at the right comps file
+
+commit 9986ab582a6fbe62f72c2f1c329db484d45064f9
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Mar 7 17:53:53 2007 -0500
+
+    - Call createrepo ourselves for the tree, not buildinstall's job
+
+commit 4e8d70bf9fa3bbca0112014aab29f696ee748b84
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Mar 7 14:42:33 2007 -0500
+
+    - Convert from commands to subprocess for things we call out
+    
+    Next I will fix up the logging
+
+commit 7e155b84e178241fca71e5021ee85ba4e46d1580
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Mar 2 11:33:01 2007 -0500
+
+    - Make the list we hand off to yum to search for as unique as we can
+
+commit be44e2527d8134ec855e844728a1201a6db6ce2b
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Fri Mar 2 10:24:03 2007 -0500
+
+    Fix various typos, work around a yum api bug, strip the manifest lines right, log more output
+
+commit 45a4b623086494b1102fb15e4c101af6ab2b55e8
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Thu Mar 1 23:06:41 2007 -0500
+
+    First attempt at supporting kickstart package syntax in manifest files
+
+commit 84a2152ce90132b5fd7f9a782193c50b05569057
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Feb 28 14:21:22 2007 -0500
+
+    Added tag f7-test2 for changeset c150a9d7a125
+
+commit 3708d8e438c94185cdd553f71ea9962f960c3ea0
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Feb 28 14:21:10 2007 -0500
+
+    pungi-0.2.7-1
+
+commit be069fc5f247d30c6c4fd5895c73f5b619deb1f2
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Feb 28 14:08:07 2007 -0500
+
+    Update comps from test2
+    prep release
+
+commit 2f3a891a5c3df37b3eb1aca9d5d78f50110b0f0c
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Mon Feb 26 13:06:31 2007 -0500
+
+    Fix gathering of srpms (thanks skvidal)
+
+commit c564cee4f6d844ed8b21904c6771b7c99329f525
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Feb 21 16:48:23 2007 -0500
+
+    pungi-0.2.6-1
+
+commit c0c9d7bed7c04a12e8694bcef7e0007c7e7df085
+Author: Jesse Keating <jkeating at redhat dot com>
+Date:   Wed Feb 21 16:48:08 2007 -0500
+
+    prep for release
+
+commit f60b531ee932751ced9dc8fe71d1c335212c2176
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Wed Feb 21 16:12:31 2007 -0500
+
+    Don't use TMPDIR with buildinstall for now
+
+commit f00a7145a55b976abed3cde56f4bf2982ce62779
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Wed Feb 21 09:34:45 2007 -0500
+
+    pungi-0.2.5-1
+
+commit c951061fe77dc92a858328e9b9827c590777b186
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Wed Feb 21 09:34:23 2007 -0500
+
+    Prep for release
+
+commit 1e9d5392e6f4eff08bf35f68f471bad9468b79cb
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Fri Feb 16 13:59:01 2007 -0500
+
+    Make cdsize a config option
+
+commit 8ceceaf8117b2f7207682fdfec3b290eab753fc3
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Fri Feb 16 13:38:47 2007 -0500
+
+    Update the changelog
+
+commit 5fa12944df6f26b3abf764bafebac2b184662f22
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Fri Feb 16 13:38:27 2007 -0500
+
+    Add a version to options.
+    Reorder options logically
+    Clean up some comments
+
+commit fba101d3fcecbecfedac5a42b6169b01f5943a32
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Fri Feb 16 09:37:52 2007 -0500
+
+    Put yum temp stuff in workdir
+
+commit 07b27a464f061cf8c5c490fa0c31b325832d87a8
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Fri Feb 16 08:45:42 2007 -0500
+
+    Use TMPDIR when calling anaconda-runtime stuff, get all output in the tree.
+
+commit 528b566ec2aa2d6275d18df7c13eb8b5b52e4ce9
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Feb 15 21:37:30 2007 -0500
+
+    Fix a flaw with getting rid of comments in the manifest.
+    Make the code block to get the package list more readable
+
+commit 7531b652bd30b3d0355bdc56678d4136304053a0
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Feb 15 18:19:26 2007 -0500
+
+    pungi-0.2.4-1
+
+commit 8fa5b7eb85bbfc27df6679925e4d56565c7377dc
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Feb 15 18:19:20 2007 -0500
+
+    Add a release target
+
+commit faed64b3f9d824773c267a358de87ac310af3dd7
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Feb 15 18:18:22 2007 -0500
+
+    Prep for release
+
+commit 20af3a498842206bcdf7349f23a4e9f8c43e2e39
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Feb 15 18:17:23 2007 -0500
+
+    Add support for comments in manifest
+
+commit 6ebb69628f3fc8c2e4db657990114a4412470d3c
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Feb 15 16:25:52 2007 -0500
+
+    Fix indent
+
+commit 090eebdcf841c24779b5ec783bcb80073a420aa6
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Feb 15 14:17:39 2007 -0500
+
+    More logging fixes; add pydoc info to functions
+
+commit ddd183386c4696b218cb7b7e18f7e812d61d4491
+Author: jkeating@localhost.localdomain <>
+Date:   Wed Feb 14 17:33:07 2007 -0500
+
+    Logging patch from jbowes
+
+commit a8cd5699bb9157f2bfc51b5d6c392ba4f13c3b66
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 13 17:22:22 2007 -0500
+
+    add stuff to changelog
+
+commit 7883986e1d805f000bbc93aa8f6b3f9c5c96c2fd
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 13 17:20:01 2007 -0500
+
+    Style fixes
+
+commit 64970b214c27f841a992e60ed9c629d79d3efadd
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 13 17:12:39 2007 -0500
+
+    Merged in changes from Will
+
+commit d21d767336f91475ff4b412537633399d2c77673
+Merge: 5d46c0c 8bb0495
+Author: wwoods@kraid.test.redhat.com <>
+Date:   Tue Feb 13 13:23:44 2007 -0500
+
+    brange merge from upstream
+
+commit 8bb0495b634407cc85cacc920c1c45873db6ed6e
+Author: wwoods@kraid.test.redhat.com <>
+Date:   Tue Feb 13 13:23:00 2007 -0500
+
+    fix up .composeinfo/mkrelative stuff
+
+commit 5d46c0c53baea814ecca19761bfa1f01f12a1a85
+Merge: 384608a 6e91727
+Author: wwoods@metroid.rdu.redhat.com <>
+Date:   Tue Feb 13 11:06:35 2007 -0500
+
+    merge from jesse's branch
+
+commit 384608a6711d22cd1543fb5a3a3caaaea9b3a9af
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 13 15:43:21 2007 -0500
+
+    Fix the makefile to not tag when making srpm
+    Add things to the changelog
+
+commit 0ff449d87f1872d0e6745d023f8551800c86132a
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 13 15:30:47 2007 -0500
+
+    List contributors
+
+commit e1242f1e74cbfa22059d1b7411a961341f003223
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 13 15:27:00 2007 -0500
+
+    Remove part of a bad patch.
+
+commit 629c1f1afd4feccb3504121e960f886e0a4dce6a
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 13 13:54:01 2007 -0500
+
+    pungi-0.2.3-1
+
+commit 7bd7f91b27a692b02cf8a1e25ce79715157bff79
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 13 12:32:55 2007 -0500
+
+    pungi-0.2.3-1
+
+commit 436994f13a1688265bf138c3e50ff673de86766b
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 13 12:31:01 2007 -0500
+
+    pungi-0.2.3-1
+
+commit 25733c18238321b6d9f7da17a6754346699c6b20
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Mon Feb 12 17:56:59 2007 -0500
+
+    pungi-0.2.3-1
+
+commit ec8b2ead8f910b9565a9f7d07e71784dfb21637e
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Feb 12 17:51:36 2007 -0500
+
+    - Add ability to define destdir on the cli to override conf file
+    - Clean up optionparse stuff, print usage if arg list is too small
+
+commit a8e260305587e415d8e79d9f2593068dac3d387f
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Feb 12 17:07:37 2007 -0500
+
+    Add runtime flags for doing specific stages of the compose
+
+commit 0832f65fce50eb0eae7ad4baa2f679e3e47ce0e9
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Feb 12 16:50:02 2007 -0500
+
+    New Make targets
+
+commit e2e81e481c300b073fc89a699eef9451bb3e6cc7
+Author: wwoods@test158.test.redhat.com <>
+Date:   Mon Feb 12 16:30:26 2007 -0500
+
+    forgot that relativize is a class method - also change name to avoid spelling mistakes
+
+commit bc1a73ace42b14ecad1e8cec5e090f074da999f8
+Author: wwoods@test158.test.redhat.com <>
+Date:   Mon Feb 12 16:29:19 2007 -0500
+
+    oops, forgot to check before removing
+
+commit 6e9172720aaaf8e28ec414d59181e4addf5b197e
+Author: wwoods@test158.test.redhat.com <>
+Date:   Mon Feb 12 15:57:58 2007 -0500
+
+    avoid traceback after interrupted download
+
+commit bbe50383dcadddd3f065d7d8679011731b46bc48
+Author: wwoods@metroid.rdu.redhat.com <>
+Date:   Mon Feb 12 13:08:28 2007 -0500
+
+    oops, left in half-baked code
+
+commit 289fc2865ec129f528a42c8b5b30496b076c1bf4
+Author: wwoods@metroid.rdu.redhat.com <>
+Date:   Fri Feb 9 16:13:52 2007 -0500
+
+    write composeinfo after writing iso/tree
+
+commit 8b1b9b36eb61f009cf51b5b7f982e0b5e97fa2af
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Feb 8 20:25:41 2007 -0500
+
+    Add support for globbing in manifest
+    
+    Redo how we find packages making use of a better yum call
+    Add warning output for unmatched packages in the manifest
+
+commit 5749bcd8dab3253680cf4449c89bcea53141c74d
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 6 22:53:43 2007 -0500
+
+    Minor speedup to short circuit depsolving
+
+commit 1e7940b7609def5831743796df2fc3c82cd137e9
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 6 17:40:21 2007 -0500
+
+    pungi-0.2.3-1
+
+commit ec8876962493d17df262df57eb723997450089b7
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 6 17:40:13 2007 -0500
+
+    Do the release dance.
+
+commit 2c5642e3d7e97ec7797dd6e8838affec39bcc314
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 6 13:54:06 2007 -0500
+
+    - Don't use 'returnSimple' anymore, deprecated in yum api
+
+commit 8a7700a4a1a80df0b403c5ce61bdf34f20148056
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Feb 6 13:51:53 2007 -0500
+
+    yum bestPackagesFromList takes an arch argument. Fixes ppc64 bug
+
+commit 78d7d7c6130ae6ff9036048db06a9c886b6adc3e
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Mon Feb 5 14:50:45 2007 -0500
+
+    Think-o.
+
+commit 130e7576fa87591978ef0f75e768ca0ec29a7e38
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Sat Feb 3 16:19:41 2007 -0500
+
+    Make isodir an object (wwoods)
+
+commit 50bc32037e4b69ffae1ff9ca0c3fc6d32e26df7a
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Sat Feb 3 15:53:47 2007 -0500
+
+    Make bugurl optional
+
+commit e91bdef56386bb0727b12301981091440fb7be37
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Feb 1 10:11:33 2007 -0500
+
+    Added tag f7-test1 for changeset ba049c3454d5
+
+commit cec173adfe08575227022225d2036af82e4e1084
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Jan 30 10:26:48 2007 -0500
+
+    Hey guess what?  implantmd5 alters the iso, so sha1sum must be done after that.
+
+commit 1c37d3ab64ada6b4b54b09fa503bd449fd5a17d9
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Mon Jan 29 16:13:06 2007 -0500
+
+    pungi-0.2.2-1
+
+commit 05868a33ac4627a8ca03acbd40cd75a760f0ef4a
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Mon Jan 29 16:11:16 2007 -0500
+
+    - add bugurl config option for anaconda betanag
+    prepare for release
+
+commit 6142220517c1272326aadddfe856ede11c72ad1e
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Mon Jan 29 16:06:08 2007 -0500
+
+    Put the srpms under the flavor dir.
+
+commit 6d3ace45299a05cdbb805d2d6be175d38c9bee60
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Mon Jan 29 15:20:49 2007 -0500
+
+    Fix the ppc booting; clean up srpm split output
+    refresh comps file
+
+commit 85e1ae84fc34169661b52c7e907a71a05d741cde
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Jan 25 13:10:44 2007 -0500
+
+    pungi-0.2.1-1
+
+commit 8bdd7bc404ceb674c3a57764a07677dfdd3ca328
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Jan 25 13:08:43 2007 -0500
+
+    Change the changelog to reflect reality
+    add stuff to the spec
+
+commit a800e7906d76555618a4d5fae95d06afbf457318
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Thu Jan 25 12:57:44 2007 -0500
+
+    Update the comps file
+
+commit 2b6f765f310cdb5291f18639caabf50a12d285eb
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Wed Jan 24 23:42:40 2007 -0500
+
+    Add a flavor config option for output
+    Move some stuff further into the work dir
+    ensure that the workdir exists
+
+commit c8bd7b29a5a2521b709ca1a6d0df6d2c85678b50
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Wed Jan 24 18:26:03 2007 -0500
+
+    Added tag pungi-0.2.0-1 for changeset f90b645121cb
+
+commit 4b969fda7d67acadc101c12d2ef90857b8b7db32
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Wed Jan 24 18:15:48 2007 -0500
+
+    pungi-0.2.0-1
+
+commit c95bd1f6d751d4c1c068b992332e746384e33df0
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Wed Jan 24 18:15:36 2007 -0500
+
+    Prep for release
+
+commit 44f250d56ec23fc13cf07bc4bfafb6d4b374749c
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Wed Jan 24 18:14:41 2007 -0500
+
+    Remove dupe lines
+
+commit 147ed75d9c9520085542b9bdeadaf80a1f6a0f44
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Wed Jan 24 16:27:28 2007 -0500
+
+    Rework the depsolving just a bit
+    
+    We get a list out of the yum function, so
+    treat it as a list, don't just pick the first
+    package.
+
+commit 5b4458bddc07da1bd906a26de5fc0bdc9500f4ce
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Wed Jan 24 10:51:28 2007 -0500
+
+    pungi--
+
+commit da72aa8bbd1a2c0ee55f790c6457777665103cd7
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Jan 23 18:35:07 2007 -0500
+
+    Grr, update the changelog you dolt.
+
+commit 5001258c1126a7da0594ee0853d3fa09fc4561d5
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Jan 23 18:34:15 2007 -0500
+
+    Bump the iso size to what was used for FC6
+
+commit c6851db291d3bb314c9bfe8664de91de64cd1811
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Tue Jan 23 18:03:52 2007 -0500
+
+    - Now use a manifest to determine what to pull in, not comps itself
+    - Add a minimal-manifest for test composes
+    - Add current F7 comps file for test composes
+    - Use some anaconda code to depsolve, gets better (and more common) results
+
+commit 5e762d8c15a03b7483b81ac221e640caf1b8f703
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Tue Jan 23 17:43:46 2007 -0500
+
+    Forgot to commit the changelog from earlier
+
+commit f2054941276b845a473e429ba5ff70451cc40728
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Sat Jan 20 11:45:08 2007 -0500
+
+    Change the version to development, as thats where yum conf points to
+
+commit b4530bac3e979f276cf06c6694fcceab9dda5f6c
+Author: jkeating@reducto.boston.redhat.com <>
+Date:   Sat Jan 20 11:28:21 2007 -0500
+
+    Add a couple more things that are required by anaconda
+
+commit ea82c159575d68bfc0d7a4c7e456183554a5371b
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Wed Jan 17 10:54:09 2007 -0500
+
+    Clean up splittree output
+
+commit e6187e19bb292fce8834323c07abc161082723b3
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Tue Jan 16 22:59:02 2007 -0500
+
+    Add rescue iso support
+
+commit 2b9fb427ef5bfd5bc0eb2f6bebe75719c56ac9b1
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Tue Jan 16 16:58:40 2007 -0500
+
+    Require the newer yum
+
+commit a97b0d3d15abd92be477f020b6fd457378c6c1de
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Jan 8 15:29:15 2007 -0500
+
+    Clean up some files, no main() sections needed anymore.
+
+commit f447b2c285cadbb7ed608ec4fdc551be78558b72
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Jan 8 14:46:45 2007 -0500
+
+    No longer use our splittree for rawhide.
+
+commit 337a57efdf30b08fd99a8e4f32b681f6298d2eac
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Jan 8 14:35:05 2007 -0500
+
+    Added tag FC-6 for changeset 9f954716abd9
+
+commit 1f99e9fa2a958f91e5667fa12be5639ad4582c41
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Wed Dec 13 22:14:41 2006 -0500
+
+    I always forget to change this file.
+
+commit cc625df6ada29619072e92a3f761779ce351d589
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Wed Dec 13 22:07:01 2006 -0500
+
+    Update the spec file
+
+commit cf42e18b515932ebce2d024680cfb82ff4283c55
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Wed Dec 13 22:04:56 2006 -0500
+
+    Add the changes thus far
+
+commit 4244cc89efcffc1d614b89fef9c8f1bf215d3d75
+Author: root@dhcp83-138.boston.redhat.com <>
+Date:   Tue Dec 12 12:21:28 2006 -0500
+
+    Add the ability to spin ppc arches
+
+commit 45138045263fe7279c0ebe70dfd97028d1db35ca
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Tue Dec 12 23:01:33 2006 -0500
+
+    Making a symlink for repodata isn't going to work so well...
+
+commit 333c87851189ff6bf0f367d466ade3dc93839bad
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Tue Dec 12 00:18:37 2006 -0500
+
+    changes needed for rawhide building
+
+commit 8716f1780747517098cf132a749b7a675863d875
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Tue Dec 12 00:16:09 2006 -0500
+
+    Added tag pungi-0.1.1-1 for changeset 591cf30beec90deb8b01aaef07e042d8878f4f09
+
+commit 3c6d242bda7aaf3a13c4fd7b73fa3c9c525836db
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Dec 11 23:58:56 2006 -0500
+
+    bump the version, change the website
+
+commit c8717859c49d698f21ae1c381f688726703d18d1
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Dec 11 23:57:21 2006 -0500
+
+    Add more info to spec file, update for spin
+
+commit f3f8e80cc27a29f60124ceba99221dd9cf5aa8c7
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Dec 11 23:47:41 2006 -0500
+
+    Add a conf for source
+
+commit cdc176ddc11b90ebaa7be1f33c8db9948a0e0a1d
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Dec 11 23:24:52 2006 -0500
+
+    Add whats been going on
+
+commit efdf2e6131dd9fde485be541859f87913546e124
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Dec 11 23:23:05 2006 -0500
+
+    Add the ability to get release note files from release note packages.
+
+commit e93179577e958e5765f880108fd0b2f50b237394
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Dec 11 17:13:02 2006 -0500
+
+    Fix some srpm stuff, split rather than strip, rsplit rather than rstrip.
+
+commit 05d024e6ab36c22146ee0b88d7585992f6510f5e
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Dec 11 17:11:57 2006 -0500
+
+    Wrong url in commented out baseurl
+
+commit 7b20c21512a4fde2707291dc88ed22bf9fe51cf1
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Sat Dec 9 22:06:55 2006 -0500
+
+    Update the changelog with a lame entry
+
+commit 4cb294b666ad0357d867709888426af5d611e52e
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Sat Dec 9 21:59:34 2006 -0500
+
+    Clean up some docs, update spec.
+
+commit baaf06b4b396bc2c92411f28c7952d4d8987012b
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Sat Dec 9 21:45:14 2006 -0500
+
+    Add some new config files, used for composing FC6+updates isos
+
+commit 7b27df1c011a7f3cf074fa77578419125fd1eed4
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Sat Dec 9 21:31:00 2006 -0500
+
+    Get the specific srpm used to build the binary
+
+commit f376824c847aeb9c3215ad9234918006af545954
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Sat Dec 9 20:48:08 2006 -0500
+
+    Enable the ability to pull down and make isos of srpms.
+
+commit 78dd15b5e25faf349e29c94968dc46fb7cd0ea3a
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Fri Dec 8 12:53:27 2006 -0500
+
+    Adjust the naming a bit, makes sense for FC6
+
+commit d326ef8df7071d8dc96e318561943e60afec3d5e
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Fri Dec 8 10:57:23 2006 -0500
+
+    Implant md5sums in isos for media check
+
+commit 6e7657d03a0922cffd6c9a6b20c598271848293e
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Thu Dec 7 22:48:22 2006 -0500
+
+    Add source repos
+
+commit b3db80940e2764d8d2259352d0250d4bab0bec35
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Dec 4 15:47:50 2006 -0500
+
+    rework the iso spinning boot args a bit.
+    Add ia64 args (thanks  "Zhang, Yanmin")
+
+commit e0dbb723039f5f089dd1b8919f266687d77907be
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Tue Nov 28 07:56:40 2006 -0500
+
+    Make the DVD iso from the base OS dir, not the first CD dir
+
+commit d01a88e87727d7dbaf19652e2e77395e2376cfeb
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Nov 27 22:37:58 2006 -0500
+
+    Change the hg host
+
+commit d52136a4c1d838f295b85acba96d3813f4123bcf
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Nov 27 22:17:29 2006 -0500
+
+    Make sure we only get the newest package objects.
+
+commit f188205cf9018ecead2c72b49b49d3c886fcd433
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Nov 20 09:52:27 2006 -0500
+
+    Add some default config options
+    
+    Make use of them in various files
+
+commit a426fcc6e510eb75c28faf7146cdd32c8edeba1e
+Author: jkeating@dhcp83-49.boston.redhat.com <>
+Date:   Mon Nov 20 07:20:41 2006 -0500
+
+    Add the build dir
+
+commit e7f61f4dea9e35874c6708c3e1ef9bce7a56863f
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 22 15:56:04 2006 -0500
+
+    Add what I did to the Changelog
+
+commit 34621fc5f0eb3b0604119a1e615c700932641b5a
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 22 15:55:25 2006 -0500
+
+    change up docs for new config file
+
+commit 95f6a0b642c24c02a28302864ffe75bfdf3de97e
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Fri Nov 17 18:01:10 2006 -0500
+
+    First pass at using a config file for options rather than CLI
+    
+    Much churn, add a new config file.  Seems to still work
+
+commit 8bddcaef5400b0b45bb04862afa650803631b1d3
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Fri Nov 17 15:24:14 2006 -0500
+
+    Add a hgignore file from Jaroslaw Gorny <jaroslav@aster.pl>
+
+commit 218a4e5611bd235dbac65f472edde47e71d3f07a
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Fri Nov 17 14:02:37 2006 -0500
+
+    Support file:// repos in yum
+
+commit 9a94d2ce399707a4dc3017bcab8ee5ab347f5454
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Thu Nov 9 13:40:53 2006 -0500
+
+    Add some more tasks
+
+commit 03c1de774f6223be81a1b43679d809f23de19604
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 20:58:41 2006 -0500
+
+    Option is version not release (at least for now)
+
+commit eeded7876c8bd7c9255ecf322a5223337a598b2e
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 20:33:11 2006 -0500
+
+    pungi-0.1.0-1
+
+commit 026e8610fb5c73d2e7c1030bbd2af671fc79b745
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 20:33:06 2006 -0500
+
+    more cleanups
+
+commit bc802de53e20c1200517f742f4ea85f222bf8049
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 20:23:54 2006 -0500
+
+    pungi-0.1.0-1
+
+commit 491dac6e74c1358edddd2758dbb679f12617c009
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 20:22:01 2006 -0500
+
+    pungi-0.1.0-1
+
+commit e7ceec23837e2849ebc9ad5b64ad15d36b1bba4a
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 20:21:52 2006 -0500
+
+    Fix a typo in the spec
+
+commit 930a72da76848cd7b401cf107bf2ac9ec51df6c8
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 20:18:39 2006 -0500
+
+    pungi-0.1.0-1
+
+commit 705e4359129ad66db7d8b08370b72e2820a5b74b
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 18:34:20 2006 -0500
+
+    Make DVD creation implant the right discinfo media numbers
+
+commit 68767e396f6d2736e1bd121f787749e7a741094d
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 18:32:51 2006 -0500
+
+    Add info on how to test from a clone
+
+commit ccbd9bac63922aee67865c13d900234cb66d3e22
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 17:52:04 2006 -0500
+
+    Add a spec file and a make file to deal with it
+
+commit dc06f38321a8fd32ad665189191cbc743bfd7a59
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 17:50:17 2006 -0500
+
+    pungi-0.1.0-1
+
+commit e80193a24781635954b1bf9ef266873812c5c715
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 17:49:52 2006 -0500
+
+    pungi--
+
+commit 245b995fd7955c5ec2169d8688b60e40dfa33fd4
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 17:46:00 2006 -0500
+
+    pungi-0.1.0-1%{?dist}
+
+commit 34f333877b0072186f91b2ddfa628606074485ff
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 17:29:39 2006 -0500
+
+    pungi--
+
+commit 7106b4f0f4cdd275c3c9d172224b39a25735b8f3
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 16:44:51 2006 -0500
+
+    Knock a few things off the list
+
+commit 5fe23421e3445cc4dea357c8cafc393c26f3a229
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 16:44:18 2006 -0500
+
+    Update for new changes
+
+commit 4053ed770850f55cac739414284026877690d80a
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 16:38:46 2006 -0500
+
+    Don't need this file anymore
+
+commit 5a594cf08d871b062f9cb212ec7f698ffcfc5067
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 16:37:58 2006 -0500
+
+    Setup yum configs to use mirror list
+
+commit a309607186b9ce65ff36e40ba3a2e3f460c1a51f
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 16:36:21 2006 -0500
+
+    Add changes thus far
+
+commit 023ad1b0fbe874c7e3aec64eda6775a9815e3274
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 8 16:34:59 2006 -0500
+
+    Shuffle things around so that dist-utils can be used.
+
+commit cbb78e7318101cf5355730d0935ee1c79d6e84bb
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Tue Nov 7 23:13:53 2006 -0500
+
+    Mark changes for today
+
+commit 9af856b57128f6a0b7d8d2b198b66e7bc7fce485
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Tue Nov 7 23:11:44 2006 -0500
+
+    Add DVD creation code
+
+commit 519adf062ce4387781fc35c57eae49f9b6ad971c
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Tue Nov 7 16:52:56 2006 -0500
+
+    Add code to write out CD isos
+
+commit 8499fb4e846933a260afeceb93a89d83712cbe2e
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Tue Nov 7 12:26:32 2006 -0500
+
+    turn on split repo creation
+
+commit 87712433dfe95d08cee35be3c4bb13ea5e19cb68
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Tue Nov 7 00:29:14 2006 -0500
+
+    add changes for yesterday in
+
+commit 69b2550104fc87585da47734194ea49ce1db033b
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Tue Nov 7 00:23:14 2006 -0500
+
+    use same layout as current fedora trees
+
+commit e281c3fd270b2f1cbfe1ece5c9807762ef1929e5
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Mon Nov 6 16:34:20 2006 -0500
+
+    Add changes sofar today
+
+commit 8c4df007dd4ae918d4b38c884e2caf65b3f1bcd9
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Mon Nov 6 16:34:04 2006 -0500
+
+    Create a ToDo file, theoretically people wanting to contribute could pick stuff off this list
+
+commit ca72e5dcc177cddada4fe80f455421014c49a14c
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Mon Nov 6 16:19:47 2006 -0500
+
+    Change some tabs to spaces
+
+commit 399c9bfb10c26bc74056074fa420404f1c8df4fb
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Mon Nov 6 16:15:25 2006 -0500
+
+    Use splittree as a module, not a script.
+    fix a line continuation
+
+commit d943ff4652a7fe7a7f98c438c149d64ead5dd720
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Mon Nov 6 16:14:32 2006 -0500
+
+    Change discs option to be an int
+
+commit c7a08948bf976b4463af1f1cd9e0f0c8f9eaac62
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 1 17:56:17 2006 -0500
+
+    hey, a changelog
+
+commit 0639fcf7c792419855df318e54622a60e6de80ed
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 1 17:48:59 2006 -0500
+
+    Get the right mediaid from the discinfo file
+
+commit 813394c5d0bf1fa4a7f1ed50d7ff70a05a7ba5dd
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 1 17:33:53 2006 -0500
+
+    Code up createSplitRepodata, move it into logical order
+
+commit e4d95b0da5abd1a1596927305369418019505f4f
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 1 16:29:38 2006 -0500
+
+    Add our out splittree until patches are accepted upstream
+
+commit e82062e18a289f33a8ec4b44bf108833c5374bb4
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Wed Nov 1 16:29:17 2006 -0500
+
+    call our own splittree for now; column length cleanup
+
+commit 1fc6544fbf595ce07ca4c2e5ffdc2991bd5add69
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Tue Oct 31 10:27:36 2006 -0500
+
+    Turn on splittree; actually write the function; change disks to discs.
+
+commit 779dee205ea632f80f61483e920652016e0c409b
+Author: jkeating@localhost.localdomain <>
+Date:   Wed Oct 25 14:11:23 2006 -0400
+
+    Fix up error messages (Jaroslaw Gorny)
+
+commit a48c3ade14a7f925f8bb3ff016a72c4fa0d4c898
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 24 09:44:11 2006 -0400
+
+    License project code under the GPLv2
+
+commit faca390f6e8361cab3831a75461d31634bc0a303
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 23 23:56:24 2006 -0400
+
+    Fonts in comps don't need to be default.
+
+commit 44910763334f894fa252f62117e35b83c893afeb
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 23 22:43:41 2006 -0400
+
+    Adjust options to match the main app
+
+commit 56b5286ff4fd0cc1adcedb73c3f84445358a71ce
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 23 22:30:05 2006 -0400
+
+    Add a 'topdir' value to the Pungi object.
+
+commit 44e6b1011d27ad90824c35360bb20724f58a466c
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 23 22:18:02 2006 -0400
+
+    Heee, shutil.copy not os.copy
+
+commit da5de28ccda0d6e18ecb14140ab232402e9e5ee7
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 23 22:16:07 2006 -0400
+
+    Copy comps instead of link, as comps source may come from a different file system
+
+commit fb8e6e7aa118b61e082017283fe93fda335ea838
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 23 22:02:43 2006 -0400
+
+    topdir isn't used anymore in pungi.py
+    Adjust plan to provide some information for contributors
+
+commit 44f270b7462bb3e386ca52069d64867f7f288bae
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 23 21:46:30 2006 -0400
+
+    First stab at binding things together
+
+commit 2e4db741491913e92c524045ef899a069f8a560e
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 23 21:46:08 2006 -0400
+
+    Use arch as part of the topdir
+
+commit abd0a5524d74a495a0cdb4efdabcde2c0d0ee6aa
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 23 21:37:13 2006 -0400
+
+    Rearrange things so that they'll actually work together
+
+commit d3e8cff9ba13d2ad634c41f2d6684742a50bcd24
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Mon Oct 23 17:47:02 2006 -0400
+
+    Update the plan with new info and project layout.
+    Add a tests dir with some testing files.
+
+commit 7c6256d737d3d4f5d403bbfc1fadd5730ad2488e
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 23 15:50:44 2006 -0400
+
+    Change name to pungi
+
+commit 123b31573e9d1463d236368c71d5d6ee61e3ce6a
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Tue Oct 24 00:46:05 2006 -0400
+
+    buildinstall does its own createrepo call, no need to do it twice
+
+commit 340e01eaf118c59a1c31d0d25a374f8b033635fe
+Author: jkeating@harpoon.lab.boston.redhat.com <>
+Date:   Mon Oct 23 22:57:30 2006 -0400
+
+    os.mkdirs doesn't exist
+
+commit 4d568ae72812f6e04629589c06b50eb99c42575f
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 17 02:08:10 2006 -0400
+
+    Create pungi, the tool to run anaconda tools
+
+commit c2b14f3bad91db53a5fe403c81ce43c91c024117
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 17 02:07:51 2006 -0400
+
+    Do the arch switch from i386 to i686 in a better (I hope) way
+
+commit 9661193aa407830b410a031c48563528ae5c36de
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 17 01:38:16 2006 -0400
+
+    Clean sqlite too, was causing a lockup
+    Translate 'i386' option to 'i686' arch
+
+commit 8e4c22a064207e987998be98ebca800cdf63e34c
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 17 00:21:40 2006 -0400
+
+    Use Fedora rather than Tree
+
+commit ac953cfae4d3f5d750c11114c96971030d14d536
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 16 23:11:58 2006 -0400
+
+    Clean the metadata out when creating the object
+
+commit 88c82fcb4d5f7e31e797019a27e47fd4a174073e
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 16 18:29:12 2006 -0400
+
+    Use a dict to return unique requires, not a list with possible dupes
+
+commit dba79b9c0fbaf4abddf9c966a3c33b6ccd642de4
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 16 01:11:08 2006 -0400
+
+    Use a dict for dep checking to speed things up
+
+commit a05f22a0732327b678457f5a3195df10712526f3
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 16 00:42:43 2006 -0400
+
+    Change findDeps to getPackageDeps, don't use a yum function name
+    Don't return a list of lists, just return a list
+
+commit 7b9ed647a4dc3cd9f794e37393a6836f14cf3104
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 16 00:08:17 2006 -0400
+
+    Put the downloaded packages in an arch specific dir
+
+commit 01ab4f42dd888f29a909c6b99b226239a9fbd319
+Author: jkeating@localhost.localdomain <>
+Date:   Sun Oct 15 23:59:41 2006 -0400
+
+    Do arch stuff better
+    Fix an endless loop
+    clean up some debug output
+
+commit bf4931150e8de4961925fe3352d7117c7a8b76b1
+Author: jkeating@localhost.localdomain <>
+Date:   Sun Oct 15 23:03:45 2006 -0400
+
+    Don't iterate through arch list to get package, search returns list
+    more logging cleanups to add arch
+
+commit 1c88ab914ab3c83b96182aa241ab28fcf81be70d
+Author: jkeating@localhost.localdomain <>
+Date:   Sun Oct 15 17:30:01 2006 -0400
+
+    First stab at doing arch specific setups
+
+commit d3415e63fc361b01319fe85f351f7ce7a6afb2fe
+Author: jkeating@localhost.localdomain <>
+Date:   Sat Oct 14 19:11:46 2006 -0400
+
+    - Use cache dir to cache downloads, hardlink to destdir
+
+commit a41dfc13bdb11da44907afb7d75a299a4af4fc7e
+Author: jkeating@localhost.localdomain <>
+Date:   Sat Oct 14 18:16:50 2006 -0400
+
+    - Add cache dir option
+    - Precreate (with error checking) cache and dest dirs
+    - Use cache dir to cache downloads, hardlink to destdir
+    - Move sys import into main section
+
+commit 2aad14464363d86e5801ab07f03921d75777c25c
+Author: jkeating@localhost.localdomain <>
+Date:   Sat Oct 14 17:43:13 2006 -0400
+
+    Call object variable directly
+
+commit 9fc4b73550983a128190e104658c8fa42973943e
+Author: jkeating@localhost.localdomain <>
+Date:   Thu Oct 12 10:37:34 2006 -0400
+
+    Use internal variables instead of passing stuff around
+
+commit 25ddb954f4e04980df96a020c46a555dde1fd035
+Author: jkeating@localhost.localdomain <>
+Date:   Thu Oct 12 00:39:10 2006 -0400
+
+    Stop hiding behind personal address now (:
+
+commit dfd31089c1daff905ed16cfa72c2b58a36141a24
+Author: jkeating@localhost.localdomain <>
+Date:   Thu Oct 12 00:38:36 2006 -0400
+
+    Much more work on the Gather class.  Actually able to download packages now.
+
+commit 990d16d2cae85ed2a6ee289b32d0cd54d651de4a
+Author: jkeating@localhost.localdomain <>
+Date:   Wed Oct 11 18:53:52 2006 -0400
+
+    start the Gather class, add some class functions
+
+commit bd2635dff40568b36d11cc76d5de90892a786173
+Author: jkeating@localhost.localdomain <>
+Date:   Wed Oct 11 10:46:32 2006 -0400
+
+    Adjust the plan a bit
+
+commit 3c7cdc5133c93648a2561c43f911634e3fd8d5e7
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 10 23:59:50 2006 -0400
+
+    Add some more comments
+
+commit 151917685cf59db438402521cd8bd164aac2d717
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 10 23:52:50 2006 -0400
+
+    A first stab at downloading packages
+
+commit f04c99fcbe430bd0bb3766664181a36d98998c9d
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 10 21:20:59 2006 -0400
+
+    Move the import of optionparse to the testing section
+
+commit 90de6d97a5036831d0581184e44d8dc67696aaf8
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 10 21:19:16 2006 -0400
+
+    Keep functions, but move them into the if main section
+
+commit c057593be6d9c926ff83bcb21f880f6e6067e5b5
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 10 21:05:28 2006 -0400
+
+    Move things into main that are for testing.
+
+commit 35a57f82e28ca244c3bd0b564780d8f6f10d00ca
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 10 18:08:38 2006 -0400
+
+    Add an hacked up option parser
+    Start on a yum object
+
+commit 7307757c2eec0171cc73ba1550641b8212dd4ddd
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 10 14:09:34 2006 -0400
+
+    Initial work, look we can get a list of packages from a comps file
+
+commit 994ed3cfdb05de9984062b36e6ed97dbb509555f
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 10 00:22:37 2006 -0400
+
+    Who wrote this?
+
+commit 8517f23cd42e4a459ad1a92fa75739d40fff4c5f
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 10 00:20:50 2006 -0400
+
+    Add the gather module and a PLAN file for it
+
+commit 7f9d981feb7aef0c8ecb9e4669fd93874b8df21d
+Author: jkeating@localhost.localdomain <>
+Date:   Tue Oct 10 00:00:02 2006 -0400
+
+    Lots more thoughts from Seth and Jesse's brainstorm
+
+commit fe65339c4dee85d598857e23975a9a5f3b202a7d
+Author: jkeating@localhost.localdomain <>
+Date:   Mon Oct 9 15:06:00 2006 -0400
+
+    Add a plan

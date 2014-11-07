@@ -54,9 +54,6 @@ endef
 
 all: $(PKGNAME)-rpm $(PKGNAME)-srpm
 
-Makefile: Makefile.tmpl $(SRC_SRPM)
-	$(CURDIR)/gen-makefile-from-src-rpm.sh $(notdir $(SRC_SRPM))
-
 rpm: $(PKGNAME)-rpm
 
 srpm: $(PKGNAME)-srpm

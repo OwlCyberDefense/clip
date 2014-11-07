@@ -1,0 +1,7 @@
+Pungi
+An anaconda based installation spin tool
+
+This project is aimed at making a public / free tool to spin installation
+trees/isos of Fedora and Fedora based distributions.
+
+See http://hosted.fedoraproject.org/projects/pungi for more information.

@@ -1,0 +1,73 @@
+.\" pungi - anaconda-based installation spin tool
+.TH "pungi" "8" "Fedora Project"  "Jesse Keating" ""
+.SH "NAME"
+pungi \- anaconda-based installation spin tool
+.SH "SYNOPSIS"
+\fBpungi\fP [options]
+.SH "DESCRIPTION"
+.PP
+\fBpungi\fP is a tool to create anaconda-based installation trees or media images given a set of RPM packages.
+
+.SH "OPTIONS"
+\fBpungi\fP is entirely command line oriented.  All input to the program is given by command line options\&.
+.PP
+.IP "\fB\-h, \-\-help\fP"
+Display a help message and then quit\&.
+.IP "\fB\-\-version\fP"
+Display program's version number and then quit\&.
+.IP "\fB\-\-name=string\fP"
+Set the name for your distribution (defaults to "Fedora")\&.
+.IP "\fB\-\-ver=string\fP"
+Set the version for your distribution (defaults to datestamp, used for $releasever in yum)\&.
+.IP "\fB\-\-flavor=string\fP"
+Set the flavor of your spin (optional)\&.
+.IP "\fB\-\-destdir=pathspec\fP"
+Path specifying the destination directory (defaults to current directory)\&.
+.IP "\fB\-\-cachedir=pathspec\fP"
+Package cache directory (defaults to /var/cache/pungi)\&.
+.IP "\fB\-\-bugurl=urlspec\fP"
+The URL for your bug reporting system (defaults to http://bugzilla.redhat.com)\&.
+.IP "\fB\-\-discs=integer\fP"
+The number of discs you want to create (defaults to 1)\&.
+.IP "\fB\-\-nosource\fP"
+Disable gathering of source packages (optional)\&.
+.IP "\fB\-\-sourceisos\fP"
+Create the source media images (other arch runs must be done)\&.
+.IP "\fB\-\-force\fP"
+Force reuse of an existing destination directory (will overwrite files)\&.
+.IP "\fB\-c ksfile, \-\-config=ksfile\fP"
+Path to kickstart configuration file\&.
+.IP "\fB\-\-all\-stages\fP"
+Enable ALL stages\&.
+.IP "\fB\-G\fP"
+Enable the Gather stage\&.
+.IP "\fB\-C\fP"
+Enable the Createrepo stage\&.
+.IP "\fB\-B\fP"
+Enable the BuildInstall stage\&.
+.IP "\fB\-I\fP"
+Enable the CreateISO stage\&.
+
+.PP
+.SH "EXAMPLES"
+.nf
+pungi -c /usr/share/pungi/f8-fedora.ks --destdir=/data/Fedora8 --name Fedora --ver 8
+.fi
+
+.PP
+.SH "SEE ALSO"
+.nf
+http://fedoraproject.org/wiki/Releases/FeatureUsePungi
+https://hosted.fedoraproject.org/projects/pungi/
+.fi
+
+.PP
+.SH "AUTHORS"
+.nf
+See the Authors file included with this program.
+.fi
+
+.PP
+.SH "BUGS"
+No bugs were harmed in the making of this software.
+.fi

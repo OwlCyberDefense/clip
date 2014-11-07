@@ -1,0 +1,62 @@
+Working with Kickstart
+
+* Remove config options for:
+  osdir
+  sourcedir
+  debugdir
+  isodir
+  iso_basename
+  cachedir
+  arch
+  relnotefilere
+  relnotedirre
+  relnotepkgs
+
+DONE ^^
+
+* Move to CLI only:
+  name
+  version
+  destdir
+  flavor (optional)
+  bugurl (optional)
+  discs (optional)
+  nosource (optional/debug)
+
+DONE ^^
+
+* Make the following transitions
+  product_name -> name *DONE*
+  product path == 'Packages/" *DONE*
+  cachedir == /var/cache/pungi *DONE*
+
+DONE ^^
+
+* Get comps data from repos
+  Use ayum.comps.<whatever> to get comps information *DONE*
+  Snag each available comps file, cat them together, use xslt to make clean *DONE*
+  Use this mutant comps for creating repodata in the destdirs. *DONE*
+
+DONE ^^
+
+* From pykickstart
+  manifest -> %packages *DONE*
+  yum-repos -> repo *DONE*
+  isosize -> part iso size <size> (optional) *DONE*
+
+DONE ^^
+
+* Release notes stuff
+  Drop all stuff but GPL, README, GPG keys, potentially README-BURNING-ISOS ?
+
+* From livecd-creator
+  Steal root check *DONE*
+  Use same cli syntax if possible (conf -> config, etc..) *DONE*
+
+DONE ^^
+
+* Figure out how to allow use of $releasever and $basearch *DONE*
+
+DONE ^^
+
+* Profit!
