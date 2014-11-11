@@ -143,12 +143,14 @@ sudo yum install -y $PACKAGES
 
 /usr/bin/sudo /usr/sbin/usermod -aG mock `id -un`
 
-/bin/echo -e "This is embarassing but due to a bug (bz #861281) you must do builds in permissive.\nhttps://bugzilla.redhat.com/show_bug.cgi?id=861281"
-/bin/echo "So this is a heads-up we're going to configure your system to run in permissive mode.  Sorry!"
-/bin/echo "You can bail by pressing ctrl-c or hit enter to continue."
-read user_input
-/usr/bin/sudo /usr/sbin/setenforce 0
-/usr/bin/sudo /bin/sed -i -e 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config
+if [ x"`cat /sys/fs/selinux/enforce`" == "x1" ]; then
+	/bin/echo -e "This is embarassing but due to a bug (bz #861281) you must do builds in permissive.\nhttps://bugzilla.redhat.com/show_bug.cgi?id=861281"
+	/bin/echo "So this is a heads-up we're going to configure your system to run in permissive mode.  Sorry!"
+	/bin/echo "You can bail by pressing ctrl-c or hit enter to continue."
+	read user_input
+	/usr/bin/sudo /usr/sbin/setenforce 0
+	/usr/bin/sudo /bin/sed -i -e 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config
+fi
 
 # Fourth, roll pungi
 if ! rpm -q pungi >/dev/null; then
