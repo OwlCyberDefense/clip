@@ -8,8 +8,7 @@ Summary:        Distribution compose tool
 Group:          Development/Tools
 License:        GPLv2
 URL:            https://fedorahosted.org/pungi
-Source0:        https://fedorahosted.org/pungi/attachment/wiki/%{version}/%{name}-%{version}.tar.bz2
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Source0:        %{_sourcedir}/%{name}-%{version}.tar.gz
 Requires:       lorax, yum => 3.2.19, repoview, createrepo >= 0.4.11
 BuildRequires:  python-devel
 
@@ -49,7 +48,6 @@ rm -rf $RPM_BUILD_ROOT
   %{python_sitelib}/%{name}-%{version}-py?.?.egg-info
 %endif
 %{_bindir}/pungi
-%{_bindir}/pkgorder
 %{_datadir}/pungi
 %{_mandir}/man8/pungi.8.gz
 /var/cache/pungi
