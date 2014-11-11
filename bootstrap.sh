@@ -46,11 +46,8 @@ Enter a fully qualified path for the [ $originalname ] repo [ default: $original
 complicated.  This script will automate some of those tasks.  Keep in mind that 
 this script isn't exhaustive; depending on a variety of factors you may have to
 install some additional packages.\n\nYour user *must* have sudo access for any 
-of this to work.
+of this to work.\n\n"
 
-If you are using RHEL enter 'r'.
-If you are using CentOS 'c'."
-read distro
 /bin/echo -e "CLIP uses yum repositories for building packages and generting ISOs.
 These must be directories of packages, not RHN channels.  E.g. a directory with
 a bunch of packages and a repodata/ sub-directory.  If you do not have yum 
