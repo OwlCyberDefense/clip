@@ -1,8 +1,8 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
-Name:           %{pkgname}
-Version:        %{version}
-Release:        %{release}
+Name:           pungi
+Version:        2.13
+Release:        3.el7
 Summary:        Distribution compose tool
 
 Group:          Development/Tools
