@@ -150,7 +150,10 @@ if [ x"`cat /sys/fs/selinux/enforce`" == "x1" ]; then
 fi
 
 # Fourth, roll pungi
-if ! rpm -q pungi >/dev/null; then
+LATEST_PUNGI=pungi-2.13-3.el7
+/usr/bin/rpm -q pungi | /usr/bin/grep -q $LATEST_PUNGI && LATEST_PUNGI_INSTALLED=1 || LATEST_PUNGI_INSTALLED=0
+if [ $LATEST_PUNGI_INSTALLED -eq 0 ]; then
+	echo "need to roll pungi"
 	/usr/bin/make pungi-rpm
 	pushd . > /dev/null  
 	cd repos/clip-repo
