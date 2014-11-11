@@ -312,7 +312,7 @@ plymouth-set-default-theme details --rebuild-initrd &> /dev/null
 ###### START - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
 # Set permissive mode
-export POLNAME=`sestatus |awk '/Policy from config file:/ { print $5; }'`
+export POLNAME=`sestatus |awk '/Loaded policy name:/ { print $4; }'`
 if [ x"$CONFIG_BUILD_ENFORCING_MODE" != "xy" ]; then
     echo "Setting permissive mode..."
     echo -e "#THIS IS A DEBUG BUILD HENCE SELINUX IS IN PERMISSIVE MODE\nSELINUX=permissive\nSELINUXTYPE=$POLNAME\n" > /etc/selinux/config
