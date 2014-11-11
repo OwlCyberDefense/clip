@@ -68,7 +68,7 @@ iso: $(DEPS) $(ADDTL_DEPS) setup-inst-ks
 	$(VERBOSE)cd $(BUILD_DIR); sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(INST_KS)"
 	@echo "Fixing the boot menu..."
 	$(VERBOSE)sudo sed -i "s/^label linux$$/label $(NAME)/" $(ISOLINUX_CFG)
-	$(VERBOSE)sudo sed -i "s/append initrd=initrd.img/append initrd=initrd.img ks=cdrom:\/$(notdir $(INST_KS))/" $(ISOLINUX_CFG)
+	$(VERBOSE)sudo sed -i "s/append initrd=initrd.img/append initrd=initrd.img ks=cdrom:\/$(notdir $(INST_KS)) text/" $(ISOLINUX_CFG)
 	$(VERBOSE)sudo sed -i "s/or upgrade an existing system/$(NAME)/" $(ISOLINUX_CFG)
 	@echo "Building ISO with pungi..."
 	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
