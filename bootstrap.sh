@@ -86,6 +86,7 @@ if [ ! -d $optrepopath ]; then
 	/bin/echo "Optional channel repo directory: $optrepopath does not exist. Creating the directory."
 	/bin/mkdir -p $optrepopath
 fi
+/bin/echo "Checking if RHEL optional repo is enabled..."
 sudo /bin/yum repolist enabled | /usr/bin/grep -q rhel-7-server-optional-rpms && OPT_SUBSCRIBED=1 || OPT_SUBSCRIBED=0
 if [ $OPT_SUBSCRIBED -eq 0 ]; then
 	/bin/echo "RHEL optional channel is disabled...enabling"
