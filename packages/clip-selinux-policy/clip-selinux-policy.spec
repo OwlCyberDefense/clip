@@ -70,6 +70,7 @@ rm -rf %{buildroot}%{_sysconfdir}/selinux/%1/booleans \
 touch %{buildroot}%{_sysconfdir}/selinux/%1/seusers \
 touch %{buildroot}%{_sysconfdir}/selinux/%1/policy/policy.%{POLICYVER} \
 touch %{buildroot}%{_sysconfdir}/selinux/%1/contexts/files/file_contexts \
+touch %{buildroot}%{_sysconfdir}/selinux/%1/contexts/files/file_contexts.local \
 touch %{buildroot}%{_sysconfdir}/selinux/%1/contexts/files/file_contexts.homedirs \
 install -m0644 config/setrans.conf %{buildroot}%{_sysconfdir}/selinux/%1/setrans.conf \
 find %{buildroot}/%{_usr}/share/selinux/%1/ -type f |xargs -P `/usr/bin/nproc` -n `/usr/bin/nproc`  bzip2 \
@@ -107,6 +108,7 @@ awk '$1 !~ "/^#/" && $2 == "=" && $3 == "module" { printf "%%s.pp.bz2 ", $1 }' .
 %dir %{_sysconfdir}/selinux/%1/contexts/files \
 %ghost %{_sysconfdir}/selinux/%1/contexts/files/file_contexts \
 %ghost %{_sysconfdir}/selinux/%1/contexts/files/file_contexts.homedirs \
+%config(noreplace) %{_sysconfdir}/selinux/%1/contexts/files/file_contexts.local \
 %config %{_sysconfdir}/selinux/%1/contexts/files/media \
 %dir %{_sysconfdir}/selinux/%1/contexts/users \
 %config(noreplace) %{_sysconfdir}/selinux/%1/contexts/users/root \
