@@ -276,13 +276,13 @@ fi
 chage -d 0 "$USERNAME"
 
 # Remove sshd if it in a production build
-# If not, just chkconfig it off
+# If not, use systemctl disable
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
     echo "Removing sshd from the system"
     /bin/rpm -e openssh openssh-clients openssh-server
 else
     echo "Turning sshd off"
-    /sbin/chkconfig --level 0123456 sshd off
+    systemctl disable sshd.service
 fi
 
 # Add the user to sudoers and setup an SELinux role/type transition.
