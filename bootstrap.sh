@@ -42,6 +42,9 @@ Enter a fully qualified path for the [ $originalname ] repo [ default: $original
 
 }
 
+PACKAGES="mock pigz createrepo repoview rpm-build lorax make"
+/usr/bin/sudo /usr/bin/yum install -y $PACKAGES
+
 /bin/echo -e "Creating an environment for building software and ISOs can be a little 
 complicated.  This script will automate some of those tasks.  Keep in mind that 
 this script isn't exhaustive; depending on a variety of factors you may have to
@@ -135,9 +138,6 @@ host.  This is usually the result of using RHEL without a subscription to RHN. T
 5. Refer to the same path in the CONFIG_REPOS file.
 "
 fi
-
-PACKAGES="mock pigz createrepo repoview rpm-build lorax make"
-sudo yum install -y $PACKAGES
 
 /usr/bin/sudo /usr/sbin/usermod -aG mock `id -un`
 
