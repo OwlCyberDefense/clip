@@ -4,6 +4,68 @@
 #
 # Authors: Spencer Shimko <spencer@quarksecurity.com>
 
+check_and_create_repo_dir ()
+{
+	repo_name=$1
+	repo_path=`sed -rn "s/^$repo_name = (.*)/\\1/p" CONFIG_REPOS`
+
+	if [ ! -d $repo_path ]; then
+		/bin/echo "$repo_name repo directory: $repo_path does not exist. Creating the directory."
+		/bin/mkdir -p $repo_path
+	fi
+
+	/bin/echo $repo_path
+}
+
+rsync_and_createrepo ()
+{
+	repo_path=$1
+	usage="y - update the directory with RPMs from a provided path\n\
+q - abort the bootstrap process\n\
+? - print help\n"
+
+	if [ -d $repo_path/repodata ]; then
+		return
+	fi
+
+	/bin/echo "Repodata is missing in $repo_path. Running createrepo."
+
+	while :; do
+		/bin/echo "Would you like to update your RPM directory with the latest RPMs [y, q, ?]: "
+		read user_input
+		if [ x"${user_input,,}" == x"y" ]; then
+			break
+		elif [ x"${user_input,,}" == x"q" ]; then
+			exit
+		elif [ x"${user_input,,}" == x"?" ]; then
+			/bin/echo -e $usage
+		else
+			/bin/echo -e $usage
+		fi
+	done
+
+	while :; do
+		/bin/echo -e "Please provide a full path where to rsync RPMs from.\n\
+If you enter 'rhel', we will try to find, mount, and copy RPMs from your CD/DVD drive\n"
+		read user_input
+		[ x"$user_input" == "x" ] && break
+
+		if [ x"${user_input,,}" == x"rhel" ]; then
+			tmpdir=`/bin/mktemp -d`
+			sudo /usr/bin/mount /dev/sr0 $tmpdir
+			/usr/bin/rsync --progress $tmpdir/Packages/* $repo_path/
+			sudo /usr/bin/umount $tmpdir
+			/bin/rm -rf $tmpdir
+		else
+			/usr/bin/rsync --progress $user_input $repo_path/
+		fi
+
+		break
+	done
+
+	/usr/bin/createrepo -d $repo_path/
+}
+
 prompt_to_enter_repo_path ()
 {
     local originalname=${1-}
@@ -41,6 +103,9 @@ Enter a fully qualified path for the [ $originalname ] repo [ default: $original
     fi
 
 }
+
+/bin/echo "Checking if registered with RHN. Will attempt to register if we are not current."
+/usr/bin/sudo /usr/bin/subscription-manager status | grep -q "Current" || /usr/bin/sudo /usr/bin/subscription-manager --auto-attach register
 
 PACKAGES="mock pigz createrepo repoview rpm-build lorax make"
 /usr/bin/sudo /usr/bin/yum install -y $PACKAGES
@@ -81,27 +146,25 @@ Enter a fully qualified path for this yum repo.  Just leave empty if you are don
     /bin/echo -e "# INSERTED BY BOOTSTRAP.SH\n$name = $path" >> CONFIG_REPOS
 done
 
-# refresh the path var for the opt repo before checking for subscription to optional channel
-optrepopath=`sed -rn 's/^opt = (.*)/\1/p' CONFIG_REPOS`
-# subscribe to the rhel optional channel repo, create a local repo, and pull in required packages
-OPT_PACKAGES="anaconda-dracut"
-if [ ! -d $optrepopath ]; then
-	/bin/echo "Optional channel repo directory: $optrepopath does not exist. Creating the directory."
-	/bin/mkdir -p $optrepopath
-fi
+rhelrepopath=$(check_and_create_repo_dir "rhel")
+optrepopath=$(check_and_create_repo_dir "opt")
+
+rsync_and_createrepo $rhelrepopath
+
 /bin/echo "Checking if RHEL optional repo is enabled..."
 sudo /bin/yum repolist enabled | /usr/bin/grep -q rhel-7-server-optional-rpms && OPT_SUBSCRIBED=1 || OPT_SUBSCRIBED=0
 if [ $OPT_SUBSCRIBED -eq 0 ]; then
 	/bin/echo "RHEL optional channel is disabled...enabling"
-	sudo /bin/subscription-manager repos --enable=rhel-7-server-optional-rpms
+	sudo /usr/bin/subscription-manager repos --enable=rhel-7-server-optional-rpms
 else
 	/bin/echo "RHEL optional channel is already enabled"
 fi
 # download the required rpms from the rhel optional channel
+OPT_PACKAGES="anaconda-dracut"
 sudo /bin/yumdownloader --destdir $optrepopath $OPT_PACKAGES
 if [ ! -d $optrepopath/repodata ]; then
-	/bin/echo "Repo dir in place but repo not initialized - run createrepo!!!"
-	createrepo -d $optrepopath
+	/bin/echo "Repodata is missing in $optrepopath. Running createrepo."
+	/usr/bin/createrepo -d $optrepopath
 fi
 
 arch=`rpm --eval %_host_cpu`
