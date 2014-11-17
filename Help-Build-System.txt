@@ -84,7 +84,7 @@ application or library, then packages/<PACKAGE NAME> will still contain a
 Makefile and spec file, and packages/<PACKAGE NAME>/<PACKAGE NAME> will
 contain the sources and application-specific build system (eg the one that
 typically has a "make all" and "make install" target).  For more information
-on this type of package refer to packages/examples/sources.
+on this type of package refer to packages/examples/source.
 
 3. Once the package has been added to the packages/ directory you must update
 the PACKAGES variable in the top-level CONFIG_BUILD file to ensure the package is 
