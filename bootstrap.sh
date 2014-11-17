@@ -176,12 +176,9 @@ else
 	/bin/echo "RHEL optional channel is already enabled"
 fi
 # download the required rpms from the rhel optional channel
-OPT_PACKAGES="anaconda-dracut"
+OPT_PACKAGES="anaconda-dracut at-spi tigervnc-server-module bitmap-fangsongti-fonts"
 sudo /bin/yumdownloader --destdir $optrepopath $OPT_PACKAGES
-if [ ! -d $optrepopath/repodata ]; then
-	/bin/echo "Repodata is missing in $optrepopath. Running createrepo."
-	/usr/bin/createrepo -d $optrepopath
-fi
+/usr/bin/createrepo -d $optrepopath
 
 arch=`rpm --eval %_host_cpu`
 # TODO Using the yum variable $releasever evaluates to 7Server which is incorrect.
