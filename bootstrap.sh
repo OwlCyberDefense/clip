@@ -104,10 +104,26 @@ Enter a fully qualified path for the [ $originalname ] repo [ default: $original
 
 }
 
+check_and_build_rpm ()
+{
+	name=$1
+	version=$2
+
+	/usr/bin/rpm -q $name | /usr/bin/grep -q $version && LATEST_INSTALLED=1 || LATEST_INSTALLED=0
+	if [ $LATEST_INSTALLED -eq 0 ]; then
+		/bin/echo "need to roll $name"
+		/usr/bin/make $name-rpm
+		pushd . > /dev/null
+		cd repos/clip-repo
+		/usr/bin/sudo /usr/bin/yum localinstall -y $name*
+		popd > /dev/null
+	fi
+}
+
 /bin/echo "Checking if registered with RHN. Will attempt to register if we are not current."
 /usr/bin/sudo /usr/bin/subscription-manager status | grep -q "Current" || /usr/bin/sudo /usr/bin/subscription-manager --auto-attach register
 
-PACKAGES="mock pigz createrepo repoview rpm-build lorax make"
+PACKAGES="mock pigz createrepo repoview rpm-build make"
 /usr/bin/sudo /usr/bin/yum install -y $PACKAGES
 
 /bin/echo -e "Creating an environment for building software and ISOs can be a little 
@@ -213,17 +229,11 @@ if [ x"`cat /sys/fs/selinux/enforce`" == "x1" ]; then
 	/usr/bin/sudo /bin/sed -i -e 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config
 fi
 
-# Fourth, roll pungi
-LATEST_PUNGI=pungi-2.13-3.el7
-/usr/bin/rpm -q pungi | /usr/bin/grep -q $LATEST_PUNGI && LATEST_PUNGI_INSTALLED=1 || LATEST_PUNGI_INSTALLED=0
-if [ $LATEST_PUNGI_INSTALLED -eq 0 ]; then
-	echo "need to roll pungi"
-	/usr/bin/make pungi-rpm
-	pushd . > /dev/null  
-	cd repos/clip-repo
-	/usr/bin/sudo /usr/bin/yum localinstall -y pungi*
-	popd > /dev/null
-fi
+# Roll lorax
+check_and_build_rpm "lorax" "lorax-19.6.45-1.el7"
+
+# Roll pungi
+check_and_build_rpm "pungi" "pungi-2.13-3.el7"
 
 if ! rpm -q "livecd-tools-13.4.4-99.el7.noarch" > /dev/null; then 
 	if rpm -q "livecd-tools" > /dev/null; then
