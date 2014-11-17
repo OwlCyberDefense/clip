@@ -27,8 +27,6 @@ PUNGI_OS_DIR := $(BUILD_DIR)/$(ISO_VERSION)/$(TARGET_ARCH)/os/
 PUNGI_ISO_DIR := $(BUILD_DIR)/$(ISO_VERSION)/$(TARGET_ARCH)/iso/
 
 PY_LIB := $(shell python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
-LORAX_TB := $(PY_LIB)/pylorax/treebuilder.py
-TB_PATCH := $(SUPPORT_DIR)/treebuilder-kver.patch
 
 PUNGI ?= /usr/bin/pungi
 PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(ISO_VERSION)" --name="$(NAME)" --nosource --force
@@ -61,10 +59,6 @@ all: iso live-iso setup-ks
 iso: $(DEPS) $(ADDTL_DEPS) setup-inst-ks
 	@echo "Gathering things with pungi..."
 	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
-	@echo "Pungi needs a patched version of Lorax's treebuilder class."
-	$(VERBOSE)cd $(BUILD_DIR); sudo patch -N -p1 $(LORAX_TB) < $(TB_PATCH) || \
-                                   sudo patch -R -p1 $(LORAX_TB) < $(TB_PATCH) ; \
-                                   sudo patch -N -p1 $(LORAX_TB) < $(TB_PATCH) || echo "Patched lorax"
 	$(VERBOSE)cd $(BUILD_DIR); sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(INST_KS)"
 	@echo "Fixing the boot menu..."
 	$(VERBOSE)sudo sed -i "s/^label linux$$/label $(NAME)/" $(ISOLINUX_CFG)
