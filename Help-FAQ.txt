@@ -266,35 +266,14 @@ CLIP for RHEL 6 Frequently Asked Questions
     RPM or yum repo.  In that way you can use your existing build system/SCM to
     generate the package(s).
 
-15. I get errors when running semanage to manipulate users and login mappings.
-    What is the deal?
-    The following error message is emitted when running:
-    # semanage login -a -s foo_u foo
-    libsemanage.dbase_llist_query: could not query record value
-    /usr/sbin/semanage: Could not query user for foo
-
-    It looks like a bug was introduced in:
-       policycoreutils-python-2.0.83-19.21.el6_2.x86_64.rpm
-
-    It works in version:
-       policycoreutils-python-2.0.83-19.18.el6_2.x86_64.rpm
-
-    This bug led to the introduction of a conf/pkglist.blacklist file.  Adding
-    packages to that file will prevent them from being using when generating
-    yum repos.  We've already added the problematic packages above to that
-    list.
-    
-    A bug has already been filed with Red Hat.  When this issue is resolved
-    the FAQ will be updated.
-
-16. How do I get the dependencies for the host?
+15. How do I get the dependencies for the host?
   RHEL:
        sudo rhn-channel --add --channel=rhel-x86_64-server-optional-6.3.z
        sudo yum install rpm-build mock createrepo repoview
   CentOS:
        sudo yum install rpm-build mock createrepo repoview
 
-17. I am getting warnings at install time stating "some of the packages you
+16. I am getting warnings at install time stating "some of the packages you
 have selected for install are missing dependencies."  What's up?
    The tools don't do a full dep check at build time.  That is because you could
    be pointing to additional yum repos at install time via the command-line
