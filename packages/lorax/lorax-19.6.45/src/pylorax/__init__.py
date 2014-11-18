@@ -342,7 +342,11 @@ class Lorax(BaseLoraxClass):
 def get_buildarch(ybo):
     # get architecture of the available anaconda package
     buildarch = None
-    for anaconda in ybo.doPackageLists(patterns=["anaconda"]).available:
+    lists = ybo.doPackageLists(patterns=["anaconda"])
+    l = lists.available
+    if len(l) == 0:
+        l = lists.reinstall_available
+    for anaconda in l:
         if anaconda.arch != "src":
             buildarch = anaconda.arch
             break
