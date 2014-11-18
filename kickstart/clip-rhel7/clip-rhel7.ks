@@ -300,12 +300,9 @@ usermod -L root
 # Disable all that GUI stuff during boot so we can actually see what is going on during boot.
 # The first users of a CLIP system will be devs. Lets make things a little easier on them.
 # by getting rid of the framebuffer effects, rhgb, and quiet.
-grubby --update-kernel=ALL --remove-args="rhgb quiet"
-sed -i -e 's/^\(splashimage.*\)/#\1/' -e 's/^\(hiddenmenu.*\)/#\1/' /boot/grub/grub.conf
+/usr/sbin/grubby --update-kernel=ALL --remove-args="rhgb quiet"
 # This is ugly but when plymouth re-rolls the initrd it creates a new entry in grub.conf that is redundant.
 # Actually rather benign but may impact developers using grubby who think there is only one kernel to work with.
-title="$(sed 's/ release.*$//' < /etc/redhat-release) ($(uname -r))"
-sed -i -e "s;title.*;title $title;" /boot/grub/grub.conf
 echo "Modifying splash screen with plymouth..."
 plymouth-set-default-theme details --rebuild-initrd &> /dev/null
 
@@ -320,8 +317,8 @@ if [ x"$CONFIG_BUILD_ENFORCING_MODE" != "xy" ]; then
 	# This line is used to make policy development easier.  It disables the "setfiles" check used by 
 	# semodule/semanage that prevents transactions containing invalid and dupe fc entries from rolling forward.
 	echo -e "module-store = direct\n[setfiles]\npath=/bin/true\n[end]\n" > /etc/selinux/semanage.conf
-	grubby --update-kernel=ALL --remove-args=enforcing
-	grubby --update-kernel=ALL --args=enforcing=0
+	/usr/sbin/grubby --update-kernel=ALL --remove-args=enforcing
+	/usr/sbin/grubby --update-kernel=ALL --args=enforcing=0
 fi
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 echo "Done with post install scripts..."
