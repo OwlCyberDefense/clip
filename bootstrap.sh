@@ -11,10 +11,9 @@ check_and_create_repo_dir ()
 
 	if [ ! -d $repo_path ]; then
 		/bin/echo "$repo_name repo directory: $repo_path does not exist. Creating the directory."
-		/bin/mkdir -p $repo_path
+		/usr/bin/sudo /bin/mkdir -p $repo_path
+		/usr/bin/sudo /usr/bin/chown $USER:$USER $repo_path
 	fi
-
-	/bin/echo $repo_path
 }
 
 rsync_and_createrepo ()
@@ -45,16 +44,17 @@ q - abort the bootstrap process\n\
 	done
 
 	while :; do
-		/bin/echo -e "Please provide a full path where to rsync RPMs from.\n\
-If you enter 'rhel', we will try to find, mount, and copy RPMs from your CD/DVD drive\n"
+		/bin/echo -e "Please provide a full path where to rsync RPMs from.\n
+If you enter 'rhel', we will try to find, mount, and copy RPMs from your CD/DVD drive\n
+Please ensure your RHEL DVD is inserted into the disk drive if you select 'rhel'\n"
 		read user_input
 		[ x"$user_input" == "x" ] && break
 
 		if [ x"${user_input,,}" == x"rhel" ]; then
 			tmpdir=`/bin/mktemp -d`
-			sudo /usr/bin/mount /dev/sr0 $tmpdir
+			/usr/bin/sudo /usr/bin/mount /dev/sr0 $tmpdir
 			/usr/bin/rsync --progress $tmpdir/Packages/* $repo_path/
-			sudo /usr/bin/umount $tmpdir
+			/usr/bin/sudo /usr/bin/umount $tmpdir
 			/bin/rm -rf $tmpdir
 		else
 			/usr/bin/rsync --progress $user_input $repo_path/
@@ -120,12 +120,6 @@ check_and_build_rpm ()
 	fi
 }
 
-/bin/echo "Checking if registered with RHN. Will attempt to register if we are not current."
-/usr/bin/sudo /usr/bin/subscription-manager status | grep -q "Current" || /usr/bin/sudo /usr/bin/subscription-manager --auto-attach register
-
-PACKAGES="mock pigz createrepo repoview rpm-build make"
-/usr/bin/sudo /usr/bin/yum install -y $PACKAGES
-
 /bin/echo -e "Creating an environment for building software and ISOs can be a little 
 complicated.  This script will automate some of those tasks.  Keep in mind that 
 this script isn't exhaustive; depending on a variety of factors you may have to
@@ -136,6 +130,41 @@ of this to work.\n\n"
 These must be directories of packages, not RHN channels.  E.g. a directory with
 a bunch of packages and a repodata/ sub-directory.  If you do not have yum 
 repositories like this available CLIP will not work!  Please see Help-FAQ.txt!\n\n"
+
+/bin/echo "Checking if $USER is in the sudoers file"
+/usr/bin/sudo -l -U $USER | grep -q "User $USER is not allowed to run sudo" && /usr/sbin/sudoers adduser $USER sudo
+
+/bin/echo "Checking if registered with RHN. We will attempt to register if we are not current. Please enter your RHN credentials if prompted."
+/usr/bin/sudo /usr/bin/subscription-manager status | grep -q "Current" || /usr/bin/sudo /usr/bin/subscription-manager --auto-attach register
+
+
+arch=`rpm --eval %_host_cpu`
+# TODO Using the yum variable $releasever evaluates to 7Server which is incorrect.
+# For now, this variable needs to be incremented during each major RHEL release until we
+# find a better way to get the release version to set for EPEL
+releasever="7"
+
+/bin/echo "Checking if epel is installed"
+
+# always have the latest epel rpm
+if ! rpm -q epel-release > /dev/null; then
+	/bin/echo "***epel rpm not installed - installing and enabling epel"
+	# if the epel.repo file does not exist write it and enable the repo
+	if [ ! -f /etc/yum.repos.d/epel.repo ]; then
+		/bin/echo "
+[epel]
+name=Bootstrap EPEL
+mirrorlist=https://mirrors.fedoraproject.org/mirrorlist?repo=epel-$releasever&arch=$arch
+failovermethod=priority
+enabled=1
+gpgcheck=0
+		" | /usr/bin/sudo tee --append /etc/yum.repos.d/epel.repo
+		/usr/bin/sudo yum --enablerepo=epel -y install epel-release
+	fi
+fi
+
+PACKAGES="mock pigz createrepo repoview rpm-build make python-kid"
+/usr/bin/sudo /usr/bin/yum install -y $PACKAGES
 
 # get the name/path for any existing yum repos from CONFIG_REPO
 rhelreponame=rhel
@@ -162,58 +191,27 @@ Enter a fully qualified path for this yum repo.  Just leave empty if you are don
     /bin/echo -e "# INSERTED BY BOOTSTRAP.SH\n$name = $path" >> CONFIG_REPOS
 done
 
-rhelrepopath=$(check_and_create_repo_dir "rhel")
-optrepopath=$(check_and_create_repo_dir "opt")
+check_and_create_repo_dir "rhel"
+check_and_create_repo_dir "opt"
+
+# Refresh repo variables
+rhelrepopath=`/bin/sed -rn 's/^rhel = (.*)/\1/p' CONFIG_REPOS`
+optrepopath=`/bin/sed -rn 's/^opt = (.*)/\1/p' CONFIG_REPOS`
 
 rsync_and_createrepo $rhelrepopath
 
 /bin/echo "Checking if RHEL optional repo is enabled..."
-sudo /bin/yum repolist enabled | /usr/bin/grep -q rhel-7-server-optional-rpms && OPT_SUBSCRIBED=1 || OPT_SUBSCRIBED=0
+/usr/bin/sudo /bin/yum repolist enabled | /usr/bin/grep -q rhel-7-server-optional-rpms && OPT_SUBSCRIBED=1 || OPT_SUBSCRIBED=0
 if [ $OPT_SUBSCRIBED -eq 0 ]; then
 	/bin/echo "RHEL optional channel is disabled...enabling"
-	sudo /usr/bin/subscription-manager repos --enable=rhel-7-server-optional-rpms
+	/usr/bin/sudo /usr/bin/subscription-manager repos --enable=rhel-7-server-optional-rpms
 else
 	/bin/echo "RHEL optional channel is already enabled"
 fi
 # download the required rpms from the rhel optional channel
 OPT_PACKAGES="anaconda-dracut at-spi tigervnc-server-module bitmap-fangsongti-fonts"
-sudo /bin/yumdownloader --destdir $optrepopath $OPT_PACKAGES
+/usr/bin/sudo /bin/yumdownloader --destdir $optrepopath $OPT_PACKAGES
 /usr/bin/createrepo -d $optrepopath
-
-arch=`rpm --eval %_host_cpu`
-# TODO Using the yum variable $releasever evaluates to 7Server which is incorrect.
-# For now, this variable needs to be incremented during each major RHEL release until we
-# find a better way to get the release version to set for EPEL
-releasever="7"
-
-# always have the latest epel rpm
-if ! rpm -q epel-release > /dev/null; then
-	/bin/echo "***epel rpm not installed - install and enable repo"
-	# if the epel.repo file does not exist write it and enable the repo
-	if [ ! -f /etc/yum.repos.d/epel.repo ]; then
-		/bin/echo "
-[epel]
-name=Bootstrap EPEL
-mirrorlist=https://mirrors.fedoraproject.org/mirrorlist?repo=epel-$releasever&arch=$arch
-failovermethod=priority
-enabled=1
-gpgcheck=0
-		" | sudo tee --append /etc/yum.repos.d/epel.repo
-		sudo yum --enablerepo=epel -y install epel-release
-	fi
-fi
-
-/bin/rpm -q "python-kid" >/dev/null || /usr/bin/sudo /usr/bin/yum install -y python-kid || if [ "$?" != "0" ]; then
-	/bin/echo "WARNING: we couldn't find a package we need to install on the build 
-host.  This is usually the result of using RHEL without a subscription to RHN. Try this:
-1. Grab a CentOS ISO.
-2. Mount it.
-3. Add it as a yum repo:
-        http://docs.oracle.com/cd/E37670_01/E37355/html/ol_create_repo.html
-4. Re-run this script and pick CentOS.
-5. Refer to the same path in the CONFIG_REPOS file.
-"
-fi
 
 /usr/bin/sudo /usr/sbin/usermod -aG mock `id -un`
 
