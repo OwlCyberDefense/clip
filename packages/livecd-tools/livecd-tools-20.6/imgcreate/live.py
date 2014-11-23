@@ -117,10 +117,7 @@ class LiveImageCreatorBase(LoopImageCreator):
 
         """
         r = kickstart.get_kernel_args(self.ks)
-        if os.path.exists(self._instroot + "/usr/bin/rhgb"):
-            r += " rhgb"
-        if os.path.exists(self._instroot + "/usr/bin/plymouth"):
-            r += " rhgb"
+        # Removed rhgb because it is unreliable across a variety of video cards
         return r
 
     def _get_mkisofs_options(self, isodir):
@@ -265,7 +262,7 @@ class LiveImageCreatorBase(LoopImageCreator):
         return "vfat msdos isofs ext4 xfs btrfs";
 
     def __extra_drivers(self):
-        retval = "sr_mod sd_mod ide-cd cdrom "
+        retval = "sr_mod sd_mod ide-cd cdrom ata_generic ata_piix sg pata_acpi dm_mod dm_log dm_region_hash dm_mirror mptbase mptscsih mptspi "
         for module in self.__modules:
             if module == "=usb":
                 retval = retval + "ehci_hcd uhci_hcd ohci_hcd "
@@ -305,7 +302,7 @@ class LiveImageCreatorBase(LoopImageCreator):
         f = open(path, "a")
         f.write('filesystems+="' + self.__extra_filesystems() + ' "\n')
         f.write('drivers+="' + self.__extra_drivers() + ' "\n')
-        f.write('add_dracutmodules+=" dmsquash-live pollcdrom "\n')
+        f.write('add_dracutmodules+=" dmsquash-live pollcdrom clip "\n')
         f.write('hostonly="no"\n')
         f.write('dracut_rescue_image="no"\n')
         f.close()
@@ -682,12 +679,6 @@ menu separator
             cfg += b
             if c:
                 cfg += c
-
-        cfg += self.__get_memtest_stanza(isodir)
-        cfg += "menu separator\n"
-
-        cfg += self.__get_local_stanza(isodir)
-        cfg += self._get_isolinux_stanzas(isodir)
 
         cfg += """menu separator
 label returntomain

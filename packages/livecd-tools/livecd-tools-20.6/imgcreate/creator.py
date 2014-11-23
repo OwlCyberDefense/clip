@@ -460,7 +460,7 @@ class ImageCreator(object):
 
         if kickstart.selinux_enabled(self.ks):
             # label the fs like it is a root before the bind mounting
-            arglist = ["/sbin/setfiles", "-F", "-r", self._instroot, selinux.selinux_file_context_path(), self._instroot]
+            arglist = ["/sbin/setfiles", "-F", "-r", self._instroot, "/etc/selinux/clip/contexts/files/file_contexts", self._instroot]
             subprocess.call(arglist, close_fds = True)
             # these dumb things don't get magically fixed, so make the user generic
         # if selinux exists on the host we need to lie to the chroot

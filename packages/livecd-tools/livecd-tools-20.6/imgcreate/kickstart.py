@@ -450,7 +450,7 @@ class SelinuxConfig(KickstartConfig):
         if not os.path.exists(self.path("/sbin/setfiles")):
             return
 
-        self.call(["/sbin/setfiles", "-p", "-e", "/proc", "-e", "/sys", "-e", "/dev", selinux.selinux_file_context_path(), "/"])
+        self.call(["/sbin/setfiles", "-F", "-p", "-e", "/proc", "-e", "/sys", "-e", "/dev", "/etc/selinux/clip/contexts/files/file_contexts", "/"])
 
     def apply(self, ksselinux):
         selinux_config = "/etc/selinux/config"
@@ -515,7 +515,8 @@ def get_timeout(ks, default = None):
         return default
     return int(ks.handler.bootloader.timeout)
 
-def get_kernel_args(ks, default = "ro rd.live.image quiet"):
+# Drop quiet since we don't want noisy boot info
+def get_kernel_args(ks, default = "ro rd.live.image live_ram"):
     if not hasattr(ks.handler.bootloader, "appendLine"):
         return default
     if ks.handler.bootloader.appendLine is None:
