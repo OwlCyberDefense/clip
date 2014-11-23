@@ -2,7 +2,8 @@
 # Copyright (C) 2013 Cubic Corporation
 #
 # Authors: Spencer Shimko <sshimko@tresys.com>
-#          Spencer Shimko <spencer@quarksecurity.com>
+# Authors: Spencer Shimko <spencer@quarksecurity.com>
+# Authors: Yuli Khodorkovskiy <ykhodorkovskiy@tresys.com>
 #
 
 # The name of the package
@@ -10,100 +11,98 @@ PKGNAME := livecd-tools
 
 # This is the version number of the RPM that will be
 # generated.  Typically you bump this for delivery.
-VERSION := 13.4.4
+VERSION := 20.6
 
 # Bump this if creating multiple releases from the same
-# version.
-RELEASE := 99.el7
+# version (think about this... why are you doing this?)
+RELEASE := 1.el7
 
-# The name of the Vendor
-VENDOR := null
+PKG := $(PKGNAME)-$(VERSION)
 
-# The name of the Packager
-PACKAGER ?= null
+# snag the architecture, hard code an arch if cross-compiling or going noarch
+ARCH := x86_64
+TARBALL = $(RPM_TOPDIR)/SOURCES/$(PKG).tar.bz2
 
-# Snag the architecture.  Assume host arch.
-# Hard code an arch if cross-compiling or going noarch.
-ARCH := noarch
+RPM_DEPS := tarball $(RPM_SPEC) Makefile
 
-SOURCES := $(PKGNAME)-$(VERSION).tar.bz2 *.patch
-
-# Spec file name
-RPM_SPEC := $(PKGNAME).spec
+PACKAGER := Tresys Technology
 
 ####################################################
 ## things below this line should rarely change
 ROOT_DIR ?= $(CURDIR)
 OUTPUT_DIR ?= $(ROOT_DIR)
-SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
-
-# exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
-RPM_DEPS := $(SOURCES) $(RPM_SPEC) Makefile
-
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
 RPM_TOPDIR ?= $(RPM_TMPDIR)/src/redhat
 RPM_BUILDROOT ?= $(RPM_TMPDIR)/rpm-buildroot
+SRPM_OUTPUT_DIR ?= $(ROOT_DIR)
+
+RPM := $(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
+SRPM := $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
+
+RPM_SPEC := $(CURDIR)/$(PKGNAME).spec
 
 MKDIR = test -d $(1) || mkdir -p $(1)
 
-RPMBUILD_ARGS := --define '_topdir $(RPM_TOPDIR)'  --define '_tmppath $(RPM_TMPDIR)'
-
-RPMQ_DEFS := --query --define 'pkgname $(PKGNAME)' --define '_sysconfdir /etc' --define 'version $(VERSION)' --define 'release $(RELEASE)' --define 'vendor $(VENDOR)' --define 'packager $(PACKAGER)' --qf '%{NAME}\n'
+RPMBUILD_ARGS := --define '_topdir $(RPM_TOPDIR)'  \
+	--define '_tmppath $(RPM_TMPDIR)' \
+	--define 'pkgname $(PKGNAME)' \
+	--define '_sysconfdir /etc' \
+	--define 'version $(VERSION)' \
+	--define 'release $(RELEASE)' \
+	--define 'packager $(PACKAGER)\n'
 
 define rpm-prep
-	$(call MKDIR,$(RPM_TOPDIR)/SOURCES)
-	$(call MKDIR,$(RPM_TOPDIR)/SPECS)
-	$(call MKDIR,$(RPM_TOPDIR)/BUILD)
-	$(call MKDIR,$(RPM_TOPDIR)/RPMS/$(ARCH))
-	$(call MKDIR,$(RPM_TOPDIR)/SRPMS)
+	$(call MKDIR,$(RPM_TOPDIR)/SOURCES);\
+$(call MKDIR,$(RPM_TOPDIR)/SPECS);\
+$(call MKDIR,$(RPM_TOPDIR)/BUILD);\
+$(call MKDIR,$(RPM_TOPDIR)/RPMS/$(ARCH));\
+$(call MKDIR,$(RPM_TOPDIR)/SRPMS);
 endef
 
-all: $(PKGNAME)-rpm $(PKGNAME)-srpm
+all: tarball srpm rpm
 
-rpm: $(PKGNAME)-rpm
+rpm: srpm $(PKGNAME)-rpm
 
-srpm: $(PKGNAME)-srpm
+tarball: $(PKGNAME)-tarball
+	$(call rpm-prep)
+
+	# create source tar and copy into the SOURCES dir
+	tar -cjf $(PKG).tar.bz2 $(PKG)
+	mv $(PKG).tar.bz2 $(TARBALL)
+
+srpm: $(PKGNAME)-srpm tarball
+	@echo "Copying the SPEC file to proper location..."
+	cat $(RPM_SPEC) > $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	@echo "Building $(PKGNAME) SRPM..."
+	cd $(RPM_TOPDIR) && rpmbuild $(RPMBUILD_ARGS) --target=$(ARCH) -bs SPECS/$(notdir $(RPM_SPEC)) --nodeps
+	cp $(RPM_TOPDIR)/SRPMS/* $(SRPM_OUTPUT_DIR)
 
 $(PKGNAME)-rpm: $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
 
-$(PKGNAME)-srpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
+$(PKGNAME)-srpm: srpm
 
-$(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
+$(OUTPUT_DIR)/$(RPM): $(SRPM)
 	@echo "Building $(PKGNAME) RPM..."
 	$(call rpm-prep)
-	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild --target=$(ARCH) $(RPMBUILD_ARGS) --buildroot $(RPM_BUILDROOT) -bb $<
-	if [ $(ARCH) != "noarch" ]; then cp $(RPM_TOPDIR)/RPMS/noarch/* $(OUTPUT_DIR)/ 2>&1 >/dev/null; exit 0; fi
-	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/*.rpm $(OUTPUT_DIR)
+	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild $(RPMBUILD_ARGS) --buildroot $(RPM_BUILDROOT) -bb $<
+	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/$(PKGNAME)-$(VERSION)-$(RELEASE)*.rpm $(OUTPUT_DIR)
 
-$(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm: $(RPM_DEPS)
-	@echo "Building $(PKGNAME) SRPM..."
-	$(call rpm-prep)
-	cp $(SOURCES) $(RPM_TOPDIR)/SOURCES/
-	echo -e "%define pkgname $(PKGNAME)\n%define _sysconfdir /etc\n%define version $(VERSION)\n%define release $(RELEASE)\n%define vendor $(VENDOR)\n%define packager $(PACKAGER)\nBuildArch: $(ARCH)\n" > $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
-	cat $(RPM_SPEC) >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
-	cd $(RPM_TOPDIR) && rpmbuild $(RPMBUILD_ARGS) -bs SPECS/$(notdir $(RPM_SPEC)) --nodeps
-	mv  $(RPM_TOPDIR)/SRPMS/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(SRPM_OUTPUT_DIR)
+$(SRPM): $(SRC_SRPM)
+	if [ ! "$(SRPM_OUTPUT_DIR)" -ef "$(RPM_TOPDIR)/SRPMS" ]; then\
+		$(call rpm-prep)\
+	fi
 
-patchy: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
-	@echo "Prepping environment for patching existing sources..."
-	@# rpmbuild can't do a -bp on a srpm so we will need to install it into our tmp/
-	$(VERBOSE)mv $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(RPM_TOPDIR)/SRPMS
-	$(VERBOSE)cd $(RPM_TOPDIR)/SRPMS && rpm $(RPMBUILD_ARGS) -ivh $(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
-	@# %patch lines w/ a -b create backup files that screw up diffs between a and b.  There doesn't appear to be an rpmbuild args to avoid it.
-	$(VERBOSE)sed -i -e 's/^\(%patch.*\) -b [^s\.]\(.*\)/\1 \2/' $(RPM_TOPDIR)/SPECS/$(RPM_SPEC)
-	@# rpmbuild build prep this thing
-	$(VERBOSE)cd $(RPM_TOPDIR)/SPECS && rpmbuild $(RPMBUILD_ARGS) --buildroot $(RPM_BUILDROOT) -bp $(RPM_SPEC)
-	$(VERBOSE)cp -r $(RPM_TOPDIR)/BUILD/$(PKGNAME)-$(VERSION) $(CURDIR)/a
-	$(VERBOSE)cp -r $(CURDIR)/a $(CURDIR)/b
-	@echo -e "\n\nAll done!  Your two patch trees are a/ and b/"
-	@echo -e "When you're finished, 'diff -purN a b > [meaningful_name].patch'.\nThen add it to $(RPM_SPEC)."
+$(RPM_SPEC): $(SRC_SRPM)
+	$(call MKDIR,$(RPM_TMPDIR))
+	( cd $(RPM_TMPDIR); rpm2cpio $< | cpio --quiet -i ${PKGNAME}.spec ) 2>&1 >/dev/null
 
 clean:
 	$(RM) -r $(RPM_TMPDIR)
 
-bare: clean
-	$(foreach f,$(shell rpm $(RPMQ_DEFS) --specfile $(RPM_SPEC)),$(RM) $(OUTPUT_DIR)/$(f)*.rpm;)
-	$(RM) $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
-	$(RM) -r a b
+bare: $(RPM_SPEC) FORCE
+	$(RM) -r $(RPM_TMPDIR)
+	$(RM) -f $(RPM) $(SRPM)
 
-.PHONY: all rpm srpm $(PKGNAME)-rpm $(PKGNAME)-srpm clean bare
+FORCE:
+
+.PHONY: all $(PKGNAME)-rpm $(PKGNAME)-srpm $(PKGNAME)-tarball clean bare rpm srpm FORCE

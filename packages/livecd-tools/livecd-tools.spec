@@ -4,8 +4,8 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 13.4.4
-Release: 99%{?dist}
+Version: 20.6
+Release: 1%{?dist}
 Epoch: 1
 License: GPLv2
 Group: System Environment/Base
@@ -16,11 +16,8 @@ URL: http://git.fedorahosted.org/git/livecd
 # make dist
 # scp livecd*.tar.bz2 fedorahosted.org:livecd
 Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}.tar.bz2
-Patch0: lokkit-fw-no-reset.patch
-Patch1: dracut-live-fix.patch
-Patch2: kargs-and-boot-menu.patch
-Patch3: setfiles-force-all-bits.patch
-Patch4: add-live-sata-mods.patch
+# Drop the requirements for grub2-efi and shim: breaks 32-bit compose
+# and not needed as we have them in comps
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{epoch}:%{version}-%{release}
 Requires: mkisofs
@@ -28,6 +25,13 @@ Requires: isomd5sum
 Requires: parted
 Requires: pyparted
 Requires: util-linux
+Requires: dosfstools
+Requires: e2fsprogs
+Requires: lorax >= 18.3
+Requires: rsync
+%ifarch %{ix86} x86_64 ppc ppc64
+Requires: hfsplus-tools
+%endif
 %ifarch %{ix86} x86_64
 Requires: syslinux
 Requires: /sbin/extlinux
@@ -35,6 +39,7 @@ Requires: /sbin/extlinux
 %ifarch ppc
 Requires: yaboot
 %endif
+Requires: dumpet
 BuildRequires: python
 BuildRequires: /usr/bin/pod2man
 
@@ -58,7 +63,7 @@ Requires: system-config-keyboard >= 1.3.0
 Requires: python-urlgrabber
 Requires: libselinux-python
 Requires: dbus-python
-Requires: dracut
+Requires: policycoreutils
 
 %description -n python-imgcreate
 Python modules that can be used for building images for things
@@ -67,11 +72,6 @@ like live image or appliances.
 
 %prep
 %setup -q
-%patch0 -p1 -b .fwfix
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
 
 %build
 make
@@ -93,8 +93,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/livecd-iso-to-pxeboot
 %{_bindir}/image-creator
 %{_bindir}/liveimage-mount
+%{_bindir}/edit-livecd
 %{_bindir}/mkbiarch
-%{_bindir}/mkefiboot
 
 %files -n python-imgcreate
 %defattr(-,root,root,-)
@@ -105,61 +105,345 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Thu May 23 2013 Brian C. Lane <bcl@redhat.com> 13.4.4-2
-- Version 13.4.4 (bcl)
-- Avoid setting empty root password (#962493) (thoger)
-- Update spec for mkefiboot
+* Fri Jan 31 2014 Brian C. Lane <bcl@redhat.com> 20.4-1
+- Version 20.4 (bcl)
+- Fix extlinux check (#1059278) (bcl)
+- Check kickstart for repo line (#1005580) (bcl)
+- Catch CreatorError during class init (#1005580) (bcl)
+- Add docleanup to edit-livecd (#1000744) (bcl)
+- utf8 decode unicode error strings (#1035248) (bcl)
+- Remove switch to Permissive (#1051523) (bcl)
 
-* Tue Aug 28 2012 Seth Vidal <skvidal at fedoraproject.org>
-- fix firewalls being reset when setting selinux state from imgcreate
+* Tue Jan 07 2014 Brian C. Lane <bcl@redhat.com> 20.3-1
+- Version 20.3 (bcl)
+- Add missing quote (#1044675) (bcl)
 
-* Tue Aug 23 2011 Brian C. Lane <bcl@redhat.com> - 13.4-1
-- Version 13.4 (bcl)
+* Tue Jan 07 2014 Brian C. Lane <bcl@redhat.com> 20.2-1
+- Version 20.2 (bcl)
+- Use LC_ALL=C for parted calls (#1045854) (bcl)
+- Fix to work with the changed yum.config._getsysver (bruno)
+- Add check for extlinux tools (#881317) (bcl)
+- Cleanup arg parsing a bit (#725047) (bcl)
+
+* Mon Nov 18 2013 Brian C. Lane <bcl@redhat.com> 20.1-1
+- add 'troubleshooting' submenu with 'basic graphics mode' to UEFI boot menu (awilliam)
+- make UEFI boot menu resemble the BIOS and non-live boot menus more (awilliam)
+- drop 'xdriver=vesa' from basic graphics mode parameters (per ajax) (awilliam)
+- Ensure filesystem modules end up in the live image initramfs. (notting)
+- Don't use mkfs.extN options for any filesystem types. (notting)
+- litd: Add --label option to override LIVE label (helio)
+- liveimage-mount: add missing import (bcl)
+- Change vfat limit from 2047 to 4095 (#995552) (bcl)
+
+* Wed Aug 07 2013 Brian C. Lane <bcl@redhat.com> 20.0-1
+- Version 20.0 (bcl)
+- Install docs in unversioned doc directory (#992144) (bochecha)
+
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:19.6-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
+* Mon Jul 15 2013 Brian C. Lane <bcl@redhat.com> 19.6-1
+- Version 19.6 (bcl)
+- litd: Add kickstart option (bcl)
+- ts.check output is a list of tuples (#979759) (bcl)
+- Add repo --noverifyssl support (#907707) (bcl)
+
+* Mon Jun 17 2013 Brian C. Lane <bcl@redhat.com> 19.5-1
+- Version 19.5 (bcl)
+- Write vconsole.conf directly (bcl)
+- litd: Add --updates option (bcl)
+
+* Fri May 31 2013 Brian C. Lane <bcl@redhat.com> 19.4-1
+- Version 19.4 (bcl)
+- Replace bash string parsing with awk (#962039,#969521) (bcl)
+- Fix default.target symlink (#968272) (bcl)
+
+* Wed May 29 2013 Brian C. Lane <bcl@redhat.com> 19.3-2
+- Add requirement on rsync (#967948)
+
+* Thu May 23 2013 Brian C. Lane <bcl@redhat.com> 19.3-1
+- Version 19.3 (bcl)
+- Avoid setting empty root password (#964299) (thoger)
+  CVE-2013-2069
+- Handle urlgrabber callback changes (#963645) (bcl)
+
+* Wed May 08 2013 Dennis Gilmore <dennis@ausil.us> 19.2-2
+- only require hfsplus-tools on ppc and x86 arches
+
+* Wed Apr 03 2013 Brian C. Lane <bcl@redhat.com> 19.2-1
+- Version 19.2 (bcl)
+- Use parted to check for GPT disklabel (#947653) (bcl)
+- Output details of dep check failure (bcl)
+- Properly generate kernel stanzas (#928093) (bcl)
+
+* Sat Mar 16 2013 Brian C. Lane <bcl@redhat.com> 19.1-1
+- Version 19.1 (bcl)
+- iso9660 module is named isofs (bcl)
+- disable dracut hostonly and rescue image (#921422) (bcl)
+
+* Fri Mar 08 2013 Brian C. Lane <bcl@redhat.com> 19.0-1
+- Version 19.0 (bcl)
+- iso9660 is now a module, include it (bcl)
+- correctly check for selinux state (#896610) (bcl)
+- Simplify kickstart example (#903378) (bcl)
+- default to symlink for /etc/localtime (#885246) (bcl)
+
+* Sat Feb 23 2013 Bruno Wolff III <bruno@wolff.to> 18.14-2
+- Get an up to date build in rawhide, since the mass 
+- rebuild used a master branch that was behind the f18 
+- branch and builds from f18 are no longer inherited.
+
+- Version 18.14 (bcl)
+- add --verifyudev to dmsetup (#885385) (bcl)
+
+- Version 18.13 (bcl)
+- silence the selinux umount error (bcl)
+- use systemd instead of inittab for startx (bcl)
+- set selinux permissive mode when building (bcl)
+- fix kickstart logging entry (bcl)
+- write hostname to /etc/hostname (#870805) (bcl)
+- add nocontexts for selinux (#858373) (bcl)
+- remove lokkit usage (bcl)
+- use locale.conf not sysconfig/i18n (#870805) (bcl)
+- don't write clock (#870805) (bcl)
+- add remainder of virtio modules to initrd (#864012) (bcl)
+
+- Require hfsplus-tools so that images will boot on Mac
+
+- Version 18.12 (bcl)
+- Remove grub 0.97 splash (bcl)
+
+- Version 18.11 (bcl)
+- not copying UEFI files shouldn't be fatal (#856893) (bcl)
+- don't require shim and grub2-efi (#856893) (bcl)
+
+- efi_requires.patch: don't force grub2-efi and shim into the package
+  list, it breaks 32-bit compose and isn't needed, we have it in comps
+
+- Version 18.10 (bcl)
+- use cp -r instead of -a (bcl)
+
+- Version 18.9 (bcl)
+- fix extra-kernel-args (#853570) (bcl)
+- New location for GRUB2 config on UEFI (#851220) (bcl)
+- Add nocleanup option to retain temp files (bcl)
+- Update imgcreate for UEFI Secure Boot (bcl)
+
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:18.8-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Mon Aug 06 2012 Brian C. Lane <bcl@redhat.com> 18.8-1
+- Version 18.8 (bcl)
+- dracut needs to load vfat and msdos filesystems (bcl)
+
+* Thu Aug 02 2012 Brian C. Lane <bcl@redhat.com> 18.7-1
+- Version 18.7 (bcl)
+- Recognize rd.live.image as well as liveimg in sed scripts of livecd-iso-to-
+  disk & edit-livecd (fgrose)
+- fix /etc/localtime file vs. symlink (#829032) (bcl)
+
+* Tue Jul 31 2012 Brian C. Lane <bcl@redhat.com> 18.6-1
+- Version 18.6 (bcl)
+- switch to using rd.live.image instead of liveimg (bcl)
+- dracut doesn't need explicit filesystems (bcl)
+- livecd-creator: Add --cacheonly for offline use (martin)
+- Implement cacheonly (offline) support in ImageCreator and LoopCreator (martin)
+- if mounting squashfs add ro mount option (jboggs)
+- imgcreate: Use copy2 for TimezoneConfig (#829032) (bcl)
+
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:18.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Thu May 03 2012 Brian C. Lane <bcl@redhat.com> 18.5-1
+- Version 18.5 (bcl)
+- Include Mac volume name graphic (mjg)
+- copy repo data to USB for F17 (#806166) (bcl)
+- Version 18.4 (bcl)
+- allow for use of yum plugins during livecd creation (notting)
+- Capitalise EFI names (mjg)
+- Add tighter Mac boot image integration (mjg)
+- fix quoting with basename and SRC (#814174) (bcl)
+- check for LIVE-REPO partition when writing DVD (#813905) (bcl)
+
+* Mon Apr 16 2012 Brian C. Lane <bcl@redhat.com> 18.3-1
+- Version 18.3 (bcl)
+- add support for cost in kickstart repo line (#735079) (mads)
+- skip copying DVD image file with skipcopy option (786037) (bcl)
+- remove kernel and initrd from EFI/BOOT (#811438) (bcl)
+- fix syntax problem in detectsrctype (bcl)
+
+* Thu Mar 01 2012 Brian C. Lane <bcl@redhat.com> - 18.2-1
+- Version 18.2 (bcl)
+- livecd-iso-to-disk: Add 2MB slop to calculation (bcl)
+- Change EFI/boot to EFI/BOOT (mjg)
+- Add support for generating EFI-bootable hybrid images (mjg)
+
+* Thu Feb 23 2012 Brian C. Lane <bcl@redhat.com> - 18.1-1
+- Version 18.1 (bcl)
+- livecd-iso-to-disk: create partition for iso (bcl)
+
+* Wed Feb 15 2012 Brian C. Lane <bcl@redhat.com> - 18.0-1
+- Version 18.0 (bcl)
+- check for valid script path before editing livecd image and update usage
+  options confusion (jboggs)
+- imgcreate: fix typo in ResizeError (bcl)
+- add missing selinux_mountpoint class object to edit-livecd (jboggs)
+
+* Wed Jan 18 2012 Brian C. Lane <bcl@redhat.com> - 17.4-1
+- Version 17.4 (bcl)
+- selinux may be off on the host, skip mount (#737064) (bcl)
+- Set base_persistdir (#741614) (bcl)
+- Fix the fix for dracut modules (#766955) (bcl)
+- Use dracut.conf.d instead fo dracut.conf (bcl)
+- dracut needs dmsquash-live explicitly included (bcl)
+- edit-livecd: -k --kickstart option (apevec)
+
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:17.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Wed Dec 21 2011 Brian C. Lane <bcl@redhat.com> 17.3-1
+- Version 17.3 (bcl)
+- python-imgcreate: remove -f from second lokkit call (#769457) (bcl)
+- Install edit-livecd to /usr/bin (bcl)
+
+* Thu Nov 03 2011 Brian C. Lane <bcl@redhat.com> 17.2-1
+- Version 17.2 (bcl)
+- Fix indent and typo in liveimage-mount (#749643) (bcl)
+- Make sure the target is labeled LIVE (#751213) (bcl)
+- Only check first match for boot flag (#739411) (bcl)
+- Stop creating backup image before resizing (#737243) (bcl)
+
+* Thu Sep 01 2011 Brian C. Lane <bcl@redhat.com> 17.1-1
+- Version 17.1 (bcl)
+- Add title and product args (#669120) (bcl)
+- Skip bind mounts when source isn't there (bcl)
+- Add new syslinux.cfg template (#734173) (bcl)
 - Use copyFile on the iso (bcl)
-- Add EFI support to netboot and DVD iso (bcl)
 - Use rsync to copy if available (bcl)
-- Support /EFI/BOOT or /EFI/boot (#688258) (bcl)
-- gptmbr can be written directly to the mbr (bcl)
-- Ensure previous filesystems are wiped when formatting (#712553) (bcl)
+
+* Thu Aug 11 2011 Brian C. Lane <bcl@redhat.com> 17.0-1
+- Version 17.0
+- Quote $SRC so iso's with spaces will work (#694915) (bruno)
+- Handle move to /sys/fs/selinux (#728576) (dwalsh)
+- master is now v17.X (bcl)
 - Turn on the legacy_boot flag for EFI (#680563) (bcl)
+- Don't ask about replacing MBR when formatting (bcl)
+- Make MBR replacement message more clear (bcl)
+- Ensure previous filesystems are wiped when formatting (#712553) (bcl)
+- Modify pxeboot script to work with F16 (bcl)
+- Add initial support for ARM architectures (martin.langhoff)
 - Copy updates and product image files (bcl)
 
-* Wed Jun 01 2011 Brian C. Lane <bcl@redhat.com> - 13.3-1
-- Version 13.3 (bcl)
-- extlinux doesn't support ext4 or btrfs on F13 (#709778) (bcl)
+* Thu Mar 31 2011 Brian C. Lane <bcl@redhat.com> 16.3-1
+- Version 16.3 (bcl)
+- Copy old initrd/xen files to isolinux when using base-on (#690940) (bcl)
+- Don't fail on missing splash image (bcl)
+- Images go into $SYSLINUXPATH (bcl)
+- fix typo (bcl)
+- Check for spaces in fs label when using overlay (#597599) (bcl)
+- Fix logic for syslinux check (bcl)
+- Fix image-creator symlink so that it is relative (bcl)
+- symlink /etc/mtab to /proc/self/mounts (#688277) (bcl)
+- liveimage-mount installed LiveOS with overlay (fgrose)
+- Fix overzealous boot->BOOT change (bcl)
+- Fix return code failure (#689360) (fgrose)
+- Fix pipefailure in checkSyslinuxVersion (#689329) (fgrose)
+- Symlink image-creator instead of hardlink (#689167) (bcl)
+- Add extracting BOOTX64.efi from iso (#688258) (bcl)
+- Add repo to DVD EFI install config file (#688258) (bcl)
+- Add EFI support to netboot (#688258) (bcl)
+- Support /EFI/BOOT or /EFI/boot (#688258) (bcl)
 
-* Wed Feb 23 2011 Brian C. Lane <bcl@redhat.com> - 13.2-1
-- Version 13.2 (bcl)
+* Mon Mar 14 2011 Brian C. Lane <bcl@redhat.com> 16.2-1
+- Version 16.2 (bcl)
+- livecd-iso-to-disk: Catch all failures (lkundrak)
+- Mailing list address changed (lkundrak)
+- Fall back to to msdos format if no extlinux (bcl)
+- Create an ext4 filesystem by default for home.img (fgrose)
+- Add error checks to home.img creation (bcl)
+- livecd-iso-to-disk Detect more disk space issues (fgrose)
+- gptmbr can be written directly to the mbr (bcl)
+- Fixup livedir support (#679023) (jan.kratochvil)
+
+* Fri Feb 18 2011 Brian C. Lane <bcl@redhat.com> 16.1-1
+- Version 16.1 (bcl)
 - Print reason for sudden exit (bcl)
 - Fix skipcopy usage with DVD iso (#644194) (bmj001)
 - Move selinux relabel to after %post (#648591) (bcl)
 - Add support for virtio disks to livecd (#672936) (bcl)
+- Support attached LiveOS devices as well as image files for LiveOS editing.
+  (fgrose)
 - Check return value on udevadm (#637258) (bcl)
+
+* Tue Feb 15 2011 Brian C. Lane <bcl@redhat.com> 16.0-1
+- Version 16.0 (bcl)
+- Add tmpdir to LiveImageCreator (bcl)
 - Source may be a file or a block device, mount accordingly (bcl)
+- Enable reading of SquashFS compression type. (fgrose)
+- Enable cloning of a running LiveOS image into a fresh iso. (fgrose)
+- Update usage documentation & add it to the script (fgrose)
+- Support the propagation of an installed Live image (fgrose)
+- Rename image source- and target-related variables (fgrose)
 - Align start of partition at 1MiB (#668967) (bcl)
+- Pass tmpdir to ImageCreator class initializer (#476676) (bcl)
+- Add tmpdir to ImageCreator class initializer (#476676) (bcl)
+- Enable an optional tmpdir for e2image in fs.resize2fs() (fgrose)
+- Bad karma commit reverted; The option to boot from a local drive *MUST* exist
+  as 99.9% of our consumers have default desktop hardware configurations.
+  (jeroen.van.meeuwen)
+- Really switch the default compression type, not just the default cli option
+  value (jeroen.van.meeuwen)
+
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:15.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Thu Jan 27 2011 Brian C. Lane <bcl@redhat.com> - 15.3-1
+- Version 15.3 (bcl)
+- Remove boot from local drive option (bcl)
 - Check for one big initrd.img (#671900) (bcl)
+- Make xz the default compression type for live images. (bruno)
 - Update documentation for xz availability. (bruno)
 - Change releasever to a command line option (#667474) (bcl)
+
+* Tue Jan 04 2011 Dennis Gilmore <dennis@ausil.us> - 15.2-2
+- patch to drop support of releasever in urls it destroys image creation in koji
+
+* Wed Dec 22 2010 Brian C. Lane <bcl@redhat.com> - 15.2-1
+- Version 5.2 (bcl)
 - Assign a device-mapper UUID w/ subsystem prefix to the dm snapshot. (dlehman)
 - Fix git URLs to match reality. (dlehman)
-
-* Wed Dec 22 2010 Brian C. Lane <bcl@redhat.com> - 13.1-1
-- Version 13.1 (bcl)
 - Trap copyFile errors (#663849) (fgrose)
-- Create tmpdir if it doesn't exist (#658632) (bcl)
-- Fix partition number selection for MMC bus devices (#587411) (fgrose)
-- Tolerate empty transactions (lkundrak)
+- Fix incomplete rename of freespace variable (#656154) (fgrose)
 
-* Mon Nov 15 2010 Brian C. Lane <bcl@redhat.com> - 13.0-1
-- Change version for f13-branch (bcl)
+* Tue Nov 30 2010 Brian C. Lane <bcl@redhat.com> - 15.1-1
+- Bump version to 15.1 (bcl)
+- Wrap subprocess.call() so we can capture all command output for debugging.
+  (jlaska)
+- Work with the logging settings when emitting progress. (jlaska)
+- Add a quiet option to surpress stdout. Adjust handle_logfile to not surpress
+  stdout. (jlaska)
+- Fix partition number selection for MMC bus devices (#587411) (fgrose)
+- Fix disk space estimation errors (#656154) (fgrose)
+- Tolerate empty transactions (lkundrak)
+- Merge livecd-creator and image-creator (lkundrak)
+- Cleanup if/then blocks (#652522) (fgrose)
+
+* Mon Nov 15 2010 Brian C. Lane <bcl@redhat.com> - 15.0-1
+- Each branch needs a different version number.
+
+* Mon Nov 15 2010 Brian C. Lane <bcl@redhat.com> - 0.3.6-1
+- Bump version to 0.3.6 (bcl)
 - Misc. fixups (#652522) (fgrose)
 - Set indentation to 4 spaces (#652522) (fgrose)
 - Add a release target (bcl)
 - Pass dracut args during check (#589778) (bcl)
+- Update dracut args (#652484) (bcl)
+- Cleanup tabs (#652522) (fgrose)
 - Cleanup EOL spaces (#652522) (fgrose)
 - Typo. Need space before ]. (bruno)
 - Add support for timeout and totaltimeout to livecd-iso-to-disk (#531566)
   (bcl)
+- Add proxy support to livecd-creator (#649546) (bcl)
 
 * Mon Nov 01 2010 Brian C. Lane <bcl@redhat.com> - 0.3.5-1
 - Converting version number to NVR
