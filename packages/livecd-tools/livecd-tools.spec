@@ -29,9 +29,6 @@ Requires: dosfstools
 Requires: e2fsprogs
 Requires: lorax >= 18.3
 Requires: rsync
-%ifarch %{ix86} x86_64 ppc ppc64
-Requires: hfsplus-tools
-%endif
 %ifarch %{ix86} x86_64
 Requires: syslinux
 Requires: /sbin/extlinux
@@ -85,8 +82,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS COPYING README HACKING
 %doc config/livecd-fedora-minimal.ks
+%{_docdir}/%{name}/AUTHORS
+%{_docdir}/%{name}/COPYING
+%{_docdir}/%{name}/README
+%{_docdir}/%{name}/HACKING
 %{_mandir}/man*/*
 %{_bindir}/livecd-creator
 %{_bindir}/livecd-iso-to-disk
