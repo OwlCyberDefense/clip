@@ -1,6 +1,6 @@
 Name:	clip-dracut-module
-Version: 1
-Release: 1
+Version: %{version}
+Release: %{release}
 Summary: CLIP Module for Dracut
 Requires: dracut
 
@@ -31,9 +31,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(755,root,root,-)
-/usr/share/dracut/modules.d/96clip/check
-/usr/share/dracut/modules.d/96clip/install
-/usr/share/dracut/modules.d/96clip/clip.sh
+/usr/lib/dracut/modules.d/96clip/module-setup.sh
+/usr/lib/dracut/modules.d/96clip/clip.sh
 
 %post
 

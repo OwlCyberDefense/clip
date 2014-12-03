@@ -1,8 +1,0 @@
-#!/bin/bash
-# Copyright (C) 2013 Cubic Corporation
-#
-# Authors: Spencer Shimko <spencer@quarksecurity.com>
-#
-if [ -x "/usr/sbin/load_policy" -o -x "/sbin/load_policy" ]; then
-        inst_hook pre-pivot 51 "$moddir/clip.sh"
-fi
