@@ -116,8 +116,7 @@ ncurses
 openscap
 #openscap-content
 openscap-utils
-# why was this needed?
-#openswan
+libreswan
 passwd
 #pam_passwdqc
 perl
@@ -139,18 +138,17 @@ util-linux-ng
 vim-minimal
 vlock
 yum
--Red_Hat_Enterprise_Linux-Release_Notes-6-en-US
+-Red_Hat_Enterprise_Linux-Release_Notes-7-en-US
 -abrt-addon-ccpp
 -abrt-addon-kerneloops
 -abrt-addon-python
 -abrt-cli
 -acpid
 -alsa-utils
--b43-fwcutter
--b43-openfwwf
 -blktrace
 -bridge-utils
--cryptsetup-luks
+-cryptsetup
+-cryptsetup-reencrypt
 -dhclient
 -dmraid
 -dosfstools
@@ -158,9 +156,6 @@ yum
 -fprintd-pam
 -hicolor-icon-theme
 -kexec-tools
--man
--man-pages
--man-pages-overrides
 -mdadm
 -mlocate
 -mtr
@@ -173,7 +168,6 @@ yum
 -pm-utils
 -redhat-indexhtml
 -rdate
--readahead
 -rhnsd
 -setserial
 -setuptool
@@ -181,7 +175,6 @@ yum
 -subscription-manager
 -sysstat
 -systemtap-runtime
--system-config-firewall-tui
 -system-config-network-tui
 -tcpdump
 -traceroute
@@ -194,10 +187,6 @@ yum
 
 -aic94xx-firmware
 -at
--atmel-firmware
--bfa-firmware
--ipw2100-firmware
--ipw2200-firmware
 -ivtv-firmware
 -iwl100-firmware
 -iwl1000-firmware
@@ -209,16 +198,9 @@ yum
 -iwl6000g2a-firmware
 -iwl6000g2b-firmware
 -iwl6050-firmware
--kernel-firmware
 -libertas-usb8388-firmware
--ql2100-firmware
--ql2200-firmware
--ql23xx-firmware
--ql2400-firmware
--ql2500-firmware
 -rt61pci-firmware
--rt73usb-firmware
--xorg-x11-drv-ati-firmware
+-xorg-x11-drv-ati
 -zd1211-firmware
 
 %end
