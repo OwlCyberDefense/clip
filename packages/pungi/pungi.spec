@@ -2,7 +2,7 @@
 
 Name:           pungi
 Version:        2.13
-Release:        3.el7
+Release:        4.el7
 Summary:        Distribution compose tool
 
 Group:          Development/Tools

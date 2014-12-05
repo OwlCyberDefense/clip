@@ -66,7 +66,8 @@ class PungiBase(object):
         # Create the root logger, that will log to our file
         logging.basicConfig(level=logging.DEBUG,
                             format='%(name)s.%(levelname)s: %(message)s',
-                            filename=logfile)
+                            filename=logfile,
+                            filemode="w")
 
 
 class CallBack(urlgrabber.progress.TextMeter):
@@ -95,7 +96,7 @@ class PungiYum(yum.YumBase):
         else:
             logfile = os.path.join(logdir, '%s.log' % (self.pungiconfig.get('pungi', 'arch')))
 
-        yum.logging.basicConfig(level=yum.logging.DEBUG, filename=logfile)
+        yum.logging.basicConfig(level=yum.logging.DEBUG, filename=logfile, filemode="w")
 
     def doFileLogSetup(self, uid, logfile):
         # This function overrides a yum function, allowing pungi to control

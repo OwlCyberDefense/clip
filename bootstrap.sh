@@ -228,7 +228,7 @@ fi
 check_and_build_rpm "lorax" "lorax-19.6.45-3.el7"
 
 # Roll pungi
-check_and_build_rpm "pungi" "pungi-2.13-3.el7"
+check_and_build_rpm "pungi" "pungi-2.13-4.el7"
 
 if ! rpm -q "livecd-tools-13.4.4-99.el7.noarch" > /dev/null; then 
 	if rpm -q "livecd-tools" > /dev/null; then

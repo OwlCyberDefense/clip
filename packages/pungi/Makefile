@@ -14,7 +14,7 @@ VERSION := 2.13
 
 # bump this if creating multiple releases from the same
 # version (think about this... why are you doing this?)
-RELEASE := 3.el7
+RELEASE := 4.el7
 
 PKG := $(PKGNAME)-$(VERSION)
 
