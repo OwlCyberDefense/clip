@@ -225,7 +225,7 @@ if [ x"`cat /sys/fs/selinux/enforce`" == "x1" ]; then
 fi
 
 # Roll lorax
-check_and_build_rpm "lorax" "lorax-19.6.45-2.el7"
+check_and_build_rpm "lorax" "lorax-19.6.45-3.el7"
 
 # Roll pungi
 check_and_build_rpm "pungi" "pungi-2.13-3.el7"

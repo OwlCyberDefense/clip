@@ -265,6 +265,7 @@ class Lorax(BaseLoraxClass):
 
         logger.info("backing up installroot")
         installroot = joinpaths(self.workdir, "installroot")
+        remove(installroot)
         linktree(self.inroot, installroot)
 
         logger.info("generating kernel module metadata")
