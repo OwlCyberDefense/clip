@@ -516,7 +516,7 @@ def get_timeout(ks, default = None):
     return int(ks.handler.bootloader.timeout)
 
 # Drop quiet since we don't want noisy boot info
-def get_kernel_args(ks, default = "ro rd.live.image live_ram"):
+def get_kernel_args(ks, default = "ro rd.live.image rd.live.ram"):
     if not hasattr(ks.handler.bootloader, "appendLine"):
         return default
     if ks.handler.bootloader.appendLine is None:
