@@ -163,7 +163,7 @@ gpgcheck=0
 	fi
 fi
 
-PACKAGES="mock pigz createrepo repoview rpm-build make python-kid"
+PACKAGES="mock pigz createrepo repoview rpm-build make python-kid syslinux-extlinux dumpet"
 /usr/bin/sudo /usr/bin/yum install -y $PACKAGES
 
 # get the name/path for any existing yum repos from CONFIG_REPO
@@ -230,7 +230,7 @@ check_and_build_rpm "lorax" "lorax-19.6.45-4.el7"
 # Roll pungi
 check_and_build_rpm "pungi" "pungi-2.13-4.el7"
 
-if ! rpm -q "livecd-tools-13.4.4-99.el7.noarch" > /dev/null; then 
+if ! rpm -q "livecd-tools-20.6-1.el7.x86_64" > /dev/null; then
 	if rpm -q "livecd-tools" > /dev/null; then
 		/bin/echo "You have livecd-tools installed, but not our version. Our version contains 
 fixes for generating live media.  We will compile our version and replace your 

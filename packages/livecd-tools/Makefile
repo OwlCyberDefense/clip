@@ -36,7 +36,7 @@ RPM_TOPDIR ?= $(RPM_TMPDIR)/src/redhat
 RPM_BUILDROOT ?= $(RPM_TMPDIR)/rpm-buildroot
 SRPM_OUTPUT_DIR ?= $(ROOT_DIR)
 
-RPM := $(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
+RPM := $(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm python-imgcreate-$(VERSION)-$(RELEASE).$(ARCH).rpm
 SRPM := $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 
 RPM_SPEC := $(CURDIR)/$(PKGNAME).spec
@@ -85,7 +85,7 @@ $(OUTPUT_DIR)/$(RPM): $(SRPM)
 	@echo "Building $(PKGNAME) RPM..."
 	$(call rpm-prep)
 	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild $(RPMBUILD_ARGS) --buildroot $(RPM_BUILDROOT) -bb $<
-	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/$(PKGNAME)-$(VERSION)-$(RELEASE)*.rpm $(OUTPUT_DIR)
+	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/*$(RELEASE)*.rpm $(OUTPUT_DIR)
 
 $(SRPM): $(SRC_SRPM)
 	if [ ! "$(SRPM_OUTPUT_DIR)" -ef "$(RPM_TOPDIR)/SRPMS" ]; then\

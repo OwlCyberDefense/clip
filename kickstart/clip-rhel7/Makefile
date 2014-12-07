@@ -34,7 +34,7 @@ PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(ISO_VERSION)" --name="$(NAME)" -
 ISOLINUX_CFG=$(PUNGI_OS_DIR)/isolinux/isolinux.cfg
 
 LIVECD_CREATOR ?= /usr/bin/livecd-creator
-override LIVECD_ARGS := $(LIVECD_ARGS)
+LIVECD_ARGS := --config=$(LIVE_KS) --logfile=$(TMP_DIR)/livecd.log -d -v
 
 DEBUG ?= y
 
@@ -71,7 +71,7 @@ iso: $(DEPS) $(ADDTL_DEPS) setup-inst-ks
 
 live-iso: $(DEPS) $(ADDTL_DEPS) setup-live-ks
 	@echo "Live CD Creator needs root permissions - please enter your sudo password if prompted."
-	$(VERBOSE)cd $(BUILD_DIR);sudo $(LIVECD_CREATOR)  $(LIVECD_ARGS) --config="$(LIVE_KS)"
+	$(VERBOSE)cd $(BUILD_DIR);sudo $(LIVECD_CREATOR) $(LIVECD_ARGS)
 	$(VERBOSE)mv --force $(BUILD_DIR)/livecd-*.iso $(OUTPUT_DIR)/$(NAME)-$(ISO_VERSION)-live.iso
 
 
