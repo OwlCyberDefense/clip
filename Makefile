@@ -18,6 +18,8 @@ include CONFIG_BUILD
 # This is the RHEL version supported by this release of CLIP.  Do not alter.
 export RHEL_VER := 7
 
+CLIP_RELEASE := "7.0_Alpha"
+
 ######################################################
 # BEGIN MAGIC
 ifneq ($(QUIET),y)
@@ -273,6 +275,9 @@ help:
 	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB>"
 	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB> OVERLAY_HOME_SIZE=<size in MB>"
 	@echo
+	@echo "To do a release of CLIP:"
+	@echo "	release"
+	@echo
 	@echo "The following make targets are available for generating RPMs in mock:"
 	@echo "	rpms (generate all rpms in mock)"
 	@for pkg in $(PACKAGES); do echo "	$$pkg-rpm"; done
@@ -392,12 +397,17 @@ bare: bare-repos clean
 	$(VERBOSE)$(RM) $(addprefix $(SRPM_OUTPUT_DIR),$(SRPMS))
 	$(VERBOSE)$(RM) $(addprefix $(OUTPUT_DIR),$(RPMS))
 
+
+release:
+	git tag -a -m "CLIP for RHEL $(CLIP_RELEASE)" CLIP_RHEL_$(CLIP_RELEASE)
+	git push origin CLIP_RHEL_$(CLIP_RELEASE)
+
 FORCE:
 
 # Unfortunately mock isn't exactly "parallel" friendly which sucks since we could roll a bunch of packages in parallel.
 .NOTPARALLEL:
 
-.PHONY:  all all-vm create-repos $(setup_all_repos) srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE clean-mock
+.PHONY:  all all-vm create-repos $(setup_all_repos) srpms rpms clean bare bare-repos $(addsuffix -rpm,$(PACKAGES)) $(addsuffix -srpm,$(PACKAGES)) $(addsuffix -nomock-rpm,$(PACKAGES)) $(addsuffix -clean,$(PACKAGES)) $(LIVECDS) $(INSTISOS) FORCE clean-mock release
 
 
 # END RULES

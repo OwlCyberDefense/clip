@@ -1,4 +1,4 @@
-CLIP for RHEL 6 Frequently Asked Questions
+CLIP for RHEL 7 Frequently Asked Questions
 
 0. I deployed my system and everything is broken.  HELP!
    That isn't a question but OK.  
@@ -267,3 +267,6 @@ have selected for install are missing dependencies."  What's up?
    repo when building on RHEL.  This typically results in libxslt-python dep
    errors.
 
+17. How do I do a release of CLIP?
+    There is a make target for doing a release. Simple set the CLIP_RELEASE variable to the title
+    of your tag. Then run "make release". The repo will be tagged and pushed to origin.
