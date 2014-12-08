@@ -1,6 +1,0 @@
-Use only the tools in this repo to generate live media.  Do not rely on other
-tools because the different versions of the tools behave differently and can
-generate non-bootable or otherwise broken media.
-
-1. Run "make iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
-eg: "make ISO_FILE=CLIP.iso USB_DEV=/dev/sdb"

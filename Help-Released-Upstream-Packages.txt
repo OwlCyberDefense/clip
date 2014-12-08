@@ -1,5 +1,0 @@
-Typically one wants to track a specific release of an upstream package.
-This is pretty straight forward:
-	1. Create a directory to host the releases for that package.
-	2. Add the tarball, src RPM, or whatever was released to that directory.
-	3. `$ git add <dir>/foo.src.rpm` and commit.
