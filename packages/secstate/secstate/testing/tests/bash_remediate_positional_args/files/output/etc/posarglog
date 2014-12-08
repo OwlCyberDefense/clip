@@ -1,9 +1,0 @@
-positional arg received: 1 = password-change-time, 2 = second
-positional arg received: 1 = pass-min-length, 2 = second arg
-positional arg received: 1 = pam-pass-min-length, 2 = /etc/root/passreqs.sh
-positional arg received: 1 = pass-min-alpha-upper, 2 = VARIABLE="WHATEVER"
-positional arg received: 1 = you should use, 2 = bash remediation
-positional arg received: 1 = , 2 = 
-positional arg received: 1 = , 2 = 
-positional arg received: 1 = , 2 = 
-positional arg received: 1 = , 2 = 

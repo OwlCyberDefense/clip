@@ -36,26 +36,22 @@ For more detailed instructions, you may reference the following:
 
    Help in getting a CLIP release out.
 
-9. Help-SecState.txt
-
-   How to use SecState's remediation functionality.
-
-10. Help-Updating-Existing-External-Packages.txt
+9. Help-Updating-Existing-External-Packages.txt
 
    Hot to update the existing external packages that are used.
 
-11. Help-Upstream-Git-Repos.txt
+10. Help-Upstream-Git-Repos.txt
 
    How to track an upstream repo using a specific git hash.
 
-12. Help-Upstreams.txt
+11. Help-Upstreams.txt
 
    How to add various upstream packages.
 
-13. Help-Upstream-SVN-Repos.txt
+12. Help-Upstream-SVN-Repos.txt
 
    How to track an upstream repo using a specific SVN hash.
 
-14. Help-Use-Cases.txt
+13. Help-Use-Cases.txt
 
    How to best use CLIP for specific scenarios.

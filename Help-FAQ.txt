@@ -244,17 +244,6 @@ CLIP for RHEL 6 Frequently Asked Questions
     revision to your tree.  I think this is the manual process you were referring
     to above.
 
-    I recommend a slightly different workflow for Aqueduct/SecState.  Over the
-    years at Tresys we have learned that committing pre-patched upstream code
-    makes it very difficult to track.  What we now do is keep "untainted" upstream
-    code for these projects and create patches to apply on top of them.  You make
-    changes, generate a patch, stick the patch in
-    packages/aqueduct/fix-stuff.patch, and add that patch to the RPM spec file,
-    packages/aqueduct/aqueduct.spec.  This makes it easy to track changes and
-    keeps the upstream sources clean.  If appropriate you can submit these
-    packages to the upstream projects and hopefully it will get merged into the
-    project and you can stop carrying the patch in your tree.
-
     One other workflow I want to mention is to simply point CLIP at a pre-rolled
     RPM or yum repo.  In that way you can use your existing build system/SCM to
     generate the package(s).

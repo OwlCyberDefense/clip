@@ -1,9 +1,0 @@
-[requires]
-deselect_benchmark_recursive
-
-[test]
-select
-
-[verify]
-list
-

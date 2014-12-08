@@ -1,7 +1,0 @@
-PassComp-G-2-2:
-	Title:  'Password'
-	Description:  Group containing all groups and rules pertaining to passwords.
-	Selected:  True
-	Member of PassComp
-	Sub Elements:
-		PassComp-G-2-3

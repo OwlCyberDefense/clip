@@ -50,7 +50,7 @@ MOCK_REL := rhel-$(RHEL_VER)-$(TARGET_ARCH)
 # This directory contains all of our packages we will be building.
 PKG_DIR += $(CURDIR)/packages
 # List of packages not to build in the packages directory
-EXCLUDE_PKGS := secstate aqueduct examples webpageexample
+EXCLUDE_PKGS := aqueduct examples webpageexample
 PACKAGES := $(shell ls $(PKG_DIR))
 PACKAGES := $(filter-out $(EXCLUDE_PKGS),$(PACKAGES))
 

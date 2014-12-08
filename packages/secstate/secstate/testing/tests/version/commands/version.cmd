@@ -1,1 +1,0 @@
-/usr/sbin/secstate --version
