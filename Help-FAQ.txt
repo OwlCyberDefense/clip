@@ -87,14 +87,7 @@ CLIP for RHEL 6 Frequently Asked Questions
     # createrepo -d /opt/rhel-6-3-x86_64/rhel-x86_64-server-optional-6/getPackage
 
 4d. How do I mirror EPEL?
-    To mirror EPEL you will need to ensure the system performing the mirroring
-    is already capable of pulling from EPEL. Refer to this page for help with
-    that:
-        http://fedoraproject.org/wiki/EPEL/FAQ#How_can_I_install_the_packages_from_the_EPEL_software_repository.3F
-    Once that is complete you can mirror EPEL.  This is how we do it:
-
-    # reposync --norepopath -m -p /opt/epel-6/ --repoid=epel  -l
-    # createrepo -d /opt/epel-6/
+    The bootstrap script will subscribe to EPEL and install the necessary packages needed for the build system. Simply run ./bootstrap.sh.
 
 4e. I want to use CentOS instead of RHEL. What do I need to do?
     CLIP officially supports RHEL.  That is what we test against. CentOS 

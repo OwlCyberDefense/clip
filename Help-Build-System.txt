@@ -47,13 +47,11 @@ To view the list of available build targets run "make help".
 
 Several repositories must be present for the build system to work:
 - RHEL/CentOS
-- EPEL
 - RHEL Optional
 - Fedora Build Groups (for RHEL 5)
 
 The locations of these repos is defined in the CONFIG_REPOS file:
 -  rhel = /mnt/repos/rhel
--  epel = /mnt/repos/epel
 -  opt = /mnt/repos/opt
 -  buildgroups = /mnt/repos/buildgroups
 
