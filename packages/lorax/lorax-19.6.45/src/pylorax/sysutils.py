@@ -104,7 +104,10 @@ def remove(target):
     if os.path.isdir(target) and not os.path.islink(target):
         shutil.rmtree(target)
     else:
-        os.unlink(target)
+        try:
+            os.unlink(target)
+        except:
+            pass
 
 def linktree(src, dst):
     runcmd(["/bin/cp", "-alxf", src, dst])
