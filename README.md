@@ -35,7 +35,7 @@ with a build dependency bar-4.3-1, thus facilitating reproducability of
 generated packages.
 
 
-###So how do I use this thing?
+###How do I use the build system?
 
 This build system has a few constructs that must be addressed by the
 user.
@@ -440,6 +440,6 @@ the repos in CONFIG_REPOS.  A common cause is lacking the Optional channel
 repo when building on RHEL.  This typically results in libxslt-python dep
 errors.
 
-##### How do release CLIP?
-There is a make target for doing a release. Simple set the `CLIP_RELEASE` variable to the title
+##### How to do a release of CLIP
+There is a make target for doing a release. First, set the `CLIP_RELEASE` variable to the title
 of your tag. Then run `make release`. The repo will be tagged and pushed to origin.
