@@ -31,12 +31,8 @@ ifeq ($(shell id -u),0)
 $(error Never CLIP as root! It will break things!  Try again as an unprivileged user with sudo access.)
 endif
 
-# Unfortunately there is a package we need that isn't in RHEL/EPEL/Opt.
-# Or they are packages from upstream we have to patch.
-# So we will roll it ourselves inside of mock :)
-HOST_REQD_PKGS := pungi livecd-tools lorax
-
-HOST_RPM_DEPS := rpm-build createrepo mock repoview
+HOST_RPM_DEPS := rpm-build createrepo mock repoview pungi livecd-tools lorax python-imgcreate dumpet pigz \
+python-kid syslinux-extlinux lorax
 
 export ROOT_DIR ?= $(CURDIR)
 export OUTPUT_DIR ?= $(ROOT_DIR)
@@ -145,7 +141,7 @@ define REPO_ADD_FILE
 endef
 
 define CHECK_DEPS
-	@if ! rpm -q $(HOST_RPM_DEPS) 2>&1 >/dev/null; then echo "Please ensure the following RPMs are installed: $(HOST_RPM_DEPS)."; exit 1; fi
+	@if ! rpm -q $(HOST_RPM_DEPS) 2>&1 >/dev/null; then echo "Please ensure the following RPMs are installed: $(HOST_RPM_DEPS). Run ./bootstrap.sh to automate this process."; exit 1; fi
 	@if [ x"`cat /sys/fs/selinux/enforce`" == "x1" ]; then echo -e "This is embarassing but due to a bug (bz #861281) you must do builds in permissive.\nhttps://bugzilla.redhat.com/show_bug.cgi?id=861281" && exit 1; fi
 endef
 
