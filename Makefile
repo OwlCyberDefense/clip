@@ -31,11 +31,6 @@ ifeq ($(shell id -u),0)
 $(error Never CLIP as root! It will break things!  Try again as an unprivileged user with sudo access.)
 endif
 
-# Unfortunately there is a package we need that isn't in RHEL/EPEL/Opt.
-# Or they are packages from upstream we have to patch.
-# So we will roll it ourselves inside of mock :)
-HOST_REQD_PKGS := pungi livecd-tools lorax
-
 HOST_RPM_DEPS := rpm-build createrepo mock repoview
 
 export ROOT_DIR ?= $(CURDIR)
