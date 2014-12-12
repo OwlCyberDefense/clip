@@ -32,7 +32,7 @@ $(error Never CLIP as root! It will break things!  Try again as an unprivileged 
 endif
 
 HOST_RPM_DEPS := rpm-build createrepo mock repoview pungi livecd-tools lorax python-imgcreate dumpet pigz \
-python-kid syslinux-extlinux
+python-kid syslinux-extlinux lorax
 
 export ROOT_DIR ?= $(CURDIR)
 export OUTPUT_DIR ?= $(ROOT_DIR)
