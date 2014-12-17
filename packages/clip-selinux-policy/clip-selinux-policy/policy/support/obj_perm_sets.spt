@@ -271,3 +271,9 @@ define(`server_stream_socket_perms', `{ client_stream_socket_perms listen accept
 # Keys
 #
 define(`manage_key_perms', `{ create link read search setattr view write } ')
+
+#
+# Services
+#
+
+define(`all_service_perms', `{ start stop status reload enable disable }')

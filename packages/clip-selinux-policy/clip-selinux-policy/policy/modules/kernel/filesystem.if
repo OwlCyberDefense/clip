@@ -3948,6 +3948,40 @@ interface(`fs_getattr_tmpfs_dirs',`
 
 ########################################
 ## <summary>
+##     Relabel directory on tmpfs filesystems.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_relabel_tmpfs_dirs',`
+	gen_require(`
+		type tmpfs_t;
+	')
+	relabel_dirs_pattern($1, tmpfs_t, tmpfs_t)
+')
+
+########################################
+## <summary>
+##     Relabel files on tmpfs filesystems.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_relabel_tmpfs_files',`
+	gen_require(`
+		type tmpfs_t;
+	')
+	relabel_files_pattern($1, tmpfs_t, tmpfs_t)
+')
+
+########################################
+## <summary>
 ##	Do not audit attempts to get the attributes
 ##	of tmpfs directories.
 ## </summary>

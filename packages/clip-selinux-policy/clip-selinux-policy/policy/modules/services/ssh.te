@@ -34,6 +34,10 @@ type ssh_keygen_exec_t;
 init_system_domain(ssh_keygen_t, ssh_keygen_exec_t)
 role system_r types ssh_keygen_t;
 
+type sshd_keygen_t;
+type sshd_keygen_exec_t;
+init_system_domain(sshd_keygen_t, sshd_keygen_exec_t)
+
 type sshd_exec_t;
 corecmd_executable_file(sshd_exec_t)
 
@@ -313,6 +317,10 @@ optional_policy(`
 	xserver_domtrans_xauth(sshd_t)
 ')
 
+ifdef(`init_systemd',`
+	systemd_logind_dbus_chat(sshd_t)
+')
+
 ########################################
 #
 # ssh_keygen local policy
@@ -358,3 +366,17 @@ optional_policy(`
 optional_policy(`
 	udev_read_db(ssh_keygen_t)
 ')
+
+##############################
+#
+# sshd_keygen_t local policy
+#
+
+allow sshd_keygen_t self:capability { chown fsetid };
+
+#corecmd_exec_bin(sshd_keygen_t)
+#files_read_etc_files(sshd_keygen_t)
+#miscfiles_read_localization(sshd_keygen_t)
+#kernel_read_system_state(sshd_keygen_t)
+
+#ssh_domtrans_keygen(sshd_keygen_t)

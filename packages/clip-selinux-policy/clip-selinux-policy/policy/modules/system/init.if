@@ -198,30 +198,32 @@ interface(`init_daemon_domain',`
 
 	ifdef(`init_systemd',`
 		init_domain($1, $2)
-	',`
-		domain_type($1)
-		domain_entry_file($1, $2)
+		# this may be because of late labelling
+		kernel_dgram_send($1)
+	')
 
-		role system_r types $1;
+	domain_type($1)
+	domain_entry_file($1, $2)
 
-		domtrans_pattern(initrc_t, $2, $1)
+	role system_r types $1;
 
-		# daemons started from init will
-		# inherit fds from init for the console
-		init_dontaudit_use_fds($1)
-		term_dontaudit_use_console($1)
+	domtrans_pattern(initrc_t, $2, $1)
 
-		# init script ptys are the stdin/out/err
-		# when using run_init
-		init_use_script_ptys($1)
+	# daemons started from init will
+	# inherit fds from init for the console
+	init_dontaudit_use_fds($1)
+	term_dontaudit_use_console($1)
 
-		ifdef(`direct_sysadm_daemon',`
-			userdom_dontaudit_use_user_terminals($1)
-		')
+	# init script ptys are the stdin/out/err
+	# when using run_init
+	init_use_script_ptys($1)
 
-		optional_policy(`
-			nscd_use($1)
-		')
+	ifdef(`direct_sysadm_daemon',`
+		userdom_dontaudit_use_user_terminals($1)
+	')
+
+	optional_policy(`
+		nscd_use($1)
 	')
 ')
 
@@ -385,9 +387,8 @@ interface(`init_system_domain',`
 
 	ifdef(`init_systemd',`
 		init_domain($1, $2)
-	',`
-		domtrans_pattern(initrc_t, $2, $1)
-	')	
+	')
+	domtrans_pattern(initrc_t, $2, $1)
 ')
 
 ########################################
@@ -635,6 +636,25 @@ interface(`init_sigchld',`
 	allow $1 init_t:process sigchld;
 ')
 
+######################################
+## <summary>
+##	Allow domain dyntransition to init_t domain.
+## </summary>
+## <param name="domain">
+## 	<summary>
+## 	Domain allowed to transition.
+## 	</summary>
+## </param>
+#
+interface(`init_dyntrans',`
+	gen_require(`
+		type init_t;
+	')
+
+	dyntrans_pattern($1, init_t)
+	domain_dyntrans_type($1)
+')
+
 ########################################
 ## <summary>
 ##	Connect to init with a unix socket.
@@ -830,6 +850,25 @@ interface(`init_telinit',`
 		allow $1 self:unix_dgram_socket create_socket_perms;
 		allow $1 init_t:unix_dgram_socket sendto;
 	')
+')
+
+########################################
+## <summary>
+##	Send unix_dgram_socket to init.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`init_dgram_send',`
+	gen_require(`
+		type init_t;
+	')
+
+	allow $1 init_t:unix_dgram_socket sendto;
 ')
 
 ########################################
@@ -1765,6 +1804,38 @@ interface(`init_var_lib_filetrans',`
 
 ########################################
 ## <summary>
+##	Create files in an init lib directory.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="file_type">
+##	<summary>
+##	The type of the object to be created
+##	</summary>
+## </param>
+## <param name="object_class">
+##	<summary>
+##	The object class.
+##	</summary>
+## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
+#
+interface(`init_var_lib_files_write',`
+	gen_require(`
+		type init_var_lib_t;
+	')
+	write_files_pattern($1, init_var_lib_t, init_var_lib_t)
+')
+
+########################################
+## <summary>
 ##	Create files in an init PID directory.
 ## </summary>
 ## <param name="domain">
@@ -1998,3 +2069,59 @@ interface(`init_udp_recvfrom_all_daemons',`
 	')
 	corenet_udp_recvfrom_labeled($1, daemon)
 ')
+
+########################################
+## <summary>
+## Allow specified domain to create a private bus connection to init.
+## </summary>
+## <param name="domain">
+## <summary>
+## Domain allowed access.
+## </summary>
+## </param>
+#
+
+interface(`init_connect_private_bus',`
+   gen_require(`
+       type init_t;
+   ')
+   write_sock_files_pattern($1, init_var_run_t, init_var_run_t)
+   init_stream_connect($1)
+')
+
+########################################
+## <summary>
+## 	Allow specified domain to get init status
+## </summary>
+## <param name="domain">
+## <summary>
+## 	Domain to allow access.
+## </summary>
+## </param>
+#
+interface(`init_service_status',`
+    gen_require(`
+        type init_t;
+    ')
+
+    allow $1 init_t:service status;
+')
+
+########################################
+## <summary>
+## 	Allow specified domain to get init start
+## </summary>
+## <param name="domain">
+## <summary>
+## 	Domain to allow access.
+## </summary>
+## </param>
+#
+interface(`init_service_start',`
+	gen_require(`
+		type init_t;
+	')
+
+	allow $1 init_t:service start;
+')
+

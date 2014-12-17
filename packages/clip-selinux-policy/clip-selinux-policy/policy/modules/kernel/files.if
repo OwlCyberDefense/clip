@@ -6692,8 +6692,7 @@ interface(`files_unconfined',`
 
 	typeattribute $1 files_unconfined_type;
 
-       # SRS: in RHEL 7 - neverallows are being triggered that werent in rhel 6
-       seutil_relabelto_bin_policy($1)
-       auth_relabelto_shadow($1)
-       auth_rw_shadow($1)
+	ifdef(`distro_redhat',`
+		auth_unconfined($1)
+	')
 ')

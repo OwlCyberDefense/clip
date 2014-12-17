@@ -116,8 +116,6 @@ can_exec(init_t, init_exec_t)
 
 allow init_t initrc_t:unix_stream_socket connectto;
 
-# For /var/run/shutdown.pid.
-allow init_t init_var_run_t:file manage_file_perms;
 files_pid_filetrans(init_t, init_var_run_t, file)
 
 allow init_t initctl_t:fifo_file manage_fifo_file_perms;
@@ -186,16 +184,28 @@ ifdef(`init_systemd',`
 	# handle instances where an old labeled init script is encountered.
 	typeattribute init_t init_run_all_scripts_domain;
 
-	allow init_t self:process { getcap getsched setpgid setfscreate setsockcreate setcap setrlimit };
+	allow init_t self:process { getcap getsched setsched setpgid setfscreate setsockcreate setcap setrlimit };
 	allow init_t self:capability2 block_suspend;
 	allow init_t self:netlink_audit_socket nlmsg_readpriv;
 	allow init_t self:netlink_kobject_uevent_socket read;
+	allow init_t self:netlink_route_socket create_netlink_socket_perms;
 	allow init_t self:netlink_selinux_socket read;
 
-	allow init_t init_var_run_t:dir manage_dir_perms;
+	files_read_all_pids(init_t)
+    
+	# For /var/run/shutdown.pid.
+	manage_files_pattern(init_t, init_var_run_t, init_var_run_t)
+	manage_lnk_files_pattern(init_t, init_var_run_t, init_var_run_t)
+	manage_sock_files_pattern(init_t, init_var_run_t, init_var_run_t)
 
+	manage_dirs_pattern(init_t, init_var_run_t, init_var_run_t)
+	manage_sock_files_pattern(init_t, syslogd_var_run_t, syslogd_var_run_t)
+
+	kernel_read_network_state(init_t)
 	kernel_read_kernel_sysctls(init_t)
 	kernel_read_vm_sysctls(init_t)
+	kernel_dgram_send(init_t)
+	kernel_stream_connect(init_t)
 
 	domain_read_all_domains_state(init_t)
 
@@ -203,14 +213,58 @@ ifdef(`init_systemd',`
 	# for privatetmp functions
 	files_manage_generic_tmp_dirs(init_t)
 	files_mounton_tmp(init_t)
+	fs_relabel_tmpfs_dirs(init_t)
+	fs_relabel_tmpfs_files(init_t)
 
 	fs_manage_cgroup_dirs(init_t)
+	relabel_dirs_pattern(init_t, cgroup_t, cgroup_t)
 	fs_rw_cgroup_files(init_t)
+
+	# mount-setup
+	fs_unmount_autofs(init_t)
+	allow init_t pstore_t:dir getattr;
 
 	selinux_compute_create_context(init_t)
 	selinux_compute_access_vector(init_t)
+	seutil_read_file_contexts(init_t)
+
+	files_list_usr(init_t)
+	files_list_var(init_t)
+	files_list_var_lib(init_t)
+	files_relabel_all_lock_dirs(init_t)
+
+	files_search_pids(init_t)
+	files_relabel_all_pids(init_t)
+	dev_relabel_all_dev_nodes(init_t)
+	dev_relabel_all_sysfs(init_t)
+	dev_relabelfrom_all_generic_dev_files(init_t)
+
+	dev_read_urand(init_t)
+	dev_write_kmsg(init_t)
+	relabelfrom_sock_files_pattern(init_t, tmpfs_t, tmpfs_t)
+	relabel_sock_files_pattern(init_t, pidfile, pidfile)
+
+	systemd_manage_unit_dirs(init_t)
+	systemd_manage_unit_files(init_t)
+	systemd_relabelto_unit_dirs(init_t)
+	systemd_manage_unit_symlinks(init_t)
+
+	# systemd_socket_activated policy
+	mls_socket_write_all_levels(init_t)
+	allow init_t systemd_socket_activated_subject_type:unix_dgram_socket create_socket_perms;
+	allow init_t systemd_socket_activated_subject_type:unix_stream_socket create_stream_socket_perms;
+	allow init_t systemd_socket_activated_object_type:dir manage_dir_perms;
+	allow init_t systemd_socket_activated_object_type:fifo_file manage_fifo_file_perms;
+	allow init_t systemd_socket_activated_object_type:sock_file manage_sock_file_perms;
+
+	files_read_all_locks(init_t)
+
+	systemd_logind_dbus_chat(init_t)
 
 	logging_send_audit_msgs(init_t)
+
+	# shared hwclock
+	clock_read_adjtime(init_t)
 
 	optional_policy(`
 		modutils_domtrans_insmod(init_t)
@@ -243,7 +297,6 @@ ifdef(`distro_debian',`
 
 ifdef(`distro_gentoo',`
 	allow init_t self:process { getcap setcap };
-
 	init_exec_rc(initrc_t)
 ')
 
@@ -488,6 +541,9 @@ modutils_read_module_config(initrc_t)
 modutils_domtrans_insmod(initrc_t)
 
 seutil_read_config(initrc_t)
+seutil_domtrans_setfiles(initrc_t)
+logging_domtrans_auditd(initrc_t)
+logging_domtrans_auditctl(initrc_t)
 
 userdom_read_user_home_content_files(initrc_t)
 # Allow access to the sysadm TTYs. Note that this will give access to the
@@ -661,6 +717,21 @@ ifdef(`init_systemd',`
 	corecmd_shell_entry_type(initrc_t)
 	corecmd_bin_domtrans(init_t, initrc_t)
 	corecmd_shell_domtrans(init_t, initrc_t)
+
+	# Connect to private bus (/run/systemd/private)
+	init_connect_private_bus(initrc_t)
+	kernel_dgram_send(initrc_t)
+	systemd_unit_files_service_status(initrc_t)
+	systemd_unit_files_service_start(initrc_t)
+	systemd_unit_files_service_stop(initrc_t)
+	systemd_power_units_service_start(initrc_t)
+	systemd_manage_unit_files(initrc_t)
+	systemd_create_unit_file_dirs(initrc_t)
+	systemd_manage_unit_symlinks(initrc_t)
+	manage_dirs_pattern(initrc_t, init_var_run_t, init_var_run_t)
+	systemd_socket_activated(initrc_t, init_var_run_t)
+	init_var_lib_files_write(initrc_t)
+	files_read_boot_files(initrc_t)
 ')
 
 optional_policy(`
@@ -716,7 +787,7 @@ optional_policy(`
 
 	cups_read_log(initrc_t)
 	cups_read_rw_config(initrc_t)
-#cups init script clears error log
+	#cups init script clears error log
 	cups_write_log(initrc_t)
 ')
 
@@ -983,3 +1054,4 @@ optional_policy(`
 optional_policy(`
 	zebra_read_config(initrc_t)
 ')
+

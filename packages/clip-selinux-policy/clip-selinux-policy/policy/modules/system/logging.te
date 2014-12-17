@@ -78,6 +78,14 @@ files_type(syslogd_var_lib_t)
 type syslogd_var_run_t;
 files_pid_file(syslogd_var_run_t)
 
+ifdef(`init_systemd',`
+	init_daemon_pid_file(syslogd_var_run_t, dir, "syslogd")
+	init_dgram_send(syslogd_t)
+	kernel_use_fds(syslogd_t)
+	kernel_stream_read(syslogd_t)
+	kernel_dgram_getattr(syslogd_t)
+')
+
 type var_log_t;
 logging_log_file(var_log_t)
 files_mountpoint(var_log_t)
@@ -250,7 +258,7 @@ miscfiles_read_localization(audisp_t)
 sysnet_dns_name_resolve(audisp_t)
 
 optional_policy(`
-	dbus_system_bus_client(audisp_t)
+ dbus_system_bus_client(audisp_t)
 ')
 
 ########################################
@@ -356,7 +364,7 @@ optional_policy(`
 # sys_admin for the integrated klog of syslog-ng and metalog
 # sys_nice for rsyslog
 # cjp: why net_admin!
-allow syslogd_t self:capability { dac_override sys_resource sys_tty_config net_admin sys_admin sys_nice chown fsetid };
+allow syslogd_t self:capability { dac_override sys_resource sys_tty_config net_admin sys_admin sys_nice sys_ptrace chown fsetid setuid setgid };
 dontaudit syslogd_t self:capability sys_tty_config;
 # setpgid for metalog
 # setrlimit for syslog-ng
@@ -446,6 +454,9 @@ dev_rw_kmsg(syslogd_t)
 domain_use_interactive_fds(syslogd_t)
 # Allow access to /proc/ information for journald
 domain_read_all_domains_state(syslogd_t)
+
+# Allow journald to create an active socket connection
+systemd_socket_activated(syslogd_t, syslogd_var_run_t)
 
 files_read_etc_files(syslogd_t)
 files_read_usr_files(syslogd_t)

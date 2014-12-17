@@ -75,6 +75,10 @@ ifeq ($(QUIET),y)
 	verbose := @
 endif
 
+ifeq "$(INIT_SYSTEMD)" "y"
+        M4PARAM += -D init_systemd
+endif
+
 M4PARAM += -D hide_broken_symptoms -D mls_num_sens=$(MLS_SENS) -D mls_num_cats=$(MLS_CATS) -D mcs_num_cats=$(MCS_CATS)
 
 # policy headers

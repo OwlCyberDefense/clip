@@ -90,6 +90,12 @@ type event_device_t;
 dev_node(event_device_t)
 
 #
+# Type for eCryptfs devices
+#
+type ecryptfs_device_t;
+dev_node(ecryptfs_device_t)
+
+#
 # Type for framebuffer /dev/fb/*
 #
 type framebuf_device_t;
@@ -191,6 +197,12 @@ type nvram_device_t;
 dev_node(nvram_device_t)
 
 #
+# Type for PKI Common devices
+#
+type pki_common_dev_t;
+dev_node(pki_common_dev_t)
+
+#
 # Type for /dev/pmu
 #
 type power_device_t;
@@ -242,6 +254,12 @@ type tpm_device_t;
 dev_node(tpm_device_t)
 
 #
+# Type for UHID devices
+#
+type uhid_device_t;
+dev_node(uhid_device_t)
+
+#
 # urandom_device_t is the type of /dev/urandom
 #
 type urandom_device_t;
@@ -276,6 +294,12 @@ dev_node(userio_device_t)
 
 type v4l_device_t;
 dev_node(v4l_device_t)
+
+#
+# Type for Virtual Function IO devices
+#
+type vfio_device_t;
+dev_node(vfio_device_t)
 
 #
 # vhost_device_t is the type for /dev/vhost-net

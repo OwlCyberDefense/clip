@@ -217,6 +217,11 @@ ifdef(`distro_redhat',`
 	')
 ')
 
+ifdef(`init_systemd',`
+	fs_read_cgroup_files(udev_t)
+	systemd_logind_read_pid_files(udev_t)
+')
+
 optional_policy(`
 	alsa_domtrans(udev_t)
 	alsa_read_lib(udev_t)

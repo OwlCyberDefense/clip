@@ -299,6 +299,11 @@ ifdef(`distro_redhat',`
 	fs_rw_tmpfs_chr_files(kernel_t)
 ')
 
+ifdef(`init_systemd',`
+	init_dyntrans(kernel_t)
+	selinux_compute_create_context(kernel_t)
+')
+
 optional_policy(`
 	# loop devices
 	fstools_use_fds(kernel_t)

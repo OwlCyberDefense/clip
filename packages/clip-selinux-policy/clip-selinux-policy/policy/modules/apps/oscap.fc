@@ -1,2 +1,5 @@
-/usr/bin/oscap						--		gen_context(system_u:object_r:oscap_exec_t,s0)
+/bin/oscap							--		gen_context(system_u:object_r:oscap_exec_t,s0)
 /usr/libexec/openscap/probe_.*		--		gen_context(system_u:object_r:oscap_probe_exec_t,s0)
+
+/root/ssg									gen_context(system_u:object_r:ssg_file_t,s0)
+

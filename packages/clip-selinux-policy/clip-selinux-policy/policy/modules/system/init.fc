@@ -7,6 +7,10 @@
 /etc/rc\.d/init\.d/.*	--	gen_context(system_u:object_r:initrc_exec_t,s0)
 /etc/sysconfig/network-scripts/ifup-ipsec -- gen_context(system_u:object_r:initrc_exec_t,s0)
 
+ifdef(`distro_redhat',`
+/etc/sysconfig/network-scripts/ifup-*		--	gen_context(system_u:object_r:bin_t,s0)
+')
+
 /etc/X11/prefdm		--	gen_context(system_u:object_r:initrc_exec_t,s0)
 
 ifdef(`distro_gentoo',`

@@ -123,3 +123,23 @@ interface(`lvm_domtrans_clvmd',`
 	corecmd_search_bin($1)
 	domtrans_pattern($1, clvmd_exec_t, clvmd_t)
 ')
+
+########################################
+## <summary>
+##	Create lvm_lock_t directories
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`lvm_create_lock_dirs',`
+	gen_require(`
+		type lvm_lock_t;
+	')
+
+	create_dirs_pattern($1, lvm_lock_t, lvm_lock_t)
+')
+

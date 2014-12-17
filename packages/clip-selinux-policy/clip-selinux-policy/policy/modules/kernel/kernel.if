@@ -293,6 +293,25 @@ interface(`kernel_stream_connect',`
 
 ########################################
 ## <summary>
+##	Connect to kernel using a unix
+##	domain stream socket.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_stream_read',`
+	gen_require(`
+		type kernel_t;
+	')
+
+	allow $1 kernel_t:unix_stream_socket read;
+')
+
+########################################
+## <summary>
 ##	Read and write kernel unix datagram sockets.
 ## </summary>
 ## <param name="domain">
@@ -325,6 +344,24 @@ interface(`kernel_dgram_send',`
 	')
 
 	allow $1 kernel_t:unix_dgram_socket sendto;
+')
+
+########################################
+## <summary>
+##	Send messages to kernel unix datagram sockets.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_dgram_getattr',`
+	gen_require(`
+		type kernel_t;
+	')
+
+	allow $1 kernel_t:unix_dgram_socket getattr;
 ')
 
 ########################################

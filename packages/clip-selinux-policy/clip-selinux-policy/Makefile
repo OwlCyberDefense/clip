@@ -212,6 +212,10 @@ ifeq "$(UBAC)" "y"
 	M4PARAM += -D enable_ubac
 endif
 
+ifeq "$(INIT_SYSTEMD)" "y"
+	M4PARAM += -D init_systemd
+endif
+
 # default MLS/MCS sensitivity and category settings.
 MLS_SENS ?= 16
 MLS_CATS ?= 1024
