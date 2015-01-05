@@ -212,7 +212,7 @@ export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
 if [ x"$CONFIG_BUILD_LIVE_MEDIA" != "y" ]; then
 	exec >/root/clip_post_install.log 2>&1
 	# Print the log to tty7 so that the user know what's going on
-	tail -f /root/clip_post_install.log >/dev/tty7 &
+	/usr/bin/tail -f /root/clip_post_install.log >/dev/tty7 &
 	TAILPID=$!
 	chvt 7
 fi
@@ -243,41 +243,41 @@ HASHED_PASSWORD='$6$314159265358$ytgatj7CAZIRFMPbEanbdi.krIJs.mS9N2JEl0jkPsCvtwC
 #
 # Don't get lost in the 'if' statement - basically map $USERNAME to the unconfined toor_r:toor_t role if it is enabled.  
 if [ x"$CONFIG_BUILD_UNCONFINED_TOOR" == "xy" ]; then
-	semanage user -a -R toor_r -R staff_r -R sysadm_r "${USERNAME}_u" 
+	/usr/sbin/semanage user -a -R toor_r -R staff_r -R sysadm_r "${USERNAME}_u" 
 else
-	semanage user -a -R staff_r -R sysadm_r "${USERNAME}_u" || semanage user -a -R staff_r "${USERNAME}_u"
+	/usr/sbin/semanage user -a -R staff_r -R sysadm_r "${USERNAME}_u" || /usr/sbin/semanage user -a -R staff_r "${USERNAME}_u"
 fi
-useradd -m "$USERNAME" -G wheel -Z "${USERNAME}_u"
+/sbin/useradd -m "$USERNAME" -G wheel -Z "${USERNAME}_u"
 
 if [ x"$HASHED_PASSWORD" == "x" ]; then
-	passwd --stdin "$USERNAME" <<< "$PASSWORD"
+	/sbin/passwd --stdin "$USERNAME" <<< "$PASSWORD"
 else
-	usermod --pass="$HASHED_PASSWORD" "$USERNAME"
+	/sbin/usermod --pass="$HASHED_PASSWORD" "$USERNAME"
 fi
 
-chage -d 0 "$USERNAME"
+/bin/chage -d 0 "$USERNAME"
 
 # Remove sshd if it in a production build
 # If not, use systemctl disable
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
-    echo "Removing sshd from the system"
+    /bin/echo "Removing sshd from the system"
     /bin/rpm -e openssh openssh-clients openssh-server
 else
-    echo "Turning sshd off"
+    /bin/echo "Turning sshd off"
     /usr/bin/systemctl disable sshd.service
 fi
 
 # Add the user to sudoers and setup an SELinux role/type transition.
 # This line enables a transition via sudo instead of requiring sudo and newrole.
 if [ x"$CONFIG_BUILD_UNCONFINED_TOOR" == "xy" ]; then
-	echo "$USERNAME        ALL=(ALL) ROLE=toor_r TYPE=toor_t      ALL" >> /etc/sudoers
-	echo "WARNING: This is a debug build with a super user present.  DO NOT USE IN PRODUCTION!" > /etc/motd
+	/bin/echo "$USERNAME        ALL=(ALL) ROLE=toor_r TYPE=toor_t      ALL" >> /etc/sudoers
+	/bin/echo "WARNING: This is a debug build with a super user present.  DO NOT USE IN PRODUCTION!" > /etc/motd
 else
-	echo "$USERNAME        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
+	/bin/echo "$USERNAME        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
 fi
 
 # Lock the root acct to prevent direct logins
-usermod -L root
+/sbin/usermod -L root
 
 # Disable all that GUI stuff during boot so we can actually see what is going on during boot.
 # The first users of a CLIP system will be devs. Lets make things a little easier on them.
@@ -285,8 +285,8 @@ usermod -L root
 /usr/sbin/grubby --update-kernel=ALL --remove-args="rhgb quiet"
 # This is ugly but when plymouth re-rolls the initrd it creates a new entry in grub.conf that is redundant.
 # Actually rather benign but may impact developers using grubby who think there is only one kernel to work with.
-echo "Modifying splash screen with plymouth..."
-plymouth-set-default-theme details --rebuild-initrd &> /dev/null
+/bin/echo "Modifying splash screen with plymouth..."
+/sbin/plymouth-set-default-theme details --rebuild-initrd &> /dev/null
 
 ###### START - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
@@ -298,7 +298,7 @@ if [ x"$CONFIG_BUILD_ENFORCING_MODE" != "xy" ]; then
 	echo "WARNING: This is a debug build in permissive mode.  DO NOT USE IN PRODUCTION!" >> /etc/motd
 	# This line is used to make policy development easier.  It disables the "setfiles" check used by 
 	# semodule/semanage that prevents transactions containing invalid and dupe fc entries from rolling forward.
-	echo -e "module-store = direct\n[setfiles]\npath=/bin/true\n[end]\n" > /etc/selinux/semanage.conf
+	/bin/echo -e "module-store = direct\n[setfiles]\npath=/bin/true\n[end]\n" > /etc/selinux/semanage.conf
 	/usr/sbin/grubby --update-kernel=ALL --remove-args=enforcing
 	/usr/sbin/grubby --update-kernel=ALL --args=enforcing=0
 fi
@@ -311,16 +311,16 @@ echo "Done with post install scripts..."
 # problems cleanly, then just kill them all and let
 # <deity> sort them out.
 if [ x"$CONFIG_BUILD_LIVE_MEDIA" == "xy" ]; then
-	service restorecond stop
-	service auditd stop
-	service rsyslog stop
-	service crond stop
-	[ -f /etc/init.d/vmtoolsd ] && service vmtoolsd stop
+	/sbin/service restorecond stop
+	/sbin/service auditd stop
+	/sbin/service rsyslog stop
+	/sbin/service crond stop
+	[ -f /etc/init.d/vmtoolsd ] && /sbin/service vmtoolsd stop
 
 	# this one isn't actually due to remediation, but needs to be done too
-	kill $(jobs -p) 2>/dev/null 1>/dev/null
+	/bin/kill $(jobs -p) 2>/dev/null 1>/dev/null
 fi
-kill $TAILPID 2>/dev/null 1>/dev/null
+/bin/kill $TAILPID 2>/dev/null 1>/dev/null
 
 %end
 
@@ -330,8 +330,8 @@ kill $TAILPID 2>/dev/null 1>/dev/null
 #CONFIG-BUILD-PLACEHOLDER
 
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
-    echo "Deleting anaconda-ks.cfg as this is a production build" >> /mnt/sysimage/root/clip_post_install.log
-    rm /mnt/sysimage/root/anaconda-ks.cfg
+    /bin/echo "Deleting anaconda-ks.cfg as this is a production build" >> /mnt/sysimage/root/clip_post_install.log
+    /bin/rm /mnt/sysimage/root/anaconda-ks.cfg
 fi
 
 %end
