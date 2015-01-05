@@ -443,3 +443,9 @@ errors.
 ##### How to do a release of CLIP
 There is a make target for doing a release. First, set the `CLIP_RELEASE` variable to the title
 of your tag. Then run `make release`. The repo will be tagged and pushed to origin.
+
+## Known Issues
+
+##### VirtualBox
+There is a known issue when creating a Virtual Machine of CLIP using VirtualBox and a hard disk size less than 20 gigabytes. Please use a HDD
+size that is at least 20 GB when using CLIP on VirtualBox.
