@@ -384,6 +384,25 @@ interface(`term_getattr_pty_fs',`
 
 ########################################
 ## <summary>
+##	Relabel from and to pty filesystem.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`term_relabel_pty_fs',`
+	gen_require(`
+		type devpts_t;
+	')
+
+	dev_list_all_dev_nodes($1)
+	allow $1 devpts_t:filesystem { relabelto relabelfrom };
+')
+
+########################################
+## <summary>
 ##	Do not audit attempts to get the
 ##	attributes of the /dev/pts directory.
 ## </summary>
@@ -579,13 +598,13 @@ interface(`term_dontaudit_setattr_generic_ptys',`
 
 ########################################
 ## <summary>
-##	read and write the generic pty
-##	type.  this is generally only used in
+##	Read and write the generic pty
+##	type.  This is generally only used in
 ##	the targeted policy.
 ## </summary>
 ## <param name="domain">
 ##	<summary>
-##	domain allowed access.
+##	Domain allowed access.
 ##	</summary>
 ## </param>
 #
@@ -597,27 +616,6 @@ interface(`term_use_generic_ptys',`
 	dev_list_all_dev_nodes($1)
 	allow $1 devpts_t:dir list_dir_perms;
 	allow $1 devpts_t:chr_file { rw_term_perms lock append };
-')
-
-########################################
-## <summary>
-##	Write tto he generic pty
-##	type. 
-## </summary>
-## <param name="domain">
-##	<summary>
-##	domain allowed access.
-##	</summary>
-## </param>
-#
-interface(`term_write_generic_ptys',`
-	gen_require(`
-		type devpts_t;
-	')
-
-	dev_list_all_dev_nodes($1)
-	allow $1 devpts_t:dir list_dir_perms;
-	allow $1 devpts_t:chr_file write;
 ')
 
 ########################################
@@ -1513,4 +1511,23 @@ interface(`term_use_all_user_ttys',`
 interface(`term_dontaudit_use_all_user_ttys',`
 	refpolicywarn(`$0() is deprecated, use term_dontaudit_use_all_ttys() instead.')
 	term_dontaudit_use_all_ttys($1)
+')
+
+#####################################
+## <summary>
+##	Read from and write virtio console.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`term_use_virtio_console',`
+	gen_require(`
+		type virtio_device_t;
+	')
+
+	dev_list_all_dev_nodes($1)
+	allow $1 virtio_device_t:chr_file rw_term_perms;
 ')

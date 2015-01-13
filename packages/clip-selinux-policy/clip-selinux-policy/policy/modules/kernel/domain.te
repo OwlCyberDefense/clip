@@ -1,4 +1,4 @@
-policy_module(domain, 1.10.0)
+policy_module(domain, 1.11.1)
 
 ########################################
 #
@@ -96,6 +96,9 @@ kernel_dontaudit_link_key(domain)
 # create child processes in the domain
 allow domain self:process { fork sigchld };
 
+# glibc get_nprocs requires read access to /sys/devices/system/cpu/online
+dev_read_cpu_online(domain)
+
 # Use trusted objects in /dev
 dev_rw_null(domain)
 dev_rw_zero(domain)
@@ -103,6 +106,14 @@ term_use_controlling_term(domain)
 
 # list the root directory
 files_list_root(domain)
+
+ifdef(`hide_broken_symptoms',`
+	# This check is in the general socket
+	# listen code, before protocol-specific
+	# listen function is called, so bad calls
+	# to listen on UDP sockets should be silenced
+	dontaudit domain self:udp_socket listen;
+')
 
 tunable_policy(`global_ssp',`
 	# enable reading of urandom for all domains:

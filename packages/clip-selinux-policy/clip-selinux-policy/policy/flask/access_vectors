@@ -445,6 +445,8 @@ class capability2
 	mac_override	# unused by SELinux
 	mac_admin	# unused by SELinux
 	syslog
+	wake_alarm
+	block_suspend
 }
 
 #
@@ -761,7 +763,6 @@ inherits database
 class db_table
 inherits database
 {
-	use		# deprecated
 	select
 	update
 	insert
@@ -780,7 +781,6 @@ inherits database
 class db_column
 inherits database
 {
-	use		# deprecated
 	select
 	update
 	insert
@@ -790,7 +790,7 @@ class db_tuple
 {
 	relabelfrom
 	relabelto
-	use		# deprecated
+	use
 	select
 	update
 	insert
@@ -804,6 +804,18 @@ inherits database
 	write
 	import
 	export
+}
+
+class db_exception
+inherits database
+{
+	use
+}
+
+class db_datatype
+inherits database
+{
+	use
 }
 
 # network peer labels
@@ -827,6 +839,9 @@ class kernel_service
 
 class tun_socket
 inherits socket
+{
+	attach_queue
+}
 
 class x_pointer
 inherits x_device
@@ -862,3 +877,14 @@ inherits database
 	implement
 	execute
 }
+
+class service
+{
+	start
+	stop
+	status
+	reload
+	enable
+	disable
+}
+

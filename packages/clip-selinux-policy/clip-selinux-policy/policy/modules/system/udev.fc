@@ -11,7 +11,11 @@
 
 /lib/udev/udev-acl --	gen_context(system_u:object_r:udev_exec_t,s0)
 
-/sbin/start_udev --	gen_context(system_u:object_r:udev_exec_t,s0)
+ifdef(`distro_debian',`
+/bin/udevadm	--	gen_context(system_u:object_r:udev_exec_t,s0)
+/lib/udev/create_static_nodes -- gen_context(system_u:object_r:udev_exec_t,s0)
+')
+
 /sbin/udev	--	gen_context(system_u:object_r:udev_exec_t,s0)
 /sbin/udevadm	--	gen_context(system_u:object_r:udev_exec_t,s0)
 /sbin/udevd	--	gen_context(system_u:object_r:udev_exec_t,s0)
@@ -19,7 +23,19 @@
 /sbin/udevstart	--	gen_context(system_u:object_r:udev_exec_t,s0)
 /sbin/wait_for_sysfs -- gen_context(system_u:object_r:udev_exec_t,s0)
 
+ifdef(`distro_redhat',`
+/sbin/start_udev --	gen_context(system_u:object_r:udev_exec_t,s0)
+')
+
 /usr/bin/udevinfo --	gen_context(system_u:object_r:udev_exec_t,s0)
 
-/var/run/PackageKit/udev(/.*)? gen_context(system_u:object_r:udev_var_run_t,s0)
-/var/run/udev(/.*)?	gen_context(system_u:object_r:udev_tbl_t,s0)
+/usr/lib/systemd/systemd-udevd -- gen_context(system_u:object_r:udev_exec_t,s0)
+
+/usr/share/virtualbox/VBoxCreateUSBNode\.sh	--	gen_context(system_u:object_r:udev_helper_exec_t,s0)
+
+/var/run/udev(/.*)?	gen_context(system_u:object_r:udev_var_run_t,s0)
+
+ifdef(`distro_debian',`
+/lib/systemd/systemd-udevd	--	gen_context(system_u:object_r:udev_exec_t,s0)
+/var/run/xen-hotplug -d	gen_context(system_u:object_r:udev_var_run_t,s0)
+')

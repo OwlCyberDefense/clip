@@ -1,4 +1,4 @@
-
+/dev/\.tmp-block-.*	-c	gen_context(system_u:object_r:fixed_disk_device_t,mls_systemhigh)
 /dev/n?(raw)?[qr]ft[0-3] -c	gen_context(system_u:object_r:tape_device_t,s0)
 /dev/n?[hs]t[0-9].*	-c	gen_context(system_u:object_r:tape_device_t,s0)
 /dev/n?z?qft[0-3]	-c	gen_context(system_u:object_r:tape_device_t,s0)
@@ -56,6 +56,10 @@ ifdef(`distro_redhat', `
 /dev/ubd[^/]*		-b	gen_context(system_u:object_r:fixed_disk_device_t,mls_systemhigh)
 /dev/vd[^/]*		-b	gen_context(system_u:object_r:fixed_disk_device_t,mls_systemhigh)
 /dev/xvd[^/]*		-b	gen_context(system_u:object_r:fixed_disk_device_t,mls_systemhigh)
+/dev/zd.*		-b	gen_context(system_u:object_r:fixed_disk_device_t,mls_systemhigh)
+/dev/zfs		-c	gen_context(system_u:object_r:fixed_disk_device_t,mls_systemhigh)
+/dev/zpios		-c	gen_context(system_u:object_r:fixed_disk_device_t,mls_systemhigh)
+/dev/zram[0-9]+		-b	gen_context(system_u:object_r:fixed_disk_device_t,mls_systemhigh)
 
 /dev/ataraid/.*		-b	gen_context(system_u:object_r:fixed_disk_device_t,mls_systemhigh)
 

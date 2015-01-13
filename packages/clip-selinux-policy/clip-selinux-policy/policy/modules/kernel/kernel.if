@@ -8,6 +8,26 @@
 
 ########################################
 ## <summary>
+##	Allows the kernel to start userland processes
+##	by dynamic transitions to the specified domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	The process type entered by the kernel.
+##	</summary>
+## </param>
+#
+interface(`kernel_dyntrans_to',`
+	gen_require(`
+		type kernel_t;
+	')
+
+	allow kernel_t self:process setcurrent;
+	allow kernel_t $1:process dyntransition;
+')
+
+########################################
+## <summary>
 ##	Allows to start userland processes
 ##	by transitioning to the specified domain.
 ## </summary>
@@ -254,6 +274,25 @@ interface(`kernel_rw_pipes',`
 
 ########################################
 ## <summary>
+##	Connect to kernel using a unix
+##	domain stream socket.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_stream_connect',`
+	gen_require(`
+		type kernel_t;
+	')
+
+	allow $1 kernel_t:unix_stream_socket connectto;
+')
+
+########################################
+## <summary>
 ##	Read and write kernel unix datagram sockets.
 ## </summary>
 ## <param name="domain">
@@ -345,13 +384,7 @@ interface(`kernel_load_module',`
 		attribute can_load_kernmodule;
 	')
 
-	allow $1 self:capability sys_module;
 	typeattribute $1 can_load_kernmodule;
-
-	# load_module() calls stop_machine() which
-	# calls sched_setscheduler()
-	allow $1 self:capability sys_nice;
-	kernel_setsched($1)
 ')
 
 ########################################
@@ -482,14 +515,6 @@ interface(`kernel_change_ring_buffer_level',`
 
 	allow $1 self:capability2 syslog;
 	allow $1 kernel_t:system syslog_console;
-
-	ifdef(`distro_rhel4',`
-		allow $1 self:capability sys_admin;
-	')
-
-	ifdef(`distro_rhel5',`
-		allow $1 self:capability sys_admin;
-	')
 ')
 
 ########################################
@@ -510,14 +535,6 @@ interface(`kernel_clear_ring_buffer',`
 
 	allow $1 self:capability2 syslog;
 	allow $1 kernel_t:system syslog_mod;
-
-	ifdef(`distro_rhel4',`
-		allow $1 self:capability sys_admin;
-	')
-
-	ifdef(`distro_rhel5',`
-		allow $1 self:capability sys_admin;
-	')
 ')
 
 ########################################
@@ -2251,6 +2268,42 @@ interface(`kernel_sigchld_unlabeled',`
 
 ########################################
 ## <summary>
+##	Get the attributes of unlabeled directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_getattr_unlabeled_dirs',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	allow $1 unlabeled_t:dir getattr_dir_perms;
+')
+
+########################################
+## <summary>
+##	Do not audit attempts to search unlabeled directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain to not audit.
+##	</summary>
+## </param>
+#
+interface(`kernel_dontaudit_search_unlabeled',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	dontaudit $1 unlabeled_t:dir search_dir_perms;
+')
+
+########################################
+## <summary>
 ##	List unlabeled directories.
 ## </summary>
 ## <param name="domain">
@@ -2325,6 +2378,78 @@ interface(`kernel_rw_unlabeled_dirs',`
 
 ########################################
 ## <summary>
+##	Delete unlabeled directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_delete_unlabeled_dirs',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	allow $1 unlabeled_t:dir delete_dir_perms;
+')
+
+########################################
+## <summary>
+##	Create, read, write, and delete unlabeled directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_manage_unlabeled_dirs',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	allow $1 unlabeled_t:dir manage_dir_perms;
+')
+
+########################################
+## <summary>
+##	Mount a filesystem on an unlabeled directory.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_mounton_unlabeled_dirs',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	allow $1 unlabeled_t:dir { search_dir_perms mounton };
+')
+
+########################################
+## <summary>
+##	Read unlabeled files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_read_unlabeled_files',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	allow $1 unlabeled_t:file read_file_perms;
+')
+
+########################################
+## <summary>
 ##	Read and write unlabeled files.
 ## </summary>
 ## <param name="domain">
@@ -2339,6 +2464,42 @@ interface(`kernel_rw_unlabeled_files',`
 	')
 
 	allow $1 unlabeled_t:file rw_file_perms;
+')
+
+########################################
+## <summary>
+##	Delete unlabeled files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_delete_unlabeled_files',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	allow $1 unlabeled_t:file delete_file_perms;
+')
+
+########################################
+## <summary>
+##	Create, read, write, and delete unlabeled files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_manage_unlabeled_files',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	allow $1 unlabeled_t:file manage_file_perms;
 ')
 
 ########################################
@@ -2377,6 +2538,42 @@ interface(`kernel_dontaudit_read_unlabeled_files',`
 	')
 
 	dontaudit $1 unlabeled_t:file { getattr read };
+')
+
+########################################
+## <summary>
+##	Delete unlabeled symbolic links.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_delete_unlabeled_symlinks',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	delete_lnk_files_pattern($1, unlabeled_t, unlabeled_t)
+')
+
+########################################
+## <summary>
+##	Create, read, write, and delete unlabeled symbolic links.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_manage_unlabeled_symlinks',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	allow $1 unlabeled_t:lnk_file manage_lnk_file_perms;
 ')
 
 ########################################
@@ -2470,7 +2667,43 @@ interface(`kernel_rw_unlabeled_blk_files',`
 		type unlabeled_t;
 	')
 
-	allow $1 unlabeled_t:blk_file getattr;
+	allow $1 unlabeled_t:blk_file rw_blk_file_perms;
+')
+
+########################################
+## <summary>
+##	Delete unlabeled block device nodes.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_delete_unlabeled_blk_files',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	delete_blk_files_pattern($1, unlabeled_t, unlabeled_t)
+')
+
+########################################
+## <summary>
+##	Create, read, write, and delete unlabeled block device nodes.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_manage_unlabeled_blk_files',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	allow $1 unlabeled_t:blk_file manage_blk_file_perms;
 ')
 
 ########################################
@@ -2490,6 +2723,62 @@ interface(`kernel_dontaudit_getattr_unlabeled_chr_files',`
 	')
 
 	dontaudit $1 unlabeled_t:chr_file getattr;
+')
+
+########################################
+## <summary>
+##	Do not audit attempts to
+##	write unlabeled character devices.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain to not audit.
+##	</summary>
+## </param>
+#
+interface(`kernel_dontaudit_write_unlabeled_chr_files',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	dontaudit $1 unlabeled_t:file write;
+')
+
+########################################
+## <summary>
+##	Delete unlabeled character device nodes.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_delete_unlabeled_chr_files',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	delete_chr_files_pattern($1, unlabeled_t, unlabeled_t)
+')
+
+
+########################################
+## <summary>
+##	Create, read, write, and delete unlabeled character device nodes.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_manage_unlabeled_chr_files',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	allow $1 unlabeled_t:chr_file manage_chr_file_perms;
 ')
 
 ########################################
@@ -2569,6 +2858,24 @@ interface(`kernel_relabelfrom_unlabeled_pipes',`
 
 ########################################
 ## <summary>
+##	Delete unlabeled named pipes
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_delete_unlabeled_pipes',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	delete_fifo_files_pattern($1, unlabeled_t, unlabeled_t)
+')
+
+########################################
+## <summary>
 ##	Allow caller to relabel unlabeled named sockets.
 ## </summary>
 ## <param name="domain">
@@ -2586,6 +2893,23 @@ interface(`kernel_relabelfrom_unlabeled_sockets',`
 	allow $1 unlabeled_t:sock_file { getattr relabelfrom };
 ')
 
+########################################
+## <summary>
+##	Delete unlabeled named sockets.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_delete_unlabeled_sockets',`
+	gen_require(`
+		type unlabeled_t;
+	')
+
+	delete_sock_files_pattern($1, unlabeled_t, unlabeled_t)
+')
 ########################################
 ## <summary>
 ##	Send and receive messages from an
@@ -2617,9 +2941,6 @@ interface(`kernel_sendrecv_unlabeled_association',`
 	')
 
 	allow $1 unlabeled_t:association { sendto recvfrom };
-
-	# temporary hack until labeling on packets is supported
-	allow $1 unlabeled_t:packet { send recv };
 ')
 
 ########################################
@@ -2962,25 +3283,5 @@ interface(`kernel_unconfined',`
 	')
 
 	typeattribute $1 kern_unconfined;
+	kernel_load_module($1)
 ')
-
-
-########################################
-## <summary>
-##     Allow the specified domain to connect to
-##     the kernel with a unix socket.
-## </summary>
-## <param name="domain">
-##     <summary>
-##     Domain allowed access.
-##     </summary>
-## </param>
-#
-interface(`kernel_stream_connect',`
-       gen_require(`
-               type kernel_t;
-       ')
-
-       allow $1 kernel_t:unix_stream_socket connectto;
-')
-

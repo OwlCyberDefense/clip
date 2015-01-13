@@ -6,7 +6,7 @@
 #
 # gen_user(username, prefix, role_set, mls_defaultlevel, mls_range, [mcs_catetories])
 #
-# Note: Identities without a prefix wil not be listed
+# Note: Identities without a prefix will not be listed
 # in the users_extra file used by genhomedircon.
 
 #
@@ -24,11 +24,16 @@ gen_user(system_u,, system_r, s0, s0 - mls_systemhigh, mcs_allcats)
 # SELinux user identity for a Linux user.  If you do not want to
 # permit any access to such users, then remove this entry.
 #
-# SRS: Due to an unforuntate bug in useradd we have to retain user_u.
-#      But we're going to use constraints to strip all access from this user ID.
 gen_user(user_u, user, user_r, s0, s0)
-#gen_user(staff_u, user, staff_r system_r sysadm_r, s0, s0 - mls_systemhigh, mcs_allcats)
-#gen_user(sysadm_u, user, sysadm_r, s0, s0 - mls_systemhigh, mcs_allcats)
+gen_user(staff_u, staff, staff_r sysadm_r ifdef(`enable_mls',`secadm_r auditadm_r'), s0, s0 - mls_systemhigh, mcs_allcats)
+gen_user(sysadm_u, sysadm, sysadm_r, s0, s0 - mls_systemhigh, mcs_allcats)
+
+# Until order dependence is fixed for users:
+ifdef(`direct_sysadm_daemon',`
+        gen_user(unconfined_u, unconfined, unconfined_r system_r, s0, s0 - mls_systemhigh, mcs_allcats)
+',`
+        gen_user(unconfined_u, unconfined, unconfined_r, s0, s0 - mls_systemhigh, mcs_allcats)
+')
 
 #
 # The following users correspond to Unix identities.
@@ -37,4 +42,8 @@ gen_user(user_u, user, user_r, s0, s0)
 # role should use the staff_r role instead of the user_r role when
 # not in the sysadm_r.
 #
-gen_user(root, user, system_r, s0, s0 - mls_systemhigh, mcs_allcats)
+ifdef(`direct_sysadm_daemon',`
+	gen_user(root, sysadm, sysadm_r staff_r ifdef(`enable_mls',`secadm_r auditadm_r') system_r, s0, s0 - mls_systemhigh, mcs_allcats)
+',`
+	gen_user(root, sysadm, sysadm_r staff_r ifdef(`enable_mls',`secadm_r auditadm_r'), s0, s0 - mls_systemhigh, mcs_allcats)
+')

@@ -1,4 +1,4 @@
-policy_module(lvm, 1.13.0)
+policy_module(lvm, 1.16.0)
 
 ########################################
 #
@@ -104,7 +104,6 @@ fs_getattr_all_fs(clvmd_t)
 fs_search_auto_mountpoints(clvmd_t)
 fs_dontaudit_list_tmpfs(clvmd_t)
 fs_dontaudit_read_removable_files(clvmd_t)
-fs_dontaudit_list_hugetlbfs(lvm_t)
 fs_rw_anon_inodefs_files(clvmd_t)
 
 storage_dontaudit_getattr_removable_dev(clvmd_t)
@@ -168,9 +167,9 @@ optional_policy(`
 # net_admin for multipath
 allow lvm_t self:capability { dac_override fowner ipc_lock sys_admin sys_nice mknod chown sys_resource sys_rawio net_admin };
 dontaudit lvm_t self:capability sys_tty_config;
-allow lvm_t self:process { sigchld sigkill sigstop signull signal };
+allow lvm_t self:process { sigchld sigkill sigstop signull signal setfscreate };
 # LVM will complain a lot if it cannot set its priority.
-allow lvm_t self:process { setsched setfscreate };
+allow lvm_t self:process setsched;
 allow lvm_t self:file rw_file_perms;
 allow lvm_t self:fifo_file manage_fifo_file_perms;
 allow lvm_t self:unix_dgram_socket create_socket_perms;
@@ -193,7 +192,9 @@ can_exec(lvm_t, lvm_exec_t)
 
 # Creating lock files
 manage_files_pattern(lvm_t, lvm_lock_t, lvm_lock_t)
+create_dirs_pattern(lvm_t, lvm_lock_t, lvm_lock_t)
 files_lock_filetrans(lvm_t, lvm_lock_t, file)
+files_lock_filetrans(lvm_t, lvm_lock_t, dir, "lvm")
 
 manage_dirs_pattern(lvm_t, lvm_var_lib_t, lvm_var_lib_t)
 manage_files_pattern(lvm_t, lvm_var_lib_t, lvm_var_lib_t)
@@ -216,6 +217,8 @@ kernel_get_sysvipc_info(lvm_t)
 kernel_read_system_state(lvm_t)
 # Read system variables in /proc/sys
 kernel_read_kernel_sysctls(lvm_t)
+# for when /usr is not mounted:
+kernel_dontaudit_search_unlabeled(lvm_t)
 # it has no reason to need this
 kernel_dontaudit_getattr_core_if(lvm_t)
 kernel_use_fds(lvm_t)
@@ -233,6 +236,7 @@ dev_manage_generic_symlinks(lvm_t)
 dev_relabel_generic_dev_dirs(lvm_t)
 dev_manage_generic_blk_files(lvm_t)
 # Read /sys/block. Device mapper metadata is kept there.
+# Write read_ahead_kb
 dev_rw_sysfs(lvm_t)
 # cjp: this has no effect since LVM does not
 # have lnk_file relabelto for anything else.
@@ -252,8 +256,6 @@ domain_read_all_domains_state(lvm_t)
 files_read_usr_files(lvm_t)
 files_read_etc_files(lvm_t)
 files_read_etc_runtime_files(lvm_t)
-# for when /usr is not mounted:
-files_dontaudit_search_isid_type_dirs(lvm_t)
 
 fs_getattr_xattr_fs(lvm_t)
 fs_search_auto_mountpoints(lvm_t)
@@ -290,7 +292,6 @@ init_use_fds(lvm_t)
 init_dontaudit_getattr_initctl(lvm_t)
 init_use_script_ptys(lvm_t)
 init_read_script_state(lvm_t)
-init_read_script_tmp_files(lvm_t)
 
 logging_send_syslog_msg(lvm_t)
 
@@ -305,7 +306,7 @@ userdom_use_user_terminals(lvm_t)
 
 ifdef(`distro_redhat',`
 	# this is from the initrd:
-	files_rw_isid_type_dirs(lvm_t)
+	kernel_rw_unlabeled_dirs(lvm_t)
 
 	optional_policy(`
 		unconfined_domain(lvm_t)
@@ -342,6 +343,7 @@ optional_policy(`
 
 optional_policy(`
 	udev_read_db(lvm_t)
+	udev_read_pid_files(lvm_t)
 ')
 
 optional_policy(`

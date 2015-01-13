@@ -1,4 +1,4 @@
-policy_module(terminal, 1.10.0)
+policy_module(terminal, 1.12.1)
 
 ########################################
 #
@@ -27,8 +27,7 @@ dev_node(console_device_t)
 type devpts_t;
 files_mountpoint(devpts_t)
 fs_associate_tmpfs(devpts_t)
-dev_associate(devpts_t)
-fs_type(devpts_t)
+fs_xattr_type(devpts_t)
 fs_use_trans devpts gen_context(system_u:object_r:devpts_t,s0);
 
 #
@@ -57,3 +56,6 @@ dev_node(tty_device_t)
 #
 type usbtty_device_t, serial_device;
 dev_node(usbtty_device_t)
+
+type virtio_device_t, serial_device;
+dev_node(virtio_device_t)

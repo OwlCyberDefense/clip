@@ -1,14 +1,22 @@
-policy_module(authlogin, 2.3.0)
+policy_module(authlogin, 2.6.0)
 
 ########################################
 #
 # Declarations
 #
 
-attribute auth_file_type;
+
+## <desc>
+## <p>
+## Allow users to resolve user passwd entries directly from ldap rather then using a sssd server
+## </p>
+## </desc>
+gen_tunable(authlogin_nsswitch_use_ldap, false)
+
 attribute can_read_shadow_passwords;
 attribute can_write_shadow_passwords;
 attribute can_relabelto_shadow_passwords;
+attribute nsswitch_domain;
 
 type auth_cache_t;
 logging_log_file(auth_cache_t)
@@ -51,7 +59,7 @@ type pam_var_run_t;
 files_pid_file(pam_var_run_t)
 
 type shadow_t;
-auth_file(shadow_t)
+files_auth_file(shadow_t)
 neverallow ~can_read_shadow_passwords shadow_t:file read;
 neverallow ~can_write_shadow_passwords shadow_t:file { create write };
 neverallow ~can_relabelto_shadow_passwords shadow_t:file relabelto;
@@ -97,6 +105,7 @@ domain_dontaudit_use_interactive_fds(chkpwd_t)
 
 dev_read_rand(chkpwd_t)
 dev_read_urand(chkpwd_t)
+dev_search_sysfs(chkpwd_t)
 
 files_read_etc_files(chkpwd_t)
 # for nscd
@@ -211,6 +220,7 @@ dontaudit pam_console_t pam_var_console_t:file write;
 
 kernel_read_kernel_sysctls(pam_console_t)
 kernel_use_fds(pam_console_t)
+kernel_dontaudit_search_unlabeled(pam_console_t)
 # Read /proc/meminfo
 kernel_read_system_state(pam_console_t)
 
@@ -246,7 +256,6 @@ dev_read_urand(pam_console_t)
 files_read_etc_files(pam_console_t)
 files_search_pids(pam_console_t)
 files_list_mnt(pam_console_t)
-files_dontaudit_search_isid_type_dirs(pam_console_t)
 # read /etc/mtab
 files_read_etc_runtime_files(pam_console_t)
 
@@ -389,10 +398,69 @@ ifdef(`distro_ubuntu',`
 ')
 
 optional_policy(`
-	nscd_socket_use(utempter_t)
+	nscd_use(utempter_t)
 ')
 
 optional_policy(`
 	xserver_use_xdm_fds(utempter_t)
 	xserver_rw_xdm_pipes(utempter_t)
+')
+
+#######################################
+#
+# nsswitch_domain local policy
+#
+
+files_list_var_lib(nsswitch_domain)
+
+# read /etc/nsswitch.conf
+files_read_etc_files(nsswitch_domain)
+
+sysnet_dns_name_resolve(nsswitch_domain)
+
+tunable_policy(`authlogin_nsswitch_use_ldap',`
+	files_list_var_lib(nsswitch_domain)
+
+	miscfiles_read_generic_certs(nsswitch_domain)
+	sysnet_use_ldap(nsswitch_domain)
+')
+
+optional_policy(`
+	tunable_policy(`authlogin_nsswitch_use_ldap',`
+		ldap_stream_connect(nsswitch_domain)
+	')
+')
+
+optional_policy(`
+	avahi_stream_connect(nsswitch_domain)
+')
+
+optional_policy(`
+	likewise_stream_connect_lsassd(nsswitch_domain)
+')
+
+optional_policy(`
+	kerberos_use(nsswitch_domain)
+')
+
+optional_policy(`
+	nis_use_ypbind(nsswitch_domain)
+')
+
+optional_policy(`
+	nscd_use(nsswitch_domain)
+')
+
+optional_policy(`
+	nslcd_stream_connect(nsswitch_domain)
+')
+
+optional_policy(`
+	sssd_stream_connect(nsswitch_domain)
+')
+
+optional_policy(`
+	samba_stream_connect_winbind(nsswitch_domain)
+	samba_read_var_files(nsswitch_domain)
+	samba_dontaudit_write_var_files(nsswitch_domain)
 ')

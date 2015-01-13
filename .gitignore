@@ -12,3 +12,4 @@ conf/yum/yum.conf
 *CHECKSUM
 Makefile.tmp
 *.rpm
+clip-selinux-policy*.tar.gz

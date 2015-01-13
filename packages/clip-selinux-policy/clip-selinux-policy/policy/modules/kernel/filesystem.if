@@ -108,6 +108,64 @@ interface(`fs_exec_noxattr',`
 
 ########################################
 ## <summary>
+##	Transform specified type into a filesystem
+##	type which has extended attribute
+##	support.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_xattr_type',`
+	gen_require(`
+		attribute xattrfs;
+	')
+
+	fs_type($1)
+
+	typeattribute $1 xattrfs;
+')
+
+########################################
+## <summary>
+##	Get the attributes of all the
+##	filesystems which have extended
+##	attributes.
+##	This includes pseudo filesystems.
+## </summary>
+## <desc>
+##	<p>
+##	Allow the specified domain to
+##	get the attributes of a filesystems
+##	which have extended attributes.
+##	Example attributes:
+##	</p>
+##	<ul>
+##		<li>Type of the file system (e.g., tmpfs)</li>
+##		<li>Size of the file system</li>
+##		<li>Available space on the file system</li>
+##	</ul>
+## </desc>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <infoflow type="read" weight="5"/>
+## <rolecap/>
+#
+interface(`fs_getattr_all_xattr_fs',`
+	gen_require(`
+		attribute xattrfs;
+	')
+
+	allow $1 xattrfs:filesystem getattr;
+')
+
+########################################
+## <summary>
 ##	Mount a persistent filesystem which
 ##	has extended attributes, such as
 ##	ext3, JFS, or XFS.
@@ -724,6 +782,7 @@ interface(`fs_read_cgroup_files',`
 	')
 
 	read_files_pattern($1, cgroup_t, cgroup_t)
+	read_lnk_files_pattern($1, cgroup_t, cgroup_t)
 	dev_search_sysfs($1)
 ')
 
@@ -2022,25 +2081,6 @@ interface(`fs_read_fusefs_symlinks',`
 	allow $1 fusefs_t:dir list_dir_perms;
 	read_lnk_files_pattern($1, fusefs_t, fusefs_t)
 ')
-#
-########################################
-## <summary>
-##	Dont audit list hugetlbfs.
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain to not audit.
-##	</summary>
-## </param>
-#
-interface(`fs_dontaudit_list_hugetlbfs',`
-	gen_require(`
-		type hugetlbfs_t;
-	')
-
-	dontaudit $1 hugetlbfs_t:dir list_dir_perms;
-')
-
 
 ########################################
 ## <summary>
@@ -2207,6 +2247,11 @@ interface(`fs_dontaudit_list_inotifyfs',`
 ##	The object class of the object being created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`fs_hugetlbfs_filetrans',`
 	gen_require(`
@@ -2214,7 +2259,7 @@ interface(`fs_hugetlbfs_filetrans',`
 	')
 
 	allow $2 hugetlbfs_t:filesystem associate;
-	filetrans_pattern($1, hugetlbfs_t, $2, $3)
+	filetrans_pattern($1, hugetlbfs_t, $2, $3, $4)
 ')
 
 ########################################
@@ -3867,6 +3912,24 @@ interface(`fs_associate_tmpfs',`
 
 ########################################
 ## <summary>
+##	Relabel from tmpfs filesystem.
+## </summary>
+## <param name="type">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_relabelfrom_tmpfs',`
+	gen_require(`
+		type tmpfs_t;
+	')
+
+	allow $1 tmpfs_t:filesystem relabelfrom;
+')
+
+########################################
+## <summary>
 ##	Get the attributes of tmpfs directories.
 ## </summary>
 ## <param name="domain">
@@ -3900,6 +3963,24 @@ interface(`fs_dontaudit_getattr_tmpfs_dirs',`
 	')
 
 	dontaudit $1 tmpfs_t:dir getattr;
+')
+
+########################################
+## <summary>
+##	Mount on tmpfs directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_mounton_tmpfs',`
+	gen_require(`
+		type tmpfs_t;
+	')
+
+	allow $1 tmpfs_t:dir mounton;
 ')
 
 ########################################
@@ -4033,6 +4114,11 @@ interface(`fs_dontaudit_write_tmpfs_dirs',`
 ##	The object class of the object being created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`fs_tmpfs_filetrans',`
 	gen_require(`
@@ -4040,7 +4126,7 @@ interface(`fs_tmpfs_filetrans',`
 	')
 
 	allow $2 tmpfs_t:filesystem associate;
-	filetrans_pattern($1, tmpfs_t, $2, $3)
+	filetrans_pattern($1, tmpfs_t, $2, $3, $4)
 ')
 
 ########################################
@@ -4522,7 +4608,7 @@ interface(`fs_unmount_all_fs',`
 ## <desc>
 ##	<p>
 ##	Allow the specified domain to
-##	et the attributes of all filesystems.
+##	get the attributes of all filesystems.
 ##	Example attributes:
 ##	</p>
 ##	<ul>

@@ -1,12 +1,1 @@
 # file contexts handled by userdomain and genhomedircon
-# ^^ SRS: except /root isnt handled in RHEL 6 since RH patches out
-# that part of genhomedircon in libsemanage and patches policy by hand to label it :-/
-# To avoid shipping a custom SELinux userspace w/ CLIP we are going to have to follow suit. 
-
-/root(.*)?                  gen_context(root:object_r:user_home_dir_t,s0-mls_systemhigh)
-/root/\.gnupg(/.+)?         gen_context(root:object_r:gpg_secret_t,s0)
-/root/\.forward         --  gen_context(root:object_r:mail_forward_t,s0)
-/root/\.ssh(/.*)?           gen_context(root:object_r:ssh_home_t,s0)
-/root/\.shosts              gen_context(root:object_r:ssh_home_t,s0)
-/root(/.*)?                 gen_context(root:object_r:user_home_t,s0)
-/root/\.debug(/.*)?         <<none>>

@@ -38,28 +38,30 @@ interface(`sysnet_domtrans_dhcpc',`
 #
 interface(`sysnet_run_dhcpc',`
 	gen_require(`
-		type dhcpc_t;
+		attribute_role dhcpc_roles;
 	')
 
 	sysnet_domtrans_dhcpc($1)
-	role $2 types dhcpc_t;
+	roleattribute $2 dhcpc_roles;
+')
 
-	modutils_run_insmod(dhcpc_t, $2)
-
-	sysnet_run_ifconfig(dhcpc_t, $2)
-
-	optional_policy(`
-		consoletype_run(dhcpc_t, $2)
+########################################
+## <summary>
+##	Do not audit attempts to read and
+##	write dhcpc udp socket descriptors.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain to not audit.
+##	</summary>
+## </param>
+#
+interface(`sysnet_dontaudit_rw_dhcpc_udp_sockets',`
+	gen_require(`
+		type dhcpc_t;
 	')
 
-	optional_policy(`
-		hostname_run(dhcpc_t, $2)
-	')
-
-	optional_policy(`
-		netutils_run(dhcpc_t, $2)
-		netutils_run_ping(dhcpc_t, $2)
-	')
+	dontaudit $1 dhcpc_t:udp_socket { read write };
 ')
 
 ########################################
@@ -79,6 +81,25 @@ interface(`sysnet_dontaudit_use_dhcpc_fds',`
 	')
 
 	dontaudit $1 dhcpc_t:fd use;
+')
+
+########################################
+## <summary>
+##	Do not audit attempts to read/write to the
+##	dhcp unix stream socket descriptors.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain to not audit.
+##	</summary>
+## </param>
+#
+interface(`sysnet_dontaudit_rw_dhcpc_unix_stream_sockets',`
+	gen_require(`
+		type dhcpc_t;
+	')
+
+	dontaudit $1 dhcpc_t:unix_stream_socket { read write };
 ')
 
 ########################################
@@ -285,7 +306,7 @@ interface(`sysnet_setattr_config',`
 	')
 
 	files_search_etc($1)
-	allow $1 net_conf_t:file setattr;
+	allow $1 net_conf_t:file setattr_file_perms;
 ')
 
 #######################################
@@ -326,6 +347,12 @@ interface(`sysnet_read_config',`
 
 	files_search_etc($1)
 	allow $1 net_conf_t:file read_file_perms;
+
+	ifdef(`distro_debian',`
+		files_search_pids($1)
+		allow $1 net_conf_t:dir list_dir_perms;
+		read_files_pattern($1, net_conf_t, net_conf_t)
+	')
 
 	ifdef(`distro_redhat',`
 		allow $1 net_conf_t:dir list_dir_perms;
@@ -399,13 +426,18 @@ interface(`sysnet_create_config',`
 ##	Domain allowed access.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`sysnet_etc_filetrans_config',`
 	gen_require(`
 		type net_conf_t;
 	')
 
-	files_etc_filetrans($1, net_conf_t, file)
+	files_etc_filetrans($1, net_conf_t, file, $2)
 ')
 
 #######################################
@@ -424,6 +456,11 @@ interface(`sysnet_manage_config',`
 	')
 
 	allow $1 net_conf_t:file manage_file_perms;
+
+	ifdef(`distro_debian',`
+		files_search_pids($1)
+		manage_files_pattern($1, net_conf_t, net_conf_t)
+	')
 
 	ifdef(`distro_redhat',`
 		manage_files_pattern($1, net_conf_t, net_conf_t)
@@ -554,6 +591,25 @@ interface(`sysnet_signal_ifconfig',`
 
 ########################################
 ## <summary>
+##	Send null signals to ifconfig.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`sysnet_signull_ifconfig',`
+	gen_require(`
+		type ifconfig_t;
+	')
+
+	allow $1 ifconfig_t:process signull;
+')
+
+########################################
+## <summary>
 ##	Read the DHCP configuration files.
 ## </summary>
 ## <param name="domain">
@@ -620,6 +676,11 @@ interface(`sysnet_search_dhcp_state',`
 ##	The object class.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`sysnet_dhcp_state_filetrans',`
 	gen_require(`
@@ -627,7 +688,7 @@ interface(`sysnet_dhcp_state_filetrans',`
 	')
 
 	files_search_var_lib($1)
-	filetrans_pattern($1, dhcp_state_t, $2, $3)
+	filetrans_pattern($1, dhcp_state_t, $2, $3, $4)
 ')
 
 ########################################
@@ -668,7 +729,7 @@ interface(`sysnet_dns_name_resolve',`
 	')
 
 	optional_policy(`
-		nscd_socket_use($1)
+		nscd_use($1)
 	')
 ')
 
@@ -696,6 +757,10 @@ interface(`sysnet_use_ldap',`
 	corenet_tcp_sendrecv_ldap_port($1)
 	corenet_tcp_connect_ldap_port($1)
 	corenet_sendrecv_ldap_client_packets($1)
+
+	# Support for LDAPS
+	dev_read_rand($1)
+	dev_read_urand($1)
 
 	sysnet_read_config($1)
 ')

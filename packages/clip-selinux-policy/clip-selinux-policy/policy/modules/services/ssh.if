@@ -196,6 +196,7 @@ template(`ssh_server_template', `
 	manage_files_pattern($1_t, $1_tmpfs_t, $1_tmpfs_t)
 	fs_tmpfs_filetrans($1_t, $1_tmpfs_t, file)
 
+	allow $1_t $1_var_run_t:dir search_dir_perms;
 	allow $1_t $1_var_run_t:file manage_file_perms;
 	files_pid_filetrans($1_t, $1_var_run_t, file)
 
@@ -248,7 +249,9 @@ template(`ssh_server_template', `
 	userdom_search_user_home_dirs($1_t)
 
 	# Allow checking users mail at login
-	mta_getattr_spool($1_t)
+	optional_policy(`
+		mta_getattr_spool($1_t)
+	')
 
 	tunable_policy(`use_nfs_home_dirs',`
 		fs_read_nfs_files($1_t)
@@ -308,9 +311,8 @@ template(`ssh_role_template',`
 	role $2 types ssh_t;
 
 	type $1_ssh_agent_t, ssh_agent_type;
-	application_domain($1_ssh_agent_t, ssh_agent_exec_t)
+	userdom_user_application_domain($1_ssh_agent_t, ssh_agent_exec_t)
 	domain_interactive_fd($1_ssh_agent_t)
-	ubac_constrained($1_ssh_agent_t)
 	role $2 types $1_ssh_agent_t;
 
 	##############################
@@ -421,6 +423,13 @@ template(`ssh_role_template',`
 	')
 
 	optional_policy(`
+		tunable_policy(`ssh_use_gpg_agent',`
+			# for ssh-add
+			gpg_stream_connect_agent($3)
+		')
+	')
+
+	optional_policy(`
 		xserver_use_xdm_fds($1_ssh_agent_t)
 		xserver_rw_xdm_pipes($1_ssh_agent_t)
 	')
@@ -460,6 +469,24 @@ interface(`ssh_signal',`
 	')
 
 	allow $1 sshd_t:process signal;
+')
+
+########################################
+## <summary>
+##	Send a null signal to sshd processes.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`ssh_signull',`
+	gen_require(`
+		type sshd_t;
+	')
+
+	allow $1 sshd_t:process signull;
 ')
 
 ########################################

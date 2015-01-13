@@ -54,6 +54,8 @@ ifdef(`distro_suse',`
 /etc/killpower		--	gen_context(system_u:object_r:etc_runtime_t,s0)
 /etc/localtime		-l	gen_context(system_u:object_r:etc_t,s0)
 /etc/mtab		--	gen_context(system_u:object_r:etc_runtime_t,s0)
+/etc/mtab~[0-9]*	--	gen_context(system_u:object_r:etc_runtime_t,s0)
+/etc/mtab\.tmp		--	gen_context(system_u:object_r:etc_runtime_t,s0)
 /etc/mtab\.fuselock	--	gen_context(system_u:object_r:etc_runtime_t,s0)
 /etc/nohotplug		--	gen_context(system_u:object_r:etc_runtime_t,s0)
 /etc/nologin.*		--	gen_context(system_u:object_r:etc_runtime_t,s0)
@@ -82,7 +84,7 @@ ifdef(`distro_redhat',`
 
 ifdef(`distro_suse',`
 /etc/defkeymap\.map	--	gen_context(system_u:object_r:etc_runtime_t,s0)
-/etc/init\.d/\.depend.*	--	gen_context(system_u:object_r:etc_runtime_t,s0)
+/etc/rc\.d/init\.d/\.depend.* -- gen_context(system_u:object_r:etc_runtime_t,s0)
 ')
 
 #
@@ -93,7 +95,7 @@ HOME_ROOT		-d	gen_context(system_u:object_r:home_root_t,s0-mls_systemhigh)
 HOME_ROOT		-l	gen_context(system_u:object_r:home_root_t,s0)
 HOME_ROOT/\.journal		<<none>>
 HOME_ROOT/lost\+found	-d	gen_context(system_u:object_r:lost_found_t,mls_systemhigh)
-HOME_ROOT/lost\+found/.*		<<none>>
+HOME_ROOT/lost\+found/.*	<<none>>
 
 #
 # /initrd
@@ -105,7 +107,12 @@ HOME_ROOT/lost\+found/.*		<<none>>
 # /lib(64)?
 #
 /lib/modules(/.*)?		gen_context(system_u:object_r:modules_object_t,s0)
-/lib64/modules(/.*)?		gen_context(system_u:object_r:modules_object_t,s0)
+
+ifdef(`distro_debian',`
+# on Debian /lib/init/rw is a tmpfs used like /var/run but
+# before /var is mounted
+/lib/init/rw(/.*)?		gen_context(system_u:object_r:var_run_t,s0-mls_systemhigh)
+')
 
 #
 # /lost+found
@@ -181,8 +188,12 @@ HOME_ROOT/lost\+found/.*		<<none>>
 /tmp/.*				<<none>>
 /tmp/\.journal			<<none>>
 
-/tmp/lost\+found	-d		gen_context(system_u:object_r:lost_found_t,mls_systemhigh)
+/tmp/lost\+found	-d	gen_context(system_u:object_r:lost_found_t,mls_systemhigh)
 /tmp/lost\+found/.*		<<none>>
+
+/tmp/systemd-private-[^/]+	-d	gen_context(system_u:object_r:tmp_t,s0-mls_systemhigh)
+/tmp/systemd-private-[^/]+/tmp	-d	gen_context(system_u:object_r:tmp_t,s0-mls_systemhigh)
+/tmp/systemd-private-[^/]+/tmp/.*	<<none>>
 
 #
 # /usr
@@ -191,7 +202,7 @@ HOME_ROOT/lost\+found/.*		<<none>>
 /usr/.*				gen_context(system_u:object_r:usr_t,s0)
 /usr/\.journal			<<none>>
 
-/usr/doc(/.*)?/lib(/.*)?		gen_context(system_u:object_r:usr_t,s0)
+/usr/doc(/.*)?/lib(/.*)?	gen_context(system_u:object_r:usr_t,s0)
 
 /usr/etc(/.*)?			gen_context(system_u:object_r:etc_t,s0)
 
@@ -204,12 +215,12 @@ HOME_ROOT/lost\+found/.*		<<none>>
 /usr/local/lost\+found	-d	gen_context(system_u:object_r:lost_found_t,mls_systemhigh)
 /usr/local/lost\+found/.*	<<none>>
 
-/usr/lost\+found		-d	gen_context(system_u:object_r:lost_found_t,mls_systemhigh)
+/usr/lost\+found	-d	gen_context(system_u:object_r:lost_found_t,mls_systemhigh)
 /usr/lost\+found/.*		<<none>>
 
 /usr/share/doc(/.*)?/README.*	gen_context(system_u:object_r:usr_t,s0)
 
-/usr/tmp			-d	gen_context(system_u:object_r:tmp_t,s0-mls_systemhigh)
+/usr/tmp		-d	gen_context(system_u:object_r:tmp_t,s0-mls_systemhigh)
 /usr/tmp/.*			<<none>>
 
 ifndef(`distro_redhat',`
@@ -236,15 +247,21 @@ ifndef(`distro_redhat',`
 
 /var/lock(/.*)?			gen_context(system_u:object_r:var_lock_t,s0)
 
-/var/lost\+found		-d	gen_context(system_u:object_r:lost_found_t,mls_systemhigh)
+/var/log/lost\+found	-d	gen_context(system_u:object_r:lost_found_t,mls_systemhigh)
+/var/log/lost\+found/.*		<<none>>
+
+/var/log/audit/lost\+found -d	gen_context(system_u:object_r:lost_found_t,mls_systemhigh)
+/var/log/audit/lost\+found/.*	<<none>>
+
+/var/lost\+found	-d	gen_context(system_u:object_r:lost_found_t,mls_systemhigh)
 /var/lost\+found/.*		<<none>>
 
-/var/run			-d	gen_context(system_u:object_r:var_run_t,s0-mls_systemhigh)
-/var/run			-l	gen_context(system_u:object_r:var_run_t,s0)
+/var/run		-d	gen_context(system_u:object_r:var_run_t,s0-mls_systemhigh)
+/var/run		-l	gen_context(system_u:object_r:var_run_t,s0)
 /var/run/.*			gen_context(system_u:object_r:var_run_t,s0)
 /var/run/.*\.*pid		<<none>>
 
-/var/spool(/.*)?			gen_context(system_u:object_r:var_spool_t,s0)
+/var/spool(/.*)?		gen_context(system_u:object_r:var_spool_t,s0)
 /var/spool/postfix/etc(/.*)?	gen_context(system_u:object_r:etc_t,s0)
 
 /var/tmp		-d	gen_context(system_u:object_r:tmp_t,s0-mls_systemhigh)
@@ -252,8 +269,12 @@ ifndef(`distro_redhat',`
 /var/tmp/.*			<<none>>
 /var/tmp/lost\+found	-d	gen_context(system_u:object_r:lost_found_t,mls_systemhigh)
 /var/tmp/lost\+found/.*		<<none>>
+/var/tmp/systemd-private-[^/]+	-d	gen_context(system_u:object_r:tmp_t,s0-mls_systemhigh)
+/var/tmp/systemd-private-[^/]+/tmp	-d	gen_context(system_u:object_r:tmp_t,s0-mls_systemhigh)
+/var/tmp/systemd-private-[^/]+/tmp/.*	<<none>>
 /var/tmp/vi\.recover	-d	gen_context(system_u:object_r:tmp_t,s0)
 
 ifdef(`distro_debian',`
-/var/run/motd		--	gen_context(system_u:object_r:etc_runtime_t,s0)
+/var/run/motd		--	gen_context(system_u:object_r:initrc_var_run_t,s0)
+/var/run/motd\.dynamic	--	gen_context(system_u:object_r:initrc_var_run_t,s0)
 ')

@@ -47,10 +47,6 @@ ifdef(`direct_toor_daemon',`
 	')
 ')
 
-optional_policy(`
-	secstate_run(toor_t, toor_r)
-')
-
 logging_dontaudit_send_audit_msgs(toor_t)
 logging_getattr_dirs(toor_t)
 #allow toor_t auditd_log_t:{ dir file } getattr;
@@ -414,10 +410,6 @@ optional_policy(`
 
 optional_policy(`
 	yam_run(toor_t, toor_r)
-')
-
-optional_policy(`
-	secstate_run(toor_t, toor_r)
 ')
 
 ifndef(`distro_redhat',`

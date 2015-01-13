@@ -1,4 +1,4 @@
-policy_module(devices, 1.12.0)
+policy_module(devices, 1.16.4)
 
 ########################################
 #
@@ -9,6 +9,7 @@ attribute device_node;
 attribute memory_raw_read;
 attribute memory_raw_write;
 attribute devices_unconfined_type;
+attribute sysfs_types;
 
 #
 # device_t is the type of /dev.
@@ -18,7 +19,7 @@ fs_associate_tmpfs(device_t)
 files_type(device_t)
 files_mountpoint(device_t)
 files_associate_tmp(device_t)
-fs_type(device_t)
+fs_xattr_type(device_t)
 fs_use_trans devtmpfs gen_context(system_u:object_r:device_t,s0);
 
 #
@@ -43,6 +44,9 @@ type cardmgr_dev_t;
 dev_node(cardmgr_dev_t)
 files_tmp_file(cardmgr_dev_t)
 
+type cachefiles_device_t;
+dev_node(cachefiles_device_t)
+
 #
 # clock_device_t is the type of
 # /dev/rtc.
@@ -55,6 +59,13 @@ dev_node(clock_device_t)
 #
 type cpu_device_t;
 dev_node(cpu_device_t)
+
+#
+# /sys/devices/system/cpu/online device
+#
+type cpu_online_t, sysfs_types;
+files_type(cpu_online_t)
+dev_associate_sysfs(cpu_online_t)
 
 #
 # Type for /dev/crash
@@ -115,11 +126,17 @@ dev_node(kvm_device_t)
 type lirc_device_t;
 dev_node(lirc_device_t)
 
+type loop_control_device_t;
+dev_node(loop_control_device_t)
+
 #
 # Type for /dev/mapper/control
 #
 type lvm_control_t;
 dev_node(lvm_control_t)
+
+type mei_device_t;
+dev_node(mei_device_t)
 
 #
 # memory_device_t is the type of /dev/kmem,
@@ -213,9 +230,9 @@ dev_node(sound_device_t)
 #
 # sysfs_t is the type for the /sys pseudofs
 #
-type sysfs_t;
+type sysfs_t, sysfs_types;
 files_mountpoint(sysfs_t)
-fs_type(sysfs_t)
+fs_xattr_type(sysfs_t)
 genfscon sysfs / gen_context(system_u:object_r:sysfs_t,s0)
 
 #

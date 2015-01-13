@@ -1,4 +1,4 @@
-policy_module(udev, 1.13.0)
+policy_module(udev, 1.17.3)
 
 ########################################
 #
@@ -25,6 +25,7 @@ files_type(udev_rules_t)
 
 type udev_var_run_t;
 files_pid_file(udev_var_run_t)
+init_daemon_pid_file(udev_var_run_t, dir, "udev")
 
 ifdef(`enable_mcs',`
 	kernel_ranged_domtrans_to(udev_t, udev_exec_t, s0 - mcs_systemhigh)
@@ -38,6 +39,7 @@ ifdef(`enable_mcs',`
 
 allow udev_t self:capability { chown dac_override dac_read_search fowner fsetid sys_admin mknod net_raw net_admin sys_nice sys_rawio sys_resource setuid setgid sys_nice sys_ptrace };
 dontaudit udev_t self:capability sys_tty_config;
+allow udev_t self:capability2 block_suspend;
 allow udev_t self:process ~{ setcurrent setexec setfscreate setrlimit execmem execstack execheap };
 allow udev_t self:process { execmem setfscreate };
 allow udev_t self:fd use;
@@ -62,21 +64,18 @@ can_exec(udev_t, udev_helper_exec_t)
 # read udev config
 allow udev_t udev_etc_t:file read_file_perms;
 
-# create udev database in /dev/.udevdb
 allow udev_t udev_tbl_t:file manage_file_perms;
 dev_filetrans(udev_t, udev_tbl_t, file)
 
 list_dirs_pattern(udev_t, udev_rules_t, udev_rules_t)
-read_files_pattern(udev_t, udev_rules_t, udev_rules_t)
+manage_files_pattern(udev_t, udev_rules_t, udev_rules_t)
+manage_lnk_files_pattern(udev_t, udev_rules_t, udev_rules_t)
 
 manage_dirs_pattern(udev_t, udev_var_run_t, udev_var_run_t)
 manage_files_pattern(udev_t, udev_var_run_t, udev_var_run_t)
 manage_lnk_files_pattern(udev_t, udev_var_run_t, udev_var_run_t)
-files_pid_filetrans(udev_t, udev_var_run_t, { dir file })
-
-manage_dirs_pattern(udev_t, udev_rules_t, udev_rules_t)
-manage_files_pattern(udev_t, udev_rules_t, udev_rules_t)
-manage_lnk_files_pattern(udev_t, udev_rules_t, udev_rules_t)
+manage_sock_files_pattern(udev_t, udev_var_run_t, udev_var_run_t)
+files_pid_filetrans(udev_t, udev_var_run_t, dir, "udev")
 
 kernel_read_system_state(udev_t)
 kernel_request_load_module(udev_t)
@@ -96,6 +95,7 @@ kernel_search_debugfs(udev_t)
 kernel_rw_net_sysctls(udev_t)
 kernel_read_network_state(udev_t)
 kernel_read_software_raid_state(udev_t)
+kernel_dontaudit_search_unlabeled(udev_t)
 
 corecmd_exec_all_executables(udev_t)
 
@@ -113,13 +113,10 @@ dev_manage_generic_symlinks(udev_t)
 domain_read_all_domains_state(udev_t)
 domain_dontaudit_ptrace_all_domains(udev_t) #pidof triggers these
 
-# console_init manages files in /etc/sysconfig
-files_manage_etc_files(udev_t)
 files_read_usr_files(udev_t)
 files_read_etc_runtime_files(udev_t)
 files_read_etc_files(udev_t)
 files_exec_etc_files(udev_t)
-files_dontaudit_search_isid_type_dirs(udev_t)
 files_getattr_generic_locks(udev_t)
 files_search_mnt(udev_t)
 
@@ -133,7 +130,7 @@ mls_file_read_all_levels(udev_t)
 mls_file_write_all_levels(udev_t)
 mls_file_upgrade(udev_t)
 mls_file_downgrade(udev_t)
-mls_process_write_down(udev_t)
+mls_process_write_all_levels(udev_t)
 
 selinux_get_fs_mount(udev_t)
 selinux_validate_context(udev_t)
@@ -158,6 +155,7 @@ miscfiles_read_localization(udev_t)
 miscfiles_read_hwdata(udev_t)
 
 modutils_domtrans_insmod(udev_t)
+modutils_read_module_config(udev_t)
 # read modules.inputmap:
 modutils_read_module_deps(udev_t)
 
@@ -177,9 +175,25 @@ sysnet_etc_filetrans_config(udev_t)
 
 userdom_dontaudit_search_user_home_content(udev_t)
 
+ifdef(`distro_debian',`
+	files_pid_filetrans(udev_t, udev_var_run_t, dir, "xen-hotplug")
+
+	optional_policy(`
+		# for /usr/lib/avahi/avahi-daemon-check-dns.sh
+		kernel_read_vm_sysctls(udev_t)
+		corenet_udp_bind_generic_node(udev_t)
+		miscfiles_read_generic_certs(udev_t)
+		avahi_create_pid_dirs(udev_t)
+		avahi_initrc_domtrans(udev_t)
+		avahi_manage_pid_files(udev_t)
+		avahi_setattr_pid_dirs(udev_t)
+		avahi_filetrans_pid(udev_t, dir, "avahi-daemon")
+	')
+')
+
 ifdef(`distro_gentoo',`
 	# during boot, init scripts use /dev/.rcsysinit
-	# existance to determine if we are in early booting
+	# existence to determine if we are in early booting
 	init_getattr_script_status_files(udev_t)
 ')
 
@@ -193,7 +207,7 @@ ifdef(`distro_redhat',`
 	fs_relabel_tmpfs_blk_file(udev_t)
 	fs_relabel_tmpfs_chr_file(udev_t)
 
-	term_use_generic_ptys(udev_t)
+	term_search_ptys(udev_t)
 
 	# for arping used for static IP addresses on PCMCIA ethernet
 	netutils_domtrans(udev_t)
@@ -226,11 +240,20 @@ optional_policy(`
 ')
 
 optional_policy(`
+	consolekit_read_pid_files(udev_t)
+')
+
+optional_policy(`
 	cups_domtrans_config(udev_t)
 ')
 
 optional_policy(`
 	dbus_system_bus_client(udev_t)
+	dbus_use_system_bus_fds(udev_t)
+
+	optional_policy(`
+		consolekit_dbus_chat(udev_t)
+	')
 ')
 
 optional_policy(`
@@ -261,6 +284,10 @@ optional_policy(`
 ')
 
 optional_policy(`
+	lvm_domtrans(udev_t)
+')
+
+optional_policy(`
 	mount_domtrans(udev_t)
 ')
 
@@ -270,7 +297,7 @@ optional_policy(`
 ')
 
 optional_policy(`
-	pcscd_read_pub_files(udev_t)
+	pcscd_read_pid_files(udev_t)
 	pcscd_domtrans(udev_t)
 ')
 

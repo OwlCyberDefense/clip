@@ -1,14 +1,17 @@
-policy_module(iptables, 1.12.0)
+policy_module(iptables, 1.15.0)
 
 ########################################
 #
 # Declarations
 #
 
+attribute_role iptables_roles;
+roleattribute system_r iptables_roles;
+
 type iptables_t;
 type iptables_exec_t;
 init_system_domain(iptables_t, iptables_exec_t)
-role system_r types iptables_t;
+role iptables_roles types iptables_t;
 
 type iptables_initrc_exec_t;
 init_script_file(iptables_initrc_exec_t)
@@ -46,6 +49,7 @@ allow iptables_t iptables_tmp_t:dir manage_dir_perms;
 allow iptables_t iptables_tmp_t:file manage_file_perms;
 files_tmp_filetrans(iptables_t, iptables_tmp_t, { file dir })
 
+kernel_getattr_proc(iptables_t)
 kernel_request_load_module(iptables_t)
 kernel_read_system_state(iptables_t)
 kernel_read_network_state(iptables_t)
@@ -68,8 +72,7 @@ fs_list_inotifyfs(iptables_t)
 
 mls_file_read_all_levels(iptables_t)
 
-term_write_console(iptables_t)
-term_write_generic_ptys(iptables_t)
+term_dontaudit_use_console(iptables_t)
 
 domain_use_interactive_fds(iptables_t)
 
@@ -88,7 +91,7 @@ logging_send_syslog_msg(iptables_t)
 
 miscfiles_read_localization(iptables_t)
 
-sysnet_domtrans_ifconfig(iptables_t)
+sysnet_run_ifconfig(iptables_t, iptables_roles)
 sysnet_dns_name_resolve(iptables_t)
 
 userdom_use_user_terminals(iptables_t)
@@ -103,12 +106,17 @@ optional_policy(`
 ')
 
 optional_policy(`
+	firewalld_read_config_files(iptables_t)
+	firewalld_dontaudit_rw_tmp_files(iptables_t)
+')
+
+optional_policy(`
 	firstboot_use_fds(iptables_t)
 	firstboot_rw_pipes(iptables_t)
 ')
 
 optional_policy(`
-	modutils_domtrans_insmod(iptables_t)
+	modutils_run_insmod(iptables_t, iptables_roles)
 ')
 
 optional_policy(`

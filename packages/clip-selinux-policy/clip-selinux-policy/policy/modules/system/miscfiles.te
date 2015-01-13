@@ -1,4 +1,4 @@
-policy_module(miscfiles, 1.9.0)
+policy_module(miscfiles, 1.11.2)
 
 ########################################
 #
@@ -40,6 +40,9 @@ files_type(locale_t)
 #
 type man_t alias catman_t;
 files_type(man_t)
+
+type man_cache_t;
+files_type(man_cache_t)
 
 #
 # Types for public content

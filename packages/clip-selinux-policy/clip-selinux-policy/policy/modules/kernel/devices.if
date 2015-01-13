@@ -932,13 +932,18 @@ interface(`dev_manage_generic_chr_files',`
 ##	the transition will occur.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`dev_filetrans',`
 	gen_require(`
 		type device_t;
 	')
 
-	filetrans_pattern($1, device_t, $2, $3)
+	filetrans_pattern($1, device_t, $2, $3, $4)
 
 	dev_associate($2)
 	files_associate_tmp($2)
@@ -962,13 +967,18 @@ interface(`dev_filetrans',`
 ##	the transition will occur.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`dev_tmpfs_filetrans_dev',`
 	gen_require(`
 		type device_t;
 	')
 
-	fs_tmpfs_filetrans($1, device_t, $2)
+	fs_tmpfs_filetrans($1, device_t, $2, $3)
 ')
 
 ########################################
@@ -1550,6 +1560,25 @@ interface(`dev_relabel_autofs_dev',`
 
 ########################################
 ## <summary>
+##	Read and write cachefiles character
+##	device nodes.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`dev_rw_cachefiles',`
+	gen_require(`
+		type device_t, cachefiles_device_t;
+	')
+
+	rw_chr_files_pattern($1, device_t, cachefiles_device_t)
+')
+
+########################################
+## <summary>
 ##	Read and write the PCMCIA card manager device.
 ## </summary>
 ## <param name="domain">
@@ -1637,13 +1666,18 @@ interface(`dev_manage_cardmgr_dev',`
 ##	Domain allowed access.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`dev_filetrans_cardmgr',`
 	gen_require(`
 		type device_t, cardmgr_dev_t;
 	')
 
-	filetrans_pattern($1, device_t, cardmgr_dev_t, { chr_file blk_file })
+	filetrans_pattern($1, device_t, cardmgr_dev_t, { chr_file blk_file }, $2)
 ')
 
 ########################################
@@ -1893,13 +1927,18 @@ interface(`dev_manage_dri_dev',`
 ##	Domain allowed access.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`dev_filetrans_dri',`
 	gen_require(`
 		type device_t, dri_device_t;
 	')
 
-	filetrans_pattern($1, device_t, dri_device_t, chr_file)
+	filetrans_pattern($1, device_t, dri_device_t, chr_file, $2)
 ')
 
 ########################################
@@ -2159,6 +2198,24 @@ interface(`dev_write_kmsg',`
 
 ########################################
 ## <summary>
+##	Read and write to the kernel messages device
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`dev_rw_kmsg',`
+	gen_require(`
+		type device_t, kmsg_device_t;
+	')
+
+	rw_chr_files_pattern($1, device_t, kmsg_device_t)
+')
+
+########################################
+## <summary>
 ##	Get the attributes of the ksm devices.
 ## </summary>
 ## <param name="domain">
@@ -2347,13 +2404,36 @@ interface(`dev_rw_lirc',`
 ##	Domain allowed access.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`dev_filetrans_lirc',`
 	gen_require(`
 		type device_t, lirc_device_t;
 	')
 
-	filetrans_pattern($1, device_t, lirc_device_t, chr_file)
+	filetrans_pattern($1, device_t, lirc_device_t, chr_file, $2)
+')
+
+######################################
+## <summary>
+##	Read and write the loop-control device.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`dev_rw_loop_control',`
+	gen_require(`
+		type device_t, loop_control_device_t;
+	')
+
+	rw_chr_files_pattern($1, device_t, loop_control_device_t)
 ')
 
 ########################################
@@ -3811,6 +3891,42 @@ interface(`dev_getattr_sysfs_dirs',`
 
 ########################################
 ## <summary>
+##	Get the attributes of sysfs filesystem
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`dev_getattr_sysfs',`
+	gen_require(`
+		type sysfs_t;
+	')
+
+	allow $1 sysfs_t:filesystem getattr;
+')
+
+########################################
+## <summary>
+##	Do not audit getting the attributes of sysfs filesystem
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain to dontaudit access from
+##	</summary>
+## </param>
+#
+interface(`dev_dontaudit_getattr_sysfs',`
+	gen_require(`
+		type sysfs_t;
+	')
+
+	dontaudit $1 sysfs_t:filesystem getattr;
+')
+
+########################################
+## <summary>
 ##	Search the sysfs directories.
 ## </summary>
 ## <param name="domain">
@@ -3968,6 +4084,27 @@ interface(`dev_rw_sysfs',`
 	read_lnk_files_pattern($1, sysfs_t, sysfs_t)
 
 	list_dirs_pattern($1, sysfs_t, sysfs_t)
+')
+
+########################################
+## <summary>
+##	Relabel from/to all sysfs types.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`dev_relabel_all_sysfs',`
+	gen_require(`
+		attribute sysfs_types;
+	')
+
+	relabel_dirs_pattern($1, sysfs_types, sysfs_types)
+	relabel_files_pattern($1, sysfs_types, sysfs_types)
+	relabel_lnk_files_pattern($1, sysfs_types, sysfs_types)
+	list_dirs_pattern($1, sysfs_types, sysfs_types)
 ')
 
 ########################################
@@ -4137,6 +4274,24 @@ interface(`dev_rw_generic_usb_dev',`
 	')
 
 	rw_chr_files_pattern($1, device_t, usb_device_t)
+')
+
+########################################
+## <summary>
+##	Relabel generic the USB devices.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`dev_relabel_generic_usb_dev',`
+	gen_require(`
+		type usb_device_t;
+	')
+
+	relabel_chr_files_pattern($1, device_t, usb_device_t)
 ')
 
 ########################################
@@ -4630,13 +4785,18 @@ interface(`dev_manage_xen',`
 ##	Domain allowed access.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`dev_filetrans_xen',`
 	gen_require(`
 		type device_t, xen_device_t;
 	')
 
-	filetrans_pattern($1, device_t, xen_device_t, chr_file)
+	filetrans_pattern($1, device_t, xen_device_t, chr_file, $2)
 ')
 
 ########################################
@@ -4765,6 +4925,31 @@ interface(`dev_create_zero_dev',`
 	')
 
 	create_chr_files_pattern($1, device_t, zero_device_t)
+')
+
+########################################
+## <summary>
+##	Read cpu online hardware state information
+## </summary>
+## <desc>
+##	<p>
+##	Allow the specified domain to read /sys/devices/system/cpu/online
+##	</p>
+## </desc>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`dev_read_cpu_online',`
+	gen_require(`
+		type cpu_online_t;
+	')
+
+	allow $1 cpu_online_t:file read_file_perms;
+
+	dev_search_sysfs($1)
 ')
 
 ########################################

@@ -18,8 +18,9 @@ interface(`unconfined_domain_noaudit',`
 		class passwd all_passwd_perms;
 	')
 
-	# Use any Linux capability.
-	allow $1 self:capability *;
+	# Use most Linux capabilities
+	allow $1 self:capability ~sys_module;
+	allow $1 self:capability2 syslog;
 	allow $1 self:fifo_file manage_fifo_file_perms;
 
 	# Transition to myself, to make get_ordered_context_list happy.
@@ -67,8 +68,7 @@ interface(`unconfined_domain_noaudit',`
 	')
 
 	optional_policy(`
-		# Communicate via dbusd.
-		dbus_system_bus_unconfined($1)
+		dbus_unconfined($1)
 	')
 
 	optional_policy(`

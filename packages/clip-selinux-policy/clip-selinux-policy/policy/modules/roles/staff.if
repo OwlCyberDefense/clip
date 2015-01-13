@@ -48,26 +48,3 @@ interface(`staff_role_change_to',`
 
 	allow staff_r $1;
 ')
-
-########################################
-## <summary>
-##      Execute all entrypoint files in the staff domain. This
-##      is an explicit transition, requiring the
-##      caller to use setexeccon().
-## </summary>
-## <param name="domain">
-##      <summary>
-##      Domain allowed access.
-##      </summary>
-## </param>
-##
-interface(`staff_entry_spec_domtrans',`
-        gen_require(`
-                        type staff_t;
-        ')
-
-        domain_entry_file_spec_domtrans($1, staff_t)
-        allow staff_t $1:fd use;
-	allow staff_t $1:fifo_file rw_file_perms;
-	allow staff_t $1:process sigchld;
-')

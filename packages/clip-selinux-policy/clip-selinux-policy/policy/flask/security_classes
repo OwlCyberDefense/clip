@@ -103,6 +103,8 @@ class db_procedure		# userspace
 class db_column			# userspace
 class db_tuple			# userspace
 class db_blob			# userspace
+class db_exception		# userspace
+class db_datatype		# userspace
 
 # network peer labels
 class peer
@@ -130,5 +132,7 @@ class db_schema			# userspace
 class db_view			# userspace
 class db_sequence		# userspace
 class db_language		# userspace
+
+class service			# userspace
 
 # FLASK

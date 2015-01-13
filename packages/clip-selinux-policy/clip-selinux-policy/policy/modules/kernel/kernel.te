@@ -1,16 +1,23 @@
-policy_module(kernel, 1.14.0)
+policy_module(kernel, 1.18.3)
 
 ########################################
 #
 # Declarations
 #
 
+## <desc>
+## <p>
+## Disable kernel module loading.
+## </p>
+## </desc>
+gen_bool(secure_mode_insmod, false)
+
 # assertion related attributes
 attribute can_load_kernmodule;
 attribute can_receive_kernel_messages;
 attribute can_dump_kernel;
 
-neverallow ~{ can_load_kernmodule kern_unconfined } self:capability sys_module;
+neverallow ~can_load_kernmodule self:capability sys_module;
 
 # domains with unconfined access to kernel resources
 attribute kern_unconfined;
@@ -22,17 +29,17 @@ attribute proc_type;
 attribute sysctl_type;
 
 role system_r;
-#role sysadm_r;
-#role staff_r;
+role sysadm_r;
+role staff_r;
 role user_r;
 
 # here until order dependence is fixed:
-#role unconfined_r;
+role unconfined_r;
 
-#ifdef(`enable_mls',`
-#	role secadm_r;
-#	role auditadm_r;
-#')
+ifdef(`enable_mls',`
+	role secadm_r;
+	role auditadm_r;
+')
 
 #
 # kernel_t is the domain of kernel threads.
@@ -49,6 +56,7 @@ sid kernel gen_context(system_u:system_r:kernel_t,mls_systemhigh)
 #
 
 type debugfs_t;
+files_mountpoint(debugfs_t)
 fs_type(debugfs_t)
 allow debugfs_t self:filesystem associate;
 genfscon debugfs / gen_context(system_u:object_r:debugfs_t,s0)
@@ -154,8 +162,15 @@ genfscon proc /sys/dev gen_context(system_u:object_r:sysctl_dev_t,s0)
 # Objects that have no known labeling information or that
 # have labels that are no longer valid are treated as having this type.
 #
-type unlabeled_t;
+# Mountpoint permissions are for the case when a file has been assigned
+# an extended attribute for the first time (old file_t).  Directories
+# where filesystems are mounted may never get relabeled.
+#
+type unlabeled_t alias file_t;
+kernel_rootfs_mountpoint(unlabeled_t)
+files_mountpoint(unlabeled_t)
 fs_associate(unlabeled_t)
+sid file gen_context(system_u:object_r:unlabeled_t,s0)
 sid unlabeled gen_context(system_u:object_r:unlabeled_t,mls_systemhigh)
 
 # These initial sids are no longer used, and can be removed:
@@ -181,7 +196,7 @@ sid tcp_socket		gen_context(system_u:object_r:unlabeled_t,mls_systemhigh)
 # kernel local policy
 #
 
-allow kernel_t self:capability *;
+allow kernel_t self:capability ~sys_module;
 allow kernel_t self:process ~{ ptrace setcurrent setexec setfscreate setrlimit execmem execstack execheap };
 allow kernel_t self:shm create_shm_perms;
 allow kernel_t self:sem create_sem_perms;
@@ -194,9 +209,6 @@ allow kernel_t self:unix_stream_socket connectto;
 allow kernel_t self:fifo_file rw_fifo_file_perms;
 allow kernel_t self:sock_file read_sock_file_perms;
 allow kernel_t self:fd use;
-# In dracut plymouthd is is running as kernel_t
-allow kernel_t self:system syslog_console;
-
 
 allow kernel_t debugfs_t:dir search_dir_perms;
 
@@ -222,6 +234,8 @@ allow kernel_t unlabeled_t:dir mounton;
 # Kernel-generated traffic e.g., TCP resets on
 # connections with invalidated labels:
 allow kernel_t unlabeled_t:packet send;
+
+kernel_request_load_module(kernel_t)
 
 # Allow unlabeled network traffic
 allow unlabeled_t unlabeled_t:packet { forward_in forward_out };
@@ -251,12 +265,6 @@ dev_create_generic_chr_files(kernel_t)
 dev_delete_generic_chr_files(kernel_t)
 dev_mounton(kernel_t)
 
-# SRS: in dracut init opens kmsg as kernel_t
-dev_write_kmsg(kernel_t)
-domain_unconfined(kernel_t)
-dev_relabel_all_dev_nodes(kernel_t)
-selinux_set_enforce_mode(kernel_t)
-
 # Mount root file system. Used when loading a policy
 # from initrd, then mounting the root filesystem
 fs_mount_all_fs(kernel_t)
@@ -264,8 +272,7 @@ fs_unmount_all_fs(kernel_t)
 
 selinux_load_policy(kernel_t)
 
-term_use_all_terms(kernel_t)
-term_use_ptmx(kernel_t)
+term_use_console(kernel_t)
 
 corecmd_exec_shell(kernel_t)
 corecmd_list_bin(kernel_t)
@@ -279,31 +286,22 @@ files_list_root(kernel_t)
 files_list_etc(kernel_t)
 files_list_home(kernel_t)
 files_read_usr_files(kernel_t)
-files_manage_mounttab(kernel_t)
-files_manage_generic_spool_dirs(kernel_t)
-
-# SRS: no idea why this wasnt here in the first place...
-#      discovered when dracut in a livecd environment couldnt use the ext3 img
-kernel_unconfined(kernel_t)
 
 mcs_process_set_categories(kernel_t)
-mcs_file_read_all(kernel_t)
-mcs_file_write_all(kernel_t)  
 
-mls_process_read_up(kernel_t)
-mls_process_write_down(kernel_t)
+mls_process_read_all_levels(kernel_t)
+mls_process_write_all_levels(kernel_t)
 mls_file_write_all_levels(kernel_t)
 mls_file_read_all_levels(kernel_t)
 
 ifdef(`distro_redhat',`
 	# Bugzilla 222337
 	fs_rw_tmpfs_chr_files(kernel_t)
+')
 
-	# SRS: Dracut loads policy then runs restorecon /dev.
-	# Problem is that the script is still running in kernel_t at that point, not init_t.
-	# This didnt use to occur since init was execd before restorecon thus is was *not* in kernel_t.
-	# So transition from kernel into setfiles.
-	#seutil_domtrans_setfiles(kernel_t)
+optional_policy(`
+	# loop devices
+	fstools_use_fds(kernel_t)
 ')
 
 optional_policy(`
@@ -321,6 +319,11 @@ optional_policy(`
 
 optional_policy(`
 	logging_send_syslog_msg(kernel_t)
+')
+
+optional_policy(`
+	mount_use_fds(kernel_t)
+	mount_read_loopback_files(kernel_t)
 ')
 
 optional_policy(`
@@ -359,9 +362,9 @@ optional_policy(`
 		fs_read_noxattr_fs_files(kernel_t)
 		fs_read_noxattr_fs_symlinks(kernel_t)
 
-		auth_read_all_dirs_except_auth_files(kernel_t)
-		auth_read_all_files_except_auth_files(kernel_t)
-		auth_read_all_symlinks_except_auth_files(kernel_t)
+		files_list_non_auth_dirs(kernel_t)
+		files_read_non_auth_files(kernel_t)
+		files_read_non_auth_symlinks(kernel_t)
 	')
 
 	tunable_policy(`nfs_export_all_rw',`
@@ -370,7 +373,7 @@ optional_policy(`
 		fs_read_noxattr_fs_files(kernel_t)
 		fs_read_noxattr_fs_symlinks(kernel_t)
 
-		auth_manage_all_files_except_auth_files(kernel_t)
+		files_manage_non_auth_files(kernel_t)
 	')
 ')
 
@@ -398,6 +401,20 @@ optional_policy(`
 
 ########################################
 #
+# Kernel module loading policy
+#
+
+if( ! secure_mode_insmod ) {
+	allow can_load_kernmodule self:capability sys_module;
+
+	# load_module() calls stop_machine() which
+	# calls sched_setscheduler()
+	allow can_load_kernmodule self:capability sys_nice;
+	kernel_setsched(can_load_kernmodule)
+}
+
+########################################
+#
 # Rules for unconfined acccess to this module
 #
 
@@ -412,10 +429,3 @@ allow kern_unconfined unlabeled_t:filesystem *;
 allow kern_unconfined unlabeled_t:association *;
 allow kern_unconfined unlabeled_t:packet *;
 allow kern_unconfined unlabeled_t:process ~{ transition dyntransition execmem execstack execheap };
-
-allow initrc_t kernel_t:unix_stream_socket connectto;
-allow kernel_t sysfs_t:dir mounton;
-
-files_unconfined(kernel_t)
-fs_associate_hugetlbfs(kernel_t)
-selinux_getattr_fs(kernel_t)

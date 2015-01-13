@@ -38,15 +38,11 @@ interface(`mount_domtrans',`
 #
 interface(`mount_run',`
 	gen_require(`
-		type mount_t;
+		attribute_role mount_roles;
 	')
 
 	mount_domtrans($1)
-	role $2 types mount_t;
-
-	optional_policy(`
-		samba_run_smbmount($1, $2)
-	')
+	roleattribute $2 mount_roles;
 ')
 
 ########################################
@@ -176,4 +172,40 @@ interface(`mount_run_unconfined',`
 
 	mount_domtrans_unconfined($1)
 	role $2 types unconfined_mount_t;
+')
+
+########################################
+## <summary>
+##	Read loopback filesystem image files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`mount_read_loopback_files',`
+	gen_require(`
+		type mount_loopback_t;
+	')
+
+	allow $1 mount_loopback_t:file read_file_perms;
+')
+
+########################################
+## <summary>
+##	Read and write loopback filesystem image files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`mount_rw_loopback_files',`
+	gen_require(`
+		type mount_loopback_t;
+	')
+
+	allow $1 mount_loopback_t:file rw_file_perms;
 ')

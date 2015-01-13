@@ -1,4 +1,4 @@
-policy_module(ssh, 2.2.0)
+policy_module(ssh, 2.5.1)
 
 ########################################
 #
@@ -18,6 +18,13 @@ gen_tunable(allow_ssh_keysign, false)
 ## </p>
 ## </desc>
 gen_tunable(ssh_sysadm_login, false)
+
+## <desc>
+## <p>
+## Allow ssh to use gpg-agent
+## </p>
+## </desc>
+gen_tunable(ssh_use_gpg_agent, false)
 
 attribute ssh_server;
 attribute ssh_agent_type;
@@ -48,8 +55,7 @@ type ssh_t;
 type ssh_exec_t;
 typealias ssh_t alias { user_ssh_t staff_ssh_t sysadm_ssh_t };
 typealias ssh_t alias { auditadm_ssh_t secadm_ssh_t };
-application_domain(ssh_t, ssh_exec_t)
-ubac_constrained(ssh_t)
+userdom_user_application_domain(ssh_t, ssh_exec_t)
 
 type ssh_agent_exec_t;
 corecmd_executable_file(ssh_agent_exec_t)
@@ -57,27 +63,30 @@ corecmd_executable_file(ssh_agent_exec_t)
 type ssh_agent_tmp_t;
 typealias ssh_agent_tmp_t alias { user_ssh_agent_tmp_t staff_ssh_agent_tmp_t sysadm_ssh_agent_tmp_t };
 typealias ssh_agent_tmp_t alias { auditadm_ssh_agent_tmp_t secadm_ssh_agent_tmp_t };
-files_tmp_file(ssh_agent_tmp_t)
-ubac_constrained(ssh_agent_tmp_t)
+userdom_user_tmp_file(ssh_agent_tmp_t)
 
 type ssh_keysign_t;
 type ssh_keysign_exec_t;
 typealias ssh_keysign_t alias { user_ssh_keysign_t staff_ssh_keysign_t sysadm_ssh_keysign_t };
 typealias ssh_keysign_t alias { auditadm_ssh_keysign_t secadm_ssh_keysign_t };
-application_domain(ssh_keysign_t, ssh_keysign_exec_t)
-ubac_constrained(ssh_keysign_t)
+userdom_user_application_domain(ssh_keysign_t, ssh_keysign_exec_t)
 
 type ssh_tmpfs_t;
 typealias ssh_tmpfs_t alias { user_ssh_tmpfs_t staff_ssh_tmpfs_t sysadm_ssh_tmpfs_t };
 typealias ssh_tmpfs_t alias { auditadm_ssh_tmpfs_t secadm_ssh_tmpfs_t };
-files_tmpfs_file(ssh_tmpfs_t)
-ubac_constrained(ssh_tmpfs_t)
+userdom_user_tmpfs_file(ssh_tmpfs_t)
 
 type ssh_home_t;
 typealias ssh_home_t alias { home_ssh_t user_ssh_home_t user_home_ssh_t staff_home_ssh_t sysadm_home_ssh_t };
 typealias ssh_home_t alias { auditadm_home_ssh_t secadm_home_ssh_t };
-files_type(ssh_home_t)
 userdom_user_home_content(ssh_home_t)
+
+type sshd_keytab_t;
+files_type(sshd_keytab_t)
+
+ifdef(`distro_debian',`
+	init_daemon_pid_file(sshd_var_run_t, dir, "sshd")
+')
 
 ##############################
 #
@@ -95,9 +104,6 @@ allow ssh_t self:sem create_sem_perms;
 allow ssh_t self:msgq create_msgq_perms;
 allow ssh_t self:msg { send receive };
 allow ssh_t self:tcp_socket create_stream_socket_perms;
-
-# Query fips mode.
-kernel_read_crypto_sysctls(ssh_t)
 
 # Read the ssh key file.
 allow ssh_t sshd_key_t:file read_file_perms;
@@ -199,6 +205,12 @@ tunable_policy(`user_tcp_server',`
 ')
 
 optional_policy(`
+	tunable_policy(`ssh_use_gpg_agent',`
+		gpg_stream_connect_agent(ssh_t)
+	')
+')
+
+optional_policy(`
 	xserver_user_x_domain_template(ssh, ssh_t, ssh_tmpfs_t)
 	xserver_domtrans_xauth(ssh_t)
 ')
@@ -208,21 +220,17 @@ optional_policy(`
 # ssh_keysign_t local policy
 #
 
-tunable_policy(`allow_ssh_keysign',`
-	allow ssh_keysign_t self:capability { setgid setuid };
-	allow ssh_keysign_t self:unix_stream_socket create_socket_perms;
+allow ssh_keysign_t self:capability { setgid setuid };
+allow ssh_keysign_t self:unix_stream_socket create_socket_perms;
 
-	allow ssh_keysign_t sshd_key_t:file { getattr read };
+allow ssh_keysign_t sshd_key_t:file { getattr read };
 
-	dev_read_urand(ssh_keysign_t)
+dev_read_urand(ssh_keysign_t)
 
-	files_read_etc_files(ssh_keysign_t)
-')
+files_read_etc_files(ssh_keysign_t)
 
 optional_policy(`
-	tunable_policy(`allow_ssh_keysign',`
-		nscd_socket_use(ssh_keysign_t)
-	')
+	nscd_use(ssh_keysign_t)
 ')
 
 #################################
@@ -236,16 +244,15 @@ optional_policy(`
 allow sshd_t self:netlink_route_socket r_netlink_socket_perms;
 allow sshd_t self:key { search link write };
 
+allow sshd_t sshd_keytab_t:file read_file_perms;
+
 manage_dirs_pattern(sshd_t, sshd_tmp_t, sshd_tmp_t)
 manage_files_pattern(sshd_t, sshd_tmp_t, sshd_tmp_t)
 manage_sock_files_pattern(sshd_t, sshd_tmp_t, sshd_tmp_t)
 files_tmp_filetrans(sshd_t, sshd_tmp_t, { dir file sock_file })
 
-kernel_dontaudit_request_load_module(sshd_t)
 kernel_search_key(sshd_t)
 kernel_link_key(sshd_t)
-
-kernel_read_crypto_sysctls(sshd_t)
 
 term_use_all_ptys(sshd_t)
 term_setattr_all_ptys(sshd_t)
@@ -254,6 +261,10 @@ term_relabelto_all_ptys(sshd_t)
 # for X forwarding
 corenet_tcp_bind_xserver_port(sshd_t)
 corenet_sendrecv_xserver_server_packets(sshd_t)
+
+ifdef(`distro_debian',`
+	allow sshd_t self:process { getcap setcap };
+')
 
 tunable_policy(`ssh_sysadm_login',`
 	# Relabel and access ptys created by sshd
@@ -276,7 +287,12 @@ optional_policy(`
 ')
 
 optional_policy(`
-	kerberos_keytab_template(sshd, sshd_t)
+	kerberos_read_keytab(sshd_t)
+	kerberos_use(sshd_t)
+')
+
+optional_policy(`
+	oddjob_domtrans_mkhomedir(sshd_t)
 ')
 
 optional_policy(`
@@ -297,29 +313,6 @@ optional_policy(`
 	xserver_domtrans_xauth(sshd_t)
 ')
 
-ifdef(`TODO',`
-tunable_policy(`ssh_sysadm_login',`
-	# Relabel and access ptys created by sshd
-	# ioctl is necessary for logout() processing for utmp entry and for w to
-	# display the tty.
-	# some versions of sshd on the new SE Linux require setattr
-	allow sshd_t ptyfile:chr_file relabelto;
-
-	optional_policy(`
-		domain_trans(sshd_t, xauth_exec_t, userdomain)
-	')
-',`
-	optional_policy(`
-		domain_trans(sshd_t, xauth_exec_t, unpriv_userdomain)
-	')
-	# Relabel and access ptys created by sshd
-	# ioctl is necessary for logout() processing for utmp entry and for w to
-	# display the tty.
-	# some versions of sshd on the new SE Linux require setattr
-	allow sshd_t userpty_type:chr_file { relabelto read write getattr ioctl setattr };
-')
-') dnl endif TODO
-
 ########################################
 #
 # ssh_keygen local policy
@@ -335,11 +328,6 @@ allow ssh_keygen_t self:unix_stream_socket create_stream_socket_perms;
 
 allow ssh_keygen_t sshd_key_t:file manage_file_perms;
 files_etc_filetrans(ssh_keygen_t, sshd_key_t, file)
- 
-# Query fips mode.
-kernel_read_crypto_sysctls(ssh_keygen_t)
-
-kernel_read_system_state(ssh_keygen_t)
 
 kernel_read_kernel_sysctls(ssh_keygen_t)
 
@@ -362,10 +350,6 @@ auth_use_nsswitch(ssh_keygen_t)
 logging_send_syslog_msg(ssh_keygen_t)
 
 userdom_dontaudit_use_unpriv_user_fds(ssh_keygen_t)
-
-optional_policy(`
-	nscd_socket_use(ssh_keygen_t)
-')
 
 optional_policy(`
 	seutil_sigchld_newrole(ssh_keygen_t)

@@ -1,4 +1,4 @@
-policy_module(files, 1.15.0)
+policy_module(files, 1.19.2)
 
 ########################################
 #
@@ -28,6 +28,12 @@ attribute polymember;
 attribute security_file_type;
 # and its opposite
 attribute non_security_file_type;
+
+# sensitive authentication files whose accesses should
+# not be dontaudited for uses
+attribute auth_file_type;
+# and its opposite
+attribute non_auth_file_type;
 
 attribute tmpfile;
 attribute tmpfsfile;
@@ -65,18 +71,6 @@ typealias etc_t alias snmpd_etc_t;
 #
 type etc_runtime_t;
 files_type(etc_runtime_t)
-#Temporarily in policy until FC5 dissappears
-typealias etc_runtime_t alias firstboot_rw_t;
-
-#
-# file_t is the default type of a file that has not yet been
-# assigned an extended attribute (EA) value (when using a filesystem
-# that supports EAs).
-#
-type file_t;
-files_mountpoint(file_t)
-kernel_rootfs_mountpoint(file_t)
-sid file gen_context(system_u:object_r:file_t,s0)
 
 #
 # home_root_t is the type for the directory where user home directories
@@ -167,6 +161,7 @@ files_mountpoint(var_lib_t)
 #
 type var_lock_t;
 files_lock_file(var_lock_t)
+files_mountpoint(var_lock_t)
 
 #
 # var_run_t is the type of /var/run, usually
@@ -195,8 +190,6 @@ fs_associate_tmpfs(file_type)
 fs_associate_ramfs(file_type)
 fs_associate_hugetlbfs(file_type)
 
-
-
 ########################################
 #
 # Rules for all tmp file types
@@ -212,7 +205,6 @@ fs_associate_tmpfs(tmpfile)
 #
 
 fs_associate_tmpfs(tmpfsfile)
-dev_associate(tmpfs_t)
 
 ########################################
 #

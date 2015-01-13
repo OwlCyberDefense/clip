@@ -1,4 +1,4 @@
-policy_module(fstools, 1.15.0)
+policy_module(fstools, 1.17.2)
 
 ########################################
 #
@@ -53,10 +53,10 @@ logging_log_filetrans(fsadm_t, fsadm_log_t, file)
 # Enable swapping to files
 allow fsadm_t swapfile_t:file { rw_file_perms swapon };
 
-kernel_use_fds(fsadm_t)
 kernel_read_system_state(fsadm_t)
 kernel_read_kernel_sysctls(fsadm_t)
 kernel_request_load_module(fsadm_t)
+kernel_manage_unlabeled_dirs(fsadm_t)
 # Allow console log change (updfstab)
 kernel_change_ring_buffer_level(fsadm_t)
 # mkreiserfs needs this
@@ -65,6 +65,7 @@ kernel_getattr_core_if(fsadm_t)
 # Access to /initrd devices
 kernel_rw_unlabeled_dirs(fsadm_t)
 kernel_rw_unlabeled_blk_files(fsadm_t)
+kernel_read_unlabeled_files(fsadm_t)
 
 corecmd_exec_bin(fsadm_t)
 #RedHat bug #201164
@@ -93,6 +94,8 @@ dev_rw_sysfs(fsadm_t)
 dev_getattr_usbfs_dirs(fsadm_t)
 # Access to /dev/mapper/control
 dev_rw_lvm_control(fsadm_t)
+# for losetup
+dev_rw_loop_control(fsadm_t)
 
 domain_use_interactive_fds(fsadm_t)
 
@@ -101,14 +104,9 @@ files_list_home(fsadm_t)
 files_read_usr_files(fsadm_t)
 files_read_etc_files(fsadm_t)
 files_manage_lost_found(fsadm_t)
-files_manage_isid_type_dirs(fsadm_t)
 # Write to /etc/mtab.
 files_manage_etc_runtime_files(fsadm_t)
 files_etc_filetrans_etc_runtime(fsadm_t, file)
-# Access to /initrd devices
-files_rw_isid_type_dirs(fsadm_t)
-files_rw_isid_type_blk_files(fsadm_t)
-files_read_isid_type_files(fsadm_t)
 
 fs_search_auto_mountpoints(fsadm_t)
 fs_getattr_xattr_fs(fsadm_t)
@@ -137,7 +135,6 @@ storage_read_scsi_generic(fsadm_t)
 storage_swapon_fixed_disk(fsadm_t)
 
 term_use_console(fsadm_t)
-term_use_generic_ptys(fsadm_t)
 
 init_use_fds(fsadm_t)
 init_use_script_ptys(fsadm_t)
@@ -147,10 +144,16 @@ logging_send_syslog_msg(fsadm_t)
 
 miscfiles_read_localization(fsadm_t)
 
+# losetup: bind mount_loopback_t files to loop devices
+mount_rw_loopback_files(fsadm_t)
+
 seutil_read_config(fsadm_t)
 
 userdom_use_user_terminals(fsadm_t)
-term_use_all_ptys(fsadm_t)
+
+ifdef(`distro_debian',`
+	term_dontaudit_use_unallocated_ttys(fsadm_t)
+')
 
 ifdef(`distro_redhat',`
 	optional_policy(`
@@ -166,6 +169,11 @@ optional_policy(`
 optional_policy(`
 	# for smartctl cron jobs
 	cron_system_entry(fsadm_t, fsadm_exec_t)
+')
+
+optional_policy(`
+	devicekit_read_pid_files(fsadm_t)
+	devicekit_append_inherited_log_files(fsadm_t)
 ')
 
 optional_policy(`

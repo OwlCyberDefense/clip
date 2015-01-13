@@ -259,6 +259,9 @@ exit 0
 %defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/selinux/clip/contexts/users/unconfined_u
 %fileList clip
+%{_sysconfdir}/selinux/clip/contexts/files/file_contexts.subs_dist
+%{_sysconfdir}/selinux/clip/contexts/virtual_domain_context
+%{_sysconfdir}/selinux/clip/contexts/virtual_image_context
 
 %package mls 
 Summary: Certifiable Linux Integration Platform SELinux mls base policy
@@ -294,6 +297,9 @@ exit 0
 %defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/selinux/mls/contexts/users/unconfined_u
 %fileList mls
+%{_sysconfdir}/selinux/mls/contexts/files/file_contexts.subs_dist
+%{_sysconfdir}/selinux/mls/contexts/virtual_domain_context
+%{_sysconfdir}/selinux/mls/contexts/virtual_image_context
 
 
 %changelog

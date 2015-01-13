@@ -1,4 +1,4 @@
-policy_module(selinuxutil, 1.15.0)
+policy_module(selinuxutil, 1.18.1)
 
 gen_require(`
 	bool secure_mode;
@@ -11,6 +11,14 @@ gen_require(`
 
 attribute can_write_binary_policy;
 attribute can_relabelto_binary_policy;
+
+attribute_role newrole_roles;
+
+attribute_role run_init_roles;
+role system_r types run_init_t;
+
+attribute_role semanage_roles;
+roleattribute system_r semanage_roles;
 
 #
 # selinux_config_t is the type applied to
@@ -32,7 +40,7 @@ role system_r types checkpolicy_t;
 # /etc/selinux/*/contexts/*
 #
 type default_context_t;
-files_type(default_context_t) 
+files_type(default_context_t)
 
 #
 # file_context_t is the type applied to
@@ -52,6 +60,7 @@ application_domain(newrole_t, newrole_exec_t)
 domain_role_change_exemption(newrole_t)
 domain_obj_id_change_exemption(newrole_t)
 domain_interactive_fd(newrole_t)
+role newrole_roles types newrole_t;
 
 #
 # policy_config_t is the type of /etc/security/selinux/*
@@ -83,13 +92,13 @@ type run_init_t;
 type run_init_exec_t;
 application_domain(run_init_t, run_init_exec_t)
 domain_system_change_exemption(run_init_t)
-role system_r types run_init_t;
+role run_init_roles types run_init_t;
 
 type semanage_t;
 type semanage_exec_t;
 application_domain(semanage_t, semanage_exec_t)
 domain_interactive_fd(semanage_t)
-role system_r types semanage_t;
+role semanage_roles types semanage_t;
 
 type semanage_store_t;
 files_type(semanage_store_t)
@@ -97,11 +106,14 @@ files_type(semanage_store_t)
 type semanage_read_lock_t;
 files_type(semanage_read_lock_t)
 
-type semanage_tmp_t; 
+type semanage_tmp_t;
 files_tmp_file(semanage_tmp_t)
 
-type semanage_trans_lock_t; 
+type semanage_trans_lock_t;
 files_type(semanage_trans_lock_t)
+
+type semanage_var_lib_t;
+files_type(semanage_var_lib_t)
 
 type setfiles_t alias restorecon_t, can_relabelto_binary_policy;
 type setfiles_exec_t alias restorecon_exec_t;
@@ -156,7 +168,7 @@ ifdef(`distro_ubuntu',`
 allow load_policy_t self:capability dac_override;
 
 # only allow read of policy config files
-read_files_pattern(load_policy_t,{ policy_src_t policy_config_t },policy_config_t)
+read_files_pattern(load_policy_t, { policy_src_t policy_config_t }, policy_config_t)
 
 domain_use_interactive_fds(load_policy_t)
 
@@ -199,6 +211,10 @@ ifdef(`hide_broken_symptoms',`
 	')
 ')
 
+optional_policy(`
+	portage_dontaudit_use_fds(load_policy_t)
+')
+
 ########################################
 #
 # Newrole local policy
@@ -216,7 +232,7 @@ allow newrole_t self:msgq create_msgq_perms;
 allow newrole_t self:msg { send receive };
 allow newrole_t self:unix_dgram_socket sendto;
 allow newrole_t self:unix_stream_socket { create_stream_socket_perms connectto };
-logging_send_audit_msgs(newrole_t)
+allow newrole_t self:netlink_audit_socket { create_netlink_socket_perms nlmsg_relay };
 
 read_files_pattern(newrole_t, default_context_t, default_context_t)
 read_lnk_files_pattern(newrole_t, default_context_t, default_context_t)
@@ -261,8 +277,8 @@ term_getattr_unallocated_ttys(newrole_t)
 term_dontaudit_use_unallocated_ttys(newrole_t)
 
 auth_use_nsswitch(newrole_t)
-auth_domtrans_chk_passwd(newrole_t)
-auth_domtrans_upd_passwd(newrole_t)
+auth_run_chk_passwd(newrole_t, newrole_roles)
+auth_run_upd_passwd(newrole_t, newrole_roles)
 auth_rw_faillog(newrole_t)
 
 # Write to utmp.
@@ -314,7 +330,7 @@ kernel_read_system_state(restorecond_t)
 
 fs_relabelfrom_noxattr_fs(restorecond_t)
 fs_dontaudit_list_nfs(restorecond_t)
-fs_getattr_xattr_fs(restorecond_t)
+fs_getattr_all_xattr_fs(restorecond_t)
 fs_list_inotifyfs(restorecond_t)
 
 selinux_validate_context(restorecond_t)
@@ -323,8 +339,8 @@ selinux_compute_create_context(restorecond_t)
 selinux_compute_relabel_context(restorecond_t)
 selinux_compute_user_contexts(restorecond_t)
 
-auth_relabel_all_files_except_auth_files(restorecond_t )
-auth_read_all_files_except_auth_files(restorecond_t)
+files_relabel_non_auth_files(restorecond_t )
+files_read_non_auth_files(restorecond_t)
 auth_use_nsswitch(restorecond_t)
 
 locallogin_dontaudit_use_fds(restorecond_t)
@@ -349,6 +365,8 @@ optional_policy(`
 #
 # Run_init local policy
 #
+
+allow run_init_roles system_r;
 
 allow run_init_t self:process setexec;
 allow run_init_t self:capability setuid;
@@ -381,8 +399,8 @@ selinux_compute_relabel_context(run_init_t)
 selinux_compute_user_contexts(run_init_t)
 
 auth_use_nsswitch(run_init_t)
-auth_domtrans_chk_passwd(run_init_t)
-auth_domtrans_upd_passwd(run_init_t)
+auth_run_chk_passwd(run_init_t, run_init_roles)
+auth_run_upd_passwd(run_init_t, run_init_roles)
 auth_dontaudit_read_shadow(run_init_t)
 
 init_spec_domtrans_script(run_init_t)
@@ -402,6 +420,8 @@ ifndef(`direct_sysadm_daemon',`
 	ifdef(`distro_gentoo',`
 		# Gentoo integrated run_init:
 		init_script_file_entry_type(run_init_t)
+
+		init_exec_rc(run_init_t)
 	')
 ')
 
@@ -424,12 +444,18 @@ allow semanage_t self:capability { dac_override audit_write };
 allow semanage_t self:unix_stream_socket create_stream_socket_perms;
 allow semanage_t self:unix_dgram_socket create_socket_perms;
 allow semanage_t self:netlink_audit_socket { create_netlink_socket_perms nlmsg_relay };
+allow semanage_t self:fifo_file rw_fifo_file_perms;
 
 allow semanage_t policy_config_t:file rw_file_perms;
+
+filetrans_pattern(semanage_t, selinux_config_t, semanage_store_t, dir, "modules")
 
 allow semanage_t semanage_tmp_t:dir manage_dir_perms;
 allow semanage_t semanage_tmp_t:file manage_file_perms;
 files_tmp_filetrans(semanage_t, semanage_tmp_t, { file dir })
+
+manage_dirs_pattern(semanage_t, semanage_var_lib_t, semanage_var_lib_t)
+manage_files_pattern(semanage_t, semanage_var_lib_t, semanage_var_lib_t)
 
 kernel_read_system_state(semanage_t)
 kernel_read_kernel_sysctls(semanage_t)
@@ -468,8 +494,8 @@ miscfiles_read_localization(semanage_t)
 seutil_libselinux_linked(semanage_t)
 seutil_manage_file_contexts(semanage_t)
 seutil_manage_config(semanage_t)
-seutil_domtrans_setfiles(semanage_t)
-seutil_domtrans_loadpolicy(semanage_t)
+seutil_run_setfiles(semanage_t, semanage_roles)
+seutil_run_loadpolicy(semanage_t, semanage_roles)
 seutil_manage_bin_policy(semanage_t)
 seutil_use_newrole_fds(semanage_t)
 seutil_manage_module_store(semanage_t)
@@ -519,6 +545,8 @@ kernel_dontaudit_list_all_proc(setfiles_t)
 kernel_dontaudit_list_all_sysctls(setfiles_t)
 
 dev_relabel_all_dev_nodes(setfiles_t)
+# to handle when /dev/console needs to be relabeled
+dev_rw_generic_chr_files(setfiles_t)
 
 domain_use_interactive_fds(setfiles_t)
 domain_dontaudit_search_all_domains_state(setfiles_t)
@@ -528,8 +556,9 @@ files_read_etc_files(setfiles_t)
 files_list_all(setfiles_t)
 files_relabel_all_files(setfiles_t)
 files_read_usr_symlinks(setfiles_t)
+files_dontaudit_read_all_symlinks(setfiles_t)
 
-fs_getattr_xattr_fs(setfiles_t)
+fs_getattr_all_xattr_fs(setfiles_t)
 fs_list_all(setfiles_t)
 fs_search_auto_mountpoints(setfiles_t)
 fs_relabelfrom_noxattr_fs(setfiles_t)
@@ -547,11 +576,7 @@ selinux_compute_user_contexts(setfiles_t)
 
 term_use_all_ttys(setfiles_t)
 term_use_all_ptys(setfiles_t)
-term_use_generic_ptys(setfiles_t)
 term_use_unallocated_ttys(setfiles_t)
-
-# During dracut /dev/console is still device_t
-dev_dontaudit_rw_generic_dev_nodes(setfiles_t)
 
 # this is to satisfy the assertion:
 auth_relabelto_shadow(setfiles_t)
@@ -561,6 +586,7 @@ init_use_script_fds(setfiles_t)
 init_use_script_ptys(setfiles_t)
 init_exec_script_files(setfiles_t)
 
+logging_send_audit_msgs(setfiles_t)
 logging_send_syslog_msg(setfiles_t)
 
 miscfiles_read_localization(setfiles_t)

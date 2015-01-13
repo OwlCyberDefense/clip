@@ -1,4 +1,4 @@
-policy_module(getty, 1.9.0)
+policy_module(getty, 1.10.0)
 
 ########################################
 #
@@ -125,7 +125,7 @@ optional_policy(`
 ')
 
 optional_policy(`
-	nscd_socket_use(getty_t)
+	nscd_use(getty_t)
 ')
 
 optional_policy(`

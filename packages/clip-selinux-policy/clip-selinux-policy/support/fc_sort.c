@@ -1,4 +1,4 @@
-/* Copyright 2005, Tresys Technology 
+/* Copyright 2005,2013 Tresys Technology
  * 
  * Some parts of this came from matchpathcon.c in libselinux
  */
@@ -81,7 +81,7 @@ typedef struct file_context_bucket {
  *      -> a is less specific than b.
  *     If a's string length is shorter than b's string length,
  *      -> a is less specific than b.
- *     If a does not have a specified type and b does not,
+ *     If a does not have a specified type and b does,
  *      -> a is less specific than b.
  */
 int fc_compare(file_context_node_t *a, file_context_node_t *b)
@@ -328,13 +328,13 @@ int main(int argc, char *argv[])
 
 
 	/* Check for the correct number of command line arguments. */
-	if (argc != 3) {
-		fprintf(stderr, "Usage: %s <infile> <outfile>\n",argv[0]);
+	if (argc < 2 || argc > 3) {
+		fprintf(stderr, "Usage: %s <infile> [<outfile>]\n",argv[0]);
 		return 1;
 	}
 	
 	input_name = argv[1];
-	output_name = argv[2];
+	output_name = (argc >= 3) ? argv[2] : NULL;
 
 	i = j = lines = 0;
 
@@ -346,6 +346,7 @@ int main(int argc, char *argv[])
 
 	/* Initialize the head of the linked list. */
 	head = current = (file_context_node_t*)malloc(sizeof(file_context_node_t));
+	head->next = NULL;
 
 	/* Parse the file into a file_context linked list. */
 	line_buf = NULL;
@@ -489,6 +490,8 @@ int main(int argc, char *argv[])
 	bcurrent = master =
 	    (file_context_bucket_t *)
 	    malloc(sizeof(file_context_bucket_t));
+	bcurrent->next = NULL;
+	bcurrent->data = NULL;
 
 	/* Go until all the nodes have been put in individual buckets. */
 	while (current) {
@@ -496,7 +499,7 @@ int main(int argc, char *argv[])
 		bcurrent->data = current;
 		current = current->next;
 
-		/* Detatch the node in the bucket from the old list. */
+		/* Detach the node in the bucket from the old list. */
 		bcurrent->data->next = NULL;
 
 		/* If there should be another bucket, put one at the end. */
@@ -523,9 +526,13 @@ int main(int argc, char *argv[])
 	fc_merge_sort(master);
 
 	/* Open the output file. */
-	if (!(out_file = fopen(argv[2], "w"))) {
-		printf("Error: failure opening output file for write.\n");
-		return -1;
+	if (output_name) {
+		if (!(out_file = fopen(output_name, "w"))) {
+			printf("Error: failure opening output file for write.\n");
+			return -1;
+		}
+	} else {
+		out_file = stdout;
 	}
 
 	/* Output the sorted file_context linked list to the output file. */
@@ -552,7 +559,9 @@ int main(int argc, char *argv[])
 	}
 	free(master);
 
-	fclose(out_file);
+	if (output_name) {
+		fclose(out_file);
+	}
 
 	return 0;
 }

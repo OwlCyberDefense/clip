@@ -41,10 +41,9 @@ template(`sudo_role_template',`
 	#
 
 	type $1_sudo_t, sudodomain; 
-	application_domain($1_sudo_t, sudo_exec_t)
+	userdom_user_application_domain($1_sudo_t, sudo_exec_t)
 	domain_interactive_fd($1_sudo_t)
 	domain_role_change_exemption($1_sudo_t)
-	ubac_constrained($1_sudo_t)
 	role $2 types $1_sudo_t;
 
 	##############################
@@ -80,8 +79,6 @@ template(`sudo_role_template',`
 	allow $3 $1_sudo_t:fifo_file rw_fifo_file_perms;
 	allow $3 $1_sudo_t:process signal_perms;
 
-	kernel_dontaudit_getattr_core_if($1_sudo_t)
-
 	kernel_read_kernel_sysctls($1_sudo_t)
 	kernel_read_system_state($1_sudo_t)
 	kernel_link_key($1_sudo_t)
@@ -93,23 +90,6 @@ template(`sudo_role_template',`
 	dev_read_urand($1_sudo_t)
 	dev_rw_generic_usb_dev($1_sudo_t)
 	dev_read_sysfs($1_sudo_t)
-
-	# SRS: I am not sure if this is the correct
-	# approach but at least it errs on the side
-	# of caution.
-	dev_dontaudit_getattr_generic_files($1_sudo_t)
-	dev_dontaudit_getattr_all_blk_files($1_sudo_t)
-	dev_dontaudit_getattr_all_chr_files($1_sudo_t)
-	dev_dontaudit_getattr_generic_pipes($1_sudo_t)
-	dev_dontaudit_getattr_nvram_dev($1_sudo_t)	
-	dev_dontaudit_getattr_usbfs_dirs($1_sudo_t)	
-	dev_dontaudit_getattr_video_dev($1_sudo_t)	
-	dev_dontaudit_getattr_memory_dev($1_sudo_t)	
-	dev_dontaudit_getattr_autofs_dev($1_sudo_t)	
-	dev_dontaudit_getattr_misc_dev($1_sudo_t)	
-	dev_dontaudit_getattr_smartcard_dev($1_sudo_t)	
-	dev_dontaudit_getattr_apm_bios_dev($1_sudo_t)	
-	dev_dontaudit_getattr_scanner_dev($1_sudo_t)	
 
 	domain_use_interactive_fds($1_sudo_t)
 	domain_sigchld_interactive_fds($1_sudo_t)
@@ -130,9 +110,9 @@ template(`sudo_role_template',`
 	selinux_compute_relabel_context($1_sudo_t)
 
 	term_getattr_pty_fs($1_sudo_t)
+	term_dontaudit_getattr_unallocated_ttys($1_sudo_t)
 	term_relabel_all_ttys($1_sudo_t)
 	term_relabel_all_ptys($1_sudo_t)
-	term_getattr_unallocated_ttys($1_sudo_t)
 
 	auth_run_chk_passwd($1_sudo_t, $2)
 	# sudo stores a token in the pam_pid directory
@@ -149,12 +129,8 @@ template(`sudo_role_template',`
 	seutil_search_default_contexts($1_sudo_t)
 	seutil_libselinux_linked($1_sudo_t)
 
-        userdom_search_user_home_content($1_sudo_t)
-        userdom_manage_all_users_keys($1_sudo_t)
- 
-        mta_role($2, $1_sudo_t)
-
 	userdom_spec_domtrans_all_users($1_sudo_t)
+	userdom_create_all_users_keys($1_sudo_t)
 	userdom_manage_user_home_content_files($1_sudo_t)
 	userdom_manage_user_home_content_symlinks($1_sudo_t)
 	userdom_manage_user_tmp_files($1_sudo_t)
@@ -162,6 +138,7 @@ template(`sudo_role_template',`
 	userdom_use_user_terminals($1_sudo_t)
 	# for some PAM modules and for cwd
 	userdom_dontaudit_search_user_home_content($1_sudo_t)
+	userdom_dontaudit_search_user_home_dirs($1_sudo_t)
 
 	ifdef(`hide_broken_symptoms', `
 		dontaudit $1_sudo_t $3:socket_class_set { read write };
@@ -183,28 +160,6 @@ template(`sudo_role_template',`
 		fprintd_dbus_chat($1_sudo_t)
 	')
 
-	optional_policy(`
-		cron_dontaudit_search_system_job_keys($1_sudo_t)
-	')
-
-')
-
-########################################
-## <summary>
-##	Link to sudo domain keys.
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-#
-interface(`sudo_link_sudo_keys',`
-	gen_require(`
-		attribute sudodomain;
-	')
-
-	allow $1 sudodomain:key link;
 ')
 
 ########################################

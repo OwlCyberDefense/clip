@@ -1,4 +1,4 @@
-policy_module(init, 1.17.0)
+policy_module(init, 1.21.4)
 
 gen_require(`
 	class passwd rootok;
@@ -16,18 +16,18 @@ gen_require(`
 ## </desc>
 gen_tunable(init_upstart, false)
 
-# used for direct running of init scripts
-# by admin domains
-attribute direct_run_init;
-attribute direct_init;
-attribute direct_init_entry;
-
 attribute init_script_domain_type;
 attribute init_script_file_type;
 attribute init_run_all_scripts_domain;
 
 # Mark process types as daemons
 attribute daemon;
+
+# Mark file type as a daemon pid file
+attribute daemonpidfile;
+# Mark file type as a daemon run directory
+# TODO - this attribute is deprecated and kept for a short while for compatibility
+attribute daemonrundir;
 
 #
 # init_t is the domain of the init process.
@@ -40,10 +40,16 @@ kernel_domtrans_to(init_t, init_exec_t)
 role system_r types init_t;
 
 #
-# init_var_run_t is the type for /var/run/shutdown.pid.
+# init_var_run_t is the type for /var/run/shutdown.pid and /var/run/systemd.
 #
 type init_var_run_t;
 files_pid_file(init_var_run_t)
+
+#
+# init_var_lib_t is the type for /var/lib/systemd.
+#
+type init_var_lib_t;
+files_type(init_var_lib_t)
 
 #
 # initctl_t is the type of the named pipe created
@@ -74,8 +80,16 @@ files_type(initrc_state_t)
 type initrc_tmp_t;
 files_tmp_file(initrc_tmp_t)
 
+type initrc_var_log_t;
+logging_log_file(initrc_var_log_t)
+
 type initrc_var_run_t;
 files_pid_file(initrc_var_run_t)
+
+ifdef(`distro_gentoo',`
+	type rc_exec_t;
+	domain_entry_file(initrc_t, rc_exec_t)
+')
 
 ifdef(`enable_mls',`
 	kernel_ranged_domtrans_to(init_t, init_exec_t, s0 - mls_systemhigh)
@@ -100,9 +114,7 @@ allow init_t self:fifo_file rw_fifo_file_perms;
 # Re-exec itself
 can_exec(init_t, init_exec_t)
 
-allow init_t initrc_t:unix_stream_socket { connectto rw_stream_socket_perms };
-allow initrc_t init_t:unix_stream_socket { connectto rw_stream_socket_perms };
-allow initrc_t init_t:fifo_file rw_fifo_file_perms;
+allow init_t initrc_t:unix_stream_socket connectto;
 
 # For /var/run/shutdown.pid.
 allow init_t init_var_run_t:file manage_file_perms;
@@ -116,13 +128,12 @@ allow init_t initrc_var_run_t:file { rw_file_perms setattr };
 
 kernel_read_system_state(init_t)
 kernel_share_state(init_t)
+kernel_dontaudit_search_unlabeled(init_t)
 
 corecmd_exec_chroot(init_t)
 corecmd_exec_bin(init_t)
 
 dev_read_sysfs(init_t)
-dev_read_urand(init_t)
-
 # Early devtmpfs
 dev_rw_generic_chr_files(init_t)
 
@@ -135,7 +146,6 @@ domain_sigchld_all_domains(init_t)
 
 files_read_etc_files(init_t)
 files_rw_generic_pids(init_t)
-files_dontaudit_search_isid_type_dirs(init_t)
 files_manage_etc_runtime_files(init_t)
 files_etc_filetrans_etc_runtime(init_t, file)
 # Run /etc/X11/prefdm:
@@ -153,7 +163,7 @@ mcs_killall(init_t)
 
 mls_file_read_all_levels(init_t)
 mls_file_write_all_levels(init_t)
-mls_process_write_down(init_t)
+mls_process_write_all_levels(init_t)
 mls_fd_use_all_levels(init_t)
 
 selinux_set_all_booleans(init_t)
@@ -172,10 +182,69 @@ seutil_read_config(init_t)
 
 miscfiles_read_localization(init_t)
 
-allow init_t self:process setsched;
+ifdef(`init_systemd',`
+	# handle instances where an old labeled init script is encountered.
+	typeattribute init_t init_run_all_scripts_domain;
+
+	allow init_t self:process { getcap getsched setpgid setfscreate setsockcreate setcap setrlimit };
+	allow init_t self:capability2 block_suspend;
+	allow init_t self:netlink_audit_socket nlmsg_readpriv;
+	allow init_t self:netlink_kobject_uevent_socket read;
+	allow init_t self:netlink_selinux_socket read;
+
+	allow init_t init_var_run_t:dir manage_dir_perms;
+
+	kernel_read_kernel_sysctls(init_t)
+	kernel_read_vm_sysctls(init_t)
+
+	domain_read_all_domains_state(init_t)
+
+	files_mounton_root(init_t)
+	# for privatetmp functions
+	files_manage_generic_tmp_dirs(init_t)
+	files_mounton_tmp(init_t)
+
+	fs_manage_cgroup_dirs(init_t)
+	fs_rw_cgroup_files(init_t)
+
+	selinux_compute_create_context(init_t)
+	selinux_compute_access_vector(init_t)
+
+	logging_send_audit_msgs(init_t)
+
+	optional_policy(`
+		modutils_domtrans_insmod(init_t)
+	')
+
+	optional_policy(`
+		dbus_system_bus_client(init_t)
+		dbus_connect_system_bus(init_t)
+	')
+
+	optional_policy(`
+		plymouthd_stream_connect(init_t)
+	')
+',`
+	tunable_policy(`init_upstart',`
+		corecmd_shell_domtrans(init_t, initrc_t)
+	',`
+		# Run the shell in the sysadm role for single-user mode.
+		# causes problems with upstart
+		sysadm_shell_domtrans(init_t)
+	')
+')
+
+ifdef(`distro_debian',`
+	fs_tmpfs_filetrans(init_t, initctl_t, fifo_file, "initctl")
+
+	allow init_t initrc_var_run_t:file manage_file_perms;
+	fs_tmpfs_filetrans(init_t, initrc_var_run_t, file, "utmp")
+')
 
 ifdef(`distro_gentoo',`
 	allow init_t self:process { getcap setcap };
+
+	init_exec_rc(initrc_t)
 ')
 
 ifdef(`distro_redhat',`
@@ -184,29 +253,20 @@ ifdef(`distro_redhat',`
 	fs_tmpfs_filetrans(init_t, initctl_t, fifo_file)
 ')
 
-tunable_policy(`init_upstart',`
-	corecmd_shell_domtrans(init_t, initrc_t)
-',`
-	# Run the shell in the sysadm role for single-user mode.
-	# causes problems with upstart
-	sysadm_shell_domtrans(init_t)
-')
-
 optional_policy(`
 	auth_rw_login_records(init_t)
 ')
 
 optional_policy(`
-	consolekit_manage_log(init_t)
-')
-
-optional_policy(`
-	dbus_connect_system_bus(init_t)
 	dbus_system_bus_client(init_t)
 ')
 
 optional_policy(`
-	nscd_socket_use(init_t)
+	nscd_use(init_t)
+')
+
+optional_policy(`
+	shutdown_domtrans(init_t)
 ')
 
 optional_policy(`
@@ -223,7 +283,8 @@ optional_policy(`
 #
 
 allow initrc_t self:process { getpgid setsched setpgid setrlimit getsched };
-allow initrc_t self:capability ~{ audit_control audit_write sys_admin sys_module };
+allow initrc_t self:capability ~{ sys_admin sys_module };
+allow initrc_t self:capability2 block_suspend;
 dontaudit initrc_t self:capability sys_module; # sysctl is triggering this
 allow initrc_t self:passwd rootok;
 allow initrc_t self:key manage_key_perms;
@@ -243,6 +304,14 @@ init_telinit(initrc_t)
 
 can_exec(initrc_t, init_script_file_type)
 
+create_dirs_pattern(initrc_t, daemonpidfile, daemonpidfile)
+manage_files_pattern(initrc_t, daemonpidfile, daemonpidfile)
+setattr_dirs_pattern(initrc_t, daemonpidfile, daemonpidfile)
+
+# TODO - this is deprecated supported for a short while for backwards compatibility
+create_dirs_pattern(initrc_t, daemonrundir, daemonrundir)
+setattr_dirs_pattern(initrc_t, daemonrundir, daemonrundir)
+
 domtrans_pattern(init_run_all_scripts_domain, initrc_exec_t, initrc_t)
 
 manage_dirs_pattern(initrc_t, initrc_state_t, initrc_state_t)
@@ -259,6 +328,10 @@ manage_dirs_pattern(initrc_t, initrc_tmp_t, initrc_tmp_t)
 manage_lnk_files_pattern(initrc_t, initrc_tmp_t, initrc_tmp_t)
 files_tmp_filetrans(initrc_t, initrc_tmp_t, { file dir })
 
+manage_dirs_pattern(initrc_t, initrc_var_log_t, initrc_var_log_t)
+manage_files_pattern(initrc_t, initrc_var_log_t, initrc_var_log_t)
+logging_log_filetrans(initrc_t, initrc_var_log_t, dir)
+
 init_write_initctl(initrc_t)
 
 kernel_read_system_state(initrc_t)
@@ -270,20 +343,16 @@ kernel_clear_ring_buffer(initrc_t)
 kernel_get_sysvipc_info(initrc_t)
 kernel_read_all_sysctls(initrc_t)
 kernel_rw_all_sysctls(initrc_t)
-kernel_request_load_module(initrc_t)
 # for lsof which is used by alsa shutdown:
 kernel_dontaudit_getattr_message_if(initrc_t)
-files_read_kernel_modules(initrc_t)
-files_read_config_files(initrc_t)
-files_read_var_lib_symlinks(initrc_t)
-files_setattr_pid_dirs(initrc_t)
+# cjp: not sure why these are here; should use mount policy
+kernel_list_unlabeled(initrc_t)
+kernel_mounton_unlabeled_dirs(initrc_t)
 
-files_manage_generic_pids_symlinks(initrc_t)
-kernel_stream_connect(initrc_t)
-files_exec_etc_files(initrc_t)
-files_manage_etc_symlinks(initrc_t)
-
+files_create_lock_dirs(initrc_t)
+files_pid_filetrans_lock_dir(initrc_t, "lock")
 files_read_kernel_symbol_table(initrc_t)
+files_setattr_lock_dirs(initrc_t)
 
 corecmd_exec_all_executables(initrc_t)
 
@@ -344,12 +413,7 @@ files_getattr_all_symlinks(initrc_t)
 files_getattr_all_pipes(initrc_t)
 files_getattr_all_sockets(initrc_t)
 files_purge_tmp(initrc_t)
-files_manage_all_locks(initrc_t)
-files_manage_boot_files(initrc_t)
-files_delete_root_files(initrc_t)
-files_manage_mnt_dirs(initrc_t)
-files_manage_mnt_files(initrc_t)
-fs_search_all(initrc_t)
+files_delete_all_locks(initrc_t)
 files_read_all_pids(initrc_t)
 files_delete_all_pids(initrc_t)
 files_delete_all_pid_dirs(initrc_t)
@@ -362,8 +426,6 @@ files_manage_urandom_seed(initrc_t)
 files_manage_generic_spool(initrc_t)
 # Mount and unmount file systems.
 # cjp: not sure why these are here; should use mount policy
-files_list_isid_type_dirs(initrc_t)
-files_mounton_isid_type_dirs(initrc_t)
 files_list_default(initrc_t)
 files_mounton_default(initrc_t)
 
@@ -385,8 +447,8 @@ mcs_process_set_categories(initrc_t)
 
 mls_file_read_all_levels(initrc_t)
 mls_file_write_all_levels(initrc_t)
-mls_process_read_up(initrc_t)
-mls_process_write_down(initrc_t)
+mls_process_read_all_levels(initrc_t)
+mls_process_write_all_levels(initrc_t)
 mls_rangetrans_source(initrc_t)
 mls_fd_share_all_levels(initrc_t)
 
@@ -395,10 +457,6 @@ selinux_get_enforce_mode(initrc_t)
 storage_getattr_fixed_disk_dev(initrc_t)
 storage_setattr_fixed_disk_dev(initrc_t)
 storage_setattr_removable_dev(initrc_t)
-storage_dontaudit_getattr_removable_dev(initrc_t)
-# lsblk, which has a bug in RHEL 6, attempts to read raw blk devs
-# https://bugzilla.redhat.com/show_bug.cgi?id=818621
-storage_dontaudit_read_removable_device(initrc_t)
 
 term_use_all_terms(initrc_t)
 term_reset_tty_labels(initrc_t)
@@ -448,6 +506,18 @@ ifdef(`distro_debian',`
 	storage_tmpfs_filetrans_fixed_disk(initrc_t)
 
 	files_setattr_etc_dirs(initrc_t)
+
+	optional_policy(`
+		exim_manage_var_lib_files(initrc_t)
+	')
+
+	optional_policy(`
+		gdomap_read_config(initrc_t)
+	')
+
+	optional_policy(`
+		minissdpd_read_config(initrc_t)
+	')
 ')
 
 ifdef(`distro_gentoo',`
@@ -465,9 +535,13 @@ ifdef(`distro_gentoo',`
 	# early init
 	dev_create_generic_dirs(initrc_t)
 	dev_delete_generic_dirs(initrc_t)
+	dev_setattr_generic_dirs(initrc_t)
 
+	files_manage_all_pids(initrc_t)
 	# allow bootmisc to create /var/lock/.keep.
 	files_manage_generic_locks(initrc_t)
+	files_manage_var_symlinks(initrc_t)
+	files_pid_filetrans(initrc_t, initrc_state_t, dir, "openrc")
 
 	# openrc uses tmpfs for its state data
 	fs_tmpfs_filetrans(initrc_t, initrc_state_t, { dir file fifo_file lnk_file })
@@ -579,8 +653,14 @@ ifdef(`distro_suse',`
 	')
 ')
 
-optional_policy(`
-	plymouthd_stream_connect(initrc_t)
+ifdef(`init_systemd',`
+	# run systemd misc initializations
+	# in the initrc_t domain, as would be
+	# done in traditional sysvinit/upstart.
+	corecmd_bin_entry_type(initrc_t)
+	corecmd_shell_entry_type(initrc_t)
+	corecmd_bin_domtrans(init_t, initrc_t)
+	corecmd_shell_domtrans(init_t, initrc_t)
 ')
 
 optional_policy(`
@@ -595,6 +675,11 @@ optional_policy(`
 optional_policy(`
 	apache_read_config(initrc_t)
 	apache_list_modules(initrc_t)
+')
+
+optional_policy(`
+	asterisk_setattr_logs(initrc_t)
+	asterisk_setattr_pid_files(initrc_t)
 ')
 
 optional_policy(`
@@ -615,6 +700,10 @@ optional_policy(`
 
 optional_policy(`
 	clamav_read_config(initrc_t)
+')
+
+optional_policy(`
+	courier_read_config(initrc_t)
 ')
 
 optional_policy(`
@@ -835,13 +924,17 @@ optional_policy(`
 ')
 
 optional_policy(`
+	stunnel_read_config(initrc_t)
+')
+
+optional_policy(`
 	sysnet_read_dhcpc_state(initrc_t)
 ')
 
 optional_policy(`
 	udev_rw_db(initrc_t)
-	udev_delete_db(initrc_t)
 	udev_manage_pid_files(initrc_t)
+	udev_manage_pid_dirs(initrc_t)
 	udev_manage_rules_files(initrc_t)
 ')
 
@@ -850,7 +943,8 @@ optional_policy(`
 ')
 
 optional_policy(`
-	virt_manage_svirt_cache(initrc_t)
+	virt_stream_connect(initrc_t)
+	virt_manage_virt_cache(initrc_t)
 ')
 
 optional_policy(`

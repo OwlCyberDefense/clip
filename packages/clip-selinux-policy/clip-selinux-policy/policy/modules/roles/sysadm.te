@@ -1,4 +1,4 @@
-policy_module(sysadm, 2.3.0)
+policy_module(sysadm, 2.7.2)
 
 ########################################
 #
@@ -12,14 +12,13 @@ policy_module(sysadm, 2.3.0)
 ## </desc>
 gen_tunable(allow_ptrace, false)
 
-role sysadm_r;
+#role sysadm_r;
 
 userdom_admin_user_template(sysadm)
 
-# SRS: removed for CLIP
-#ifndef(`enable_mls',`
-#	userdom_security_admin_template(sysadm_t, sysadm_r)
-#')
+ifndef(`enable_mls',`
+	userdom_security_admin_template(sysadm_t, sysadm_r)
+')
 
 ########################################
 #
@@ -28,15 +27,13 @@ userdom_admin_user_template(sysadm)
 
 corecmd_exec_shell(sysadm_t)
 
-mls_process_read_up(sysadm_t)
+mls_process_read_all_levels(sysadm_t)
 
-# SRS: removed for CLIP for RHEL 6.2 since we want ubac on sysadm too.
-#ubac_process_exempt(sysadm_t)
-#ubac_file_exempt(sysadm_t)
-#ubac_fd_exempt(sysadm_t)
+ubac_process_exempt(sysadm_t)
+ubac_file_exempt(sysadm_t)
+ubac_fd_exempt(sysadm_t)
 
 init_exec(sysadm_t)
-init_stream_connect(sysadm_t)
 
 # Add/remove user home directories
 userdom_manage_user_home_dirs(sysadm_t)
@@ -54,32 +51,30 @@ ifdef(`direct_sysadm_daemon',`
 	')
 ')
 
-logging_read_generic_logs(sysadm_t)
+ifdef(`distro_gentoo',`
+	init_exec_rc(sysadm_t)
+')
 
-# SRS: removed for CLIP
-#ifndef(`enable_mls',`
-#	logging_manage_audit_log(sysadm_t)
-#	logging_manage_audit_config(sysadm_t)
-#	logging_run_auditctl(sysadm_t, sysadm_r)
-#')
+ifndef(`enable_mls',`
+	logging_manage_audit_log(sysadm_t)
+	logging_manage_audit_config(sysadm_t)
+	logging_run_auditctl(sysadm_t, sysadm_r)
+')
 
-# SRS: removed for CLIP
-#tunable_policy(`allow_ptrace',`
-#	domain_ptrace_all_domains(sysadm_t)
-#')
+tunable_policy(`allow_ptrace',`
+	domain_ptrace_all_domains(sysadm_t)
+')
 
-# SRS: removed for CLIP
-#optional_policy(`
-#	amanda_run_recover(sysadm_t, sysadm_r)
-#')
+optional_policy(`
+	amanda_run_recover(sysadm_t, sysadm_r)
+')
 
-# SRS: removed for CLIP
-#optional_policy(`
-#	apache_run_helper(sysadm_t, sysadm_r)
-#	#apache_run_all_scripts(sysadm_t, sysadm_r)
-#	#apache_domtrans_sys_script(sysadm_t)
-#	apache_role(sysadm_r, sysadm_t)
-#')
+optional_policy(`
+	apache_run_helper(sysadm_t, sysadm_r)
+	#apache_run_all_scripts(sysadm_t, sysadm_r)
+	#apache_domtrans_sys_script(sysadm_t)
+	apache_role(sysadm_r, sysadm_t)
+')
 
 optional_policy(`
 	# cjp: why is this not apm_run_client
@@ -91,11 +86,19 @@ optional_policy(`
 ')
 
 optional_policy(`
+	asterisk_stream_connect(sysadm_t)
+')
+
+optional_policy(`
 	auditadm_role_change(sysadm_r)
 ')
 
 optional_policy(`
 	backup_run(sysadm_t, sysadm_r)
+')
+
+optional_policy(`
+	bacula_run_admin(sysadm_t, sysadm_r)
 ')
 
 optional_policy(`
@@ -254,6 +257,7 @@ optional_policy(`
 
 optional_policy(`
 	portage_run(sysadm_t, sysadm_r)
+	portage_run_fetch(sysadm_t, sysadm_r)
 	portage_run_gcc_config(sysadm_t, sysadm_r)
 ')
 
@@ -299,7 +303,7 @@ optional_policy(`
 ')
 
 optional_policy(`
-	samhain_admin(sysadm_t)
+	samhain_admin(sysadm_t, sysadm_r)
 ')
 
 optional_policy(`
@@ -386,6 +390,10 @@ optional_policy(`
 ')
 
 optional_policy(`
+	virt_stream_connect(sysadm_t)
+')
+
+optional_policy(`
 	vmware_role(sysadm_r, sysadm_t)
 ')
 
@@ -413,10 +421,6 @@ optional_policy(`
 	yam_run(sysadm_t, sysadm_r)
 ')
 
-optional_policy(`
-	secstate_run(sysadm_t, sysadm_r)
-')
-
 ifndef(`distro_redhat',`
 	optional_policy(`
 		auth_role(sysadm_r, sysadm_t)
@@ -436,6 +440,10 @@ ifndef(`distro_redhat',`
 
 	optional_policy(`
 		dbus_role_template(sysadm, sysadm_r, sysadm_t)
+
+		optional_policy(`
+			gnome_role_template(sysadm, sysadm_r, sysadm_t)
+		')
 	')
 
 	optional_policy(`
@@ -448,10 +456,6 @@ ifndef(`distro_redhat',`
 
 	optional_policy(`
 		gift_role(sysadm_r, sysadm_t)
-	')
-
-	optional_policy(`
-		gnome_role(sysadm_r, sysadm_t)
 	')
 
 	optional_policy(`

@@ -1,4 +1,4 @@
-policy_module(filesystem, 1.15.0)
+policy_module(filesystem, 1.18.3)
 
 ########################################
 #
@@ -8,6 +8,7 @@ policy_module(filesystem, 1.15.0)
 attribute filesystem_type;
 attribute filesystem_unconfined_type;
 attribute noxattrfs;
+attribute xattrfs;
 
 ##############################
 #
@@ -15,7 +16,7 @@ attribute noxattrfs;
 # filesystems with extended attributes
 #
 type fs_t;
-fs_type(fs_t)
+fs_xattr_type(fs_t)
 sid fs gen_context(system_u:object_r:fs_t,s0)
 
 # Use xattrs for the following filesystem types.
@@ -32,7 +33,9 @@ fs_use_xattr gpfs gen_context(system_u:object_r:fs_t,s0);
 fs_use_xattr jffs2 gen_context(system_u:object_r:fs_t,s0);
 fs_use_xattr jfs gen_context(system_u:object_r:fs_t,s0);
 fs_use_xattr lustre gen_context(system_u:object_r:fs_t,s0);
+fs_use_xattr squashfs gen_context(system_u:object_r:fs_t,s0);
 fs_use_xattr xfs gen_context(system_u:object_r:fs_t,s0);
+fs_use_xattr zfs gen_context(system_u:object_r:fs_t,s0);
 
 # Use the allocating task SID to label inodes in the following filesystem
 # types, and label the filesystem itself with the specified context.
@@ -69,9 +72,8 @@ genfscon capifs / gen_context(system_u:object_r:capifs_t,s0)
 
 type cgroup_t;
 fs_type(cgroup_t)
-files_type(cgroup_t)
 files_mountpoint(cgroup_t)
-dev_associate_sysfs(cgroup_t) # only for systemd systems
+dev_associate_sysfs(cgroup_t)
 genfscon cgroup / gen_context(system_u:object_r:cgroup_t,s0)
 
 type configfs_t;
@@ -93,12 +95,10 @@ fs_type(futexfs_t)
 genfscon futexfs / gen_context(system_u:object_r:futexfs_t,s0)
 
 type hugetlbfs_t;
-fs_type(hugetlbfs_t)
+fs_xattr_type(hugetlbfs_t)
 files_mountpoint(hugetlbfs_t)
+dev_associate(hugetlbfs_t)
 fs_use_trans hugetlbfs gen_context(system_u:object_r:hugetlbfs_t,s0);
-# This appears to be coming from dracut where /dev/hugepages is device_t
-# and needs to be relabeled during restorecon.
-dev_node(hugetlbfs_t)
 
 type ibmasmfs_t;
 fs_type(ibmasmfs_t)
@@ -127,6 +127,12 @@ type oprofilefs_t;
 fs_type(oprofilefs_t)
 genfscon oprofilefs / gen_context(system_u:object_r:oprofilefs_t,s0)
 
+type pstore_t;
+fs_type(pstore_t)
+files_mountpoint(pstore_t)
+dev_associate_sysfs(pstore_t)
+genfscon pstore / gen_context(system_u:object_r:pstore_t,s0)
+
 type ramfs_t;
 fs_type(ramfs_t)
 files_mountpoint(ramfs_t)
@@ -146,11 +152,6 @@ type spufs_t;
 fs_type(spufs_t)
 genfscon spufs / gen_context(system_u:object_r:spufs_t,s0)
 files_mountpoint(spufs_t)
-
-type squash_t;
-fs_type(squash_t)
-genfscon squash / gen_context(system_u:object_r:squash_t,s0)
-files_mountpoint(squash_t)
 
 type sysv_t;
 fs_noxattr_type(sysv_t)
@@ -174,7 +175,8 @@ genfscon vxfs / gen_context(system_u:object_r:vxfs_t,s0)
 # tmpfs_t is the type for tmpfs filesystems
 #
 type tmpfs_t;
-fs_type(tmpfs_t)
+dev_associate(tmpfs_t)
+fs_xattr_type(tmpfs_t)
 files_type(tmpfs_t)
 files_mountpoint(tmpfs_t)
 files_poly_parent(tmpfs_t)

@@ -9,7 +9,7 @@
 /etc/selinux/([^/]*/)?policy(/.*)?	gen_context(system_u:object_r:policy_config_t,mls_systemhigh)
 /etc/selinux/([^/]*/)?setrans\.conf --	gen_context(system_u:object_r:selinux_config_t,mls_systemhigh)
 /etc/selinux/([^/]*/)?seusers	--	gen_context(system_u:object_r:selinux_config_t,mls_systemhigh)
-/etc/selinux/([^/]*/)?modules/(active|tmp|previous)(/.*)? gen_context(system_u:object_r:semanage_store_t,s0)
+/etc/selinux/([^/]*/)?modules(/.*)?	gen_context(system_u:object_r:semanage_store_t,s0)
 /etc/selinux/([^/]*/)?modules/semanage\.read\.LOCK -- gen_context(system_u:object_r:semanage_read_lock_t,s0)
 /etc/selinux/([^/]*/)?modules/semanage\.trans\.LOCK -- gen_context(system_u:object_r:semanage_trans_lock_t,s0)
 /etc/selinux/([^/]*/)?users(/.*)? --	gen_context(system_u:object_r:selinux_config_t,mls_systemhigh)
@@ -32,7 +32,7 @@
 /usr/bin/checkpolicy		--	gen_context(system_u:object_r:checkpolicy_exec_t,s0)
 /usr/bin/newrole		--	gen_context(system_u:object_r:newrole_exec_t,s0)
 
-/usr/lib(64)?/selinux(/.*)?		gen_context(system_u:object_r:policy_src_t,s0)
+/usr/lib/selinux(/.*)?			gen_context(system_u:object_r:policy_src_t,s0)
 
 /usr/sbin/load_policy		--	gen_context(system_u:object_r:load_policy_exec_t,s0)
 /usr/sbin/restorecond		--	gen_context(system_u:object_r:restorecond_exec_t,s0)
@@ -41,6 +41,11 @@
 /usr/sbin/setsebool		--	gen_context(system_u:object_r:semanage_exec_t,s0)
 /usr/sbin/semanage		--	gen_context(system_u:object_r:semanage_exec_t,s0)
 /usr/sbin/semodule		--	gen_context(system_u:object_r:semanage_exec_t,s0)
+
+#
+# /var/lib
+#
+/var/lib/selinux(/.*)?			gen_context(system_u:object_r:semanage_var_lib_t,s0)
 
 #
 # /var/run

@@ -78,10 +78,30 @@
 #
 interface(`files_type',`
 	gen_require(`
-		attribute file_type, non_security_file_type;
+		attribute file_type, non_security_file_type, non_auth_file_type;
 	')
 
-	typeattribute $1 file_type, non_security_file_type;
+	typeattribute $1 file_type, non_security_file_type, non_auth_file_type;
+')
+
+########################################
+## <summary>
+##	Mark the specified type as a file
+##	that is related to authentication.
+## </summary>
+## <param name="file_type">
+##	<summary>
+##	Type of the authentication-related
+##	file.
+##	</summary>
+## </param>
+#
+interface(`files_auth_file',`
+	gen_require(`
+		attribute file_type, security_file_type, auth_file_type;
+	')
+
+	typeattribute $1 file_type, security_file_type, auth_file_type;
 ')
 
 ########################################
@@ -99,10 +119,10 @@ interface(`files_type',`
 #
 interface(`files_security_file',`
 	gen_require(`
-		attribute file_type, security_file_type;
+		attribute file_type, security_file_type, non_auth_file_type;
 	')
 
-	typeattribute $1 file_type, security_file_type;
+	typeattribute $1 file_type, security_file_type, non_auth_file_type;
 ')
 
 ########################################
@@ -543,6 +563,24 @@ interface(`files_manage_non_security_dirs',`
 
 ########################################
 ## <summary>
+##	Relabel from/to non-security directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_relabel_non_security_dirs',`
+	gen_require(`
+		attribute non_security_file_type;
+	')
+
+	relabel_dirs_pattern($1, non_security_file_type, non_security_file_type)
+')
+
+########################################
+## <summary>
 ##	Get the attributes of all files.
 ## </summary>
 ## <param name="domain">
@@ -596,6 +634,44 @@ interface(`files_dontaudit_getattr_non_security_files',`
 	')
 
 	dontaudit $1 non_security_file_type:file getattr;
+')
+
+########################################
+## <summary>
+##	Create, read, write, and delete all non-security files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`files_manage_non_security_files',`
+	gen_require(`
+		attribute non_security_file_type;
+	')
+
+	manage_files_pattern($1, non_security_file_type, non_security_file_type)
+')
+
+########################################
+## <summary>
+##	Relabel from/to all non-security files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`files_relabel_non_security_files',`
+	gen_require(`
+		attribute non_security_file_type;
+	')
+
+	relabel_files_pattern($1, non_security_file_type, non_security_file_type)
 ')
 
 ########################################
@@ -1162,6 +1238,24 @@ interface(`files_list_all',`
 
 ########################################
 ## <summary>
+##	Create all files as is.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_create_all_files_as',`
+	gen_require(`
+		attribute file_type;
+	')
+
+	allow $1 file_type:kernel_service create_files_as;
+')
+
+########################################
+## <summary>
 ##	Do not audit attempts to search the
 ##	contents of any directories on extended
 ##	attribute filesystems.
@@ -1273,6 +1367,141 @@ interface(`files_unmount_all_file_type_fs',`
 	')
 
 	allow $1 file_type:filesystem unmount;
+')
+
+########################################
+## <summary>
+##	Read all non-authentication related
+##	directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_list_non_auth_dirs',`
+	gen_require(`
+		attribute non_auth_file_type;
+	')
+
+	allow $1 non_auth_file_type:dir list_dir_perms;
+')
+
+########################################
+## <summary>
+##	Read all non-authentication related
+##	files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_read_non_auth_files',`
+	gen_require(`
+		attribute non_auth_file_type;
+	')
+
+	read_files_pattern($1, non_auth_file_type, non_auth_file_type)
+')
+
+########################################
+## <summary>
+##	Read all non-authentication related
+## symbolic links.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_read_non_auth_symlinks',`
+	gen_require(`
+		attribute non_auth_file_type;
+	')
+
+	read_lnk_files_pattern($1, non_auth_file_type, non_auth_file_type)
+')
+
+########################################
+## <summary>
+##	rw non-authentication related files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_rw_non_auth_files',`
+	gen_require(`
+		attribute non_auth_file_type;
+	')
+
+	rw_files_pattern($1, non_auth_file_type, non_auth_file_type)
+')
+
+########################################
+## <summary>
+##	Manage non-authentication related
+##	files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`files_manage_non_auth_files',`
+	gen_require(`
+		attribute non_auth_file_type;
+	')
+
+	manage_dirs_pattern($1, non_auth_file_type, non_auth_file_type)
+	manage_files_pattern($1, non_auth_file_type, non_auth_file_type)
+	manage_lnk_files_pattern($1, non_auth_file_type, non_auth_file_type)
+	manage_fifo_files_pattern($1, non_auth_file_type, non_auth_file_type)
+	manage_sock_files_pattern($1, non_auth_file_type, non_auth_file_type)
+
+	# satisfy the assertions:
+	seutil_create_bin_policy($1)
+	files_manage_kernel_modules($1)
+')
+
+########################################
+## <summary>
+##	Relabel all non-authentication related
+##	files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`files_relabel_non_auth_files',`
+	gen_require(`
+		attribute non_auth_file_type;
+	')
+
+	allow $1 non_auth_file_type:dir list_dir_perms;
+	relabel_dirs_pattern($1, non_auth_file_type, non_auth_file_type)
+	relabel_files_pattern($1, non_auth_file_type, non_auth_file_type)
+	relabel_lnk_files_pattern($1, non_auth_file_type, non_auth_file_type)
+	relabel_fifo_files_pattern($1, non_auth_file_type, non_auth_file_type)
+	relabel_sock_files_pattern($1, non_auth_file_type, non_auth_file_type)
+	# this is only relabelfrom since there should be no
+	# device nodes with file types.
+	relabelfrom_blk_files_pattern($1, non_auth_file_type, non_auth_file_type)
+	relabelfrom_chr_files_pattern($1, non_auth_file_type, non_auth_file_type)
+
+	# satisfy the assertions:
+	seutil_relabelto_bin_policy($1)
 ')
 
 #############################################
@@ -1428,6 +1657,24 @@ interface(`files_setattr_all_mountpoints',`
 
 ########################################
 ## <summary>
+##	Do not audit attempts to set the attributes on all mount points.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain to not audit.
+##	</summary>
+## </param>
+#
+interface(`files_dontaudit_setattr_all_mountpoints',`
+	gen_require(`
+		attribute mountpoint;
+	')
+
+	dontaudit $1 mountpoint:dir setattr;
+')
+
+########################################
+## <summary>
 ##	Search all mount points.
 ## </summary>
 ## <param name="domain">
@@ -1464,6 +1711,24 @@ interface(`files_dontaudit_search_all_mountpoints',`
 
 ########################################
 ## <summary>
+##	List all mount points.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_list_all_mountpoints',`
+	gen_require(`
+		attribute mountpoint;
+	')
+
+	allow $1 mountpoint:dir list_dir_perms;
+')
+
+########################################
+## <summary>
 ##	Do not audit listing of all mount points.
 ## </summary>
 ## <param name="domain">
@@ -1478,6 +1743,24 @@ interface(`files_dontaudit_list_all_mountpoints',`
 	')
 
 	dontaudit $1 mountpoint:dir list_dir_perms;
+')
+
+########################################
+## <summary>
+##	Do not audit attempts to write to mount points.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain to not audit.
+##	</summary>
+## </param>
+#
+interface(`files_dontaudit_write_all_mountpoints',`
+	gen_require(`
+		attribute mountpoint;
+	')
+
+	dontaudit $1 mountpoint:dir write;
 ')
 
 ########################################
@@ -1556,13 +1839,18 @@ interface(`files_dontaudit_rw_root_dir',`
 ##	The object class of the object being created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_root_filetrans',`
 	gen_require(`
 		type root_t;
 	')
 
-	filetrans_pattern($1, root_t, $2, $3)
+	filetrans_pattern($1, root_t, $2, $3, $4)
 ')
 
 ########################################
@@ -1660,6 +1948,42 @@ interface(`files_delete_root_dir_entry',`
 
 ########################################
 ## <summary>
+##	Associate to root file system.
+## </summary>
+## <param name="file_type">
+##	<summary>
+##	Type of the file to associate.
+##	</summary>
+## </param>
+#
+interface(`files_associate_rootfs',`
+	gen_require(`
+		type root_t;
+	')
+
+	allow $1 root_t:filesystem associate;
+')
+
+########################################
+## <summary>
+##	Relabel to and from rootfs file system.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_relabel_rootfs',`
+	gen_require(`
+		type root_t;
+	')
+
+	allow $1 root_t:filesystem { relabelto relabelfrom };
+')
+
+########################################
+## <summary>
 ##	Unmount a rootfs filesystem.
 ## </summary>
 ## <param name="domain">
@@ -1674,6 +1998,24 @@ interface(`files_unmount_rootfs',`
 	')
 
 	allow $1 root_t:filesystem unmount;
+')
+
+########################################
+## <summary>
+##	Mount on the root directory (/)
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_mounton_root',`
+	gen_require(`
+		type root_t;
+	')
+
+	allow $1 root_t:dir mounton;
 ')
 
 ########################################
@@ -1842,13 +2184,18 @@ interface(`files_manage_boot_dirs',`
 ##	The object class of the object being created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_boot_filetrans',`
 	gen_require(`
 		type boot_t;
 	')
 
-	filetrans_pattern($1, boot_t, $2, $3)
+	filetrans_pattern($1, boot_t, $2, $3, $4)
 ')
 
 ########################################
@@ -2618,13 +2965,18 @@ interface(`files_manage_etc_symlinks',`
 ##	Object classes to be created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_etc_filetrans',`
 	gen_require(`
 		type etc_t;
 	')
 
-	filetrans_pattern($1, etc_t, $2, $3)
+	filetrans_pattern($1, etc_t, $2, $3, $4)
 ')
 
 ########################################
@@ -2642,6 +2994,11 @@ interface(`files_etc_filetrans',`
 ##	Domain allowed access.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 ## <rolecap/>
 #
 interface(`files_create_boot_flag',`
@@ -2650,7 +3007,7 @@ interface(`files_create_boot_flag',`
 	')
 
 	allow $1 etc_runtime_t:file manage_file_perms;
-	filetrans_pattern($1, root_t, etc_runtime_t, file)
+	filetrans_pattern($1, root_t, etc_runtime_t, file, $2)
 ')
 
 ########################################
@@ -2684,7 +3041,7 @@ interface(`files_delete_boot_flag',`
 ## </summary>
 ## <param name="domain">
 ##	<summary>
-##	Domain allowed access.
+##	Domain to not audit.
 ##	</summary>
 ## </param>
 #
@@ -2758,6 +3115,25 @@ interface(`files_dontaudit_read_etc_runtime_files',`
 
 ########################################
 ## <summary>
+##	Do not audit attempts to write
+##	etc runtime files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain to not audit.
+##	</summary>
+## </param>
+#
+interface(`files_dontaudit_write_etc_runtime_files',`
+	gen_require(`
+		type etc_runtime_t;
+	')
+
+	dontaudit $1 etc_runtime_t:file write;
+')
+
+########################################
+## <summary>
 ##	Read and write files in /etc that are dynamically
 ##	created on boot, such as mtab.
 ## </summary>
@@ -2813,19 +3189,24 @@ interface(`files_manage_etc_runtime_files',`
 ##	The class of the object being created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_etc_filetrans_etc_runtime',`
 	gen_require(`
 		type etc_t, etc_runtime_t;
 	')
 
-	filetrans_pattern($1, etc_t, etc_runtime_t, $2)
+	filetrans_pattern($1, etc_t, etc_runtime_t, $2, $3)
 ')
 
 ########################################
 ## <summary>
 ##	Getattr of directories on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -2834,17 +3215,14 @@ interface(`files_etc_filetrans_etc_runtime',`
 ## </param>
 #
 interface(`files_getattr_isid_type_dirs',`
-	gen_require(`
-		type file_t;
-	')
-
-	allow $1 file_t:dir getattr;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_getattr_unlabeled_dirs() instead.')
+	kernel_getattr_unlabeled_dirs($1)
 ')
 
 ########################################
 ## <summary>
 ##	Do not audit attempts to search directories on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -2853,17 +3231,14 @@ interface(`files_getattr_isid_type_dirs',`
 ## </param>
 #
 interface(`files_dontaudit_search_isid_type_dirs',`
-	gen_require(`
-		type file_t;
-	')
-
-	dontaudit $1 file_t:dir search_dir_perms;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_dontaudit_search_unlabeled() instead.')
+	kernel_dontaudit_search_unlabeled($1)
 ')
 
 ########################################
 ## <summary>
 ##	List the contents of directories on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -2872,17 +3247,14 @@ interface(`files_dontaudit_search_isid_type_dirs',`
 ## </param>
 #
 interface(`files_list_isid_type_dirs',`
-	gen_require(`
-		type file_t;
-	')
-
-	allow $1 file_t:dir list_dir_perms;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_list_unlabeled() instead.')
+	kernel_list_unlabeled($1)
 ')
 
 ########################################
 ## <summary>
 ##	Read and write directories on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -2891,17 +3263,14 @@ interface(`files_list_isid_type_dirs',`
 ## </param>
 #
 interface(`files_rw_isid_type_dirs',`
-	gen_require(`
-		type file_t;
-	')
-
-	allow $1 file_t:dir rw_dir_perms;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_rw_unlabeled_dirs() instead.')
+	kernel_rw_unlabeled_dirs($1)
 ')
 
 ########################################
 ## <summary>
 ##	Delete directories on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -2910,17 +3279,14 @@ interface(`files_rw_isid_type_dirs',`
 ## </param>
 #
 interface(`files_delete_isid_type_dirs',`
-	gen_require(`
-		type file_t;
-	')
-
-	delete_dirs_pattern($1, file_t, file_t)
+	refpolicywarn(`$0($*) has been deprecated, use kernel_delete_unlabeled_dirs() instead.')
+	kernel_delete_unlabeled_dirs($1)
 ')
 
 ########################################
 ## <summary>
 ##	Create, read, write, and delete directories
-##	on new filesystems that have not yet been labeled.
+##	on new filesystems that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -2929,17 +3295,14 @@ interface(`files_delete_isid_type_dirs',`
 ## </param>
 #
 interface(`files_manage_isid_type_dirs',`
-	gen_require(`
-		type file_t;
-	')
-
-	allow $1 file_t:dir manage_dir_perms;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_manage_unlabeled_dirs() instead.')
+	kernel_manage_unlabeled_dirs($1)
 ')
 
 ########################################
 ## <summary>
 ##	Mount a filesystem on a directory on new filesystems
-##	that has not yet been labeled.
+##	that has not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -2948,17 +3311,14 @@ interface(`files_manage_isid_type_dirs',`
 ## </param>
 #
 interface(`files_mounton_isid_type_dirs',`
-	gen_require(`
-		type file_t;
-	')
-
-	allow $1 file_t:dir { search_dir_perms mounton };
+	refpolicywarn(`$0($*) has been deprecated, use kernel_mounton_unlabeled_dirs() instead.')
+	kernel_mounton_unlabeled_dirs($1)
 ')
 
 ########################################
 ## <summary>
 ##	Read files on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -2967,17 +3327,14 @@ interface(`files_mounton_isid_type_dirs',`
 ## </param>
 #
 interface(`files_read_isid_type_files',`
-	gen_require(`
-		type file_t;
-	')
-
-	allow $1 file_t:file read_file_perms;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_read_unlabeled_files() instead.')
+	kernel_read_unlabeled_files($1)
 ')
 
 ########################################
 ## <summary>
 ##	Delete files on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -2986,17 +3343,14 @@ interface(`files_read_isid_type_files',`
 ## </param>
 #
 interface(`files_delete_isid_type_files',`
-	gen_require(`
-		type file_t;
-	')
-
-	delete_files_pattern($1, file_t, file_t)
+	refpolicywarn(`$0($*) has been deprecated, use kernel_delete_unlabeled_files() instead.')
+	kernel_delete_unlabeled_files($1)
 ')
 
 ########################################
 ## <summary>
 ##	Delete symbolic links on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -3005,17 +3359,14 @@ interface(`files_delete_isid_type_files',`
 ## </param>
 #
 interface(`files_delete_isid_type_symlinks',`
-	gen_require(`
-		type file_t;
-	')
-
-	delete_lnk_files_pattern($1, file_t, file_t)
+	refpolicywarn(`$0($*) has been deprecated, use kernel_delete_unlabeled_symlinks() instead.')
+	kernel_delete_unlabeled_symlinks($1)
 ')
 
 ########################################
 ## <summary>
 ##	Delete named pipes on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -3024,17 +3375,14 @@ interface(`files_delete_isid_type_symlinks',`
 ## </param>
 #
 interface(`files_delete_isid_type_fifo_files',`
-	gen_require(`
-		type file_t;
-	')
-
-	delete_fifo_files_pattern($1, file_t, file_t)
+	refpolicywarn(`$0($*) has been deprecated, use kernel_delete_unlabeled_pipes() instead.')
+	kernel_delete_unlabeled_pipes($1)
 ')
 
 ########################################
 ## <summary>
 ##	Delete named sockets on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -3043,17 +3391,14 @@ interface(`files_delete_isid_type_fifo_files',`
 ## </param>
 #
 interface(`files_delete_isid_type_sock_files',`
-	gen_require(`
-		type file_t;
-	')
-
-	delete_sock_files_pattern($1, file_t, file_t)
+	refpolicywarn(`$0($*) has been deprecated, use kernel_delete_unlabeled_sockets() instead.')
+	kernel_delete_unlabeled_sockets($1)
 ')
 
 ########################################
 ## <summary>
 ##	Delete block files on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -3062,17 +3407,14 @@ interface(`files_delete_isid_type_sock_files',`
 ## </param>
 #
 interface(`files_delete_isid_type_blk_files',`
-	gen_require(`
-		type file_t;
-	')
-
-	delete_blk_files_pattern($1, file_t, file_t)
+	refpolicywarn(`$0($*) has been deprecated, use kernel_delete_unlabeled_blk_files() instead.')
+	kernel_delete_unlabeled_blk_files($1)
 ')
 
 ########################################
 ## <summary>
 ##	Do not audit attempts to write to character
-##	files that have not yet been labeled.
+##	files that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -3081,17 +3423,14 @@ interface(`files_delete_isid_type_blk_files',`
 ## </param>
 #
 interface(`files_dontaudit_write_isid_chr_files',`
-	gen_require(`
-		type file_t;
-	')
-
-	dontaudit $1 file_t:chr_file write;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_dontaudit_write_unlabeled_chr_files() instead.')
+	kernel_dontaudit_write_unlabeled_chr_files($1)
 ')
 
 ########################################
 ## <summary>
 ##	Delete chr files on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -3100,17 +3439,14 @@ interface(`files_dontaudit_write_isid_chr_files',`
 ## </param>
 #
 interface(`files_delete_isid_type_chr_files',`
-	gen_require(`
-		type file_t;
-	')
-
-	delete_chr_files_pattern($1, file_t, file_t)
+	refpolicywarn(`$0($*) has been deprecated, use kernel_delete_unlabeled_chr_files() instead.')
+	kernel_delete_unlabeled_chr_files($1)
 ')
 
 ########################################
 ## <summary>
 ##	Create, read, write, and delete files
-##	on new filesystems that have not yet been labeled.
+##	on new filesystems that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -3119,17 +3455,14 @@ interface(`files_delete_isid_type_chr_files',`
 ## </param>
 #
 interface(`files_manage_isid_type_files',`
-	gen_require(`
-		type file_t;
-	')
-
-	allow $1 file_t:file manage_file_perms;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_manage_unlabeled_files() instead.')
+	kernel_manage_unlabeled_files($1)
 ')
 
 ########################################
 ## <summary>
 ##	Create, read, write, and delete symbolic links
-##	on new filesystems that have not yet been labeled.
+##	on new filesystems that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -3138,17 +3471,14 @@ interface(`files_manage_isid_type_files',`
 ## </param>
 #
 interface(`files_manage_isid_type_symlinks',`
-	gen_require(`
-		type file_t;
-	')
-
-	allow $1 file_t:lnk_file manage_lnk_file_perms;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_manage_unlabeled_symlinks() instead.')
+	kernel_manage_unlabeled_symlinks($1)
 ')
 
 ########################################
 ## <summary>
 ##	Read and write block device nodes on new filesystems
-##	that have not yet been labeled.
+##	that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -3157,17 +3487,14 @@ interface(`files_manage_isid_type_symlinks',`
 ## </param>
 #
 interface(`files_rw_isid_type_blk_files',`
-	gen_require(`
-		type file_t;
-	')
-
-	allow $1 file_t:blk_file rw_blk_file_perms;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_rw_unlabeled_blk_files() instead.')
+	kernel_rw_unlabeled_blk_files($1)
 ')
 
 ########################################
 ## <summary>
 ##	Create, read, write, and delete block device nodes
-##	on new filesystems that have not yet been labeled.
+##	on new filesystems that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -3176,17 +3503,14 @@ interface(`files_rw_isid_type_blk_files',`
 ## </param>
 #
 interface(`files_manage_isid_type_blk_files',`
-	gen_require(`
-		type file_t;
-	')
-
-	allow $1 file_t:blk_file manage_blk_file_perms;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_manage_unlabeled_blk_files() instead.')
+	kernel_manage_unlabeled_blk_files($1)
 ')
 
 ########################################
 ## <summary>
 ##	Create, read, write, and delete character device nodes
-##	on new filesystems that have not yet been labeled.
+##	on new filesystems that have not yet been labeled.  (Deprecated)
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -3195,11 +3519,8 @@ interface(`files_manage_isid_type_blk_files',`
 ## </param>
 #
 interface(`files_manage_isid_type_chr_files',`
-	gen_require(`
-		type file_t;
-	')
-
-	allow $1 file_t:chr_file manage_chr_file_perms;
+	refpolicywarn(`$0($*) has been deprecated, use kernel_manage_unlabeled_chr_files() instead.')
+	kernel_manage_unlabeled_chr_files($1)
 ')
 
 ########################################
@@ -3358,13 +3679,18 @@ interface(`files_relabelto_home',`
 ##	The class of the object being created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_home_filetrans',`
 	gen_require(`
 		type home_root_t;
 	')
 
-	filetrans_pattern($1, home_root_t, $2, $3)
+	filetrans_pattern($1, home_root_t, $2, $3, $4)
 ')
 
 ########################################
@@ -3798,13 +4124,18 @@ interface(`files_relabel_kernel_modules',`
 ##	The object class of the object being created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_kernel_modules_filetrans',`
 	gen_require(`
 		type modules_object_t;
 	')
 
-	filetrans_pattern($1, modules_object_t, $2, $3)
+	filetrans_pattern($1, modules_object_t, $2, $3, $4)
 ')
 
 ########################################
@@ -4139,6 +4470,24 @@ interface(`files_rw_generic_tmp_sockets',`
 
 ########################################
 ## <summary>
+##	Mount filesystems in the tmp directory (/tmp)
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_mounton_tmp',`
+	gen_require(`
+		type tmp_t;
+	')
+
+	allow $1 tmp_t:dir mounton;
+')
+
+########################################
+## <summary>
 ##	Set the attributes of all tmp directories.
 ## </summary>
 ## <param name="domain">
@@ -4312,13 +4661,18 @@ interface(`files_read_all_tmp_files',`
 ##	The object class of the object being created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_tmp_filetrans',`
 	gen_require(`
 		type tmp_t;
 	')
 
-	filetrans_pattern($1, tmp_t, $2, $3)
+	filetrans_pattern($1, tmp_t, $2, $3, $4)
 ')
 
 ########################################
@@ -4675,13 +5029,18 @@ interface(`files_read_usr_symlinks',`
 ##	The object class.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_usr_filetrans',`
 	gen_require(`
 		type usr_t;
 	')
 
-	filetrans_pattern($1, usr_t, $2, $3)
+	filetrans_pattern($1, usr_t, $2, $3, $4)
 ')
 
 ########################################
@@ -4914,6 +5273,25 @@ interface(`files_list_var',`
 
 ########################################
 ## <summary>
+##	Do not audit attempts to list
+##	the contents of /var.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain to not audit.
+##	</summary>
+## </param>
+#
+interface(`files_dontaudit_list_var',`
+	gen_require(`
+		type var_t;
+	')
+
+	dontaudit $1 var_t:dir list_dir_perms;
+')
+
+########################################
+## <summary>
 ##	Create, read, write, and delete directories
 ##	in the /var directory.
 ## </summary>
@@ -5078,13 +5456,18 @@ interface(`files_manage_var_symlinks',`
 ##	The object class.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_var_filetrans',`
 	gen_require(`
 		type var_t;
 	')
 
-	filetrans_pattern($1, var_t, $2, $3)
+	filetrans_pattern($1, var_t, $2, $3, $4)
 ')
 
 ########################################
@@ -5212,6 +5595,11 @@ interface(`files_rw_var_lib_dirs',`
 ##	The object class.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_var_lib_filetrans',`
 	gen_require(`
@@ -5219,7 +5607,7 @@ interface(`files_var_lib_filetrans',`
 	')
 
 	allow $1 var_t:dir search_dir_perms;
-	filetrans_pattern($1, var_lib_t, $2, $3)
+	filetrans_pattern($1, var_lib_t, $2, $3, $4)
 ')
 
 ########################################
@@ -5304,6 +5692,24 @@ interface(`files_manage_mounttab',`
 
 ########################################
 ## <summary>
+##	Set the attributes of the generic lock directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_setattr_lock_dirs',`
+	gen_require(`
+		type var_t, var_lock_t;
+	')
+
+	setattr_dirs_pattern($1, var_t, var_lock_t)
+')
+
+########################################
+## <summary>
 ##	Search the locks directory (/var/lock).
 ## </summary>
 ## <param name="domain">
@@ -5378,6 +5784,26 @@ interface(`files_rw_lock_dirs',`
 
 	allow $1 var_lock_t:lnk_file read_lnk_file_perms;
 	rw_dirs_pattern($1, var_t, var_lock_t)
+')
+
+########################################
+## <summary>
+## 	Create lock directories
+## </summary>
+## <param name="domain">
+## 	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+#
+interface(`files_create_lock_dirs',`
+	gen_require(`
+		type var_t, var_lock_t;
+	')
+
+	allow $1 var_t:dir search_dir_perms;
+	allow $1 var_lock_t:lnk_file read_lnk_file_perms;
+	create_dirs_pattern($1, var_lock_t, var_lock_t)
 ')
 
 ########################################
@@ -5461,6 +5887,7 @@ interface(`files_manage_generic_locks',`
 
 	allow $1 var_t:dir search_dir_perms;
 	allow $1 var_lock_t:lnk_file read_lnk_file_perms;
+	manage_dirs_pattern($1, var_lock_t, var_lock_t)
 	manage_files_pattern($1, var_lock_t, var_lock_t)
 ')
 
@@ -5534,6 +5961,29 @@ interface(`files_manage_all_locks',`
 
 ########################################
 ## <summary>
+##	Relabel from/to all lock files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_relabel_all_locks',`
+	gen_require(`
+		attribute lockfile;
+		type var_t, var_lock_t;
+	')
+
+	allow $1 var_lock_t:lnk_file read_lnk_file_perms;
+	allow $1 { var_t var_lock_t }:dir search_dir_perms;
+	relabel_dirs_pattern($1, lockfile, lockfile)
+	relabel_files_pattern($1, lockfile, lockfile)
+	relabel_lnk_files_pattern($1, lockfile, lockfile)
+')
+
+########################################
+## <summary>
 ##	Create an object in the locks directory, with a private
 ##	type using a type transition.
 ## </summary>
@@ -5552,6 +6002,11 @@ interface(`files_manage_all_locks',`
 ##	The object class of the object being created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_lock_filetrans',`
 	gen_require(`
@@ -5560,7 +6015,7 @@ interface(`files_lock_filetrans',`
 
 	allow $1 var_t:dir search_dir_perms;
 	allow $1 var_lock_t:lnk_file read_lnk_file_perms;
-	filetrans_pattern($1, var_lock_t, $2, $3)
+	filetrans_pattern($1, var_lock_t, $2, $3, $4)
 ')
 
 ########################################
@@ -5582,26 +6037,6 @@ interface(`files_dontaudit_getattr_pid_dirs',`
 	dontaudit $1 var_run_t:lnk_file read_lnk_file_perms;
 	dontaudit $1 var_run_t:dir getattr;
 ')
-
-########################################
-## <summary>
-##     manage generic symbolic links
-##     in the /var/run directory.
-## </summary>
-## <param name="domain">
-##     <summary>
-##     Domain allowed access.
-##     </summary>
-## </param>
-#
-interface(`files_manage_generic_pids_symlinks',`
-       gen_require(`
-               type var_run_t;
-       ')
-
-       manage_lnk_files_pattern($1,var_run_t,var_run_t)
-')
-
 
 ########################################
 ## <summary>
@@ -5766,6 +6201,11 @@ interface(`files_write_generic_pid_pipes',`
 ##	The object class of the object being created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 ## <infoflow type="write" weight="10"/>
 #
 interface(`files_pid_filetrans',`
@@ -5775,7 +6215,30 @@ interface(`files_pid_filetrans',`
 
 	allow $1 var_t:dir search_dir_perms;
 	allow $1 var_run_t:lnk_file read_lnk_file_perms;
-	filetrans_pattern($1, var_run_t, $2, $3)
+	filetrans_pattern($1, var_run_t, $2, $3, $4)
+')
+
+########################################
+## <summary>
+## 	Create a generic lock directory within the run directories
+## </summary>
+## <param name="domain">
+## 	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
+#
+interface(`files_pid_filetrans_lock_dir',`
+	gen_require(`
+		type var_lock_t;
+	')
+
+	files_pid_filetrans($1, var_lock_t, dir, $2)
 ')
 
 ########################################
@@ -5882,25 +6345,6 @@ interface(`files_read_all_pids',`
 
 ########################################
 ## <summary>
-##	Mount filesystems on all polyinstantiation
-##	member directories.
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-#
-interface(`files_mounton_all_poly_members',`
-	gen_require(`
-		attribute polymember;
-	')
-
-	allow $1 polymember:dir mounton;
-')
-
-########################################
-## <summary>
 ##	Delete all process IDs.
 ## </summary>
 ## <param name="domain">
@@ -5944,6 +6388,84 @@ interface(`files_delete_all_pid_dirs',`
 	allow $1 var_t:dir search_dir_perms;
 	allow $1 var_run_t:lnk_file read_lnk_file_perms;
 	delete_dirs_pattern($1, pidfile, pidfile)
+')
+
+########################################
+## <summary>
+##	Create, read, write and delete all
+##	var_run (pid) content
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain alloed access.
+##	</summary>
+## </param>
+#
+interface(`files_manage_all_pids',`
+	gen_require(`
+		attribute pidfile;
+	')
+
+	manage_dirs_pattern($1, pidfile, pidfile)
+	manage_files_pattern($1, pidfile, pidfile)
+	manage_lnk_files_pattern($1, pidfile, pidfile)
+')
+
+########################################
+## <summary>
+##	Relabel to/from all var_run (pid) directories
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain alloed access.
+##	</summary>
+## </param>
+#
+interface(`files_relabel_all_pid_dirs',`
+	gen_require(`
+		attribute pidfile;
+	')
+
+	relabel_dirs_pattern($1, pidfile, pidfile)
+')
+
+########################################
+## <summary>
+##	Relabel to/from all var_run (pid) files and directories
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain alloed access.
+##	</summary>
+## </param>
+#
+interface(`files_relabel_all_pids',`
+	gen_require(`
+		attribute pidfile;
+	')
+
+	relabel_dirs_pattern($1, pidfile, pidfile)
+	relabel_files_pattern($1, pidfile, pidfile)
+	relabel_lnk_files_pattern($1, pidfile, pidfile)
+')
+
+########################################
+## <summary>
+##	Mount filesystems on all polyinstantiation
+##	member directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`files_mounton_all_poly_members',`
+	gen_require(`
+		attribute polymember;
+	')
+
+	allow $1 polymember:dir mounton;
 ')
 
 ########################################
@@ -6083,6 +6605,11 @@ interface(`files_manage_generic_spool',`
 ##	the transition will occur.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`files_spool_filetrans',`
 	gen_require(`
@@ -6090,7 +6617,7 @@ interface(`files_spool_filetrans',`
 	')
 
 	allow $1 var_t:dir search_dir_perms;
-	filetrans_pattern($1, var_spool_t, $2, $3)
+	filetrans_pattern($1, var_spool_t, $2, $3, $4)
 ')
 
 ########################################
@@ -6164,9 +6691,4 @@ interface(`files_unconfined',`
 	')
 
 	typeattribute $1 files_unconfined_type;
-
-	# SRS: in RHEL 7 - neverallows are being triggered that werent in rhel 6
-	seutil_relabelto_bin_policy($1)
-	auth_relabelto_shadow($1)
-	auth_rw_shadow($1)
 ')

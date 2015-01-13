@@ -1,8 +1,6 @@
 #
 # /etc
 #
-/etc/init\.d/.*		--	gen_context(system_u:object_r:initrc_exec_t,s0)
-
 /etc/rc\.d/rc		--	gen_context(system_u:object_r:initrc_exec_t,s0)
 /etc/rc\.d/rc\.[^/]+	--	gen_context(system_u:object_r:initrc_exec_t,s0)
 
@@ -24,10 +22,10 @@ ifdef(`distro_gentoo',`
 #
 # /lib
 #
+/lib/systemd/systemd	--	gen_context(system_u:object_r:init_exec_t,s0)
+
 ifdef(`distro_gentoo', `
 /lib/rc/init\.d(/.*)?		gen_context(system_u:object_r:initrc_state_t,s0)
-/lib32/rc/init\.d(/.*)?		gen_context(system_u:object_r:initrc_state_t,s0)
-/lib64/rc/init\.d(/.*)?		gen_context(system_u:object_r:initrc_state_t,s0)
 ')
 
 #
@@ -38,17 +36,15 @@ ifdef(`distro_gentoo', `
 /sbin/upstart		--	gen_context(system_u:object_r:init_exec_t,s0)
 
 ifdef(`distro_gentoo', `
-/sbin/rc		--	gen_context(system_u:object_r:initrc_exec_t,s0)
-/sbin/runscript		--	gen_context(system_u:object_r:initrc_exec_t,s0)
-/sbin/runscript\.sh	--	gen_context(system_u:object_r:initrc_exec_t,s0)
-/sbin/runsvcscript\.sh	--	gen_context(system_u:object_r:initrc_exec_t,s0)
-/sbin/svcinit		--	gen_context(system_u:object_r:initrc_exec_t,s0)
+/sbin/rc		--	gen_context(system_u:object_r:rc_exec_t,s0)
 ')
 
 #
 # /usr
 #
 /usr/bin/sepg_ctl	--	gen_context(system_u:object_r:initrc_exec_t,s0)
+
+/usr/lib/systemd/systemd --	gen_context(system_u:object_r:init_exec_t,s0)
 
 /usr/libexec/dcc/start-.* --	gen_context(system_u:object_r:initrc_exec_t,s0)
 /usr/libexec/dcc/stop-.* --	gen_context(system_u:object_r:initrc_exec_t,s0)
@@ -59,10 +55,19 @@ ifdef(`distro_gentoo', `
 #
 # /var
 #
+/var/lib/systemd(/.*)?		gen_context(system_u:object_r:init_var_lib_t,s0)
+
+/var/run/initctl	-p	gen_context(system_u:object_r:initctl_t,s0)
 /var/run/utmp		--	gen_context(system_u:object_r:initrc_var_run_t,s0)
 /var/run/runlevel\.dir		gen_context(system_u:object_r:initrc_var_run_t,s0)
 /var/run/random-seed	--	gen_context(system_u:object_r:initrc_var_run_t,s0)
 /var/run/setmixer_flag	--	gen_context(system_u:object_r:initrc_var_run_t,s0)
+/var/run/systemd(/.*)?		gen_context(system_u:object_r:init_var_run_t,s0)
+
+ifdef(`distro_debian',`
+/var/run/hotkey-setup	--	gen_context(system_u:object_r:initrc_var_run_t,s0)
+/var/run/kdm/.*		--	gen_context(system_u:object_r:initrc_var_run_t,s0)
+')
 
 ifdef(`distro_gentoo', `
 /var/lib/init\.d(/.*)?		gen_context(system_u:object_r:initrc_state_t,s0)

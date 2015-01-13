@@ -76,6 +76,8 @@ interface(`init_script_domain',`
 	domain_type($1)
 	domain_entry_file($1, $2)
 
+	role system_r types $1;
+
 	domtrans_pattern(init_run_all_scripts_domain, $2, $1)
 ')
 
@@ -107,12 +109,8 @@ interface(`init_domain',`
 
 	domtrans_pattern(init_t, $2, $1)
 
-	ifdef(`hide_broken_symptoms',`
-		# RHEL4 systems seem to have a stray
-		# fds open from the initrd
-		ifdef(`distro_rhel4',`
-			kernel_dontaudit_use_fds($1)
-		')
+	ifdef(`init_systemd',`
+		allow $1 init_t:unix_stream_socket { read write ioctl };
 	')
 ')
 
@@ -191,7 +189,6 @@ interface(`init_ranged_domain',`
 #
 interface(`init_daemon_domain',`
 	gen_require(`
-		attribute direct_run_init, direct_init, direct_init_entry;
 		type initrc_t;
 		role system_r;
 		attribute daemon;
@@ -199,42 +196,32 @@ interface(`init_daemon_domain',`
 
 	typeattribute $1 daemon;
 
-	domain_type($1)
-	domain_entry_file($1, $2)
+	ifdef(`init_systemd',`
+		init_domain($1, $2)
+	',`
+		domain_type($1)
+		domain_entry_file($1, $2)
 
-	role system_r types $1;
+		role system_r types $1;
 
-	domtrans_pattern(initrc_t, $2, $1)
+		domtrans_pattern(initrc_t, $2, $1)
 
-	# daemons started from init will
-	# inherit fds from init for the console
-	init_dontaudit_use_fds($1)
-	term_dontaudit_use_console($1)
+		# daemons started from init will
+		# inherit fds from init for the console
+		init_dontaudit_use_fds($1)
+		term_dontaudit_use_console($1)
 
-	# init script ptys are the stdin/out/err
-	# when using run_init
-	init_use_script_ptys($1)
+		# init script ptys are the stdin/out/err
+		# when using run_init
+		init_use_script_ptys($1)
 
-	ifdef(`direct_sysadm_daemon',`
-		domtrans_pattern(direct_run_init, $2, $1)
-		allow direct_run_init $1:process { noatsecure siginh rlimitinh };
-
-		typeattribute $1 direct_init;
-		typeattribute $2 direct_init_entry;
-
-		userdom_dontaudit_use_user_terminals($1)
-	')
-
-	ifdef(`hide_broken_symptoms',`
-		# RHEL4 systems seem to have a stray
-		# fds open from the initrd
-		ifdef(`distro_rhel4',`
-			kernel_dontaudit_use_fds($1)
+		ifdef(`direct_sysadm_daemon',`
+			userdom_dontaudit_use_user_terminals($1)
 		')
-	')
 
-	optional_policy(`
-		nscd_socket_use($1)
+		optional_policy(`
+			nscd_use($1)
+		')
 	')
 ')
 
@@ -285,15 +272,67 @@ interface(`init_ranged_daemon_domain',`
 		type initrc_t;
 	')
 
-	init_daemon_domain($1, $2)
+	ifdef(`init_systemd',`
+		init_ranged_domain($1, $2, $3)
+	',`
+		init_daemon_domain($1, $2)
 
-	ifdef(`enable_mcs',`
-		range_transition initrc_t $2:process $3;
+		ifdef(`enable_mcs',`
+			range_transition initrc_t $2:process $3;
+		')
+
+		ifdef(`enable_mls',`
+			range_transition initrc_t $2:process $3;
+			mls_rangetrans_target($1)
+		')
 	')
+')
 
-	ifdef(`enable_mls',`
-		range_transition initrc_t $2:process $3;
-		mls_rangetrans_target($1)
+#########################################
+## <summary>
+##	Abstract socket service activation (systemd).
+## </summary>
+## <param name="domain">
+##	<summary>
+##	The domain to be started by systemd socket activation.
+##	</summary>
+## </param>
+#
+interface(`init_abstract_socket_activation',`
+	ifdef(`init_systemd',`
+		gen_require(`
+			type init_t;
+		')
+
+		allow init_t $1:unix_stream_socket { bind create setopt listen };
+	')
+')
+
+#########################################
+## <summary>
+##	Named socket service activation (systemd).
+## </summary>
+## <param name="domain">
+##	<summary>
+##	The domain to be started by systemd socket activation.
+##	</summary>
+## </param>
+## <param name="sock_file">
+##	<summary>
+##	The domain socket file type.
+##	</summary>
+## </param>
+#
+interface(`init_named_socket_activation',`
+	ifdef(`init_systemd',`
+		gen_require(`
+			type init_t;
+		')
+
+		allow init_t $1:unix_stream_socket { bind create setopt listen };
+
+		allow init_t $2:dir create;
+		create_sock_files_pattern(init_t, $2, $2)
 	')
 ')
 
@@ -344,15 +383,11 @@ interface(`init_system_domain',`
 
 	role system_r types $1;
 
-	domtrans_pattern(initrc_t, $2, $1)
-
-	ifdef(`hide_broken_symptoms',`
-		# RHEL4 systems seem to have a stray
-		# fds open from the initrd
-		ifdef(`distro_rhel4',`
-			kernel_dontaudit_use_fds($1)
-		')
-	')
+	ifdef(`init_systemd',`
+		init_domain($1, $2)
+	',`
+		domtrans_pattern(initrc_t, $2, $1)
+	')	
 ')
 
 ########################################
@@ -403,16 +438,79 @@ interface(`init_ranged_system_domain',`
 		type initrc_t;
 	')
 
-	init_system_domain($1, $2)
+	ifdef(`init_systemd',`
+		init_ranged_domain($1, $2, $3)
+	',`
+		init_system_domain($1, $2)
 
-	ifdef(`enable_mcs',`
-		range_transition initrc_t $2:process $3;
+		ifdef(`enable_mcs',`
+			range_transition initrc_t $2:process $3;
+		')
+
+		ifdef(`enable_mls',`
+			range_transition initrc_t $2:process $3;
+			mls_rangetrans_target($1)
+		')
+	')
+')
+
+########################################
+## <summary>
+##	Mark the file type as a daemon pid file, allowing initrc_t
+##	to create it
+## </summary>
+## <param name="filetype">
+##	<summary>
+##	Type to mark as a daemon pid file
+##	</summary>
+## </param>
+## <param name="class">
+##	<summary>
+##	Class on which the type is applied
+##	</summary>
+## </param>
+## <param name="filename">
+##	<summary>
+##	Filename of the file that the init script creates
+##	</summary>
+## </param>
+#
+interface(`init_daemon_pid_file',`
+	gen_require(`
+		attribute daemonpidfile;
+		type initrc_t;
 	')
 
-	ifdef(`enable_mls',`
-		range_transition initrc_t $2:process $3;
-		mls_rangetrans_target($1)
+	typeattribute $1 daemonpidfile;
+
+	files_pid_file($1)
+	files_pid_filetrans(initrc_t, $1, $2, $3)
+')
+
+########################################
+## <summary>
+##	Mark the file type as a daemon run dir, allowing initrc_t
+##	to create it
+## </summary>
+## <param name="filetype">
+##	<summary>
+##	Type to mark as a daemon run dir
+##	</summary>
+## </param>
+## <param name="filename">
+##	<summary>
+##	Filename of the directory that the init script creates
+##	</summary>
+## </param>
+#
+interface(`init_daemon_run_dir',`
+	gen_require(`
+		attribute daemonrundir;
+		type initrc_t;
 	')
+
+	refpolicywarn(`$0($*) has been deprecated, use init_daemon_pid_file() instead.')
+	init_daemon_pid_file($1, dir, $2)
 ')
 
 ########################################
@@ -451,6 +549,36 @@ interface(`init_exec',`
 
 	corecmd_search_bin($1)
 	can_exec($1, init_exec_t)
+')
+
+########################################
+## <summary>
+##	Execute the rc application in the caller domain.
+## </summary>
+## <desc>
+## <p>
+##	This is only applicable to Gentoo or distributions that use the OpenRC
+##	init system.
+## </p>
+## <p>
+##	The OpenRC /sbin/rc binary is used for both init scripts as well as
+##	management applications and tools. When used for management purposes,
+##	calling /sbin/rc should never cause a transition to initrc_t.
+## </p>
+## </desc>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`init_exec_rc',`
+	gen_require(`
+		type rc_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	can_exec($1, rc_exec_t)
 ')
 
 ########################################
@@ -730,7 +858,7 @@ interface(`init_rw_initctl',`
 ## </summary>
 ## <param name="domain">
 ##	<summary>
-##	Domain allowed access.
+##	Domain to not audit.
 ##	</summary>
 ## </param>
 #
@@ -778,6 +906,14 @@ interface(`init_spec_domtrans_script',`
 
 	files_list_etc($1)
 	spec_domtrans_pattern($1, initrc_exec_t, initrc_t)
+
+	ifdef(`distro_gentoo',`
+		gen_require(`
+			type rc_exec_t;
+		')
+
+		domtrans_pattern($1, rc_exec_t, initrc_t)
+	')
 
 	ifdef(`enable_mcs',`
 		range_transition $1 initrc_exec_t:process s0;
@@ -917,12 +1053,14 @@ interface(`init_all_labeled_script_domtrans',`
 #
 interface(`init_run_daemon',`
 	gen_require(`
-		attribute direct_run_init, direct_init, direct_init_entry;
+                attribute init_script_file_type;
 		role system_r;
 	')
 
-	typeattribute $1 direct_run_init;
-	role_transition $2 direct_init_entry system_r;
+	allow $2 system_r;
+
+        init_all_labeled_script_domtrans($1)
+        role_transition $2 init_script_file_type system_r;
 ')
 
 ########################################
@@ -1423,6 +1561,27 @@ interface(`init_use_script_ptys',`
 
 ########################################
 ## <summary>
+##	Read and write inherited init script ptys.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`init_use_inherited_script_ptys',`
+	gen_require(`
+		type initrc_devpts_t;
+	')
+
+	term_list_ptys($1)
+	allow $1 initrc_devpts_t:chr_file { getattr read write ioctl };
+
+	init_use_fds($1)
+')
+
+########################################
+## <summary>
 ##	Do not audit attempts to read and
 ##	write the init script pty.
 ## </summary>
@@ -1477,6 +1636,25 @@ interface(`init_dontaudit_read_script_status_files',`
 
 	dontaudit $1 initrc_state_t:dir search_dir_perms;
 	dontaudit $1 initrc_state_t:file read_file_perms;
+')
+
+######################################
+## <summary>
+##	Search the /run/systemd directory.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`init_search_run',`
+	gen_require(`
+		type init_var_run_t;
+	')
+
+	files_search_pids($1)
+	allow $1 init_var_run_t:dir search_dir_perms;
 ')
 
 ########################################
@@ -1537,6 +1715,11 @@ interface(`init_rw_script_tmp_files',`
 ##	The object class.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 #
 interface(`init_script_tmp_filetrans',`
 	gen_require(`
@@ -1544,7 +1727,73 @@ interface(`init_script_tmp_filetrans',`
 	')
 
 	files_search_tmp($1)
-	filetrans_pattern($1, initrc_tmp_t, $2, $3)
+	filetrans_pattern($1, initrc_tmp_t, $2, $3, $4)
+')
+
+########################################
+## <summary>
+##	Create files in an init lib directory.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="file_type">
+##	<summary>
+##	The type of the object to be created
+##	</summary>
+## </param>
+## <param name="object_class">
+##	<summary>
+##	The object class.
+##	</summary>
+## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
+#
+interface(`init_var_lib_filetrans',`
+	gen_require(`
+		type init_var_lib_t;
+	')
+	files_search_var_lib($1)
+	filetrans_pattern($1, init_var_lib_t, $2, $3, $4)
+')
+
+########################################
+## <summary>
+##	Create files in an init PID directory.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="file_type">
+##	<summary>
+##	The type of the object to be created
+##	</summary>
+## </param>
+## <param name="object_class">
+##	<summary>
+##	The object class.
+##	</summary>
+## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
+#
+interface(`init_pid_filetrans',`
+	gen_require(`
+		type init_var_run_t;
+	')
+	files_search_pids($1)
+	filetrans_pattern($1, init_var_run_t, $2, $3, $4)
 ')
 
 ########################################
@@ -1712,7 +1961,7 @@ interface(`init_pid_filetrans_utmp',`
 		type initrc_var_run_t;
 	')
 
-	files_pid_filetrans($1, initrc_var_run_t, file)
+	files_pid_filetrans($1, initrc_var_run_t, file, "utmp")
 ')
 
 ########################################

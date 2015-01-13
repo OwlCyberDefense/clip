@@ -47,9 +47,9 @@ endif
 BINDIR ?= /usr/bin
 SBINDIR ?= /usr/sbin
 ifdef TEST_TOOLCHAIN
-tc_usrbindir := env LD_LIBRARY_PATH="$(TEST_TOOLCHAIN)/lib" $(TEST_TOOLCHAIN)$(BINDIR)
-tc_usrsbindir := env LD_LIBRARY_PATH="$(TEST_TOOLCHAIN)/lib" $(TEST_TOOLCHAIN)$(SBINDIR)
-tc_sbindir := env LD_LIBRARY_PATH="$(TEST_TOOLCHAIN)/lib" $(TEST_TOOLCHAIN)/sbin
+tc_usrbindir := env LD_LIBRARY_PATH="$(TEST_TOOLCHAIN)/lib:$(TEST_TOOLCHAIN)/usr/lib" $(TEST_TOOLCHAIN)$(BINDIR)
+tc_usrsbindir := env LD_LIBRARY_PATH="$(TEST_TOOLCHAIN)/lib:$(TEST_TOOLCHAIN)/usr/lib" $(TEST_TOOLCHAIN)$(SBINDIR)
+tc_sbindir := env LD_LIBRARY_PATH="$(TEST_TOOLCHAIN)/lib:$(TEST_TOOLCHAIN)/usr/lib" $(TEST_TOOLCHAIN)/sbin
 else
 tc_usrbindir := $(BINDIR)
 tc_usrsbindir := $(SBINDIR)
@@ -74,6 +74,7 @@ M4 ?= m4
 PYTHON ?= python
 SED ?= sed
 SORT ?= LC_ALL=C sort
+UMASK ?= umask
 
 CFLAGS += -Wall
 
@@ -96,6 +97,7 @@ support := support
 genxml := $(PYTHON) -E $(support)/segenxml.py
 gendoc := $(PYTHON) -E $(support)/sedoctool.py
 genperm := $(PYTHON) -E $(support)/genclassperms.py
+policyvers := $(PYTHON) -E $(support)/policyvers.py
 fcsort := $(tmpdir)/fc_sort
 setbools := $(AWK) -f $(support)/set_bools_tuns.awk
 get_type_attr_decl := $(SED) -r -f $(support)/get_type_attr_decl.sed
@@ -130,9 +132,9 @@ endif
 # config file paths
 globaltun = $(poldir)/global_tunables
 globalbool = $(poldir)/global_booleans
-rolemap = $(poldir)/rolemap
 user_files := $(poldir)/users
 policycaps := $(poldir)/policy_capabilities
+ctx_defaults := $(poldir)/context_defaults
 
 # local config file paths
 ifndef LOCAL_ROOT
@@ -156,6 +158,7 @@ policypath = $(installdir)/policy
 contextpath = $(installdir)/contexts
 homedirpath = $(contextpath)/files/homedir_template
 fcpath = $(contextpath)/files/file_contexts
+fcsubspath = $(contextpath)/files/file_contexts.subs_dist
 ncpath = $(contextpath)/netfilter_contexts
 sharedir = $(prefix)/share/selinux
 modpkgdir = $(sharedir)/$(strip $(NAME))
@@ -183,11 +186,6 @@ ifneq ($(DISTRO),)
 	M4PARAM += -D distro_$(DISTRO)
 endif
 
-# rhel4 also implies redhat
-ifeq "$(DISTRO)" "rhel4"
-	M4PARAM += -D distro_redhat
-endif
-
 ifeq "$(DISTRO)" "ubuntu"
 	M4PARAM += -D distro_debian
 endif
@@ -204,7 +202,7 @@ endif
 NAME ?= $(TYPE)
 
 # default unknown permissions setting
-#UNK_PERMS ?= deny
+UNK_PERMS ?= deny
 
 ifeq ($(DIRECT_INITRC),y)
 	M4PARAM += -D direct_sysadm_daemon
@@ -248,7 +246,7 @@ seusers := $(appconf)/seusers
 appdir := $(contextpath)
 user_default_contexts := $(wildcard config/appconfig-$(TYPE)/*_default_contexts)
 user_default_contexts_names := $(addprefix $(contextpath)/users/,$(subst _default_contexts,,$(notdir $(user_default_contexts))))
-appfiles := $(addprefix $(appdir)/,default_contexts default_type initrc_context failsafe_context userhelper_context removable_context dbus_contexts sepgsql_contexts x_contexts customizable_types securetty_types) $(contextpath)/files/media $(user_default_contexts_names)
+appfiles := $(addprefix $(appdir)/,default_contexts default_type initrc_context failsafe_context userhelper_context removable_context dbus_contexts sepgsql_contexts x_contexts customizable_types securetty_types virtual_domain_context virtual_image_context) $(contextpath)/files/media $(fcsubspath) $(user_default_contexts_names)
 net_contexts := $(builddir)net_contexts
 
 all_layers := $(shell find $(wildcard $(moddir)/*) -maxdepth 0 -type d)
@@ -315,48 +313,6 @@ fs_names := "btrfs ext2 ext3 ext4 xfs jfs"
 # Functions
 #
 
-# parse-rolemap-compat modulename,outputfile
-define parse-rolemap-compat
-	$(verbose) $(M4) $(M4PARAM) $(rolemap) | \
-		$(AWK) '/^[[:blank:]]*[A-Za-z]/{ print "gen_require(type " $$3 "; role " $$1 ";)\n$1_per_userdomain_template(" $$2 "," $$3 "," $$1 ")" }' >> $2
-endef
-
-# parse-rolemap modulename,outputfile
-define parse-rolemap
-	$(verbose) $(M4) $(M4PARAM) $(rolemap) | \
-		$(AWK) '/^[[:blank:]]*[A-Za-z]/{ print "gen_require(type " $$3 "; role " $$1 ";)\n$1_per_role_template(" $$2 "," $$3 "," $$1 ")" }' >> $2
-endef
-
-# perrole-expansion modulename,outputfile
-define perrole-expansion
-	$(verbose) echo "ifdef(\`""$1""_per_role_template',\`" > $2
-	$(call parse-rolemap,$1,$2)
-	$(verbose) echo "')" >> $2
-
-	$(verbose) echo "ifdef(\`""$1""_per_userdomain_template',\`" >> $2
-	$(verbose) echo "errprint(\`Warning: per_userdomain_templates have been renamed to per_role_templates (""$1""_per_userdomain_template)'__endline__)" >> $2
-	$(call parse-rolemap-compat,$1,$2)
-	$(verbose) echo "')" >> $2
-endef
-
-# create-base-per-role-tmpl modulenames,outputfile
-define create-base-per-role-tmpl
-	$(verbose) echo "define(\`base_per_role_template',\`" >> $2
-
-	$(verbose) for i in $1; do \
-		echo "ifdef(\`""$$i""_per_role_template',\`""$$i""_per_role_template("'$$*'")')" \
-			>> $2 ;\
-	done
-
-	$(verbose) for i in $1; do \
-		echo "ifdef(\`""$$i""_per_userdomain_template',\`" >> $2 ;\
-		echo "errprint(\`Warning: per_userdomain_templates have been renamed to per_role_templates (""$$i""_per_userdomain_template)'__endline__)" >> $2 ;\
-		echo """$$i""_per_userdomain_template("'$$*'")')"  >> $2 ;\
-	done
-	$(verbose) echo "')" >> $@
-
-endef
-
 # detect-metaxml layer_names
 ifdef LOCAL_ROOT
 define detect-metaxml
@@ -406,10 +362,10 @@ $(moddir)/kernel/corenetwork.if: $(moddir)/kernel/corenetwork.te.in $(moddir)/ke
 	@echo "#" >> $@
 	$(verbose) cat $@.in >> $@
 	$(verbose) $(GREP) "^[[:blank:]]*network_(interface|node|port|packet)(_controlled)?\(.*\)" $< \
-		| $(M4) -D self_contained_policy $(M4PARAM) $@.m4 - \
+		| $(M4) -D self_contained_policy $(M4PARAM) $(m4divert) $@.m4 $(m4undivert) - \
 		| $(SED) -e 's/dollarsone/\$$1/g' -e 's/dollarszero/\$$0/g' >> $@
 
-$(moddir)/kernel/corenetwork.te: $(moddir)/kernel/corenetwork.te.m4 $(moddir)/kernel/corenetwork.te.in
+$(moddir)/kernel/corenetwork.te: $(m4divert) $(moddir)/kernel/corenetwork.te.m4 $(m4undivert) $(moddir)/kernel/corenetwork.te.in
 	@echo "#" > $@
 	@echo "# This is a generated file!  Instead of modifying this file, the" >> $@
 	@echo "# $(notdir $@).in or $(notdir $@).m4 file should be modified." >> $@
@@ -490,7 +446,6 @@ html $(tmpdir)/html: $(polxml)
 #
 $(userpath)/system.users: $(m4support) $(tmpdir)/generated_definitions.conf $(user_files)
 	@mkdir -p $(tmpdir)
-	@mkdir -p $(userpath)
 	@echo "Installing system.users"
 	@echo "# " > $(tmpdir)/system.users
 	@echo "# Do not edit this file. " >> $(tmpdir)/system.users
@@ -499,12 +454,13 @@ $(userpath)/system.users: $(m4support) $(tmpdir)/generated_definitions.conf $(us
 	@echo "#" >> $(tmpdir)/system.users
 	$(verbose) $(M4) -D self_contained_policy $(M4PARAM) $^ | $(SED) -r -e 's/^[[:blank:]]+//' \
 		-e '/^[[:blank:]]*($$|#)/d' >> $(tmpdir)/system.users
-	$(verbose) $(INSTALL) -m 644 $(tmpdir)/system.users $@
+	@$(INSTALL) -d -m 0755 $(@D)
+	$(verbose) $(INSTALL) -m 0644 $(tmpdir)/system.users $@
 
 $(userpath)/local.users: config/local.users
-	@mkdir -p $(userpath)
 	@echo "Installing local.users"
-	$(verbose) $(INSTALL) -b -m 644 $< $@
+	@$(INSTALL) -d -m 0755 $(@D)
+	$(verbose) $(INSTALL) -b -m 0644 $< $@
 
 ########################################
 #
@@ -522,22 +478,27 @@ install-appconfig: $(appfiles)
 
 $(installdir)/booleans: $(booleans)
 	@mkdir -p $(tmpdir)
-	@mkdir -p $(installdir)
 	$(verbose) $(SED) -r -e 's/false/0/g' -e 's/true/1/g' \
 		-e '/^[[:blank:]]*($$|#)/d' $(booleans) | $(SORT) > $(tmpdir)/booleans
-	$(verbose) $(INSTALL) -m 644 $(tmpdir)/booleans $@
+	@$(INSTALL) -d -m 0755 $(@D)
+	$(verbose) $(INSTALL) -m 0644 $(tmpdir)/booleans $@
 
 $(contextpath)/files/media: $(appconf)/media
-	@mkdir -p $(contextpath)/files/
-	$(verbose) $(INSTALL) -m 644 $< $@
+	@$(INSTALL) -d -m 0755 $(@D)
+	$(verbose) $(INSTALL) -m 0644 $< $@
+
+$(fcsubspath): config/file_contexts.subs_dist
+	@$(INSTALL) -d -m 0755 $(@D)
+	$(verbose) $(INSTALL) -m 0644 $< $@
 
 $(contextpath)/users/%: $(appconf)/%_default_contexts
-	@mkdir -p $(appdir)/users
-	$(verbose) $(INSTALL) -m 644 $^ $@
+	@$(INSTALL) -d -m 0755 $(@D)
+	$(verbose) $(INSTALL) -m 0644 $^ $@
 
 $(appdir)/%: $(appconf)/%
-	@mkdir -p $(appdir)
-	$(verbose) $(M4) $(M4PARAM) $(m4support) $< > $@
+	$(verbose) $(M4) $(M4PARAM) $(m4support) $< > $(tmpdir)/$(@F)
+	@$(INSTALL) -d -m 0755 $(@D)
+	$(verbose) $(INSTALL) -m 0644 $(tmpdir)/$(@F) $@
 
 ########################################
 #
@@ -547,7 +508,6 @@ install-headers: $(layerxml) $(tunxml) $(boolxml)
 	@mkdir -p $(headerdir)
 	@echo "Installing $(NAME) policy headers."
 	$(verbose) $(INSTALL) -m 644 $^ $(headerdir)
-	$(verbose) $(M4) $(M4PARAM) $(rolemap) > $(headerdir)/$(notdir $(rolemap))
 	$(verbose) mkdir -p $(headerdir)/support
 	$(verbose) $(INSTALL) -m 644 $(m4support) $(word $(words $(genxml)),$(genxml)) $(xmldtd) $(headerdir)/support
 	$(verbose) $(genperm) $(avs) $(secclass) > $(headerdir)/support/all_perms.spt
@@ -645,27 +605,27 @@ resetlabels:
 # Clean everything
 #
 bare: clean
-	rm -f $(polxml)
-	rm -f $(layerxml)
-	rm -f $(modxml)
-	rm -f $(tunxml)
-	rm -f $(boolxml)
-	rm -f $(mod_conf)
-	rm -f $(booleans)
-	rm -fR $(htmldir)
-	rm -f $(tags)
+	$(verbose) rm -f $(polxml)
+	$(verbose) rm -f $(layerxml)
+	$(verbose) rm -f $(modxml)
+	$(verbose) rm -f $(tunxml)
+	$(verbose) rm -f $(boolxml)
+	$(verbose) rm -f $(mod_conf)
+	$(verbose) rm -f $(booleans)
+	$(verbose) rm -fR $(htmldir)
+	$(verbose) rm -f $(tags)
 # don't remove these files if we're given a local root
 ifndef LOCAL_ROOT
-	rm -f $(fcsort)
-	rm -f $(support)/*.pyc
+	$(verbose) rm -f $(fcsort)
+	$(verbose) rm -f $(support)/*.pyc
 ifneq ($(generated_te),)
-	rm -f $(generated_te)
+	$(verbose) rm -f $(generated_te)
 endif
 ifneq ($(generated_if),)
-	rm -f $(generated_if)
+	$(verbose) rm -f $(generated_if)
 endif
 ifneq ($(generated_fc),)
-	rm -f $(generated_fc)
+	$(verbose) rm -f $(generated_fc)
 endif
 endif
 

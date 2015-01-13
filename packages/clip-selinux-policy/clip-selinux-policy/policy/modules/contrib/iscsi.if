@@ -1,0 +1,127 @@
+## <summary>Establish connections to iSCSI devices.</summary>
+
+########################################
+## <summary>
+##	Execute a domain transition to run iscsid.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`iscsid_domtrans',`
+	gen_require(`
+		type iscsid_t, iscsid_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, iscsid_exec_t, iscsid_t)
+')
+
+########################################
+## <summary>
+##	Create, read, write, and delete
+##	iscsid sempaphores.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`iscsi_manage_semaphores',`
+	gen_require(`
+		type iscsid_t;
+	')
+
+	allow $1 iscsid_t:sem create_sem_perms;
+')
+
+########################################
+## <summary>
+##	Connect to iscsid using a unix
+##	domain stream socket.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`iscsi_stream_connect',`
+	gen_require(`
+		type iscsid_t, iscsi_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	stream_connect_pattern($1, iscsi_var_lib_t, iscsi_var_lib_t, iscsid_t)
+')
+
+########################################
+## <summary>
+##	Read iscsid lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`iscsi_read_lib_files',`
+	gen_require(`
+		type iscsi_var_lib_t;
+	')
+
+	read_files_pattern($1, iscsi_var_lib_t, iscsi_var_lib_t)
+	allow $1 iscsi_var_lib_t:dir list_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	All of the rules required to
+##	administrate an iscsi environment.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`iscsi_admin',`
+	gen_require(`
+		type iscsid_t, iscsi_lock_t, iscsi_log_t;
+		type iscsi_var_lib_t, iscsi_var_run_t, iscsi_tmp_t;
+		type iscsi_initrc_exec_t;
+	')
+
+	allow $1 iscsid_t:process { ptrace signal_perms };
+	ps_process_pattern($1, iscsid_t)
+
+	init_labeled_script_domtrans($1, iscsi_initrc_exec_t)
+	domain_system_change_exemption($1)
+	role_transition $2 iscsi_initrc_exec_t system_r;
+	allow $2 system_r;
+
+	logging_search_logs($1)
+	admin_pattern($1, iscsi_log_t)
+
+	files_search_locks($1)
+	admin_pattern($1, iscsi_lock_t)
+
+	files_search_var_lib($1)
+	admin_pattern($1, iscsi_var_lib_t)
+
+	files_search_pids($1)
+	admin_pattern($1, iscsi_var_run_t)
+
+	files_search_tmp($1)
+	admin_pattern($1, iscsi_tmp_t)
+')
