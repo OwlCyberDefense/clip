@@ -144,24 +144,17 @@ arch=`rpm --eval %_host_cpu`
 # find a better way to get the release version to set for EPEL
 releasever="7"
 
-/bin/echo "Checking if epel is installed"
-
 # always have the latest epel rpm
-if ! rpm -q epel-release > /dev/null; then
-	/bin/echo "***epel rpm not installed - installing and enabling epel"
-	# if the epel.repo file does not exist write it and enable the repo
-	if [ ! -f /etc/yum.repos.d/epel.repo ]; then
-		/bin/echo "
+/bin/echo "Checking if epel is installed and updating to the latest version if it is"
+/bin/echo "
 [epel]
 name=Bootstrap EPEL
 mirrorlist=https://mirrors.fedoraproject.org/mirrorlist?repo=epel-$releasever&arch=$arch
 failovermethod=priority
 enabled=1
 gpgcheck=0
-		" | /usr/bin/sudo tee --append /etc/yum.repos.d/epel.repo
-		/usr/bin/sudo yum --enablerepo=epel -y install epel-release
-	fi
-fi
+" | /usr/bin/sudo tee --append /etc/yum.repos.d/epel.repo
+/usr/bin/sudo yum --enablerepo=epel -y install epel-release
 
 PACKAGES="mock pigz createrepo repoview rpm-build make python-kid syslinux-extlinux dumpet"
 /usr/bin/sudo /usr/bin/yum install -y $PACKAGES
