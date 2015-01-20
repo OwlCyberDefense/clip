@@ -96,6 +96,7 @@ chkconfig
 chrony
 coreutils
 cpio
+dhclient
 dbus
 device-mapper
 e2fsprogs
@@ -149,7 +150,6 @@ yum
 -bridge-utils
 -cryptsetup
 -cryptsetup-reencrypt
--dhclient
 -dmraid
 -dosfstools
 -fprintd
@@ -257,14 +257,10 @@ fi
 
 /bin/chage -d 0 "$USERNAME"
 
-# Remove sshd if it in a production build
-# If not, use systemctl disable
+# Remove sshd and dhclient if it in a production build
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
-    /bin/echo "Removing sshd from the system"
-    /bin/rpm -e openssh openssh-clients openssh-server
-else
-    /bin/echo "Turning sshd off"
-    /usr/bin/systemctl disable sshd.service
+    /bin/echo "Removing sshd and dhclient from the system"
+    /bin/rpm -e openssh openssh-clients openssh-server dhclient
 fi
 
 # Add the user to sudoers and setup an SELinux role/type transition.
