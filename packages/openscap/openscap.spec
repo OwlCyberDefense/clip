@@ -55,15 +55,15 @@ BuildRequires:  python-devel
 The %{name}-python package contains the bindings so that %{name}
 libraries can be used by python.
 
-%package        python3
-Summary:        Python 3 bindings for %{name}
-Group:          Development/Libraries
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-BuildRequires:  python3-devel
-
-%description    python3
-The %{name}-python3 package contains the bindings so that %{name}
-libraries can be used by python3.
+#%package        python3
+#Summary:        Python 3 bindings for %{name}
+#Group:          Development/Libraries
+#Requires:       %{name}%{?_isa} = %{version}-%{release}
+#BuildRequires:  python3-devel
+#
+#%description    python3
+#The %{name}-python3 package contains the bindings so that %{name}
+#libraries can be used by python3.
 
 %package        perl
 Summary:        Perl bindings for %{name}
@@ -122,16 +122,16 @@ BuildRequires:  GConf2-devel
 The %{name}-extra-probes package contains additional probes that are not
 commonly used and require additional dependencies.
 
-%package        extra-probes-sql
-Summary:        SCAP probes for Database
-Group:          Applications/System
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-BuildRequires:  opendbx-devel
-
-%description    extra-probes-sql
-The %{name}-extra-probes-sql package contains additional OpenSCAP probes
-for querying database objects. Users are advised to install appropriate
-opendbx backend package along this one.
+#%package        extra-probes-sql
+#Summary:        SCAP probes for Database
+#Group:          Applications/System
+#Requires:       %{name}%{?_isa} = %{version}-%{release}
+#BuildRequires:  opendbx-devel
+#
+#%description    extra-probes-sql
+#The %{name}-extra-probes-sql package contains additional OpenSCAP probes
+#for querying database objects. Users are advised to install appropriate
+#opendbx backend package along this one.
 
 %package        engine-sce
 Summary:        Script Check Engine plug-in for OpenSCAP
@@ -180,7 +180,7 @@ export CFLAGS="$RPM_OPT_FLAGS -fpie"
 export LDFLAGS="-pie -Wl,-z,relro -Wl,-z,now"
 %endif
 
-%configure --enable-sce --enable-perl --enable-selinux_policy --enable-python3
+%configure --enable-sce --enable-perl --enable-selinux_policy
 
 make %{?_smp_mflags}
 # Remove shebang from bash-completion script
@@ -284,8 +284,8 @@ exit 0
 %defattr(-,root,root,-)
 %{python_sitearch}/*
 
-%files python3
-%{python3_sitearch}/*
+#%files python3
+#%{python3_sitearch}/*
 
 %files perl
 %defattr(-,root,root,-)
@@ -326,9 +326,9 @@ exit 0
 %{_libexecdir}/openscap/probe_ldap57
 %{_libexecdir}/openscap/probe_gconf
 
-%files extra-probes-sql
-%{_libexecdir}/openscap/probe_sql
-%{_libexecdir}/openscap/probe_sql57
+#%files extra-probes-sql
+#%{_libexecdir}/openscap/probe_sql
+#%{_libexecdir}/openscap/probe_sql57
 
 %files engine-sce
 %{_libdir}/libopenscap_sce.so.*
