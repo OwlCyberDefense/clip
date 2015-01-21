@@ -2,4 +2,6 @@ anaconda-dracut-19.31.79-1.el7.x86_64.rpm
 at-spi-1.32.0-12.el7.i686.rpm
 at-spi-1.32.0-12.el7.x86_64.rpm
 bitmap-fangsongti-fonts-0.3-21.el7.noarch.rpm
+GConf2-devel-3.2.6-8.el7.i686.rpm
+GConf2-devel-3.2.6-8.el7.x86_64.rpm
 tigervnc-server-module-1.2.80-0.30.20130314svn5065.el7.x86_64.rpm

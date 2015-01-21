@@ -202,7 +202,8 @@ else
 	/bin/echo "RHEL optional channel is already enabled"
 fi
 # download the required rpms from the rhel optional channel
-OPT_PACKAGES="anaconda-dracut at-spi tigervnc-server-module bitmap-fangsongti-fonts"
+OPT_PACKAGES="anaconda-dracut at-spi tigervnc-server-module bitmap-fangsongti-fonts \
+GConf2-devel"
 /usr/bin/sudo /bin/yumdownloader --destdir $optrepopath $OPT_PACKAGES
 /usr/bin/createrepo -d $optrepopath
 
@@ -241,6 +242,22 @@ Press the any key to continue or ctrl-c to exit.
 	pushd . > /dev/null
 	cd repos/clip-repo
 	/usr/bin/sudo /usr/bin/yum localinstall -y livecd-tools* and python-imgcreate*
+	popd > /dev/null
+fi
+
+if ! rpm -q "openscap-1.2.1-1.el7.x86_64" > /dev/null; then
+	if rpm -q "openscap" > /dev/null; then
+		/bin/echo "You have openscap installed, but not our version. Our version is
+required to build scap-security-guide.
+Press the any key to continue or ctrl-c to exit.
+"
+		read user_input
+		/usr/bin/sudo /usr/bin/yum remove openscap* 2>/dev/null || true
+	fi
+	/usr/bin/make openscap-rpm
+	pushd . > /dev/null
+	cd repos/clip-repo
+	/usr/bin/sudo /usr/bin/yum localinstall -y openscap*
 	popd > /dev/null
 fi
 
