@@ -78,7 +78,7 @@ clip-selinux-policy
 clip-selinux-policy-clip
 m4
 # TODO Add back in once we get everything installing
-#scap-security-guide
+scap-security-guide
 dracut
 clip-dracut-module
 # SRS: this will need python-simplejson from epel on RHEL 7
