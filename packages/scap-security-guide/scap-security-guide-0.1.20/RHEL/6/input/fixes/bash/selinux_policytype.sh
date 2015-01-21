@@ -1,0 +1,1 @@
+../../../../../shared/fixes/bash/selinux_policytype.sh
