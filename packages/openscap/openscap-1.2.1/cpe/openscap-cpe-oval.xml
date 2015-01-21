@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<oval_definitions
+    xmlns:unix-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix"
+    xmlns:ind-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#independent"
+    xmlns:lin-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux"
+    xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5"
+    xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <generator>
+            <oval:product_name>vim</oval:product_name>
+            <oval:schema_version>5.10.1</oval:schema_version>
+            <oval:timestamp>2012-11-22T15:00:00+01:00</oval:timestamp>
+      </generator>
+      <definitions>
+            <definition class="inventory" id="oval:org.open-scap.cpe.rhel:def:1" version="1">
+                  <metadata>
+                        <title>Red Hat Enterprise Linux</title>
+                        <affected family="unix">
+                              <platform>Red Hat Enterprise Linux</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:redhat:enterprise_linux" source="CPE"/>
+                        <description>The operating system installed on the system is Red Hat Enterprise Linux</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Red Hat Enterprise Linux is installed" test_ref="oval:org.open-scap.cpe.rhel:tst:2"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.rhel:def:5" version="1">
+                  <metadata>
+                        <title>Red Hat Enterprise Linux 5</title>
+                        <affected family="unix">
+                              <platform>Red Hat Enterprise Linux 5</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:redhat:enterprise_linux:5" source="CPE"/>
+                        <description>The operating system installed on the system is Red Hat Enterprise Linux 5</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Red Hat Enterprise Linux 5 is installed" test_ref="oval:org.open-scap.cpe.rhel:tst:5"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.rhel:def:6" version="1">
+                  <metadata>
+                        <title>Red Hat Enterprise Linux 6</title>
+                        <affected family="unix">
+                              <platform>Red Hat Enterprise Linux 6</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:redhat:enterprise_linux:6" source="CPE"/>
+                        <description>The operating system installed on the system is Red Hat Enterprise Linux 6</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Red Hat Enterprise Linux 6 is installed" test_ref="oval:org.open-scap.cpe.rhel:tst:6"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.rhel:def:7" version="1">
+                  <metadata>
+                        <title>Red Hat Enterprise Linux 7</title>
+                        <affected family="unix">
+                              <platform>Red Hat Enterprise Linux 7</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:redhat:enterprise_linux:7" source="CPE"/>
+                        <description>The operating system installed on the system is Red Hat Enterprise Linux 7</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Red Hat Enterprise Linux 7 is installed" test_ref="oval:org.open-scap.cpe.rhel:tst:7"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.rhel:def:1005" version="1">
+                  <metadata>
+                        <title>Community Enterprise Operating System 5</title>
+                        <affected family="unix">
+                              <platform>Community Enterprise Operating System 5</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:centos:centos:5" source="CPE"/>
+                        <description>The operating system installed on the system is Community Enterprise Operating System 5</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Community Enterprise Operating System 5 is installed" test_ref="oval:org.open-scap.cpe.rhel:tst:1005"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.rhel:def:1006" version="1">
+                  <metadata>
+                        <title>Community Enterprise Operating System 6</title>
+                        <affected family="unix">
+                              <platform>Community Enterprise Operating System 6</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:centos:centos:6" source="CPE"/>
+                        <description>The operating system installed on the system is Community Enterprise Operating System 6</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Community Enterprise Operating System 6 is installed" test_ref="oval:org.open-scap.cpe.rhel:tst:1006"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.rhel:def:1007" version="1">
+                  <metadata>
+                        <title>Community Enterprise Operating System 7</title>
+                        <affected family="unix">
+                              <platform>Community Enterprise Operating System 7</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:centos:centos:7" source="CPE"/>
+                        <description>The operating system installed on the system is Community Enterprise Operating System 7</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Community Enterprise Operating System 7 is installed" test_ref="oval:org.open-scap.cpe.rhel:tst:1007"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.fedora:def:16" version="1">
+                  <metadata>
+                        <title>Fedora 16</title>
+                        <affected family="unix">
+                            <platform>Fedora 16</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:fedoraproject:fedora:16" source="CPE"/>
+                        <description>The operating system installed on the system is Fedora 16</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Fedora 16 is installed" test_ref="oval:org.open-scap.cpe.fedora:tst:16"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.fedora:def:17" version="1">
+                  <metadata>
+                        <title>Fedora 17</title>
+                        <affected family="unix">
+                            <platform>Fedora 17</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:fedoraproject:fedora:17" source="CPE"/>
+                        <description>The operating system installed on the system is Fedora 17</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Fedora 17 is installed" test_ref="oval:org.open-scap.cpe.fedora:tst:17"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.fedora:def:18" version="1">
+                  <metadata>
+                        <title>Fedora 18</title>
+                        <affected family="unix">
+                            <platform>Fedora 18</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:fedoraproject:fedora:18" source="CPE"/>
+                        <description>The operating system installed on the system is Fedora 18</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Fedora 18 is installed" test_ref="oval:org.open-scap.cpe.fedora:tst:18"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.fedora:def:19" version="1">
+                  <metadata>
+                        <title>Fedora 19</title>
+                        <affected family="unix">
+                            <platform>Fedora 19</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:fedoraproject:fedora:19" source="CPE"/>
+                        <description>The operating system installed on the system is Fedora 19</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Fedora 19 is installed" test_ref="oval:org.open-scap.cpe.fedora:tst:19"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.fedora:def:20" version="1">
+                  <metadata>
+                        <title>Fedora 20</title>
+                        <affected family="unix">
+                            <platform>Fedora 20</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:fedoraproject:fedora:20" source="CPE"/>
+                        <description>The operating system installed on the system is Fedora 20</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Fedora 20 is installed" test_ref="oval:org.open-scap.cpe.fedora:tst:20"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.fedora:def:21" version="1">
+                  <metadata>
+                        <title>Fedora 21</title>
+                        <affected family="unix">
+                            <platform>Fedora 21</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:fedoraproject:fedora:21" source="CPE"/>
+                        <description>The operating system installed on the system is Fedora 21</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Fedora 21 is installed" test_ref="oval:org.open-scap.cpe.fedora:tst:21"/>
+                  </criteria>
+            </definition>
+            <definition class="inventory" id="oval:org.open-scap.cpe.fedora:def:22" version="1">
+                  <metadata>
+                        <title>Fedora 22</title>
+                        <affected family="unix">
+                            <platform>Fedora 22</platform>
+                        </affected>
+                        <reference ref_id="cpe:/o:fedoraproject:fedora:22" source="CPE"/>
+                        <description>The operating system installed on the system is Fedora 22</description>
+                  </metadata>
+                  <criteria>
+                        <criterion comment="Installed operating system is part of the unix family" test_ref="oval:org.open-scap.cpe.rhel:tst:1"/>
+                        <criterion comment="Fedora 22 is installed" test_ref="oval:org.open-scap.cpe.fedora:tst:22"/>
+                  </criteria>
+            </definition>
+      </definitions>
+      <tests>
+            <family_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.rhel:tst:1" version="1" check="only one" 
+                  comment="installed operating system is part of the Unix family" 
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#independent">
+                  <object object_ref="oval:org.open-scap.cpe.unix:obj:1"/>
+                  <state state_ref="oval:org.open-scap.cpe.unix:ste:1"/>
+            </family_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.rhel:tst:2" version="1" check="at least one" comment="/etc/redhat-release is provided by redhat-release package"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+                  <state state_ref="oval:org.open-scap.cpe.rhel:ste:2"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.rhel:tst:5" version="1" check="at least one" comment="redhat-release is version 5"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.redhat-release:obj:1"/>
+                  <state state_ref="oval:org.open-scap.cpe.rhel:ste:5"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.rhel:tst:6" version="1" check="at least one" comment="redhat-release is version 6"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+                  <state state_ref="oval:org.open-scap.cpe.rhel:ste:6"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.rhel:tst:7" version="1" check="at least one" comment="redhat-release is version 7"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+                  <state state_ref="oval:org.open-scap.cpe.rhel:ste:7"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.rhel:tst:1005" version="1" check="at least one" comment="centos-release is version 5"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+                  <state state_ref="oval:org.open-scap.cpe.rhel:ste:1005"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.rhel:tst:1006" version="1" check="at least one" comment="centos-release is version 6"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+                  <state state_ref="oval:org.open-scap.cpe.rhel:ste:1006"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.rhel:tst:1007" version="1" check="at least one" comment="centos-release is version 7"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+                  <state state_ref="oval:org.open-scap.cpe.rhel:ste:1007"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.fedora:tst:16" version="1" check="at least one" comment="fedora-release is version Fedora 16"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+                  <state state_ref="oval:org.open-scap.cpe.fedora:ste:16"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.fedora:tst:17" version="1" check="at least one" comment="fedora-release is version Fedora 17"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+                  <state state_ref="oval:org.open-scap.cpe.fedora:ste:17"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.fedora:tst:18" version="1" check="at least one" comment="fedora-release is version Fedora 18"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+                  <state state_ref="oval:org.open-scap.cpe.fedora:ste:18"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.fedora:tst:19" version="1" check="at least one" comment="fedora-release is version Fedora 19"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+                  <state state_ref="oval:org.open-scap.cpe.fedora:ste:19"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.fedora:tst:20" version="1" check="at least one" comment="fedora-release is version Fedora 20"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+                  <state state_ref="oval:org.open-scap.cpe.fedora:ste:20"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.fedora:tst:21" version="1" check="at least one" comment="fedora-release is version Fedora 21"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+                  <state state_ref="oval:org.open-scap.cpe.fedora:ste:21"/>
+            </rpminfo_test>
+            <rpminfo_test check_existence="at_least_one_exists" id="oval:org.open-scap.cpe.fedora:tst:22" version="1" check="at least one" comment="fedora-release is version Fedora 22"
+                  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+                  <state state_ref="oval:org.open-scap.cpe.fedora:ste:22"/>
+            </rpminfo_test>
+      </tests>
+      <objects>
+            <lin-def:rpminfo_object id="oval:org.open-scap.cpe.redhat-release:obj:1" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <lin-def:name>redhat-release</lin-def:name>
+            </lin-def:rpminfo_object>
+            <lin-def:rpminfo_object id="oval:org.open-scap.cpe.fedora-release:obj:2" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <lin-def:name>fedora-release</lin-def:name>
+            </lin-def:rpminfo_object>
+            <lin-def:rpmverifyfile_object id="oval:org.open-scap.cpe.redhat-release:obj:3" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <!-- Sadly, OVAL cannot do the right query (rpm -q -whatprovides system-release). Let's check the filename instead. -->
+                  <behaviors nolinkto='true' nomd5='true' nosize='true' nouser='true' nogroup='true' nomtime='true' nomode='true' nordev='true' noconfigfiles='true' noghostfiles='true' />
+                  <lin-def:name operation="pattern match"/>
+                  <lin-def:epoch operation="pattern match"/>
+                  <lin-def:version operation="pattern match"/>
+                  <lin-def:release operation="pattern match"/>
+                  <lin-def:arch operation="pattern match"/>
+                  <lin-def:filepath>/etc/redhat-release</lin-def:filepath>
+            </lin-def:rpmverifyfile_object>
+            <family_object id="oval:org.open-scap.cpe.unix:obj:1" version="1"  xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#independent"/>
+      </objects>
+      <states>
+            <family_state id="oval:org.open-scap.cpe.unix:ste:1" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#independent">
+                  <family>unix</family>
+            </family_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.rhel:ste:2" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <name operation="pattern match">^redhat-release</name>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.rhel:ste:5" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <version operation="pattern match">^5[^\d]</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.rhel:ste:6" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <name operation="pattern match">^redhat-release</name>
+                  <version operation="pattern match">^6[^\d]</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.rhel:ste:7" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <name operation="pattern match">^redhat-release</name>
+                  <version operation="pattern match">^7[^\d]</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.rhel:ste:1005" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <name operation="pattern match">^centos-release</name>
+                  <version operation="pattern match">^5</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.rhel:ste:1006" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <name operation="pattern match">^centos-release</name>
+                  <version operation="pattern match">^6</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.rhel:ste:1007" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <name operation="pattern match">^centos-release</name>
+                  <version operation="pattern match">^7</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:16" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <version operation="pattern match">^16$</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:17" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <version operation="pattern match">^17$</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:18" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <version operation="pattern match">^18$</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:19" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <version operation="pattern match">^19$</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:20" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <version operation="pattern match">^20$</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:21" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <version operation="pattern match">^21$</version>
+            </rpminfo_state>
+            <rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:22" version="1" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux">
+                  <version operation="pattern match">^22$</version>
+            </rpminfo_state>
+      </states>
+</oval_definitions>

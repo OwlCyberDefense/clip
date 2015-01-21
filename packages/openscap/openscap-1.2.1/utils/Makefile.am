@@ -1,0 +1,44 @@
+SUBDIRS =
+oscap_LDADD =
+
+bin_PROGRAMS =
+bin_SCRIPTS =
+man_MANS =
+
+if WANT_UTIL_OSCAP
+bin_PROGRAMS += oscap
+man_MANS += oscap.8
+oscap_SOURCES	= oscap.c oscap-tool.h oscap-tool.c oscap-ds.c
+oscap_CPPFLAGS	= \
+	-I$(top_srcdir)/src/common/public \
+	-I$(top_srcdir)/src/DS/public \
+	-I$(top_srcdir)/src/source/public
+
+oscap_LDADD	+= $(top_builddir)/src/libopenscap.la
+
+oscap_CPPFLAGS	+= -DOVAL_PROBE_DIR='"$(probe_dir)"'
+oscap_SOURCES	+= oscap-oval.c
+oscap_CPPFLAGS	+= -I$(top_srcdir)/src/OVAL/public
+
+oscap_SOURCES	+= oscap-xccdf.c
+oscap_CPPFLAGS	+=-I$(top_srcdir)/src/XCCDF/public \
+		  -I$(top_srcdir)/src/XCCDF_POLICY/public
+
+oscap_SOURCES	+= oscap-cvss.c
+oscap_CPPFLAGS	+= -I$(top_srcdir)/src/CVSS/public
+
+oscap_SOURCES   += oscap-cpe.c
+oscap_CPPFLAGS  += -I$(top_srcdir)/src/CPE/public
+
+oscap_SOURCES   += oscap-cve.c
+oscap_CPPFLAGS  += -I$(top_srcdir)/src/CVE/public
+
+oscap_SOURCES   += oscap-info.c
+endif
+
+if WANT_UTIL_SCAP_AS_RPM
+bin_SCRIPTS += scap-as-rpm
+man_MANS += scap-as-rpm.8
+endif
+
+EXTRA_DIST	= $(bin_SCRIPTS) $(man_MANS)
