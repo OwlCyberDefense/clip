@@ -13,3 +13,4 @@ conf/yum/yum.conf
 Makefile.tmp
 *.rpm
 clip-selinux-policy*.tar.gz
+tags
