@@ -16,6 +16,9 @@
 <refine-value idref="var_accounts_passwords_pam_faillock_fail_interval" selector="900" />
 <refine-value idref="var_accounts_passwords_pam_faillock_deny" selector="3" />
 
+<!-- CLIP specific -->
+<refine-value idref="login_banner_text" selector="dod_default" />
+
 <!-- BEGIN STIG RULE SELECTION -->
 
 <!-- Disk Partitioning -->
@@ -33,5 +36,8 @@
 <select idref="accounts_minimum_age_login_defs" selected="true" />
 <select idref="accounts_passwords_pam_fail_interval" selected="true" />
 <select idref="accounts_passwords_pam_faillock_deny" selected="true" />
+
+<!-- CLIP specific -->
+<select idref="set_system_login_banner" selected="true"/>
 
 </Profile>
