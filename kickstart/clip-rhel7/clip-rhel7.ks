@@ -127,6 +127,7 @@ policycoreutils-python
 procps
 rootfiles
 rpm
+rsync
 rsyslog
 ruby
 -selinux-policy-targeted
@@ -259,8 +260,8 @@ fi
 
 # Remove sshd and dhclient if it in a production build
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
-    /bin/echo "Removing sshd and dhclient from the system"
-    /bin/rpm -e openssh openssh-clients openssh-server dhclient
+    /bin/echo "Removing sshd, rsync, and dhclient from the system"
+    /bin/rpm -e openssh openssh-clients openssh-server dhclient rsync
 fi
 
 # Add the user to sudoers and setup an SELinux role/type transition.
