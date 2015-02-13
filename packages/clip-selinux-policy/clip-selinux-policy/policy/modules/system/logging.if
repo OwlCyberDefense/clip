@@ -480,6 +480,11 @@ interface(`logging_domtrans_syslog',`
 ##	The object class of the object being created.
 ##	</summary>
 ## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
+##	</summary>
+## </param>
 ## <infoflow type="write" weight="10"/>
 #
 interface(`logging_log_filetrans',`
@@ -488,7 +493,7 @@ interface(`logging_log_filetrans',`
 	')
 
 	files_search_var($1)
-	filetrans_pattern($1, var_log_t, $2, $3)
+	filetrans_pattern($1, var_log_t, $2, $3, $4)
 ')
 
 ########################################
@@ -525,11 +530,14 @@ interface(`logging_log_filetrans',`
 #
 interface(`logging_send_syslog_msg',`
 	gen_require(`
-		type syslogd_t, devlog_t;
+		type syslogd_t, syslogd_var_run_t, devlog_t;
 	')
 
-	allow $1 devlog_t:lnk_file read_lnk_file_perms;
 	allow $1 devlog_t:sock_file write_sock_file_perms;
+
+	# systemd journal socket is in /run/systemd/journal/dev-log
+	init_search_run($1)
+	allow $1 syslogd_var_run_t:dir search_dir_perms;
 
 	# the type of socket depends on the syslog daemon
 	allow $1 syslogd_t:unix_dgram_socket sendto;
@@ -681,6 +689,25 @@ interface(`logging_rw_generic_log_dirs',`
 
 #######################################
 ## <summary>
+##	Search through all log dirs.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`logging_search_all_logs',`
+	gen_require(`
+		attribute logfile;
+	')
+
+	allow $1 logfile:dir search_dir_perms;
+')
+
+#######################################
+## <summary>
 ##	Set attributes on all log dirs.
 ## </summary>
 ## <param name="domain">
@@ -700,7 +727,7 @@ interface(`logging_setattr_all_log_dirs',`
 
 ########################################
 ## <summary>
-##	Do not audit attempts to get the atttributes
+##	Do not audit attempts to get the attributes
 ##	of any log files.
 ## </summary>
 ## <param name="domain">
@@ -715,6 +742,24 @@ interface(`logging_dontaudit_getattr_all_logs',`
 	')
 
 	dontaudit $1 logfile:file getattr;
+')
+
+########################################
+## <summary>
+##	Read the atttributes of any log file
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+#
+interface(`logging_getattr_all_logs',`
+	gen_require(`
+		attribute logfile;
+	')
+
+	allow $1 logfile:file getattr;
 ')
 
 ########################################
@@ -1042,24 +1087,4 @@ interface(`logging_admin_syslog',`
 interface(`logging_admin',`
 	logging_admin_audit($1, $2)
 	logging_admin_syslog($1, $2)
-')
-
-########################################
-## <summary>
-##	Allow a domain getattr access to dirs
-##	in the auditd_log_t domain.
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-## <rolecap/>
-#
-interface(`logging_getattr_dirs',`
-	gen_require(`
-                type auditd_log_t;
-        ')
-	
-	allow $1 auditd_log_t:dir getattr;
 ')
