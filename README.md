@@ -280,7 +280,7 @@ The username is ` toor ` and the password is ` neutronbass `.  You can
 change this in the %post of the kickstart (./kickstarts/clip-rhel7/clip-rhel7.ks).
 
 ##### What is the default bootloader password for GRUB?
-The default password for GRUB is ` neutronbass `.  You can change this in the kickstart (./kickstarts/ciip-rhel7/clip-rhel7.ks).
+The default password for GRUB is ` neutronbass ` and the default user is ` root `.  You can change this in the kickstart (./kickstarts/ciip-rhel7/clip-rhel7.ks). It is highly recommended you change your password either in the kickstart or at runtime. Refer to the following guide for runtime updating of the grub password: https://help.ubuntu.com/community/Grub2/Passwords
 
 ##### How do I set up local yum repos?
 Run ./bootstrap.sh with an RHEL 7 DVD in the DVD-Drive.
