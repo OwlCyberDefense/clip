@@ -37,11 +37,6 @@ else
   CONFIG_BUILD_UNCONFINED_TOOR := y
 endif
 
-# If you want to override individual debug flags you can do it here.  Don't forget that setting the flags here overrides 
-# the values controlled by CONFIG_BUILD_PRODUCTION above.
-#CONFIG_BUILD_UNCONFINED_TOOR := y
-CONFIG_BUILD_ENFORCING_MODE := n
-
 ################################################
 ### STOP USER CONFIG 
 ################################################
