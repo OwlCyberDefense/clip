@@ -145,6 +145,13 @@ kickstart.
 1. Remove conf/pkglist.<reponame>
 2. Run ` make conf/pkglist.<reponame> `
 
+#### Configuring AIDE
+
+CLIP runs an AIDE check as the last step during installation. The newly created database, AIDE binary, and aide.conf are then moved to a read-only file system.
+A cron job is executed every 24 hours and writes detected changes to ` /var/log/aide.log `. Where the AIDE files are written, the cron job, as well as aide.conf,
+are all configurable in the kickstart script. A typical use case is to disable networking on the system if the cron job fails. Another useful configuration is to write
+the AIDE files to read-only media that is kept off the box for added security.
+
 ## Rolling a LiveCD and generating Live Media
 livecd-tools from EPEL has problems.  We have a patched version we're using.
 To generate Live Media you're going to have to install our version. Either run ` ./bootstrap.sh` or install manually:

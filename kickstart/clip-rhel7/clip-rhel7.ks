@@ -65,10 +65,9 @@ logvol swap           --vgname=vg00 --name=swap  --fstype=swap --recommended
 
 logvol /var/log       --vgname=vg00 --name=log   --fstype=ext4 --size 1500 --fsoptions=defaults,nosuid,noexec,nodev --maxsize 25000 --grow
 logvol /var/log/audit --vgname=vg00 --name=audit --fstype=ext4 --size 1500 --fsoptions=defaults,nosuid,noexec,nodev --maxsize 25000 --grow
-#logvol /tmp           --vgname=vg00 --name=tmp   --fstype=ext4 --size 100  --fsoptions=defaults,bind,nosuid,noexec,nodev --maxsize 6000  --grow
-#logvol /var/tmp       --vgname=vg00 --name=vtmp  --fstype=ext4 --size 100  --fsoptions=defaults,nosuid,noexec,nodev --maxsize 5000  --grow
 logvol /tmp           --vgname=vg00 --name=tmp   --fstype=ext4 --size 100  --maxsize 6000  --grow
 logvol /var/tmp       --vgname=vg00 --name=vtmp  --fstype=ext4 --size 100  --maxsize 5000  --grow
+logvol /var/lib/aide  --vgname=vg00 --name=aide  --fstype=ext4 --size 100  --maxsize 5000  --grow
 
 %packages --excludedocs
 #CONFIG-BUILD-ADDTL-PACKAGES
@@ -344,6 +343,22 @@ $CONTENT_PATH/ssg-rhel7-xccdf.xml 2>&1 | tee $SSG_PATH/clip-el7-ssg-fix_log.txt
 --report $SSG_PATH/clip-el7-ssg-post-results.html \
 --cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
 $CONTENT_PATH/ssg-rhel7-xccdf.xml
+
+### Setup AIDE ###
+AIDE_DIR=/var/lib/aide
+
+echo "configuring AIDE"
+/bin/mv $AIDE_DIR/aide.db.new.gz $AIDE_DIR/aide.db.gz
+/bin/mv /sbin/aide $AIDE_DIR/aide
+/bin/mv /etc/aide.conf $AIDE_DIR/aide.conf
+/bin/ln -s $AIDE_DIR/aide /usr/sbin/aide
+/sbin/aide --init
+
+# run aide cron job daily
+echo "0 1 * * * $AIDE_DIR/aide --check --config=$AIDE/aide.conf" >> /etc/crontab
+
+/bin/sed -ie '/vg00-aide/ s/defaults/ro,defaults/' /etc/fstab
+### Done with AIDE ###
 
 /bin/kill $TAILPID 2>/dev/null 1>/dev/null
 
