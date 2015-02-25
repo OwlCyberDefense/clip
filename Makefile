@@ -221,11 +221,11 @@ $(eval REPO_LINES := $(REPO_LINES)repo --name=$(REPO_ID) --baseurl=file://$(REPO
 $(eval CLIP_REPO_DIRS += "$(REPO_DIR)/$(REPO_ID)-repo")
 $(eval PKG_LISTS += "./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)")
 
-setup-$(REPO_ID)-repo:  $(REPO_DIR)/$(REPO_ID)-repo/last-updated $(CONFIG_BUILD_DEPS)
+setup-$(REPO_ID)-repo:  $(REPO_DIR)/$(REPO_ID)-repo/last-updated
 
 # This is the key target for managing yum repos.  If the pkg list for the repo
 # is more recent then our private repo regen the repo by symlink'ing the packages into our repo.
-$(REPO_DIR)/$(REPO_ID)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID) $(CONFIG_BUILD_DEPS)
+$(REPO_DIR)/$(REPO_ID)-repo/last-updated: $(CONF_DIR)/pkglist.$(REPO_ID)
 	@echo "Cleaning $(REPO_ID) yum repo, this could take a few minutes..."
 	$(VERBOSE)$(RM) -r $(REPO_DIR)/$(REPO_ID)-repo
 	@echo "Populating $(REPO_ID) yum repo, this could take a few minutes..."
