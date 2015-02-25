@@ -391,6 +391,7 @@ bare-repos: clean-mock
 
 clean:
 	@sudo $(RM) -rf $(RPM_TMPDIR)
+	@sudo $(RM) -rf $(SRPM_OUTPUT_DIR)
 	@$(VERBOSE)for pkg in $(PACKAGES); do $(MAKE) -C $(PKG_DIR)/$$pkg $@; done
 
 bare: bare-repos clean
