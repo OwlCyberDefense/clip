@@ -152,6 +152,18 @@ A cron job is executed every 24 hours and writes detected changes to ` /var/log/
 are all configurable in the kickstart script. A typical use case is to disable networking on the system if the cron job fails. Another useful configuration is to write
 the AIDE files to read-only media that is kept off the box for added security.
 
+#### Configuring Scap Security Guide
+
+CLIP uses Scap Security Guide (SSG) [1] to perform remediation and audit of our system. The profile used is
+based on the SSG stig-rhel7-server-upstream profile [2]. All SSG configuration is done in the CLIP kickstart script.
+The logs from auditing and remediation are placed in /root/ssg/ by default.
+
+**NOTE**: A more up to date version of SSG will be included in RHEL 7.1 Beta. Unfortunately, we must carry our own OpenScap and SSG RPMs to keep up with the newest profiles. Once CLIP for RHEL 7.1 is released, these RPMs may be dropped from our packages.
+
+[1] https://github.com/OpenSCAP/scap-security-guide
+
+[2] https://github.com/OpenSCAP/scap-security-guide/blob/master/RHEL/7/input/profiles/stig-rhel7-server-upstream.xml
+
 ## Rolling a LiveCD and generating Live Media
 livecd-tools from EPEL has problems.  We have a patched version we're using.
 To generate Live Media you're going to have to install our version. Either run ` ./bootstrap.sh` or install manually:
@@ -194,7 +206,7 @@ understand how you can use CLIP.
 
 A developer starting from scratch will leverage all of the features available
 in CLIP:
-- Remediation content (Scap Security Guide will be used in the future. This is currently not being used.)
+- Remediation content
 - Audit content (validated XCCDF & OVAL snapshots from SCAP Security Guide)
 - Build system:
   - Mock for rolling RPMs from source
@@ -210,7 +222,7 @@ installed system.
 
 This developer already has packages and yum repositories, but will use the
 following CLIP features:
-- Remediation content (Scap Security Guide will be used in the future. This is currently not being used.)
+- Remediation content
 - Audit content (validated XCCDF & OVAL snapshots from SCAP Security Guide)
 - Build system:
   - Pungi and Lorax for rolling installation ISOs
@@ -225,11 +237,9 @@ will be installed and rolling ISOs.
 
 #####Developer who only wants the remediation and audit content
 
-**NOTE**: Remediation is currently/auditing is currently non-functional in CLIP. In the future, we will be using Scap Security Guide for remediation and auditing.
-
 These developers already have packages and yum repositories and can already
 roll ISOs.  They only want to leverage the following features:
-- Remediation content (Scap Security Guide will be used in the future. This is currently not being used.)
+- Remediation content
 - Audit content (validated XCCDF & OVAL snapshots from SCAP Security Guide)
 
 **NOTE**: Tresys recommends moving to the CLIP build system, which was developed
@@ -242,7 +252,7 @@ number of problems in those tools.
 
 If the developer chooses to only use the remediation and audit content as
 described in the third scenario, the developer must roll the needed RPMs by
-running "$ make scap-security-guide-rpm".  The
+running "$ make openscap-rpm; make scap-security-guide-rpm".  The
 generated RPMs will be placed in repos/clip-repo.  You can then copy the RPMs
 into into the build environment and roll ISOs.
 
