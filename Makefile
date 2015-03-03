@@ -119,6 +119,7 @@ ifeq ($(QUIET),y)
 endif
 
 MKDIR = $(VERBOSE)test -d $(1) || mkdir -p $(1)
+CHECK_REPO = $(VERBOSE)test -d $(1)/repodata || $(REPO_CREATE) $(1)
 
 SYSTEMS := $(shell ls $(KICKSTART_DIR))
 
@@ -169,6 +170,7 @@ $(1): $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(
 	$(call CHECK_DEPS)
 	$(call MKDIR,$(CLIP_REPO_DIR))
 	$(call CHECK_MOCK)
+	$(call CHECK_REPO,$(CLIP_REPO_DIR))
 	$(VERBOSE)$(MOCK) $(MOCK_ARGS) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	cd $(CLIP_REPO_DIR) && $(REPO_CREATE) .
 ifeq ($(ENABLE_SIGNING),y)
