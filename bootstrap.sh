@@ -12,7 +12,10 @@ check_and_create_repo_dir ()
 	if [ ! -d $repo_path ]; then
 		/bin/echo "$repo_name repo directory: $repo_path does not exist. Creating the directory."
 		/usr/bin/sudo /bin/mkdir -p $repo_path
-		/usr/bin/sudo /usr/bin/chown $USER:$USER $repo_path
+	fi
+	if [ ! -r $repo_path ] || [ ! -x $repo_path ]; then
+		/bin/echo "$repo_path does not have proper permissions to continue. Please change the permissions on the directory and any parent directories and try again."
+		exit
 	fi
 }
 
@@ -72,8 +75,8 @@ prompt_to_enter_repo_path ()
     local originalpath=${2-}
     if [ -z $originalpath ]; then
             /bin/echo -e "
-There is no default path set for the $originalname repo.  You must provide a path for the $originalname repo or the script will
-exit immediately."
+There is no default path set for the [ $originalname ] repo.  You must provide a path for the [ $originalname ] repo to be created on your system
+or the script will exit immediately. For example: [ /home/`whoami`/$originalname/ ]"
             /bin/echo -e "
 Enter a fully qualified path for the $originalname repo.\n"
             read path
@@ -145,7 +148,7 @@ arch=`rpm --eval %_host_cpu`
 releasever="7"
 
 # always have the latest epel rpm
-/bin/echo "Checking if epel is installed and updating to the latest version if it is"
+/bin/echo "Checking if epel is installed and updating to the latest version if our version is older"
 /bin/echo "
 [epel]
 name=Bootstrap EPEL
@@ -156,7 +159,7 @@ gpgcheck=0
 " | /usr/bin/sudo tee --append /etc/yum.repos.d/epel.repo
 /usr/bin/sudo yum --enablerepo=epel -y install epel-release
 
-PACKAGES="mock pigz createrepo repoview rpm-build make python-kid syslinux-extlinux dumpet"
+PACKAGES="mock pigz createrepo repoview rpm-build make python-kid"
 /usr/bin/sudo /usr/bin/yum install -y $PACKAGES
 
 # get the name/path for any existing yum repos from CONFIG_REPO
@@ -174,7 +177,7 @@ prompt_to_enter_repo_path $optreponame $optrepopath
 Adding additional yum repos if necessary"
 while :; do
 	/bin/echo -e "
-Enter a name for this yum repo.  Just leave empty if you are done adding, or don't wish to change, the repositories.\n"
+Enter a name for this yum repo.  Just leave empty if you are done adding, or don't wish to change the repositories.\n"
 	read name
 	[ x"$name" == "x" ] && break
 	/bin/echo -e "
@@ -234,10 +237,8 @@ Press the any key to continue or ctrl-c to exit.
 		read user_input
 		/usr/bin/sudo /usr/bin/yum remove livecd-tools 2>/dev/null || true
 		/usr/bin/sudo /usr/bin/yum remove python-imgcreate 2>/dev/null || true
-	else 
-		/usr/bin/make livecd-tools-rpm
-		/usr/bin/sudo /usr/bin/yum localinstall -y livecd-tools* python-imgcreate*
 	fi
+	/usr/bin/sudo /usr/bin/yum install -y syslinux-extlinux dumpet 2>/dev/null || true
 	/usr/bin/make livecd-tools-rpm
 	pushd . > /dev/null
 	cd repos/clip-repo
@@ -261,6 +262,5 @@ Press the any key to continue or ctrl-c to exit.
 	popd > /dev/null
 fi
 
-/bin/echo -e "Basic bootstrapping of build host is complete.\nPress 'enter' to run 'make clip-rhel7-iso' or ctrl-c to quit."
-read user_input
+/bin/echo -e "Basic bootstrapping of build host is complete.\nRunning 'make clip-rhel7-iso'"
 /usr/bin/make clip-rhel7-iso
