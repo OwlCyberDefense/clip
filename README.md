@@ -1,20 +1,31 @@
 #Certifiable Linux Integration Platform (CLIP)
 
-##Getting Started
+## Table of Contents
+  * [Getting Started](#gs)
+  * [Build System](#bs)
+  * [Creating a Live CD] (#livecd)
+  * [Use Cases] (#use)
+  * [Frequently Asked Questions] (#faq)
+  * [Known Issues] (#issues)
+
+##Getting Started <a id="gs"></a>
+
 Here is a quick list of the things you need to do to get started.
 
-1. CHANGE THE DEFAULT PASSWORD IN YOUR KICKSTART (kickstarts/clip-rhel7/clip-rhel7.ks)!
+1. **CHANGE THE DEFAULT PASSWORD IN YOUR KICKSTART** (`kickstarts/clip-rhel7/clip-rhel7.ks`)!
 CLIP intentionally ships with an unencrypted default password!  It is "neutronbass".
-DO NOT LEAVE THIS PASSWORD LINE INTACT!
-2. Run "./bootstrap.sh".
+**DO NOT LEAVE THIS PASSWORD LINE INTACT!**
+2. Run `./bootstrap.sh`.
 3. After you have run bootstrap once you do not have to run it again unless there there has been a new release of CLIP.
-4. Roll an ISO by running ` make clip-rhel7-iso `
-Note: for a complete list of targets available please run `make help`
+4. Roll an ISO by running `make clip-rhel7-iso`
 
-##Build System
+**Note**: for a complete list of targets available please run `make help`
+
+##Build System <a id="bs"></a>
+
 ###What is this thing?
 
-This build system allows developers and administrators to create RPMs and LiveCDs
+CLIP’s build system allows developers and administrators to create RPMs and LiveCDs
 in a controlled environment.
 
 Specific features include:
@@ -29,9 +40,9 @@ Unique feature:
 * Versioned build-time and run-time package dependencies. Normally
 a packager will point mock at a	package repository full of RPMs at
 different version levels.  This makes it difficult to ensure
-reproducability across builds.  This build system allows one to version
+reproducibility across builds.  This build system allows one to version
 build-time and run-time dependencies, eg create an RPM for application "foo"
-with a build dependency bar-4.3-1, thus facilitating reproducability of
+with a build dependency bar-4.3-1, thus facilitating reproducibility of
 generated packages.
 
 
@@ -46,7 +57,7 @@ user.
 - ISO configuration files, ie kickstart files.
 - Adding existing binary packages to the image
 
-To view the list of available build targets run ` make help `.
+To view the list of available build targets run `make help`.
 
 ####Managing yum repos
 
@@ -55,10 +66,10 @@ Several repositories must be present for the build system to work:
 - RHEL Optional
 - Fedora Build Groups (for RHEL 5)
 
-The locations of these repos is defined in the CONFIG_REPOS file:
--  rhel = /mnt/repos/rhel
--  opt = /mnt/repos/opt
--  buildgroups = /mnt/repos/buildgroups
+The locations of these repos is defined in the `CONFIG_REPOS` file:
+-  `rhel = /mnt/repos/rhel`
+-  `opt = /mnt/repos/opt`
+-  `buildgroups = /mnt/repos/buildgroups`
 
 Remember that repositories are often architecture specific so you might have
 to update these variables to build for a different architecture.
@@ -68,51 +79,52 @@ to update these variables to build for a different architecture.
 The most common task is adding your own packages to be included in a rolled
 ISO.
 
-1. First, a directory is created in packages/<PACKAGE NAME>.  The contents of
+1. First, a directory is created in `packages/<PACKAGE NAME>`.  The contents of
 this directory will vary depending on the type of package.  Now choose one of
-the two options below, 2)i or 2)ii
+the two options below, 2)1 or 2)2
 
-2. i. If you want to include a package and you have a src.rpm that needs *no*
-  modifications refer to packages/examples/srcrpm as a reference.  You will copy
-  the src rpm, Makefile.tmpl and the gen-makefile-from-src-rpm.sh to the newly 
+2. 
+   1. If you want to include a package and you have a src.rpm that needs *no*
+  modifications refer to `packages/examples/srcrpm` as a reference.  You will copy
+  the src rpm, `Makefile.tmpl` and the `gen-makefile-from-src-rpm.sh` to the newly
   created (#1) package directory.  Now enter that directory and run
-  "$ ./gen-makefile-from-src-rpm.sh <package>.src.rpm".  This will generate a
+  `./gen-makefile-from-src-rpm.sh <package>.src.rpm`.  This will generate a
   Makefile based on the src RPM.  Skip to step #3.
 
-  ii. If the intent is to contain custom source code, eg an internally developed
-  application or library, then packages/<PACKAGE NAME> will still contain a
-  Makefile and spec file, and packages/<PACKAGE NAME>/<PACKAGE NAME> will
-  contain the sources and application-specific build system (eg the one that
-  typically has a "make all" and "make install" target).  For more information
-  on this type of package refer to packages/examples/source.
+   2. If the intent is to contain custom source code, e.g. an internally developed
+  application or library, then `packages/<PACKAGE NAME>` will still contain a
+  Makefile and spec file, and `packages/<PACKAGE NAME>/<PACKAGE NAME>` will
+  contain the sources and application-specific build system (e.g. the one that
+  typically has a `make all` and `make install` target).  For more information
+  on this type of package refer to `packages/examples/source`.
 
-3. Once the package has been added to the packages/ directory you must update
-the PACKAGES variable in the top-level CONFIG_BUILD file to ensure the package is 
+3. Once the package has been added to the `packages/` directory you must update
+the `PACKAGES` variable in the top-level `CONFIG_BUILD` file to ensure the package is
 generated as part of any build. Once a package is generated it will appear
-in repos/clip-repo.  To add the package to an ISO image update the
+in `repos/clip-repo`.  To add the package to an ISO image update the
 appropriate kickstart file and add the package name to the kickstart's package
 list.
 
 ####ISO configuration (kickstart files)
 
-The kickstart/ directory contains the files needed to configure an ISO.  The
+The `kickstart/` directory contains the files needed to configure an ISO.  The
 Makefiles in this directory call out to tools in the support/ directory and
 pass in a kickstart.  This kickstart is used to generate an ISO.
 
 To add a new ISO, first add an appropriate kickstart to the
-kickstart/<productname> directory.  Since this build system generates and
+`kickstart/<productname>` directory.  Since this build system generates and
 manages yum repos we must "muck around" with the kickstart so ensure it has
-the ` #REPO-REPLACEMENT-PLACEHOLDER ` line somewhere near the top.
+the `#REPO-REPLACEMENT-PLACEHOLDER` line somewhere near the top.
 
-NOTE: the string ` #REPO-REPLACEDMENT-PLACEHOLDER ` *must* appear in the
+**Note**: the string `#REPO-REPLACEMENT-PLACEHOLDER` *must* appear in the
 kickstart for this to work appropriately.
 
 If you choose to use a hostable kickstart script rather than rebuilding an
-iso, you can run the following from ./kickstart/clip-rhel7:
-` make setup-ks `
+iso, you can run the following from `./kickstart/clip-rhel7`:
+`make setup-ks `
 
 A hostable kickstart is then located in
-./tmp/clip-iso-build/1/x86_64/os/clip-rhel7.ks 
+`./tmp/clip-iso-build/1/x86_64/os/clip-rhel7.ks`
 
 ####Adding existing binary packages to the image
 
@@ -120,43 +132,42 @@ There are two ways to add an existing binary package to this build system.
 Once one of these methods has been followed you can reference the package in
 the kickstart and it will be installed during the installation process.
 
-Method 1:
+**Method 1:**
 
-1. Add the fully qualified path to the package to the PRE_ROLLED_PACKAGES
-variable in the CONFIG_BUILD file.
+1. Add the fully qualified path to the package to the `PRE_ROLLED_PACKAGES`
+variable in the `CONFIG_BUILD` file.
 2. Reference the package from your kickstart.
 
-Method 2:
+**Method 2:**
+
 **Note**: This method is easier if you have existing yum repositories to use. Skip to step 3 if
 you have a yum repo created.
 
 1. Copy the package to the appropriate repo directory (eg, /mnt/repos/custom-yum-repo).
-2. Run ` createrepo -d <repodir> `
-3. Add the repo to CONFIG_REPOS
-    1. Add the package filename to the pkglist.<reponame> file in conf/.
-    2. Run ` make conf/pkglist.<reponame> `
-5. Run ` make bare-repos `
-6. Run ` make create-repos `
+2. Run `createrepo -d <repodir>`
+3. Add the repo to `CONFIG_REPOS`
+    1. Add the package filename to the `pkglist.<reponame>` file in `conf/`.
+    2. Run `make conf/pkglist.<reponame>`
+5. Run `make bare-repos`
+6. Run `make create-repos`
 7. Add the packages you want to include in the ISO to the appropriate
 kickstart.
 8. Build your image.
 
 #### Updated existing external packages:
-1. Remove conf/pkglist.<reponame>
-2. Run ` make conf/pkglist.<reponame> `
+1. Remove `conf/pkglist.<reponame>`
+2. Run `make conf/pkglist.<reponame>`
 
 #### Configuring AIDE
 
 CLIP runs an AIDE check as the last step during installation. The newly created database, AIDE binary, and aide.conf are then moved to a read-only file system.
-A cron job is executed every 24 hours and writes detected changes to ` /var/log/aide.log `. Where the AIDE files are written, the cron job, as well as aide.conf,
-are all configurable in the kickstart script. A typical use case is to disable networking on the system if the cron job fails. Another useful configuration is to write
-the AIDE files to read-only media that is kept off the box for added security.
+A cron job is executed every 24 hours and writes detected changes to `/var/log/aide.log`. Where the AIDE files are written, the cron job, as well as `aide.conf`, are all configurable in the kickstart script. A typical use case is to disable networking on the system if the cron job fails. Another useful configuration is to write the AIDE files to read-only media that is kept off the box for added security.
 
 #### Configuring Scap Security Guide
 
 CLIP uses Scap Security Guide (SSG) [1] to perform remediation and audit of our system. The profile used is
 based on the SSG stig-rhel7-server-upstream profile [2]. All SSG configuration is done in the CLIP kickstart script.
-The logs from auditing and remediation are placed in /root/ssg/ by default.
+The logs from auditing and remediation are placed in `/root/ssg/` by default.
 
 **NOTE**: A more up to date version of SSG will be included in RHEL 7.1 Beta. Unfortunately, we must carry our own OpenScap and SSG RPMs to keep up with the newest profiles. Once CLIP for RHEL 7.1 is released, these RPMs may be dropped from our packages.
 
@@ -164,39 +175,48 @@ The logs from auditing and remediation are placed in /root/ssg/ by default.
 
 [2] https://github.com/OpenSCAP/scap-security-guide/blob/master/RHEL/7/input/profiles/stig-rhel7-server-upstream.xml
 
-## Rolling a LiveCD and generating Live Media
+## Rolling a LiveCD and generating Live Media <a id="livecd"></a>
+
 livecd-tools from EPEL has problems.  We have a patched version we're using.
-To generate Live Media you're going to have to install our version. Either run ` ./bootstrap.sh` or install manually:
+To generate Live Media you're going to have to install our version. Either run `./bootstrap.sh` or install manually:
 
 ```
-$ make livecd-tools-rpm
-$ cd repos/clip-repo
-$ sudo yum remove livecd-tools python-imgcreate -y
-$ sudo yum localinstall livecd-tools*.noarch.rpm python-imgcreate* -y
+make livecd-tools-rpm
+cd repos/clip-repo
+sudo yum remove livecd-tools python-imgcreate -y
+sudo yum localinstall livecd-tools*.noarch.rpm python-imgcreate* -y
 ```
 
 We can take a live CD ISO, write it to non-optical media like a
 hard drive or USB device.  This can be done with the following make
 commands:
 
-` make clip-rhel7-live-iso `
+```
+make clip-rhel7-live-iso
+```
 
 That generates the live ISO image.  Now you can write that image
 to a hard drive or USB device.
 
-` make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel7-*-live.iso `
+```
+make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel7-*-live.iso
+```
 
 This will generate stateless live media.  If you want to retain state
 across reboots specify an overlay size (in MB) as well:
 
-` make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel7-*-live.iso OVERLAY_SIZE=256 `
+```
+make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel7-*-live.iso OVERLAY_SIZE=256
+```
 
 If you want to retain state in the home directory across boots, specify a home
 overlay size (in MB) and an overlay size (in MB) as well:
 
-` make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel7-*-live.iso OVERLAY_SIZE=256 OVERLAY_HOME=128 `
+```
+make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel7-*-live.iso OVERLAY_SIZE=256 OVERLAY_HOME=128
+```
 
-## Use Cases (WIP)
+## Use Cases (WIP) <a id="use"></a>
 
 CLIP targets several usage scenarios - each interacting and leveraging CLIP in
 different ways.  Please review the use cases described below to better
@@ -214,7 +234,7 @@ in CLIP:
   - Configuration management friendly yum repos and package lists
 
 Developers starting from scratch should insert any new sources into the
-packages/ directory.  This source will be rolled up into RPMs, placed into yum
+`packages/` directory.  This source will be rolled up into RPMs, placed into yum
 repositories, and can then be included and used in a kickstart ending up in the
 installed system.
 
@@ -230,7 +250,7 @@ following CLIP features:
 
 This developer uses the CLIP build system to roll ISOs with the remediation
 content, audit content, and existing custom packages present. This developer
-must add an entry to CONFIG_REPOS that points to the developer’s custom yum
+must add an entry to `CONFIG_REPOS` that points to the developer’s custom yum
 repo.  Once the repo is added to the configuration file the developer will
 modify the kickstart adding to add the custom packages.  The custom packages
 will be installed and rolling ISOs.
@@ -252,11 +272,11 @@ number of problems in those tools.
 
 If the developer chooses to only use the remediation and audit content as
 described in the third scenario, the developer must roll the needed RPMs by
-running "$ make openscap-rpm; make scap-security-guide-rpm".  The
-generated RPMs will be placed in repos/clip-repo.  You can then copy the RPMs
+running `make openscap-rpm; make scap-security-guide-rpm`.  The
+generated RPMs will be placed in `repos/clip-repo`.  You can then copy the RPMs
 into into the build environment and roll ISOs.
 
-## Frequently Asked Questions
+## Frequently Asked Questions <a id="faq"></a>
 
 ##### I deployed my system and everything is broken.  HELP!
 
@@ -273,10 +293,10 @@ Second, we applied a least privilege model during development.  This means
 that we exercised the core system functions and permitted access only when
 absolutely necessary.  If you're doing something that isn't part of what
 the CLIP team considers "core system" then that access isn't accounted for
-in policy or remediation content.  
+in policy or remediation content.
 
 For example, we do not consider Apache to be part of the "core system."
-Getting Apache up and running in CLIP will take a little bit of work.  
+Getting Apache up and running in CLIP will take a little bit of work.
 Another example is USB support.  The remediation content disables 
 USB support.  This is aligned with the requirements and CLIP itself.
 If you need USB support you're going to have to update the remediation
@@ -287,23 +307,23 @@ deviations from the requirements when it occurs, not during a certification
 and accreditation process.
 
 ##### How do I roll an installation ISO?
-` make clip-rhel7-iso `
+`make clip-rhel7-iso`
 
 ##### What other things can I make?
-` make help `
+`make help`
 
 ##### What is the default username and password for CLIP?
-The username is ` toor ` and the password is ` neutronbass `.  You can
-change this in the %post of the kickstart (./kickstarts/clip-rhel7/clip-rhel7.ks).
+The username is `toor` and the password is `neutronbass`.  You can
+change this in the `%post` of the kickstart (`./kickstarts/clip-rhel7/clip-rhel7.ks`).
 
 ##### What is the default bootloader password for GRUB?
-The default password for GRUB is ` neutronbass ` and the default user is ` root `.  You can change this in the kickstart (./kickstarts/ciip-rhel7/clip-rhel7.ks). It is highly recommended you change your password either in the kickstart or at runtime. Refer to the following guide for runtime updating of the grub password: https://help.ubuntu.com/community/Grub2/Passwords
+The default password for GRUB is `neutronbass` and the default user is `root`.  You can change this in the kickstart (`./kickstarts/clip-rhel7/clip-rhel7.ks`). It is highly recommended you change your password either in the kickstart or at runtime. Refer to the following guide for runtime updating of the grub password: https://help.ubuntu.com/community/Grub2/Passwords
 
 ##### How do I set up local yum repos?
-Run ./bootstrap.sh with an RHEL 7 DVD in the DVD-Drive.
+Run `./bootstrap.sh` with an RHEL 7 DVD in the DVD-Drive.
 
 ##### How do I mirror EPEL?
-The bootstrap script will subscribe to EPEL and install the necessary packages needed for the build system. Simply run ` ./bootstrap.sh. `
+The bootstrap script will subscribe to EPEL and install the necessary packages needed for the build system. Simply run `./bootstrap.sh`.
 
 ##### I want to use CentOS instead of RHEL. What do I need to do?
 CentOS is not currently supported at this time.
@@ -317,14 +337,15 @@ RHEL want to work-around this issue (hack):
 2. Mount it.
 3. Add it as a yum repo:
 http://docs.oracle.com/cd/E37670_01/E37355/html/ol_create_repo.html
-4. Re-run ` ./bootstrap.sh ` and point “opt” to your newly created yum repo.
+4. Re-run `./bootstrap.sh` and point "opt" to your newly created yum repo.
 
 ##### An EXCEPTION was thrown during the build.  What do I do?
 The likely culprit is an RPM that failed to roll properly. Open
-./repos/clip-repo/build.log and ./tmp/clip-iso-build/logs/x86_64.log.
+`./repos/clip-repo/build.log and ./tmp/clip-iso-build/logs/x86_64.log`.
+
 A good option for debugging the issue is to roll the RPM outside of mock.
-Go into packages/<PACKAGENAME> and run ` make rpm `.  It should fail to build again.
-This time go into ./tmp/src/redhat/BUILD/<PACKAGENAME>-<PACKAGEVERSION>.  This is where the
+Go into `packages/<PACKAGENAME>` and run `make rpm`.  It should fail to build again.
+This time go into `./tmp/src/redhat/BUILD/<PACKAGENAME>-<PACKAGEVERSION>`.  This is where the
 build occurred.  You can now poke around in this directory to see what went wrong.
 
 ##### Why do I get prompted for so many passwords the first time I login?
@@ -332,7 +353,7 @@ The default user's password is immediately expired when the account is
 created.  This means you have to login and choose a new password.
 
 ##### How do I add a user?
-Use these commands (change <USERNAME> to the appropriate username):
+Use these commands (change `<USERNAME>` to the appropriate username):
 ```
 semanage user -a -R staff_r -R sysadm_r <USERNAME>_u
 useradd -Z <USERNAME>_u -m <USERNAME>
@@ -360,23 +381,25 @@ After the clip installation completes, you will want to set the SELinux
 categories for privileged users.  This can be accomplished by running the
 following commands in order:
 
-``` export username=`whoami`
+``` 
+export username=`whoami`
 sudo -Es
 setenforce 0
 semanage user -m -L s0 -r s0-s0:c0.c1023 ${username}_u
 semanage login -m -s ${username}_u -r s0-s0:c0.c1023 ${username}
-exit ```
+exit
+```
 
-After logging back in, running ` id -Z ` should produce following the output:
+After logging back in, running `id -Z` should produce following the output:
 
-` <username>_u:staff_r:staff_t:s0-s0:c0.c1023 `
+`<username>_u:staff_r:staff_t:s0-s0:c0.c1023`
 
 ##### How do I become a privileged user?
-Use ` sudo -s `.  Make sure the user has a line in sudoers like this:
-` echo "<USERNAME>        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers `
+Use `sudo -s`.  Make sure the user has a line in sudoers like this:
+`echo "<USERNAME>        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers`
 
-Note: You will have to adjust the ROLE and TYPE fields as appropriate. For
-example, ` ROLE=auditadm_r TYPE=auditadm_t `
+**Note**: You will have to adjust the ROLE and TYPE fields as appropriate. For
+example, `ROLE=auditadm_r TYPE=auditadm_t`
 
 ##### Why am I getting "permission denied" when adding a user?
 You probably removed user_u from your SELinux policy.  Due to a bug in
@@ -400,9 +423,9 @@ those repos via NFS.  Each build system NFS mounts those servers.  It is a
 relatively painless process that has proven to lead to consistency across
 builds.  All of this said, we're open to accepting patches from the
 community that implement support for remote repos but do so in a way to still
-meets the goal of reproducable builds.
+meets the goal of reproducible builds.
 
-##### Why do I see a series of question marks in the output of ` ls -l ` ?
+##### Why do I see a series of question marks in the output of `ls -l` ?
 This is SELinux enforcing a mandatory access control security policy that
 prevents a given subject (eg sysadm) from querying the security attributes of
 a file or directory.  Assuming you have search and read permissions on the
@@ -412,16 +435,22 @@ directory you will be able to view the filename, but that is it.
 The likely culprit is libsemanage being configured to validate fc entries
 prior to rolling a transaction forward.  The following is the error
 message emitted when this occurs:
-``` /etc/selinux/clip/contexts/files/file_contexts: Multiple same specifications ...
+
+``` 
+/etc/selinux/clip/contexts/files/file_contexts: Multiple same specifications ...
 libsemanage.semanage_install_active: setfiles returned error code 1.
-semodule:  Failed! ```
+semodule:  Failed! 
+```
 
 The fix for this is to disable the setfiles check in samange.conf:
-` echo -e "module-store = direct\n[setfiles]\npath=/bin/true\n[end]\n" > /etc/selinux/semanage.conf `
+```
+echo -e "module-store = direct\n[setfiles]\npath=/bin/true\n[end]\n" > /etc/selinux/semanage.conf
+```
 
 If you're using a CLIP kickstart the ks handles this in response to the
-CONFIG_BUILD_ENFORCING_MODE flag.  In permissive mode this check is disabled.
-Note: I would recommend doing this only when doing development.  Errors
+`CONFIG_BUILD_ENFORCING_MODE` flag.  In permissive mode this check is disabled.
+
+**Note**: This is only recommended when doing development.  Errors
 like this are a sign of a policy problem that needs to be fixed.
 
 ##### What are some workflows I can use to source control my changes to CLIP and keep in sync with updates?
@@ -444,16 +473,16 @@ RPM or yum repo.  In that way you can use your existing build system/SCM to
 generate the package(s).
 
 ##### How do I get the dependencies for the host?
-Run ` ./bootstrap.sh `
+Run `./bootstrap.sh` from within the clip directory.
 
-##### I am getting warnings at install time stating ` some of the packages you have selected for install are missing dependencies. `
+##### I am getting warnings at install time stating "some of the packages you have selected for install are missing dependencies."
 The tools don't do a full dependency check at build time.  That is because you could
 be pointing to additional yum repos at install time via the command-line
-(etc).  If anyone knows of a method to verify deps at build time please shoot
+(etc).  If anyone knows of a method to verify dependencies at build time please shoot
 us an email.
 
 The way you fix it is by making sure the referenced package is present in
-the repos in CONFIG_REPOS.  A common cause is lacking the Optional channel
+the repos in `CONFIG_REPOS`.  A common cause is lacking the Optional channel
 repo when building on RHEL.  This typically results in libxslt-python dep
 errors.
 
@@ -461,7 +490,7 @@ errors.
 There is a make target for doing a release. First, set the `CLIP_RELEASE` variable to the title
 of your tag. Then run `make release`. The repo will be tagged and pushed to origin.
 
-## Known Issues
+## Known Issues <a id="issues"></a>
 
 ##### VirtualBox
 There is a known issue when creating a Virtual Machine of CLIP using VirtualBox and a hard disk size less than 20 gigabytes. Please use a HDD
