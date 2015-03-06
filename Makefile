@@ -106,7 +106,7 @@ PKG_BLACKLIST := $(shell $(SED) -e 's/\(.*\)\#.*/\1/g' $(CONF_DIR)/pkglist.black
 # Macros to determine package info: version, release, arch.
 PKG_VER = $(strip $(eval $(shell $(GREP) ^VERSION $(PKG_DIR)/$(1)/Makefile))$(VERSION))
 PKG_REL = $(strip $(eval $(shell $(GREP) ^RELEASE $(PKG_DIR)/$(1)/Makefile))$(RELEASE))
-PKG_ARCH = $(strip $(eval $(shell $(GREP) ^ARCH $(PKG_DIR)/$(1)/Makefile))$(ARCH))
+PKG_ARCH := $(shell uname -i)
 # macros for converting between package name and file names
 RPM_FROM_PKG_NAME = $(1)-$(call PKG_VER,$(1))-$(call PKG_REL,$(1)).$(call PKG_ARCH,$(1)).rpm
 SRPM_FROM_PKG_NAME = $(1)-$(call PKG_VER,$(1))-$(call PKG_REL,$(1)).src.rpm
@@ -161,7 +161,7 @@ define CHECK_LIVE_TOOLS
 		sudo yum remove livecd-tools python-imgcreate -y 2>&1 >/dev/null || true ; \
 		$(MAKE) livecd-tools-rpm; \
 		cd $(CLIP_REPO_DIR); \
-		sudo yum localinstall livecd-tools*.noarch.rpm python-imgcreate* -y; \
+		sudo yum localinstall livecd-tools*.$(ARCH).rpm python-imgcreate* -y; \
 	fi
 endef
 

@@ -1,8 +1,9 @@
-# Copyright (C) 2011 Tresys Technology, LLC
+# Copyright (C) 2011,2015 Tresys Technology, LLC
 # Copyright (C) 2014 QuarkSecurity, Inc
 #
 # Authors: Spencer Shimko <sshimko@tresys.com>
 # Authors: Spencer Shimko <spencer@quarksecurity.com>
+# Authors: Yuli Khodorkovskiy <ykhodorkovskiy@tresys.com>
 #
 
 # The name of the package
@@ -16,27 +17,33 @@ VERSION := 2.13
 # version (think about this... why are you doing this?)
 RELEASE := 4.el7
 
-PKG := $(PKGNAME)-$(VERSION)
+# The name of the Packager
+PACKAGER ?= Tresys Technology
+
+VENDOR := Red Hat
 
 # snag the architecture, hard code an arch if cross-compiling or going noarch
-ARCH := noarch
-TARBALL = $(RPM_TOPDIR)/SOURCES/$(PKG).tar.gz
+ARCH ?= $(shell uname -i)
 
-RPM_DEPS := tarball $(RPM_SPEC) Makefile
+# the filename of the tarball
+TARBALL = $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION).tar.gz
 
-PACKAGER := Quark Security, Inc
+# spec file name
+RPM_SPEC = $(CURDIR)/$(PKGNAME).spec
 
 ####################################################
 ## things below this line should rarely change
 ROOT_DIR ?= $(CURDIR)
 OUTPUT_DIR ?= $(ROOT_DIR)
+SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
+
+# exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
+TAR_DEPS := $(wildcard $(PKGNAME)/*)
+RPM_DEPS := $(TARBALL) $(RPM_SPEC) $(CURDIR)/Makefile
+
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
 RPM_TOPDIR ?= $(RPM_TMPDIR)/src/redhat
 RPM_BUILDROOT ?= $(RPM_TMPDIR)/rpm-buildroot
-SRPM_OUTPUT_DIR ?= $(ROOT_DIR)
-
-RPM := $(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
-SRPM := $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 
 RPM_SPEC := $(CURDIR)/$(PKGNAME).spec
 
@@ -51,60 +58,52 @@ RPMBUILD_ARGS := --define '_topdir $(RPM_TOPDIR)'  \
 	--define 'packager $(PACKAGER)\n'
 
 define rpm-prep
-	$(call MKDIR,$(RPM_TOPDIR)/SOURCES);\
-$(call MKDIR,$(RPM_TOPDIR)/SPECS);\
-$(call MKDIR,$(RPM_TOPDIR)/BUILD);\
-$(call MKDIR,$(RPM_TOPDIR)/RPMS/$(ARCH));\
-$(call MKDIR,$(RPM_TOPDIR)/SRPMS);
+	$(call MKDIR,$(RPM_TOPDIR)/SOURCES)
+	$(call MKDIR,$(RPM_TOPDIR)/SPECS)
+	$(call MKDIR,$(RPM_TOPDIR)/BUILD)
+	$(call MKDIR,$(RPM_TOPDIR)/RPMS/$(ARCH))
+	$(call MKDIR,$(RPM_TOPDIR)/SRPMS)
+	cp $(TARBALL) $(RPM_TOPDIR)/SOURCES/
 endef
 
-all: tarball srpm rpm
+all: $(PKGNAME)-rpm $(PKGNAME)-srpm
 
-rpm: srpm $(PKGNAME)-rpm
+tarball: $(TARBALL)
 
-tarball: $(PKGNAME)-tarball
-	$(call rpm-prep)
+rpm: $(PKGNAME)-rpm
 
-	# create source tar and copy into the SOURCES dir
-	tar -czf $(PKG).tar.gz $(PKG)
-	mv $(PKG).tar.gz $(TARBALL)
-
-srpm: $(PKGNAME)-srpm tarball
-	@echo "Copying the SPEC file to proper location..."
-	cat $(RPM_SPEC) > $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
-	@echo "Building $(PKGNAME) SRPM..."
-	cd $(RPM_TOPDIR) && rpmbuild $(RPMBUILD_ARGS) --target=$(ARCH) -bs SPECS/$(notdir $(RPM_SPEC)) --nodeps
-	cp $(RPM_TOPDIR)/SRPMS/* $(SRPM_OUTPUT_DIR)
+srpm: $(PKGNAME)-srpm
 
 $(PKGNAME)-rpm: $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm
 
-$(PKGNAME)-srpm: srpm
+$(PKGNAME)-srpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 
-$(OUTPUT_DIR)/$(RPM): $(SRPM)
+# Note: if you're carrying a tarball already (e.g., you are using an officially released tarball), just copy it from here to $(TARBALL)
+# Something like this should work: "cp $@ $(RPM_TOPDIR)/SOURCES/"
+$(TARBALL): $(TAR_DEPS)
+	@echo "Building $(PKGNAME) source tarball..."
+	tar -czf $@ $(PKGNAME)-$(VERSION)/
+
+$(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 	@echo "Building $(PKGNAME) RPM..."
 	$(call rpm-prep)
-	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild $(RPMBUILD_ARGS) --buildroot $(RPM_BUILDROOT) -bb $<
-	if [ $(ARCH) != "noarch" ]; then cp $(RPM_TOPDIR)/RPMS/noarch/* $(OUTPUT_DIR)/ 2>&1 >/dev/null; exit 0; fi
-	mv  $(RPM_TOPDIR)/RPMS/$(ARCH)/$(PKGNAME)-$(VERSION)-$(RELEASE)*.rpm $(OUTPUT_DIR)
+	cd $(RPM_TOPDIR)/SRPMS && rpmbuild --rebuild $(RPMBUILD_ARGS) -bb $<
+	cp  $(RPM_TOPDIR)/RPMS/$(ARCH)/*.rpm $(OUTPUT_DIR)
 
-$(SRPM): $(SRC_SRPM)
-	if [ ! "$(SRPM_OUTPUT_DIR)" -ef "$(RPM_TOPDIR)/SRPMS" ]; then\
-		$(call rpm-prep)\
-	fi
-
-$(RPM_SPEC): $(SRC_SRPM)
-	$(call MKDIR,$(RPM_TMPDIR))
-	( cd $(RPM_TMPDIR); rpm2cpio $< | cpio --quiet -i ${PKGNAME}.spec ) 2>&1 >/dev/null
+$(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm: $(RPM_DEPS)
+	@echo "Building $(PKGNAME) SRPM..."
+	$(call rpm-prep)
+	echo -e "%define pkgname $(PKGNAME)\n%define _sysconfdir /etc\n%define version $(VERSION)\n%define release $(RELEASE)\n\
+%define vendor $(VENDOR)\n%define packager $(PACKAGER)\nBuildArch: $(ARCH)\n"> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	cat $(RPM_SPEC) >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	cd $(RPM_TOPDIR) && rpmbuild $(RPMBUILD_ARGS) -bs SPECS/$(notdir $(RPM_SPEC)) --nodeps
+	cp  $(RPM_TOPDIR)/SRPMS/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(SRPM_OUTPUT_DIR)
 
 clean:
 	$(RM) -r $(RPM_TMPDIR)
 
-# This is slightly undesirable, but in order to cleanup *all& RONs peroperly we need
-# to query the spec file, so in the bare target we have to extract the spec file :(
-bare: $(RPM_SPEC) FORCE
-	$(RM) -r $(RPM_TMPDIR)
-	$(RM) -f $(RPM) $(SRPM)
+bare: clean
+	$(RM) $(OUTPUT_DIR)/*.rpm
+	$(RM) $(TARBALL)
 
-FORCE:
-
-.PHONY: all $(PKGNAME)-rpm $(PKGNAME)-srpm $(PKGNAME)-tarball clean bare rpm srpm FORCE
+.PHONY: all rpm srpm tarball $(PKGNAME)-rpm $(PKGNAME)-srpm clean bare

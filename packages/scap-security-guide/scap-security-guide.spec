@@ -12,8 +12,6 @@ URL:		https://fedorahosted.org/scap-security-guide/
 
 Source0:	http://repos.ssgproject.org/sources/%{name}-%{version}.tar.gz
 
-BuildArch:	noarch
-
 BuildRequires:	libxslt, expat, python, openscap-utils >= 1.0.8, python-lxml
 Requires:	xml-common, openscap-utils >= 1.0.8
 
