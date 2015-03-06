@@ -93,6 +93,9 @@ REPO_WGET := /usr/bin/wget
 REPO_CREATE := /usr/bin/createrepo -d --workers $(shell /usr/bin/nproc) -c $(REPO_DIR)/yumcache
 REPO_QUERY :=  repoquery -c $(YUM_CONF_FILE) --quiet -a --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}.rpm'
 MOCK_ARGS += --resultdir=$(CLIP_REPO_DIR) -r $(MOCK_REL) --configdir=$(MOCK_CONF_DIR) --unpriv --rebuild
+ifeq ($(CLEAN_MOCK),n)
+    MOCK_ARGS += --no-clean --no-cleanup-after
+endif
 
 # This deps list gets propegated down to sub-makefiles
 # Add to this list to pass deps down to SRPM creation

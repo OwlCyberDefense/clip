@@ -53,6 +53,11 @@ CONFIG_BUILD_BASH_VARS := export CONFIG_BUILD_PRODUCTION=$(strip $(CONFIG_BUILD_
 # (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
 TARGET_ARCH := $(shell uname -i)
 
+# If you want to reuse the same chroot for all RPMs, set CLEAN_MOCK to n
+# This should decrease the build time since we won't have to install common
+# packages in the chroot for each RPM
+CLEAN_MOCK := y
+
 # Quiet down the build output a bit.
 QUIET := n
 

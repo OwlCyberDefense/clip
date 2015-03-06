@@ -265,10 +265,11 @@ roll ISOs.  They only want to leverage the following features:
 **NOTE**: Tresys recommends moving to the CLIP build system, which was developed
 based on our experiences developing cross domain solutions.  One of the issues
 we frequently encounter is the lack of reproducibility of builds.  This build
-system allows you to roll RPMs in mock eliminating build host dependencies.  It
-allows you to version the packages used to roll an RPM.  It manages yum
-repositories and carries patched versions of ISO generation tools to address a
-number of problems in those tools.
+system allows you to roll RPMs in mock eliminating build host dependencies.  By
+default, a clean chroot will be used for each RPM. This is configurable in
+CONFIG_BUILD with the `CLEAN_MOCK` option.  Mock allows you to version the packages
+used to roll an RPM.  It manages yum repositories and carries patched versions of
+ISO generation tools to address a number of problems in those tools.
 
 If the developer chooses to only use the remediation and audit content as
 described in the third scenario, the developer must roll the needed RPMs by
@@ -411,7 +412,7 @@ issue.
 One of the reasons we wrote this new build and integration system is to
 ensure consistency across builds.  That is, we wanted to ensure that an ISO
 generated in 2012 could be re-generated in 2014 without any functional
-differences.  Pointing to a remote repo makes this difficult to ensure.
+differences.  Pointing to a remote repo makes this difficult to ensure
 mock would roll RPMs using the packages available when mock was run.
 However, the ISOs would be built using packages available when the ISO was
 rolled.  This is exacerbated if you refer to HTTP/FTP yum repos from the
