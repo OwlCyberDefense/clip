@@ -398,7 +398,7 @@ bare: bare-repos clean
 	for pkg in $(PACKAGES); do $(MAKE) -C $(PKG_DIR)/$$pkg $@; done
 	$(VERBOSE)$(RM) $(addprefix $(SRPM_OUTPUT_DIR),$(SRPMS))
 	$(VERBOSE)$(RM) $(addprefix $(OUTPUT_DIR),$(RPMS))
-
+	$(VERBOSE)$(RM) *.iso
 
 release:
 	git tag -a -m "CLIP for RHEL $(CLIP_RELEASE)" CLIP_RHEL_$(CLIP_RELEASE)
