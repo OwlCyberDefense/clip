@@ -15,7 +15,7 @@ VERSION := 19.6.45
 
 # bump this if creating multiple releases from the same
 # version (think about this... why are you doing this?)
-RELEASE := 4.el7
+RELEASE := 5.el7
 
 # The name of the Packager
 PACKAGER ?= Tresys Technology
