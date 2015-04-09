@@ -204,10 +204,21 @@ if [ $OPT_SUBSCRIBED -eq 0 ]; then
 else
 	/bin/echo "RHEL optional channel is already enabled"
 fi
-# download the required rpms from the rhel optional channel
+# pull opt package versions from pkglist.opt. Otherwise just download the newest
+# versions available
 OPT_PACKAGES="anaconda-dracut at-spi tigervnc-server-module bitmap-fangsongti-fonts \
 GConf2-devel"
-/usr/bin/sudo /bin/yumdownloader --destdir $optrepopath $OPT_PACKAGES
+CONF=./conf/pkglist.opt
+VERSIONED_LIST=
+if [ -s $CONF ]; then
+    for pkg in $OPT_PACKAGES; do
+        pkg=`/bin/sed -rn "s/$pkg-(.*).rpm/$pkg-\1/p" $CONF`
+        VERSIONED_LIST="$VERSIONED_LIST $pkg"
+    done
+else
+    VERSIONED_LIST=$OPT_PACKAGES
+fi
+/usr/bin/sudo /bin/yumdownloader --destdir $optrepopath $VERSIONED_LIST
 /usr/bin/createrepo -d $optrepopath
 
 /usr/bin/sudo /usr/sbin/usermod -aG mock `id -un`
