@@ -14,4 +14,10 @@ Makefile.tmp
 *.rpm
 clip-selinux-policy*.tar.gz
 tags
+packages/*tags
 *.pyc
+packages/clip-selinux-policy/clip-selinux-policy/policy/modules/kernel/corenetwork.if
+packages/clip-selinux-policy/clip-selinux-policy/policy/modules/kernel/corenetwork.te
+packages/clip-selinux-policy/clip-selinux-policy/base.conf
+packages/clip-selinux-policy/clip-selinux-policy/base.fc
+packages/clip-selinux-policy/clip-selinux-policy/*.pp
