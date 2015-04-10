@@ -348,14 +348,14 @@ $CONTENT_PATH/ssg-rhel7-xccdf.xml
 AIDE_DIR=/var/lib/aide
 
 echo "configuring AIDE"
-/bin/mv $AIDE_DIR/aide.db.new.gz $AIDE_DIR/aide.db.gz
 /bin/mv /sbin/aide $AIDE_DIR/aide
 /bin/mv /etc/aide.conf $AIDE_DIR/aide.conf
 /bin/ln -s $AIDE_DIR/aide /usr/sbin/aide
-/sbin/aide --init
+/sbin/aide --init --config=$AIDE_DIR/aide.conf
+/bin/mv $AIDE_DIR/aide.db.new.gz $AIDE_DIR/aide.db.gz
 
 # run aide cron job daily
-echo "0 1 * * * $AIDE_DIR/aide --check --config=$AIDE/aide.conf" >> /etc/crontab
+echo "0 1 * * * $AIDE_DIR/aide --check --config=$AIDE_DIR/aide.conf" >> /etc/crontab
 
 /bin/sed -ie '/vg00-aide/ s/defaults/ro,defaults/' /etc/fstab
 ### Done with AIDE ###
