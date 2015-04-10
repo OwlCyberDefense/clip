@@ -45,7 +45,7 @@ install
 timezone --utc Etc/GMT
 auth --useshadow --passalgo=sha512
 
-selinux --permissive
+selinux --enforcing
 firewall --enabled
 reboot
 
