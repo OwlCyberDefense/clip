@@ -1496,6 +1496,25 @@ interface(`init_stream_connect_script',`
 ########################################
 ## <summary>
 ##	Allow the specified domain to read/write to
+##	init with unix domain stream sockets.
+##	</summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`init_rw_stream_sockets',`
+	gen_require(`
+		type init_t;
+	')
+
+	allow $1 init_t:unix_stream_socket rw_stream_socket_perms;
+')
+
+########################################
+## <summary>
+##	Allow the specified domain to read/write to
 ##	init scripts with a unix domain stream sockets.
 ## </summary>
 ## <param name="domain">
@@ -1827,11 +1846,11 @@ interface(`init_var_lib_filetrans',`
 ##	</summary>
 ## </param>
 #
-interface(`init_var_lib_files_write',`
+interface(`init_manage_var_lib_files',`
 	gen_require(`
 		type init_var_lib_t;
 	')
-	write_files_pattern($1, init_var_lib_t, init_var_lib_t)
+	manage_files_pattern($1, init_var_lib_t, init_var_lib_t)
 ')
 
 ########################################
