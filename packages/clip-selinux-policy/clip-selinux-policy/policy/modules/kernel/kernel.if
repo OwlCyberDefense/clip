@@ -662,6 +662,24 @@ interface(`kernel_get_sysvipc_info',`
 
 ########################################
 ## <summary>
+##	Search kernel thread dirs in /proc/.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_search_state',`
+	gen_require(`
+		type kernel_t;
+	')
+
+	allow $1 kernel_t:dir search_dir_perms;
+')
+
+########################################
+## <summary>
 ##	Get the attributes of a kernel debugging filesystem.
 ## </summary>
 ## <param name="domain">
