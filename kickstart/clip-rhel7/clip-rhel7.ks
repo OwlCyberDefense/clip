@@ -255,12 +255,12 @@ else
 	/sbin/usermod --pass="$HASHED_PASSWORD" "$USERNAME"
 fi
 
-/bin/chage -d 0 "$USERNAME"
-
-# Remove sshd and dhclient if it in a production build
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
-    /bin/echo "Removing sshd, rsync, and dhclient from the system"
-    /bin/rpm -e openssh openssh-clients openssh-server dhclient rsync
+	# Remove sshd and dhclient if it in a production build
+	/bin/echo "Removing sshd, rsync, and dhclient from the system"
+	/bin/rpm -e openssh openssh-clients openssh-server dhclient rsync
+	# Force password reset only for production builds
+	/bin/chage -d 0 "$USERNAME"
 fi
 
 # Add the user to sudoers and setup an SELinux role/type transition.
