@@ -302,12 +302,31 @@ interface(`kernel_stream_connect',`
 ##	</summary>
 ## </param>
 #
-interface(`kernel_stream_read',`
+interface(`kernel_read_stream_sockets',`
 	gen_require(`
 		type kernel_t;
 	')
 
 	allow $1 kernel_t:unix_stream_socket read;
+')
+
+########################################
+## <summary>
+##  Read/write to kernel using a unix
+##  domain stream socket.
+## </summary>
+## <param name="domain">
+##  <summary>
+##  Domain allowed access.
+##  </summary>
+## </param>
+#
+interface(`kernel_rw_stream_sockets',`
+    gen_require(`
+        type kernel_t;
+    ')
+
+    allow $1 kernel_t:unix_stream_socket { read write getattr };
 ')
 
 ########################################
@@ -356,7 +375,7 @@ interface(`kernel_dgram_send',`
 ##	</summary>
 ## </param>
 #
-interface(`kernel_dgram_getattr',`
+interface(`kernel_getattr_dgram_sockets',`
 	gen_require(`
 		type kernel_t;
 	')
