@@ -275,7 +275,7 @@ If the developer chooses to only use the remediation and audit content as
 described in the third scenario, the developer must roll the needed RPMs by
 running `make openscap-rpm; make scap-security-guide-rpm`.  The
 generated RPMs will be placed in `repos/clip-repo`.  You can then copy the RPMs
-into into the build environment and roll ISOs.
+into the build environment and roll ISOs.
 
 ## Frequently Asked Questions <a id="faq"></a>
 
@@ -283,7 +283,7 @@ into into the build environment and roll ISOs.
 
 First, CLIP is very, very locked down.  This does not indicate breakage, 
 rather a conscious decision to address security requirements first and 
-foremost.  CLIP is not a general-purpose OS.  It is an base platform and 
+foremost.  CLIP is not a general-purpose OS.  It is a base platform and 
 build environment that provides a starting point for developing 
 solutions that meet strict security requirements.  Red Hat Enterprise 
 Linux is a general-purpose OS (and rightly so).  The security requirements 
