@@ -30,3 +30,4 @@
 /var/roothome /root
 /usr/bin /bin
 /usr/sbin /sbin
+/usr/lib/udev /lib/udev

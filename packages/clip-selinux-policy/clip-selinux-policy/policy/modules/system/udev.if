@@ -103,7 +103,7 @@ interface(`udev_read_state',`
 ##	</summary>
 ## </param>
 #
-interface(`udev_create_kobject_uevent_socket',`
+interface(`udev_create_kobject_uevent_sockets',`
 	gen_require(`
 		type udev_t;
 	')
