@@ -346,18 +346,44 @@ $CONTENT_PATH/ssg-rhel7-xccdf.xml
 
 ### Setup AIDE ###
 AIDE_DIR=/var/lib/aide
+AIDE_SCRIPT=/root/aide.sh
 
 echo "configuring AIDE"
-/bin/mv /sbin/aide $AIDE_DIR/aide
-/bin/mv /etc/aide.conf $AIDE_DIR/aide.conf
-/bin/ln -s $AIDE_DIR/aide /usr/sbin/aide
-/sbin/aide --init --config=$AIDE_DIR/aide.conf
-/bin/mv $AIDE_DIR/aide.db.new.gz $AIDE_DIR/aide.db.gz
+cat <<- EOF > $AIDE_SCRIPT
+	#!/bin/sh
+	/bin/rm -f $AIDE_SCRIPT
+	/bin/mv /sbin/aide $AIDE_DIR/aide
+	/bin/mv /etc/aide.conf $AIDE_DIR/aide.conf
+	/bin/ln -s $AIDE_DIR/aide /usr/sbin/aide
+	# run aide cron job daily
+	echo "0 1 * * * $AIDE_DIR/aide --check --config=$AIDE_DIR/aide.conf" >> /etc/crontab
+	/bin/sed -ie '/vg00-aide/ s/defaults/ro,defaults/' /etc/fstab
+	/sbin/aide --init --config=$AIDE_DIR/aide.conf
+	/bin/mv $AIDE_DIR/aide.db.new.gz $AIDE_DIR/aide.db.gz
+	/usr/bin/systemctl disable aide.service
+	/usr/sbin/reboot
+EOF
 
-# run aide cron job daily
-echo "0 1 * * * $AIDE_DIR/aide --check --config=$AIDE_DIR/aide.conf" >> /etc/crontab
+/bin/chmod 755 $AIDE_SCRIPT
 
-/bin/sed -ie '/vg00-aide/ s/defaults/ro,defaults/' /etc/fstab
+/usr/bin/cat <<- EOF > /etc/systemd/system/aide.service
+	[Unit]
+	Description=AIDE one time service
+	Before=systemd-user-sessions.service
+
+	[Service]
+	User=root
+	Group=root
+	Type=oneshot
+	ExecStart=$AIDE_SCRIPT
+	RemainAfterExit=true
+
+	[Install]
+	WantedBy=multi-user.target
+EOF
+
+systemctl enable aide.service
+
 ### Done with AIDE ###
 
 /bin/kill $TAILPID 2>/dev/null 1>/dev/null
