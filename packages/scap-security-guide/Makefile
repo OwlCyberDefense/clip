@@ -38,7 +38,7 @@ OUTPUT_DIR ?= $(ROOT_DIR)
 SRPM_OUTPUT_DIR ?= $(OUTPUT_DIR)
 
 # exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
-TAR_DEPS := $(wildcard $(PKGNAME)-$(VERSION)/**/*)
+TAR_DEPS := $(shell find $(PKGNAME)-$(VERSION) -type f -name '*.*')
 RPM_DEPS := $(TARBALL) $(RPM_SPEC) $(CURDIR)/Makefile
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
