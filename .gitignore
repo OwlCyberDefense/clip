@@ -3,6 +3,7 @@ tmp
 ./*.rpm
 *.iso
 conf/mock/*.cfg
+conf/pkglist.clip
 repos/yumcache/*
 repodata
 repos/*-repo/*
