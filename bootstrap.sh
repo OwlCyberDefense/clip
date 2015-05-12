@@ -56,17 +56,17 @@ Please ensure your RHEL DVD is inserted into the disk drive if you select 'rhel'
 		if [ x"${user_input,,}" == x"rhel" ]; then
 			tmpdir=`/bin/mktemp -d`
 			/usr/bin/sudo /usr/bin/mount /dev/sr0 $tmpdir
-			/usr/bin/rsync --progress $tmpdir/Packages/* $repo_path/
+			/usr/bin/sudo /usr/bin/rsync -r --progress $tmpdir/Packages/ $repo_path/
 			/usr/bin/sudo /usr/bin/umount $tmpdir
-			/bin/rm -rf $tmpdir
+			/usr/bin/sudo /bin/rm -rf $tmpdir
 		else
-			/usr/bin/rsync --progress $user_input $repo_path/
+			/usr/bin/sudo /usr/bin/rsync -r --progress $user_input $repo_path/
 		fi
 
 		break
 	done
 
-	/usr/bin/createrepo -d $repo_path/
+	/usr/bin/sudo /usr/bin/createrepo -d $repo_path/
 }
 
 prompt_to_enter_repo_path ()
@@ -219,7 +219,7 @@ else
     VERSIONED_LIST=$OPT_PACKAGES
 fi
 /usr/bin/sudo /bin/yumdownloader --destdir $optrepopath $VERSIONED_LIST
-/usr/bin/createrepo -d $optrepopath
+/usr/bin/sudo /usr/bin/createrepo -d $optrepopath
 
 /usr/bin/sudo /usr/sbin/usermod -aG mock `id -un`
 
