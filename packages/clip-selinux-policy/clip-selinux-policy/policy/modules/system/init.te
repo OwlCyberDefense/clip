@@ -271,6 +271,8 @@ ifdef(`init_systemd',`
 	systemd_relabelto_unit_dirs(init_t)
 	systemd_manage_unit_symlinks(init_t)
 
+	systemd_relabelto_kmod_files(init_t)
+
 	# systemd_socket_activated policy
 	mls_socket_write_all_levels(init_t)
 	allow init_t systemd_socket_activated_subject_type:unix_dgram_socket create_socket_perms;

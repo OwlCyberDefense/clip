@@ -36,6 +36,7 @@
 /var/run/systemd/sessions(/.*)?	gen_context(system_u:object_r:systemd_logind_var_run_t,s0)
 /var/run/systemd/users(/.*)?	gen_context(system_u:object_r:systemd_logind_var_run_t,s0)
 /var/run/systemd/inhibit(/.*)?	gen_context(system_u:object_r:systemd_logind_var_run_t,s0)
+/var/run/tmpfiles\.d/kmod.conf	gen_context(system_u:object_r:systemd_kmod_conf_t,s0)
 
 # Systemd unit files
 /usr/lib/systemd/ntp-units\.d(/.*)?		gen_context(system_u:object_r:systemd_unit_file_t)

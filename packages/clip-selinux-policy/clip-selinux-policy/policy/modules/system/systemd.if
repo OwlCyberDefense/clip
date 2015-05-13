@@ -515,6 +515,44 @@ interface(`systemd_hostnamed_manage_config',`
 	files_etc_filetrans($1, hostname_etc_t, file, "hostname")
 ')
 
+########################################
+## <summary>
+##   Allow process to write to systemd_kmod_conf_t.
+## </summary>
+## <param name="domain">
+##   <summary>
+##     Domain allowed access.
+##   </summary>
+## </param>
+## <rolecap/>
+#
+interface(`systemd_write_kmod_files',`
+	gen_require(`
+		type systemd_kmod_conf_t;
+	')
+
+	write_files_pattern($1, var_run_t, systemd_kmod_conf_t)
+')
+
+########################################
+## <summary>
+##   Allow process to relabel to systemd_kmod_conf_t.
+## </summary>
+## <param name="domain">
+##   <summary>
+##     Domain allowed access.
+##   </summary>
+## </param>
+## <rolecap/>
+#
+interface(`systemd_relabelto_kmod_files',`
+	gen_require(`
+		type systemd_kmod_conf_t;
+	')
+
+	allow $1 systemd_kmod_conf_t:file relabelto;
+')
+
 #######################################
 ## <summary>
 ##  Create objects in /run/systemd/generator directory
