@@ -348,7 +348,7 @@ cat <<- EOF > $AIDE_SCRIPT
 	/bin/mv /etc/aide.conf $AIDE_DIR/aide.conf
 	/bin/ln -s $AIDE_DIR/aide /usr/sbin/aide
 	# run aide cron job daily
-	echo "0 1 * * * $AIDE_DIR/aide --check --config=$AIDE_DIR/aide.conf" >> /etc/crontab
+	echo "0 1 * * * root $AIDE_DIR/aide --check --config=$AIDE_DIR/aide.conf" >> /etc/crontab
 	/bin/sed -ie '/vg00-aide/ s/defaults/ro,defaults/' /etc/fstab
 	/sbin/aide --init --config=$AIDE_DIR/aide.conf
 	/bin/mv $AIDE_DIR/aide.db.new.gz $AIDE_DIR/aide.db.gz
