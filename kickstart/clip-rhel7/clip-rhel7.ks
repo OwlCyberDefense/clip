@@ -377,6 +377,11 @@ EOF
 systemctl enable aide.service
 
 ### Done with AIDE ###
+if [ x"$ENABLE_NETWORKING" == "xn" ]; then
+	/bin/echo "Disabling networking"
+	/bin/yum remove -y dhclient
+	/usr/bin/systemctl disable network.service
+fi
 
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
 	# Remove sshd and rsync if in a production build

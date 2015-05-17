@@ -27,14 +27,18 @@ endif
 # CONFIG_BUILD_ENFORCING_MODE is used to put the system in permissive mode or enforcing mode after install.
 # CONFIG_BUILD_UNCONFINED_TOOR allows the toor user to run the unconfined (read->all powerful) toor_r:toor_t role.
 #                              Normally the toor user is confined in the sysadm_r:sysadm_t role.
+# ENABLE_NETWORKING is used to enable or disable networking. 'y' corresponds to enabled networking. 'n' will remove
+#                              all networking related RPMs.
 # Note: these variables and values will be inserted into /root/clip-info.txt for inspection at run-time.
 CONFIG_BUILD_PRODUCTION := n
 ifeq ($(CONFIG_BUILD_PRODUCTION),y)
   CONFIG_BUILD_ENFORCING_MODE := y
   CONFIG_BUILD_UNCONFINED_TOOR := n
+  ENABLE_NETWORKING := n
 else
   CONFIG_BUILD_ENFORCING_MODE := n
   CONFIG_BUILD_UNCONFINED_TOOR := y
+  ENABLE_NETWORKING := y
 endif
 
 ################################################
@@ -47,7 +51,7 @@ endif
 ADDTL_DEPS := $(CURDIR)/CONFIG_REPOS $(CURDIR)/CONFIG_BUILD
 
 # Translate the CONFIG_BUILD_* flags into BASH vars that we insert into things like a kickstart %post
-CONFIG_BUILD_BASH_VARS := export CONFIG_BUILD_PRODUCTION=$(strip $(CONFIG_BUILD_PRODUCTION)) CONFIG_BUILD_ENFORCING_MODE=$(strip $(CONFIG_BUILD_ENFORCING_MODE)) CONFIG_BUILD_UNCONFINED_TOOR=$(strip $(CONFIG_BUILD_UNCONFINED_TOOR)) ISO_VERSION=$(strip $(ISO_VERSION))
+CONFIG_BUILD_BASH_VARS := export CONFIG_BUILD_PRODUCTION=$(strip $(CONFIG_BUILD_PRODUCTION)) CONFIG_BUILD_ENFORCING_MODE=$(strip $(CONFIG_BUILD_ENFORCING_MODE)) CONFIG_BUILD_UNCONFINED_TOOR=$(strip $(CONFIG_BUILD_UNCONFINED_TOOR)) ISO_VERSION=$(strip $(ISO_VERSION)) ENABLE_NETWORKING=$(strip $(ENABLE_NETWORKING))
 
 # Typically we are rolling builds on the target arch.  Changing this may have dire consequences.
 # (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
@@ -61,4 +65,4 @@ CLEAN_MOCK := y
 # Quiet down the build output a bit.
 QUIET := n
 
-export TARGET_ARCH ADDTL_DEPS QUIET CONFIG_BUILD_BASH_VARS CONFIG_BUILD_ENFORCING_MODE CONFIG_BUILD_UNCONFINED_TOOR CONFIG_BUILD_PRODUCTION ISO_VERSION
+export TARGET_ARCH ADDTL_DEPS QUIET CONFIG_BUILD_BASH_VARS CONFIG_BUILD_ENFORCING_MODE CONFIG_BUILD_UNCONFINED_TOOR CONFIG_BUILD_PRODUCTION ISO_VERSION ENABLE_NETWORKING
