@@ -186,7 +186,7 @@ To generate Live Media you're going to have to install our version. Either run `
 make livecd-tools-rpm
 cd repos/clip-repo
 sudo yum remove livecd-tools python-imgcreate -y
-sudo yum localinstall livecd-tools*.noarch.rpm python-imgcreate* -y
+sudo yum localinstall livecd-tools*x86_64.rpm python-imgcreate* -y
 ```
 
 We can take a live CD ISO, write it to non-optical media like a
