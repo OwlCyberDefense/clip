@@ -439,11 +439,12 @@ logging_send_syslog_msg(systemd_sessions_t)
 # Tmpfiles local policy
 #
 
-allow systemd_tmpfiles_t self:capability  { fowner chown fsetid dac_override };
+allow systemd_tmpfiles_t self:capability  { fowner chown fsetid dac_override mknod };
 allow systemd_tmpfiles_t self:process { setfscreate getcap };
 
 dev_relabel_all_sysfs(systemd_tmpfiles_t)
 dev_read_urand(systemd_tmpfiles_t)
+dev_manage_all_dev_nodes(systemd_tmpfiles_t)
 
 files_read_etc_files(systemd_tmpfiles_t)
 files_relabel_all_lock_dirs(systemd_tmpfiles_t)
