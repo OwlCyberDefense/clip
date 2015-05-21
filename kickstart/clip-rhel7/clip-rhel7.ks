@@ -374,7 +374,11 @@ EOF
 	WantedBy=multi-user.target
 EOF
 
-systemctl enable aide.service
+if [ x"CONFIG_BUILD_AIDE" == "xy" ]; then
+	systemctl enable aide.service
+else
+	systemctl disable aide.service
+fi
 
 ### Done with AIDE ###
 if [ x"$ENABLE_NETWORKING" == "xn" ]; then
