@@ -374,7 +374,7 @@ EOF
 	WantedBy=multi-user.target
 EOF
 
-if [ x"CONFIG_BUILD_AIDE" == "xy" ]; then
+if [ x"$CONFIG_BUILD_AIDE" == "xy" ]; then
 	systemctl enable aide.service
 else
 	systemctl disable aide.service
