@@ -74,7 +74,7 @@ The locations of these repos is defined in the `CONFIG_REPOS` file:
 Remember that repositories are often architecture specific so you might have
 to update these variables to build for a different architecture.
 
-####Custom packages
+####Custom Packages <a id=”custom-packages”></a>
 
 The most common task is adding your own packages to be included in a rolled
 ISO.
@@ -489,9 +489,12 @@ the repos in `CONFIG_REPOS`.  A common cause is lacking the Optional channel
 repo when building on RHEL.  This typically results in libxslt-python dep
 errors.
 
-##### How to do a release of CLIP
+##### How do I release CLIP?
 There is a make target for doing a release. First, set the `CLIP_RELEASE` variable to the title
 of your tag. Then run `make release`. The repo will be tagged and pushed to origin.
+
+##### How do I add an external package to the build system?
+The CLIP build system is designed to utilize mock to build your external package in a chroot. Please see [Custom Packages](#custom-packages-) for more information.
 
 ## Known Issues <a id="issues"></a>
 
