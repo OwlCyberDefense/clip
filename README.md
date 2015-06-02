@@ -4,6 +4,7 @@
   * [Getting Started](#gs)
   * [Build System](#bs)
   * [Creating a Live CD] (#livecd)
+  * [SELinux Policy] (#selinux)
   * [Use Cases] (#use)
   * [Frequently Asked Questions] (#faq)
   * [Known Issues] (#issues)
@@ -218,6 +219,35 @@ overlay size (in MB) and an overlay size (in MB) as well:
 ```
 make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel7-*-live.iso OVERLAY_SIZE=256 OVERLAY_HOME=128
 ```
+## SELinux Policy <a id="selinux"></a>
+
+CLIP SELinux policy for Red Hat Enterprise Linux 7 (RHEL7) takes a step toward
+strengthening RHEL7 targeted policy, especially with respect to systemd. The
+policy is currently in an Alpha state and only supports booting/logins in
+Enforcing. Some caveats about the current policy state:
+- Remaining denials do not prevent booting/logins in Enforcing, but may cause
+  error messages on boot.
+- systemd_unit_file policy is not complete; therefore, starting and stopping
+  services may not be fully supported.
+- Login user policy is not stripped down to match least-privilege model and
+  lacks support for a super-user role. Any commands which would require a super
+  user will not be available in the Alpha (e.g. shutdown, reboot, mount).
+- Modules have not been stripped down to the smallest subset of CLIP-related
+  modules.
+
+The main design goals for this release are as follows:
+- First and foremost, get CLIP RHEL7 booting in Enforcing.
+- Support logins in Enforcing.
+- Put long-running processes in explicitly labeled domains.
+- Allow short-running processes/scripts to fall through to the initrc domain.
+  Any subsequent forks/execs (from initrc_t) should result in proper domain
+  transitions.
+
+The status of policy issues/developments can be tracked here:
+https://github.com/TresysTechnology/clip/labels/selinux
+
+The intent is to resolve all of the remaining issues outlined above by the next
+CLIP release (https://github.com/TresysTechnology/clip/milestones/RHEL_7-Beta).
 
 ## Use Cases (WIP) <a id="use"></a>
 
