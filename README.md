@@ -98,12 +98,13 @@ the two options below, 2)1 or 2)2
   typically has a `make all` and `make install` target).  For more information
   on this type of package refer to `packages/examples/source`.
 
-3. Once the package has been added to the `packages/` directory you must update
-the `PACKAGES` variable in the top-level `CONFIG_BUILD` file to ensure the package is
-generated as part of any build. Once a package is generated it will appear
-in `repos/clip-repo`.  To add the package to an ISO image update the
-appropriate kickstart file and add the package name to the kickstart's package
-list.
+3. Once the package has been added to the [`packages/`](./packages/) directory, it will be dynamically
+added to the build via the [`PACKAGES`](./Makefile#L52) variable in the top level Makeifle.
+There is nothing needed to be done on the part of the user to add the package to the build. After a package
+is built by mock, it will appear in `repos/clip-repo`. To add the package to an ISO image,
+update the appropriate kickstart file and add the package name to the kickstart's package list.
+To exclude the package from future builds, add the package name as it appears in the `packages/`
+directory to the [`EXCLUDE_PKGS`](./Makefile#L50) variable in the top level Makefile.
 
 ####ISO configuration (kickstart files)
 
