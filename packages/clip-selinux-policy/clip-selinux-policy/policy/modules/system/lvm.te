@@ -305,6 +305,10 @@ seutil_sigchld_newrole(lvm_t)
 
 userdom_use_user_terminals(lvm_t)
 
+ifdef(`init_systemd',`
+	systemd_socket_activated(lvm_t, lvm_var_run_t)
+')
+
 ifdef(`distro_redhat',`
 	# this is from the initrd:
 	kernel_rw_unlabeled_dirs(lvm_t)

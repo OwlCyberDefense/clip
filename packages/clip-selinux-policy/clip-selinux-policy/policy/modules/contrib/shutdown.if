@@ -91,6 +91,24 @@ interface(`shutdown_signal',`
 
 ########################################
 ## <summary>
+##	Share shutdown process state.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`shutdown_share_state',`
+	gen_require(`
+		type shutdown_t;
+	')
+
+	allow $1 shutdown_t:process share;
+')
+
+########################################
+## <summary>
 ##	Get attributes of shutdown executable files.
 ## </summary>
 ## <param name="domain">

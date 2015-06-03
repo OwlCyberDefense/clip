@@ -319,6 +319,7 @@ optional_policy(`
 
 ifdef(`init_systemd',`
 	systemd_logind_dbus_chat(sshd_t)
+	init_rw_stream_sockets(sshd_t)
 ')
 
 ########################################

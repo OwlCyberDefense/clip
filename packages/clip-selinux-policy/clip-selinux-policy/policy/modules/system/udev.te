@@ -220,6 +220,7 @@ ifdef(`distro_redhat',`
 ifdef(`init_systemd',`
 	fs_read_cgroup_files(udev_t)
 	systemd_logind_read_pid_files(udev_t)
+	systemd_socket_activated(udev_t, udev_var_run_t)
 ')
 
 optional_policy(`

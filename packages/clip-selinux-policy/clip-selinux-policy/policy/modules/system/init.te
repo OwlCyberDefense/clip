@@ -189,13 +189,19 @@ ifdef(`init_systemd',`
 
 	allow init_t self:process { getcap getsched setsched setpgid setfscreate setsockcreate setcap setrlimit };
 	allow init_t self:capability2 block_suspend;
+	allow init_t self:unix_stream_socket connectto;
 	allow init_t self:netlink_audit_socket nlmsg_readpriv;
-	allow init_t self:netlink_kobject_uevent_socket read;
+	allow init_t self:netlink_kobject_uevent_socket create_socket_perms;
 	allow init_t self:netlink_route_socket create_netlink_socket_perms;
 	allow init_t self:netlink_selinux_socket read;
 
+	kernel_getattr_proc(init_t)
 	files_read_all_pids(init_t)
-    
+
+	read_files_pattern(init_t, hostname_etc_t, hostname_etc_t)
+	shutdown_share_state(init_t)
+	kernel_read_fs_sysctls(init_t)
+
 	# For /var/run/shutdown.pid.
 	manage_files_pattern(init_t, init_var_run_t, init_var_run_t)
 	manage_lnk_files_pattern(init_t, init_var_run_t, init_var_run_t)
@@ -227,6 +233,16 @@ ifdef(`init_systemd',`
 	fs_unmount_autofs(init_t)
 	allow init_t pstore_t:dir getattr;
 
+	dev_rw_autofs(init_t)
+	fs_list_auto_mountpoints(init_t)
+	fs_mount_autofs(init_t)
+	fs_manage_hugetlbfs_dirs(init_t)
+	fs_mounton_sysctl_fs(init_t)
+
+	dev_create_generic_dirs(init_t)
+	relabelto_dirs_pattern(init_t, var_log_t, var_log_t)
+	relabelto_files_pattern(init_t, var_log_t, var_log_t)
+
 	selinux_compute_create_context(init_t)
 	selinux_compute_access_vector(init_t)
 	seutil_read_file_contexts(init_t)
@@ -246,6 +262,9 @@ ifdef(`init_systemd',`
 	dev_write_kmsg(init_t)
 	relabelfrom_sock_files_pattern(init_t, tmpfs_t, tmpfs_t)
 	relabel_sock_files_pattern(init_t, pidfile, pidfile)
+	fs_getattr_tmpfs(init_t)
+	fs_read_tmpfs_files(init_t)
+	fs_read_cgroup_files(init_t)
 
 	systemd_manage_unit_dirs(init_t)
 	systemd_manage_unit_files(init_t)
@@ -265,10 +284,18 @@ ifdef(`init_systemd',`
 	systemd_logind_dbus_chat(init_t)
 
 	logging_send_audit_msgs(init_t)
+	logging_relabelto_devlog_sock_files(init_t)
+	fs_dontaudit_getattr_xattr_fs(init_t)
 
 	# shared hwclock
 	clock_read_adjtime(init_t)
 
+	# udevd is a "systemd kobject uevent socket activated daemon"
+	udev_create_kobject_uevent_sockets(init_t)
+
+	term_relabel_pty_dir(init_t)
+
+	files_search_kernel_modules(init_t)
 	optional_policy(`
 		modutils_domtrans_insmod(init_t)
 	')

@@ -553,6 +553,25 @@ interface(`logging_send_syslog_msg',`
 
 ########################################
 ## <summary>
+##	Allow domain to relabelto devlog sock_files
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`logging_relabelto_devlog_sock_files',`
+	gen_require(`
+		type devlog_t;
+	')
+
+	allow $1 devlog_t:sock_file relabelto;
+')
+
+########################################
+## <summary>
 ##	Read the auditd configuration files.
 ## </summary>
 ## <param name="domain">

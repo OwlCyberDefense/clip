@@ -5,6 +5,7 @@
 /bin/systemd-nspawn			--	gen_context(system_u:object_r:systemd_nspawn_exec_t,s0)
 /bin/systemd-run			--	gen_context(system_u:object_r:systemd_run_exec_t,s0)
 /bin/systemd-stdio-bridge	--	gen_context(system_u:object_r:systemd_stdio_bridge_exec_t,s0)
+/bin/systemd-tmpfiles		--	gen_context(system_u:object_r:systemd_tmpfiles_exec_t,s0)
 /bin/systemd-tty-ask-password-agent		--			gen_context(system_u:object_r:systemd_passwd_agent_exec_t,s0)
 
 /usr/lib/dracut/.*\.service		gen_context(system_u:object_r:systemd_unit_file_t,s0)
@@ -23,8 +24,6 @@
 /usr/lib/systemd/systemd-localed		--	gen_context(system_u:object_r:systemd_locale_exec_t,s0)
 /usr/lib/systemd/systemd-logind			--	gen_context(system_u:object_r:systemd_logind_exec_t,s0)
 /usr/lib/systemd/systemd-machined	--	gen_context(system_u:object_r:systemd_machined_exec_t,s0)
-/usr/lib/systemd/systemd-shutdownd			--	gen_context(system_u:object_r:systemd_shutdownd_exec_t,s1)
-/usr/lib/systemd/systemd-vconsole-setup	--	gen_context(system_u:object_r:systemd_vconsole_setup_exec_t,s0)
 /usr/lib/systemd/user-generators(/.*)?		gen_context(system_u:object_r:bin_t,s0)
 /usr/lib/systemd/user-preset(/.*)?			gen_context(system_u:object_r:systemd_unit_file_t,s0)
 

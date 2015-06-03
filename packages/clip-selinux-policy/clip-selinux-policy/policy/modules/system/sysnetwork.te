@@ -160,6 +160,10 @@ ifdef(`distro_redhat', `
 	files_exec_etc_files(dhcpc_t)
 ')
 
+ifdef(`init_systemd',`
+	init_rw_stream_sockets(dhcpc_t)
+')
+
 ifdef(`distro_ubuntu',`
 	optional_policy(`
 		unconfined_domain(dhcpc_t)

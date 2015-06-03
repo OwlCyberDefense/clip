@@ -1790,7 +1790,7 @@ interface(`init_script_tmp_filetrans',`
 
 ########################################
 ## <summary>
-##	Create files in an init lib directory.
+##	Search init variable state and transition to specified label.
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -1799,17 +1799,12 @@ interface(`init_script_tmp_filetrans',`
 ## </param>
 ## <param name="file_type">
 ##	<summary>
-##	The type of the object to be created
+##	The label to transition to.
 ##	</summary>
 ## </param>
 ## <param name="object_class">
 ##	<summary>
 ##	The object class.
-##	</summary>
-## </param>
-## <param name="name" optional="true">
-##	<summary>
-##	The name of the object being created.
 ##	</summary>
 ## </param>
 #

@@ -3820,6 +3820,24 @@ interface(`fs_rw_rpc_named_pipes',`
 
 ########################################
 ## <summary>
+##	Mount on sysclt_fs dirs.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_mounton_sysctl_fs',`
+	gen_require(`
+		type sysctl_fs_t;
+	')
+
+	files_mountpoint(sysctl_fs_t)
+')
+
+########################################
+## <summary>
 ##	Mount a tmpfs filesystem.
 ## </summary>
 ## <param name="domain">

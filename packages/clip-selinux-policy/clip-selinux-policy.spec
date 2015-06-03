@@ -128,7 +128,7 @@ fi
 
 %define loadpolicy() \
 . %{_sysconfdir}/selinux/config; \
-( cd /usr/share/selinux/%1; semodule -n -b base.pp.bz2 -i %2 -s %1 2>&1 | /bin/tee /tmp/load_policy.log ); \
+( cd /usr/share/selinux/%1; semodule -n -b base.pp.bz2 -i %2 -s %1 &> /dev/null ); \
 
 %define relabel() \
 . %{_sysconfdir}/selinux/config; \
@@ -136,7 +136,7 @@ FILE_CONTEXT=%{_sysconfdir}/selinux/%1/contexts/files/file_contexts; \
 selinuxenabled; \
 if [ $? = 0  -a "${SELINUXTYPE}" = %1 -a -f ${FILE_CONTEXT}.pre ]; then \
      fixfiles -C ${FILE_CONTEXT}.pre restore; \
-     restorecon -R /root /var/log /var/run 2> /dev/null; \
+     restorecon -RF / &> /dev/null; \
      rm -f ${FILE_CONTEXT}.pre; \
 fi; 
 
@@ -246,12 +246,12 @@ Based off of reference policy refpolicy-2.20110726.tar.bz2
 %post clip
 packages=`cat /usr/share/selinux/clip/modules.lst`
 if [ $1 -eq 1 ]; then
-   %loadpolicy clip $packages 2>> /tmp/policy_load.log
-   restorecon -R /root /var/log /var/run 2>> /tmp/policy_load.log
+   %loadpolicy clip $packages
+   restorecon -RF / &> /dev/null
 else
 #   semodule -n -s clip 2>/dev/null
-   %loadpolicy clip $packages 2>> /tmp/policy_load.log
-   %relabel clip 2>> /tmp/policy_load.log
+   %loadpolicy clip $packages
+   %relabel clip
 fi
 
 echo "-F" > /.autorelabel
