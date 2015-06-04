@@ -80,6 +80,14 @@ interface(`auth_use_pam',`
 	optional_policy(`
 		nis_authenticate($1)
 	')
+
+	optional_policy(`
+		tunable_policy(`authlogin_update_passwd',`
+			allow $1 self:process setfscreate;
+			files_manage_etc_files($1)
+			files_manage_etc_runtime_files($1)
+		')
+	')
 ')
 
 ########################################

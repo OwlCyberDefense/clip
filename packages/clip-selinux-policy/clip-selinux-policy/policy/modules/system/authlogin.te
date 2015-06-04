@@ -13,6 +13,13 @@ policy_module(authlogin, 2.6.0)
 ## </desc>
 gen_tunable(authlogin_nsswitch_use_ldap, false)
 
+## <desc>
+## <p>
+## Allow callers of auth_use_pam to update passwords through pam
+## </p>
+## </desc>
+gen_tunable(authlogin_udpate_passwd, true)
+
 attribute can_read_shadow_passwords;
 attribute can_write_shadow_passwords;
 attribute can_relabelto_shadow_passwords;
