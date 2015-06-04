@@ -231,6 +231,7 @@ dev_create_generic_chr_files(lvm_t)
 dev_delete_generic_dirs(lvm_t)
 dev_read_rand(lvm_t)
 dev_read_urand(lvm_t)
+dev_write_kmsg(lvm_t)
 dev_rw_lvm_control(lvm_t)
 dev_manage_generic_symlinks(lvm_t)
 dev_relabel_generic_dev_dirs(lvm_t)
@@ -303,6 +304,12 @@ seutil_search_default_contexts(lvm_t)
 seutil_sigchld_newrole(lvm_t)
 
 userdom_use_user_terminals(lvm_t)
+
+ifdef(`init_systemd',`
+	systemd_socket_activated(lvm_t, lvm_var_run_t)
+	fs_manage_hugetlbfs_dirs(lvm_t)
+	init_rw_stream_sockets(lvm_t)
+')
 
 ifdef(`distro_redhat',`
 	# this is from the initrd:

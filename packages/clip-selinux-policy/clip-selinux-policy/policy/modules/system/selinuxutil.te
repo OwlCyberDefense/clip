@@ -67,7 +67,7 @@ role newrole_roles types newrole_t;
 # the security server policy configuration.
 #
 type policy_config_t;
-files_type(policy_config_t)
+files_security_file(policy_config_t)
 
 neverallow ~can_relabelto_binary_policy policy_config_t:file relabelto;
 #neverallow ~can_write_binary_policy policy_config_t:file { write append };
@@ -97,6 +97,7 @@ role run_init_roles types run_init_t;
 type semanage_t;
 type semanage_exec_t;
 application_domain(semanage_t, semanage_exec_t)
+init_system_domain(semanage_t, semanage_exec_t)
 domain_interactive_fd(semanage_t)
 role semanage_roles types semanage_t;
 

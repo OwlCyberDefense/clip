@@ -143,13 +143,13 @@ interface(`dev_relabel_all_dev_nodes',`
 		type device_t;
 	')
 
-	relabelfrom_dirs_pattern($1, device_t, device_node)
-	relabelfrom_files_pattern($1, device_t, device_node)
-	relabelfrom_lnk_files_pattern($1, device_t, { device_t device_node })
-	relabelfrom_fifo_files_pattern($1, device_t, device_node)
-	relabelfrom_sock_files_pattern($1, device_t, device_node)
-	relabel_blk_files_pattern($1, device_t, { device_t device_node })
-	relabel_chr_files_pattern($1, device_t, { device_t device_node })
+	relabel_dirs_pattern($1, device_t, { device_t device_node })
+	relabel_files_pattern($1, device_t, device_node)
+	relabel_lnk_files_pattern($1, device_t, { device_t device_node })
+	relabel_fifo_files_pattern($1, device_t, device_node)
+	relabel_sock_files_pattern($1, device_t, device_node)
+	relabel_blk_files_pattern($1, device_t, device_node)
+	relabel_chr_files_pattern($1, device_t, device_node)
 ')
 
 ########################################
@@ -709,7 +709,65 @@ interface(`dev_relabelfrom_generic_chr_files',`
 		type device_t;
 	')
 
-	allow $1 device_t:chr_file relabelfrom;
+	allow $1 device_t:chr_file relabelfrom_chr_file_perms;
+')
+
+########################################
+## <summary>
+##	Relabel from generic block device files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`dev_relabelfrom_generic_blk_files',`
+	gen_require(`
+		type device_t;
+	')
+
+	allow $1 device_t:blk_file relabelfrom_blk_file_perms;
+')
+
+########################################
+## <summary>
+##	Relabel from generic sock_file device files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`dev_relabelfrom_generic_sock_files',`
+	gen_require(`
+		type device_t;
+	')
+
+	allow $1 device_t:sock_file relabelfrom_sock_file_perms;
+')
+
+########################################
+## <summary>
+##	Allow relabeling from all generic device files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`dev_relabelfrom_all_generic_dev_files',`
+	gen_require(`
+		attribute device_node;
+		type device_t;
+	')
+
+	dev_relabelfrom_generic_chr_files($1)
+	dev_relabelfrom_generic_blk_files($1)
+	dev_relabelfrom_generic_sock_files($1)
 ')
 
 ########################################

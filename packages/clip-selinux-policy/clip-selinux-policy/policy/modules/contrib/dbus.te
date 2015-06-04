@@ -118,6 +118,15 @@ selinux_compute_create_context(system_dbusd_t)
 selinux_compute_relabel_context(system_dbusd_t)
 selinux_compute_user_contexts(system_dbusd_t)
 
+optional_policy(`
+	ifdef(`init_systemd',`
+		systemd_socket_activated(system_dbusd_t, system_dbusd_var_run_t)
+		systemd_logind_use_fds(system_dbusd_t)
+		systemd_logind_manage_pid_pipes(system_dbusd_t)
+		kernel_dgram_send(system_dbusd_t)
+	')
+')
+
 term_dontaudit_use_console(system_dbusd_t)
 
 auth_use_nsswitch(system_dbusd_t)

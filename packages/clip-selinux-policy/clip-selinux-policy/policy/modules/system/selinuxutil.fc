@@ -1,6 +1,12 @@
 # SELinux userland utilities
 
 #
+# /bin
+#
+/bin/checkpolicy		--	gen_context(system_u:object_r:checkpolicy_exec_t,s0)
+/bin/newrole		--	gen_context(system_u:object_r:newrole_exec_t,s0)
+
+#
 # /etc
 #
 /etc/selinux(/.*)?			gen_context(system_u:object_r:selinux_config_t,s0)
@@ -24,8 +30,11 @@
 #
 /sbin/load_policy		--	gen_context(system_u:object_r:load_policy_exec_t,s0)
 /sbin/restorecon		--	gen_context(system_u:object_r:setfiles_exec_t,s0)
+/sbin/run_init		--	gen_context(system_u:object_r:run_init_exec_t,s0)
 /sbin/setfiles.*		--	gen_context(system_u:object_r:setfiles_exec_t,s0)
-
+/sbin/setsebool		--	gen_context(system_u:object_r:semanage_exec_t,s0)
+/sbin/semanage		--	gen_context(system_u:object_r:semanage_exec_t,s0)
+/sbin/semodule		--	gen_context(system_u:object_r:semanage_exec_t,s0)
 #
 # /usr
 #

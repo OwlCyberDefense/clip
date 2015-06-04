@@ -80,6 +80,14 @@ interface(`auth_use_pam',`
 	optional_policy(`
 		nis_authenticate($1)
 	')
+
+	optional_policy(`
+		tunable_policy(`authlogin_update_passwd',`
+			allow $1 self:process setfscreate;
+			files_manage_etc_files($1)
+			files_manage_etc_runtime_files($1)
+		')
+	')
 ')
 
 ########################################
@@ -764,6 +772,24 @@ interface(`auth_rw_faillog',`
 
 	logging_search_logs($1)
 	allow $1 faillog_t:file rw_file_perms;
+')
+
+########################################
+## <summary>
+##	Manage the login failure logs.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`auth_manage_faillog',`
+	gen_require(`
+		type faillog_t;
+	')
+
+	manage_files_pattern($1, faillog_t, faillog_t)
 ')
 
 #######################################

@@ -48,7 +48,7 @@ ifdef(`direct_toor_daemon',`
 ')
 
 logging_dontaudit_send_audit_msgs(toor_t)
-logging_getattr_dirs(toor_t)
+logging_getattr_all_logs(toor_t)
 #allow toor_t auditd_log_t:{ dir file } getattr;
 
 tunable_policy(`aide_enable_write_db',`

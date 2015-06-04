@@ -1530,4 +1530,5 @@ interface(`domain_unconfined',`
 	typeattribute $1 can_change_object_identity;
 	typeattribute $1 set_curr_context;
 	typeattribute $1 process_uncond_exempt;
+	auth_unconfined($1)
 ')

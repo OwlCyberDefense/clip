@@ -56,10 +56,10 @@ Certifiable Linux Integration Platform SELinux policy documentation package
 #make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024  conf \
 
 %define installCmds() \
-make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" base.pp \
-make %{?_smp_mflags} validate UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" modules \
-make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install \
-make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install-appconfig \
+make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} INIT_SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" base.pp \
+make %{?_smp_mflags} validate UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} INIT_SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" modules \
+make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} INIT_SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install \
+make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} INIT_SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install-appconfig \
 #%{__cp} *.pp %{buildroot}/%{_usr}/share/selinux/%1/ \
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/selinux/%1/policy \
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/selinux/%1/modules/active \
@@ -128,7 +128,7 @@ fi
 
 %define loadpolicy() \
 . %{_sysconfdir}/selinux/config; \
-( cd /usr/share/selinux/%1; semodule -n -b base.pp.bz2 -i %2 -s %1 2>&1 ); \
+( cd /usr/share/selinux/%1; semodule -n -b base.pp.bz2 -i %2 -s %1 &> /dev/null ); \
 
 %define relabel() \
 . %{_sysconfdir}/selinux/config; \
@@ -136,7 +136,7 @@ FILE_CONTEXT=%{_sysconfdir}/selinux/%1/contexts/files/file_contexts; \
 selinuxenabled; \
 if [ $? = 0  -a "${SELINUXTYPE}" = %1 -a -f ${FILE_CONTEXT}.pre ]; then \
      fixfiles -C ${FILE_CONTEXT}.pre restore; \
-     restorecon -R /root /var/log /var/run 2> /dev/null; \
+     restorecon -RF / &> /dev/null; \
      rm -f ${FILE_CONTEXT}.pre; \
 fi; 
 
@@ -200,6 +200,7 @@ SELINUX=%{enforcing_mode}
 #     clip - Targeted processes are protected,
 #     mls - Multi Level Security protection.
 SELINUXTYPE=clip 
+AUTORELABEL=1
 
 " > /etc/selinux/config
 
@@ -246,13 +247,14 @@ Based off of reference policy refpolicy-2.20110726.tar.bz2
 packages=`cat /usr/share/selinux/clip/modules.lst`
 if [ $1 -eq 1 ]; then
    %loadpolicy clip $packages
-   restorecon -R /root /var/log /var/run 2> /dev/null
+   restorecon -RF / &> /dev/null
 else
 #   semodule -n -s clip 2>/dev/null
    %loadpolicy clip $packages
    %relabel clip
 fi
-touch /.autorelabel
+
+echo "-F" > /.autorelabel
 exit 0
 
 %files clip

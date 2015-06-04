@@ -16,6 +16,10 @@ type oscap_probe_exec_t;
 application_domain(oscap_probe_t, oscap_probe_exec_t)
 role system_r types oscap_probe_t;
 
+# oscap plays with ssg files
+type ssg_file_t;
+files_type(ssg_file_t)
+
 ########################################
 #
 # oscap local policy

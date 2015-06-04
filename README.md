@@ -221,8 +221,8 @@ make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel7-*-live.iso OVERLAY_SIZE=25
 ```
 ## SELinux Policy <a id="selinux"></a>
 
-CLIP SELinux policy for Red Hat Enterprise Linux 7 (RHEL7) takes a step toward
-strengthening RHEL7 targeted policy, especially with respect to systemd. The
+CLIP SELinux policy for Red Hat Enterprise Linux 7 (RHEL7) aims to provide a
+certifiable SELinux policy from which users can base their own policy. The
 policy is currently in an Alpha state and only supports booting/logins in
 Enforcing. Some caveats about the current policy state:
 - Remaining denials do not prevent booting/logins in Enforcing, but may cause

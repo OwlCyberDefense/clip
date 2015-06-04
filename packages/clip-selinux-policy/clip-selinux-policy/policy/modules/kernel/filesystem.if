@@ -3820,6 +3820,24 @@ interface(`fs_rw_rpc_named_pipes',`
 
 ########################################
 ## <summary>
+##	Mount on sysclt_fs dirs.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_mounton_sysctl_fs',`
+	gen_require(`
+		type sysctl_fs_t;
+	')
+
+	files_mountpoint(sysctl_fs_t)
+')
+
+########################################
+## <summary>
 ##	Mount a tmpfs filesystem.
 ## </summary>
 ## <param name="domain">
@@ -3944,6 +3962,40 @@ interface(`fs_getattr_tmpfs_dirs',`
 	')
 
 	allow $1 tmpfs_t:dir getattr;
+')
+
+########################################
+## <summary>
+##     Relabel directory on tmpfs filesystems.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_relabel_tmpfs_dirs',`
+	gen_require(`
+		type tmpfs_t;
+	')
+	relabel_dirs_pattern($1, tmpfs_t, tmpfs_t)
+')
+
+########################################
+## <summary>
+##     Relabel files on tmpfs filesystems.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_relabel_tmpfs_files',`
+	gen_require(`
+		type tmpfs_t;
+	')
+	relabel_files_pattern($1, tmpfs_t, tmpfs_t)
 ')
 
 ########################################

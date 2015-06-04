@@ -293,6 +293,44 @@ interface(`kernel_stream_connect',`
 
 ########################################
 ## <summary>
+##	Connect to kernel using a unix
+##	domain stream socket.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_read_stream_sockets',`
+	gen_require(`
+		type kernel_t;
+	')
+
+	allow $1 kernel_t:unix_stream_socket read;
+')
+
+########################################
+## <summary>
+##  Read/write to kernel using a unix
+##  domain stream socket.
+## </summary>
+## <param name="domain">
+##  <summary>
+##  Domain allowed access.
+##  </summary>
+## </param>
+#
+interface(`kernel_rw_stream_sockets',`
+    gen_require(`
+        type kernel_t;
+    ')
+
+    allow $1 kernel_t:unix_stream_socket { read write getattr };
+')
+
+########################################
+## <summary>
 ##	Read and write kernel unix datagram sockets.
 ## </summary>
 ## <param name="domain">
@@ -325,6 +363,24 @@ interface(`kernel_dgram_send',`
 	')
 
 	allow $1 kernel_t:unix_dgram_socket sendto;
+')
+
+########################################
+## <summary>
+##	Send messages to kernel unix datagram sockets.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_getattr_dgram_sockets',`
+	gen_require(`
+		type kernel_t;
+	')
+
+	allow $1 kernel_t:unix_dgram_socket getattr;
 ')
 
 ########################################
@@ -602,6 +658,24 @@ interface(`kernel_get_sysvipc_info',`
 	')
 
 	allow $1 kernel_t:system ipc_info;
+')
+
+########################################
+## <summary>
+##	Search kernel thread dirs in /proc/.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`kernel_search_state',`
+	gen_require(`
+		type kernel_t;
+	')
+
+	allow $1 kernel_t:dir search_dir_perms;
 ')
 
 ########################################

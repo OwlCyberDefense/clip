@@ -163,3 +163,39 @@ interface(`iptables_manage_config',`
 	files_search_etc($1)
 	manage_files_pattern($1, iptables_conf_t, iptables_conf_t)
 ')
+
+###################################
+## <summary>
+##	Read/write iptables rawip sockets
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`iptables_rw_raw_sockets',`
+	gen_require(`
+		type iptables_t;
+	')
+
+	allow $1 iptables_t:rawip_socket rw_socket_perms;
+')
+
+###################################
+## <summary>
+##	Read/write iptables stream sockets
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`iptables_rw_stream_sockets',`
+	gen_require(`
+		type iptables_t;
+	')
+
+	allow $1 iptables_t:unix_stream_socket rw_socket_perms;
+')
