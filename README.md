@@ -100,7 +100,7 @@ the two options below, 2)1 or 2)2
   on this type of package refer to `packages/examples/source`.
 
 3. Once the package has been added to the [`packages/`](./packages/) directory, it will be dynamically
-added to the build via the [`PACKAGES`](./Makefile#L52) variable in the top level Makeifle.
+added to the build via the [`PACKAGES`](./Makefile#L52) variable in the top level Makefile.
 There is nothing needed to be done on the part of the user to add the package to the build. After a package
 is built by mock, it will appear in `repos/clip-repo`. To add the package to an ISO image,
 update the appropriate kickstart file and add the package name to the kickstart's package list.
