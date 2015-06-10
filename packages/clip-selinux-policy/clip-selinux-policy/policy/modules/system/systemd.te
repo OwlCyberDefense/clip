@@ -413,10 +413,10 @@ optional_policy(`
 	dbus_connect_system_bus(systemd_logind_t)
 ')
 
-systemd_unit_files_service_status(systemd_logind_t)
-systemd_unit_files_service_start(systemd_logind_t)
-systemd_unit_files_service_stop(systemd_logind_t)
-systemd_power_units_service_start(systemd_logind_t)
+systemd_status_unit_services(systemd_logind_t)
+systemd_start_unit_services(systemd_logind_t)
+systemd_stop_unit_services(systemd_logind_t)
+systemd_start_power_unit_services(systemd_logind_t)
 init_service_status(systemd_logind_t)
 init_service_start(systemd_logind_t)
 # This is for reading /proc/1/cgroup

@@ -162,6 +162,7 @@ ifdef(`distro_redhat', `
 
 ifdef(`init_systemd',`
 	init_rw_stream_sockets(dhcpc_t)
+	init_read_state(dhcpc_t)
 ')
 
 ifdef(`distro_ubuntu',`
@@ -243,7 +244,7 @@ optional_policy(`
 ')
 
 optional_policy(`
-	systemd_services_status(dhcpc_t)
+	systemd_status_unit_services(dhcpc_t)
 	systemd_search_units(dhcpc_t)
 ')
 

@@ -2139,3 +2139,23 @@ interface(`init_service_start',`
 	allow $1 init_t:service start;
 ')
 
+########################################
+## <summary>
+##	Send and receive messages from
+##	systemd over dbus.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`init_dbus_chat',`
+	gen_require(`
+		type initrc_t;
+		class dbus send_msg;
+	')
+
+	allow $1 init_t:dbus send_msg;
+	allow init_t $1:dbus send_msg;
+')

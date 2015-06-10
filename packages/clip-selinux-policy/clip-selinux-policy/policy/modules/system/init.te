@@ -299,6 +299,7 @@ ifdef(`init_systemd',`
 	term_relabel_pty_dir(init_t)
 
 	files_search_kernel_modules(init_t)
+
 	optional_policy(`
 		modutils_domtrans_insmod(init_t)
 	')
@@ -761,12 +762,11 @@ ifdef(`init_systemd',`
 	# Connect to private bus (/run/systemd/private)
 	init_connect_private_bus(initrc_t)
 	kernel_dgram_send(initrc_t)
-	systemd_unit_files_service_status(initrc_t)
-	systemd_unit_files_service_start(initrc_t)
-	systemd_unit_files_service_stop(initrc_t)
-	systemd_power_units_service_start(initrc_t)
+	systemd_status_unit_services(initrc_t)
+	systemd_stop_unit_services(initrc_t)
+	systemd_start_power_unit_services(initrc_t)
 	systemd_manage_unit_files(initrc_t)
-	systemd_create_unit_file_dirs(initrc_t)
+	systemd_create_unit_dirs(initrc_t)
 	systemd_manage_unit_symlinks(initrc_t)
 	manage_dirs_pattern(initrc_t, init_var_run_t, init_var_run_t)
 	systemd_socket_activated(initrc_t, init_var_run_t)
