@@ -392,9 +392,10 @@ if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
 	/bin/echo "Removing ssh and rsync from the system"
 	/bin/yum remove -y openssh* rsync
 	/bin/rpm -e --nodeps rpm yum
-	# Force password reset only for production builds
-	/bin/chage -d 0 "$USERNAME"
 fi
+
+# Force password reset
+/bin/chage -d 0 "$USERNAME"
 
 /bin/kill $TAILPID 2>/dev/null 1>/dev/null
 
