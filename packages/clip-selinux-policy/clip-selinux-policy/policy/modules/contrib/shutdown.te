@@ -87,3 +87,10 @@ optional_policy(`
 optional_policy(`
 	xserver_dontaudit_write_log(shutdown_t)
 ')
+
+ifdef(`init_systemd',`
+    kernel_use_fds(shutdown_t)
+    domain_signal_all_domains(shutdown_t)
+    domain_search_all_domains_state(shutdown_t)
+    domain_read_all_domains_state(shutdown_t)
+')
