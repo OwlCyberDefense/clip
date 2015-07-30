@@ -240,6 +240,7 @@ ifdef(`init_systemd',`
 	fs_mounton_sysctl_fs(init_t)
 
 	dev_create_generic_dirs(init_t)
+	dev_manage_input_dev(init_t)
 	relabelto_dirs_pattern(init_t, var_log_t, var_log_t)
 	relabelto_files_pattern(init_t, var_log_t, var_log_t)
 
