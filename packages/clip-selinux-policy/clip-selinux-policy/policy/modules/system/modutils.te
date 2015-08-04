@@ -328,3 +328,5 @@ ifdef(`distro_ubuntu',`
 		unconfined_domain(update_modules_t)
 	')
 ')
+
+kernel_search_key(insmod_t)

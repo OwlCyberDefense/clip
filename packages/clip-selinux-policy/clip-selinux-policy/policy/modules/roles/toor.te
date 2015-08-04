@@ -462,3 +462,12 @@ ifndef(`distro_redhat',`
 	')
 ')
 
+ifdef(`init_systemd',`
+	optional_policy(`
+		systemd_start_unit_services(toor_t)
+		systemd_start_power_unit_services(toor_t)
+		systemd_stop_unit_services(toor_t)
+		systemd_status_unit_services(toor_t)
+		logging_send_audit_msgs(toor_t)
+	')
+')
