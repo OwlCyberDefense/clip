@@ -1,1 +1,1 @@
-/usr/bin/livecd-creator	--	gen_context(system_u:object_r:livecd_exec_t,s0)
+/bin/livecd-creator	--	gen_context(system_u:object_r:livecd_exec_t,s0)

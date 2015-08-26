@@ -184,10 +184,10 @@ ifdef(`distro_gentoo',`
 #
 /usr/(.*/)?Bin(/.*)?			gen_context(system_u:object_r:bin_t,s0)
 /usr/(.*/)?bin(/.*)?			gen_context(system_u:object_r:bin_t,s0)
-/usr/bin/git-shell		--	gen_context(system_u:object_r:shell_exec_t,s0)
-/usr/bin/fish			--	gen_context(system_u:object_r:shell_exec_t,s0)
-/usr/bin/scponly		--	gen_context(system_u:object_r:shell_exec_t,s0)
-/usr/bin/tcsh			--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/git-shell		--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/fish			--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/scponly		--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/tcsh			--	gen_context(system_u:object_r:shell_exec_t,s0)
 
 /usr/lib(.*/)?bin(/.*)?			gen_context(system_u:object_r:bin_t,s0)
 
@@ -258,8 +258,8 @@ ifdef(`init_systemd',`
 
 /usr/lib/debug/bin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
 /usr/lib/debug/sbin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
-/usr/lib/debug/usr/bin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
-/usr/lib/debug/usr/sbin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
+/usr/lib/debug/bin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
+/usr/lib/debug/sbin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
 
 /usr/lib/[^/]*thunderbird[^/]*/thunderbird -- gen_context(system_u:object_r:bin_t,s0)
 /usr/lib/[^/]*thunderbird[^/]*/thunderbird-bin -- gen_context(system_u:object_r:bin_t,s0)
@@ -280,9 +280,9 @@ ifdef(`init_systemd',`
 /usr/local/Printer(/.*)?		gen_context(system_u:object_r:bin_t,s0)
 /usr/local/linuxprinter/filters(/.*)?	gen_context(system_u:object_r:bin_t,s0)
 
-/usr/sbin/scponlyc		--	gen_context(system_u:object_r:shell_exec_t,s0)
-/usr/sbin/sesh			--	gen_context(system_u:object_r:shell_exec_t,s0)
-/usr/sbin/smrsh			--	gen_context(system_u:object_r:shell_exec_t,s0)
+/sbin/scponlyc		--	gen_context(system_u:object_r:shell_exec_t,s0)
+/sbin/sesh			--	gen_context(system_u:object_r:shell_exec_t,s0)
+/sbin/smrsh			--	gen_context(system_u:object_r:shell_exec_t,s0)
 
 /usr/share/ajaxterm/ajaxterm.py.* --	gen_context(system_u:object_r:bin_t,s0)
 /usr/share/ajaxterm/qweb.py.* --	gen_context(system_u:object_r:bin_t,s0)

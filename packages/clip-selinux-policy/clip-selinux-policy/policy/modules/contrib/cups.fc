@@ -23,8 +23,8 @@
 /opt/brother/Printers(.*/)?inf(/.*)?	gen_context(system_u:object_r:cupsd_rw_etc_t,s0)
 /opt/gutenprint/ppds(/.*)?	gen_context(system_u:object_r:cupsd_rw_etc_t,s0)
 
-/usr/bin/cups-config-daemon	--	gen_context(system_u:object_r:cupsd_config_exec_t,s0)
-/usr/bin/hpijs	--	gen_context(system_u:object_r:hplip_exec_t,s0)
+/bin/cups-config-daemon	--	gen_context(system_u:object_r:cupsd_config_exec_t,s0)
+/bin/hpijs	--	gen_context(system_u:object_r:hplip_exec_t,s0)
 
 /usr/Brother/fax/.*\.log.*	gen_context(system_u:object_r:cupsd_log_t,s0)
 /usr/Brother/(.*/)?inf(/.*)?	gen_context(system_u:object_r:cupsd_rw_etc_t,s0)
@@ -41,14 +41,14 @@
 
 /usr/local/linuxprinter/ppd(/.*)?	gen_context(system_u:object_r:cupsd_rw_etc_t,s0)
 
-/usr/sbin/hp-[^/]+	--	gen_context(system_u:object_r:hplip_exec_t,s0)
-/usr/sbin/cupsd	--	gen_context(system_u:object_r:cupsd_exec_t,s0)
-/usr/sbin/hal_lpadmin	--	gen_context(system_u:object_r:cupsd_config_exec_t,s0)
-/usr/sbin/hpiod	--	gen_context(system_u:object_r:hplip_exec_t,s0)
-/usr/sbin/printconf-backend	--	gen_context(system_u:object_r:cupsd_config_exec_t,s0)
-/usr/sbin/ptal-printd	--	gen_context(system_u:object_r:ptal_exec_t,s0)
-/usr/sbin/ptal-mlcd	--	gen_context(system_u:object_r:ptal_exec_t,s0)
-/usr/sbin/ptal-photod	--	gen_context(system_u:object_r:ptal_exec_t,s0)
+/sbin/hp-[^/]+	--	gen_context(system_u:object_r:hplip_exec_t,s0)
+/sbin/cupsd	--	gen_context(system_u:object_r:cupsd_exec_t,s0)
+/sbin/hal_lpadmin	--	gen_context(system_u:object_r:cupsd_config_exec_t,s0)
+/sbin/hpiod	--	gen_context(system_u:object_r:hplip_exec_t,s0)
+/sbin/printconf-backend	--	gen_context(system_u:object_r:cupsd_config_exec_t,s0)
+/sbin/ptal-printd	--	gen_context(system_u:object_r:ptal_exec_t,s0)
+/sbin/ptal-mlcd	--	gen_context(system_u:object_r:ptal_exec_t,s0)
+/sbin/ptal-photod	--	gen_context(system_u:object_r:ptal_exec_t,s0)
 
 /usr/share/cups(/.*)?	gen_context(system_u:object_r:cupsd_etc_t,s0)
 /usr/share/foomatic/db/oldprinterids	--	gen_context(system_u:object_r:cupsd_rw_etc_t,s0)

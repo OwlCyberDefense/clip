@@ -1,4 +1,4 @@
-/usr/bin/podsleuth	--	gen_context(system_u:object_r:podsleuth_exec_t,s0)
+/bin/podsleuth	--	gen_context(system_u:object_r:podsleuth_exec_t,s0)
 
 /usr/libexec/hal-podsleuth	--	gen_context(system_u:object_r:podsleuth_exec_t,s0)
 

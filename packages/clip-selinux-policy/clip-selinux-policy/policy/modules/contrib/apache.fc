@@ -36,9 +36,9 @@ HOME_DIR/((www)|(web)|(public_html))(/.*)?/logs(/.*)?	gen_context(system_u:objec
 
 /usr/.*\.cgi	--	gen_context(system_u:object_r:httpd_sys_script_exec_t,s0)
 
-/usr/bin/htsslpass	--	gen_context(system_u:object_r:httpd_helper_exec_t,s0)
-/usr/bin/mongrel_rails	--	gen_context(system_u:object_r:httpd_exec_t,s0)
-/usr/bin/ssi-cgi	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/bin/htsslpass	--	gen_context(system_u:object_r:httpd_helper_exec_t,s0)
+/bin/mongrel_rails	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/bin/ssi-cgi	--	gen_context(system_u:object_r:httpd_exec_t,s0)
 
 /usr/lib/apache-ssl/.+	--	gen_context(system_u:object_r:httpd_exec_t,s0)
 /usr/lib/apache(/.*)?	gen_context(system_u:object_r:httpd_modules_t,s0)
@@ -53,20 +53,20 @@ HOME_DIR/((www)|(web)|(public_html))(/.*)?/logs(/.*)?	gen_context(system_u:objec
 
 /usr/libexec/httpd-ssl-pass-dialog	--	gen_context(system_u:object_r:httpd_passwd_exec_t,s0)
 
-/usr/sbin/apache(2)?	--	gen_context(system_u:object_r:httpd_exec_t,s0)
-/usr/sbin/apache-ssl(2)?	--	gen_context(system_u:object_r:httpd_exec_t,s0)
-/usr/sbin/cgi-wrapper	--	gen_context(system_u:object_r:httpd_exec_t,s0)
-/usr/sbin/cherokee	--	gen_context(system_u:object_r:httpd_exec_t,s0)
-/usr/sbin/hiawatha	--	gen_context(system_u:object_r:httpd_exec_t,s0)
-/usr/sbin/httpd\.event	--	gen_context(system_u:object_r:httpd_exec_t,s0)
-/usr/sbin/httpd(\.worker)?	--	gen_context(system_u:object_r:httpd_exec_t,s0)
-/usr/sbin/lighttpd	--	gen_context(system_u:object_r:httpd_exec_t,s0)
-/usr/sbin/rotatelogs	--	gen_context(system_u:object_r:httpd_rotatelogs_exec_t,s0)
-/usr/sbin/suexec	--	gen_context(system_u:object_r:httpd_suexec_exec_t,s0)
-/usr/sbin/wigwam	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/sbin/apache(2)?	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/sbin/apache-ssl(2)?	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/sbin/cgi-wrapper	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/sbin/cherokee	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/sbin/hiawatha	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/sbin/httpd\.event	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/sbin/httpd(\.worker)?	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/sbin/lighttpd	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/sbin/rotatelogs	--	gen_context(system_u:object_r:httpd_rotatelogs_exec_t,s0)
+/sbin/suexec	--	gen_context(system_u:object_r:httpd_suexec_exec_t,s0)
+/sbin/wigwam	--	gen_context(system_u:object_r:httpd_exec_t,s0)
 
 ifdef(`distro_suse',`
-/usr/sbin/httpd2-.*	--	gen_context(system_u:object_r:httpd_exec_t,s0)
+/sbin/httpd2-.*	--	gen_context(system_u:object_r:httpd_exec_t,s0)
 ')
 
 /usr/share/dirsrv(/.*)?	gen_context(system_u:object_r:httpd_sys_content_t,s0)

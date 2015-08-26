@@ -8,17 +8,17 @@
 /sbin/anacron	--	gen_context(system_u:object_r:anacron_exec_t,s0)
 /sbin/cron(d)?	--	gen_context(system_u:object_r:crond_exec_t,s0)
 
-/usr/bin/at	--	gen_context(system_u:object_r:crontab_exec_t,s0)
-/usr/bin/(f)?crontab	--	gen_context(system_u:object_r:crontab_exec_t,s0)
+/bin/at	--	gen_context(system_u:object_r:crontab_exec_t,s0)
+/bin/(f)?crontab	--	gen_context(system_u:object_r:crontab_exec_t,s0)
 
 /usr/libexec/fcron	--	gen_context(system_u:object_r:crond_exec_t,s0)
 /usr/libexec/fcronsighup	--	gen_context(system_u:object_r:crontab_exec_t,s0)
 
-/usr/sbin/anacron	--	gen_context(system_u:object_r:anacron_exec_t,s0)
-/usr/sbin/atd	--	gen_context(system_u:object_r:crond_exec_t,s0)
-/usr/sbin/cron(d)?	--	gen_context(system_u:object_r:crond_exec_t,s0)
-/usr/sbin/fcron	--	gen_context(system_u:object_r:crond_exec_t,s0)
-/usr/sbin/fcronsighup	--	gen_context(system_u:object_r:crontab_exec_t,s0)
+/sbin/anacron	--	gen_context(system_u:object_r:anacron_exec_t,s0)
+/sbin/atd	--	gen_context(system_u:object_r:crond_exec_t,s0)
+/sbin/cron(d)?	--	gen_context(system_u:object_r:crond_exec_t,s0)
+/sbin/fcron	--	gen_context(system_u:object_r:crond_exec_t,s0)
+/sbin/fcronsighup	--	gen_context(system_u:object_r:crontab_exec_t,s0)
 
 /var/lib/glpi/files(/.*)?	gen_context(system_u:object_r:cron_var_lib_t,s0)
 

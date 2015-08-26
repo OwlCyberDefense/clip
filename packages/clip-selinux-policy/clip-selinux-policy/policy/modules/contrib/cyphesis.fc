@@ -1,6 +1,6 @@
 /etc/rc\.d/init\.d/cyphesis	--	gen_context(system_u:object_r:cyphesis_initrc_exec_t,s0)
 
-/usr/bin/cyphesis	--	gen_context(system_u:object_r:cyphesis_exec_t,s0)
+/bin/cyphesis	--	gen_context(system_u:object_r:cyphesis_exec_t,s0)
 
 /var/log/cyphesis(/.*)?	gen_context(system_u:object_r:cyphesis_log_t,s0)
 

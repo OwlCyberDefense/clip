@@ -2,13 +2,13 @@
 
 /etc/rc\.d/init\.d/zarafa.*	--	gen_context(system_u:object_r:zarafa_initrc_exec_t,s0)
 
-/usr/bin/zarafa-dagent	--	gen_context(system_u:object_r:zarafa_deliver_exec_t,s0)
-/usr/bin/zarafa-gateway	--	gen_context(system_u:object_r:zarafa_gateway_exec_t,s0)
-/usr/bin/zarafa-ical	--	gen_context(system_u:object_r:zarafa_ical_exec_t,s0)
-/usr/bin/zarafa-indexer	--	gen_context(system_u:object_r:zarafa_indexer_exec_t,s0)
-/usr/bin/zarafa-monitor	--	gen_context(system_u:object_r:zarafa_monitor_exec_t,s0)
-/usr/bin/zarafa-server	--	gen_context(system_u:object_r:zarafa_server_exec_t,s0)
-/usr/bin/zarafa-spooler	--	gen_context(system_u:object_r:zarafa_spooler_exec_t,s0)
+/bin/zarafa-dagent	--	gen_context(system_u:object_r:zarafa_deliver_exec_t,s0)
+/bin/zarafa-gateway	--	gen_context(system_u:object_r:zarafa_gateway_exec_t,s0)
+/bin/zarafa-ical	--	gen_context(system_u:object_r:zarafa_ical_exec_t,s0)
+/bin/zarafa-indexer	--	gen_context(system_u:object_r:zarafa_indexer_exec_t,s0)
+/bin/zarafa-monitor	--	gen_context(system_u:object_r:zarafa_monitor_exec_t,s0)
+/bin/zarafa-server	--	gen_context(system_u:object_r:zarafa_server_exec_t,s0)
+/bin/zarafa-spooler	--	gen_context(system_u:object_r:zarafa_spooler_exec_t,s0)
 
 /var/lib/zarafa(/.*)?	gen_context(system_u:object_r:zarafa_var_lib_t,s0)
 /var/lib/zarafa-webaccess(/.*)?	gen_context(system_u:object_r:zarafa_var_lib_t,s0)

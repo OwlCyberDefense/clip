@@ -10,8 +10,8 @@
 #
 # /usr
 #
-/usr/bin/initdb(\.sepgsql)?	--	gen_context(system_u:object_r:postgresql_exec_t,s0)
-/usr/bin/(se)?postgres		--	gen_context(system_u:object_r:postgresql_exec_t,s0)
+/bin/initdb(\.sepgsql)?	--	gen_context(system_u:object_r:postgresql_exec_t,s0)
+/bin/(se)?postgres		--	gen_context(system_u:object_r:postgresql_exec_t,s0)
 
 /usr/lib/pgsql/test/regress(/.*)?	gen_context(system_u:object_r:postgresql_db_t,s0)
 /usr/lib/pgsql/test/regress/pg_regress -- gen_context(system_u:object_r:postgresql_exec_t,s0)

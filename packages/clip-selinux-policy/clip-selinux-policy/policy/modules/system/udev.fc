@@ -27,7 +27,7 @@ ifdef(`distro_redhat',`
 /sbin/start_udev --	gen_context(system_u:object_r:udev_exec_t,s0)
 ')
 
-/usr/bin/udevinfo --	gen_context(system_u:object_r:udev_exec_t,s0)
+/bin/udevinfo --	gen_context(system_u:object_r:udev_exec_t,s0)
 
 /usr/lib/systemd/systemd-udevd -- gen_context(system_u:object_r:udev_exec_t,s0)
 

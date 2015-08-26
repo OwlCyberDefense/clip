@@ -1,7 +1,7 @@
 /etc/hal/capability\.d/printer_update\.hal	--	gen_context(system_u:object_r:hald_exec_t,s0)
 /etc/hal/device\.d/printer_remove\.hal	-- 	gen_context(system_u:object_r:hald_exec_t,s0)
 
-/usr/bin/hal-setup-keymap	--	gen_context(system_u:object_r:hald_keymap_exec_t,s0)
+/bin/hal-setup-keymap	--	gen_context(system_u:object_r:hald_keymap_exec_t,s0)
 
 /usr/libexec/hal-acl-tool	--	gen_context(system_u:object_r:hald_acl_exec_t,s0)
 /usr/libexec/hal-dccm	--	gen_context(system_u:object_r:hald_dccm_exec_t,s0)
@@ -10,8 +10,8 @@
 /usr/libexec/hald-addon-macbookpro-backlight	--	gen_context(system_u:object_r:hald_mac_exec_t,s0)
 /usr/libexec/hald-addon-macbook-backlight	--	gen_context(system_u:object_r:hald_mac_exec_t,s0)
 
-/usr/sbin/hald	--	gen_context(system_u:object_r:hald_exec_t,s0)
-/usr/sbin/radeontool	--	gen_context(system_u:object_r:hald_mac_exec_t,s0)
+/sbin/hald	--	gen_context(system_u:object_r:hald_exec_t,s0)
+/sbin/radeontool	--	gen_context(system_u:object_r:hald_mac_exec_t,s0)
 
 /var/cache/hald(/.*)?	gen_context(system_u:object_r:hald_cache_t,s0)
 

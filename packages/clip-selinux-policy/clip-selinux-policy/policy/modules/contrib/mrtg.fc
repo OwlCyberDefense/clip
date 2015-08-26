@@ -3,7 +3,7 @@
 
 /etc/rc\.d/init\.d/mrtg	--	gen_context(system_u:object_r:mrtg_initrc_exec_t,s0)
 
-/usr/bin/mrtg	--	gen_context(system_u:object_r:mrtg_exec_t,s0)
+/bin/mrtg	--	gen_context(system_u:object_r:mrtg_exec_t,s0)
 
 /var/lib/mrtg(/.*)?	gen_context(system_u:object_r:mrtg_var_lib_t,s0)
 

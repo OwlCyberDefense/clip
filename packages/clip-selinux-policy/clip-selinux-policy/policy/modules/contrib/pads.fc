@@ -5,6 +5,6 @@
 
 /etc/rc\.d/init\.d/pads	--	gen_context(system_u:object_r:pads_initrc_exec_t,s0)
 
-/usr/bin/pads	--	gen_context(system_u:object_r:pads_exec_t,s0)
+/bin/pads	--	gen_context(system_u:object_r:pads_exec_t,s0)
 
 /var/run/pads\.pid	--	gen_context(system_u:object_r:pads_var_run_t,s0)
