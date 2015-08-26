@@ -3,17 +3,20 @@
 #
 /bin					gen_context(system_u:object_r:bin_t,s0)
 /bin/.*					gen_context(system_u:object_r:bin_t,s0)
-/bin/d?ash			--	gen_context(system_u:object_r:shell_exec_t,s0)
 /bin/bash			--	gen_context(system_u:object_r:shell_exec_t,s0)
 /bin/bash2			--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/d?ash			--	gen_context(system_u:object_r:shell_exec_t,s0)
 /bin/fish			--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/git-shell		--	gen_context(system_u:object_r:shell_exec_t,s0)
 /bin/ksh.*			--	gen_context(system_u:object_r:shell_exec_t,s0)
 /bin/mksh			--	gen_context(system_u:object_r:shell_exec_t,s0)
 /bin/mountpoint			--	gen_context(system_u:object_r:bin_t,s0)
 /bin/sash			--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/scponly		--	gen_context(system_u:object_r:shell_exec_t,s0)
 /bin/tcsh			--	gen_context(system_u:object_r:shell_exec_t,s0)
 /bin/yash			--	gen_context(system_u:object_r:shell_exec_t,s0)
 /bin/zsh.*			--	gen_context(system_u:object_r:shell_exec_t,s0)
+
 
 #
 # /dev
@@ -184,10 +187,6 @@ ifdef(`distro_gentoo',`
 #
 /usr/(.*/)?Bin(/.*)?			gen_context(system_u:object_r:bin_t,s0)
 /usr/(.*/)?bin(/.*)?			gen_context(system_u:object_r:bin_t,s0)
-/bin/git-shell		--	gen_context(system_u:object_r:shell_exec_t,s0)
-/bin/fish			--	gen_context(system_u:object_r:shell_exec_t,s0)
-/bin/scponly		--	gen_context(system_u:object_r:shell_exec_t,s0)
-/bin/tcsh			--	gen_context(system_u:object_r:shell_exec_t,s0)
 
 /usr/lib(.*/)?bin(/.*)?			gen_context(system_u:object_r:bin_t,s0)
 
@@ -258,8 +257,8 @@ ifdef(`init_systemd',`
 
 /usr/lib/debug/bin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
 /usr/lib/debug/sbin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
-/usr/lib/debug/bin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
-/usr/lib/debug/sbin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
+/usr/lib/debug/usr/bin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
+/usr/lib/debug/usr/sbin(/.*)?	--	gen_context(system_u:object_r:bin_t,s0)
 
 /usr/lib/[^/]*thunderbird[^/]*/thunderbird -- gen_context(system_u:object_r:bin_t,s0)
 /usr/lib/[^/]*thunderbird[^/]*/thunderbird-bin -- gen_context(system_u:object_r:bin_t,s0)

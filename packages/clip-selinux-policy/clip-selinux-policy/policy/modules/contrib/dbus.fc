@@ -6,8 +6,6 @@ HOME_DIR/\.dbus(/.*)?	gen_context(system_u:object_r:session_dbusd_home_t,s0)
 
 /lib/dbus-.*/dbus-daemon-launch-helper -- gen_context(system_u:object_r:dbusd_exec_t,s0)
 
-/bin/dbus-daemon(-1)?	--	gen_context(system_u:object_r:dbusd_exec_t,s0)
-
 /usr/lib/dbus-.*/dbus-daemon-launch-helper	--	gen_context(system_u:object_r:dbusd_exec_t,s0)
 
 /usr/libexec/dbus-daemon-launch-helper	--	gen_context(system_u:object_r:dbusd_exec_t,s0)

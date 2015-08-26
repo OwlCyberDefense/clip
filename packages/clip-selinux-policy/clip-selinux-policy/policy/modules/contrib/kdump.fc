@@ -4,10 +4,5 @@
 
 /bin/kdumpctl	--	gen_context(system_u:object_r:kdumpctl_exec_t,s0)
 
-/bin/kdumpctl	--	gen_context(system_u:object_r:kdumpctl_exec_t,s0)
-
-/sbin/kdump	--	gen_context(system_u:object_r:kdump_exec_t,s0)
-/sbin/kexec	--	gen_context(system_u:object_r:kdump_exec_t,s0)
-
 /sbin/kdump	--	gen_context(system_u:object_r:kdump_exec_t,s0)
 /sbin/kexec	--	gen_context(system_u:object_r:kdump_exec_t,s0)

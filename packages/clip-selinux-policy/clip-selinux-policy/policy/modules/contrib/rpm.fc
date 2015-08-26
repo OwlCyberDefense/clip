@@ -1,17 +1,15 @@
+/bin/debuginfo-install	--	gen_context(system_u:object_r:debuginfo_exec_t,s0)
+/bin/fedora-rmdevelrpms	--	gen_context(system_u:object_r:rpm_exec_t,s0)
+/bin/online_update	--	gen_context(system_u:object_r:rpm_exec_t,s0)
 /bin/rpm	--	gen_context(system_u:object_r:rpm_exec_t,s0)
+/bin/rpmdev-rmdevelrpms	--	gen_context(system_u:object_r:rpm_exec_t,s0)
+/bin/smart	--	gen_context(system_u:object_r:rpm_exec_t,s0)
+/bin/yum	--	gen_context(system_u:object_r:rpm_exec_t,s0)
+/bin/zif	--	gen_context(system_u:object_r:rpm_exec_t,s0)
 
 /etc/rc\.d/init\.d/bcfg2	--	gen_context(system_u:object_r:rpm_initrc_exec_t,s0)
 
 /sbin/yast2	--	gen_context(system_u:object_r:rpm_exec_t,s0)
-
-/bin/debuginfo-install	--	gen_context(system_u:object_r:debuginfo_exec_t,s0)
-/bin/fedora-rmdevelrpms	--	gen_context(system_u:object_r:rpm_exec_t,s0)
-/bin/online_update	--	gen_context(system_u:object_r:rpm_exec_t,s0)
-/bin/rpmdev-rmdevelrpms	--	gen_context(system_u:object_r:rpm_exec_t,s0)
-/bin/rpm	--	gen_context(system_u:object_r:rpm_exec_t,s0)
-/bin/smart	--	gen_context(system_u:object_r:rpm_exec_t,s0)
-/bin/yum	--	gen_context(system_u:object_r:rpm_exec_t,s0)
-/bin/zif	--	gen_context(system_u:object_r:rpm_exec_t,s0)
 
 /usr/libexec/packagekitd	--	gen_context(system_u:object_r:rpm_exec_t,s0)
 /usr/libexec/yumDBUSBackend.py	--	gen_context(system_u:object_r:rpm_exec_t,s0)

@@ -2,10 +2,6 @@
 
 /sbin/plymouthd	--	gen_context(system_u:object_r:plymouthd_exec_t,s0)
 
-/bin/plymouth	--	gen_context(system_u:object_r:plymouth_exec_t,s0)
-
-/sbin/plymouthd	--	gen_context(system_u:object_r:plymouthd_exec_t,s0)
-
 /var/lib/plymouth(/.*)?	gen_context(system_u:object_r:plymouthd_var_lib_t,s0)
 
 /var/log/boot\.log.*	--	gen_context(system_u:object_r:plymouthd_var_log_t,mls_systemhigh)

@@ -1,12 +1,8 @@
-/bin/ping.* 		--	gen_context(system_u:object_r:ping_exec_t,s0)
-/bin/tracepath.*		--	gen_context(system_u:object_r:traceroute_exec_t,s0)
-/bin/traceroute.*	--	gen_context(system_u:object_r:traceroute_exec_t,s0)
-
-/sbin/arping		--	gen_context(system_u:object_r:netutils_exec_t,s0)
-
 /bin/arping		--	gen_context(system_u:object_r:netutils_exec_t,s0)
 /bin/lft		--	gen_context(system_u:object_r:traceroute_exec_t,s0)
 /bin/nmap		--	gen_context(system_u:object_r:traceroute_exec_t,s0)
+/bin/ping.* 		--	gen_context(system_u:object_r:ping_exec_t,s0)
+/bin/tracepath.*		--	gen_context(system_u:object_r:traceroute_exec_t,s0)
 /bin/traceroute.*	--	gen_context(system_u:object_r:traceroute_exec_t,s0)
 
 /sbin/arping	--	gen_context(system_u:object_r:netutils_exec_t,s0)
