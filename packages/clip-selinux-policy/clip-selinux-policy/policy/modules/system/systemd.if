@@ -59,25 +59,6 @@ interface(`systemd_list_units',`
 	allow $1 systemdunitfile:dir list_dir_perms;
 ')
 
-######################################
-## <summary>
-##   Allow domain to create systemd unit dirs.
-## </summary>
-## <param name="domain">
-##   <summary>
-##     Domain allowed access.
-##   </summary>
-## </param>
-#
-interface(`systemd_create_unit_dirs',`
-	gen_require(`
-		attribute systemdunitfile;
-	')
-
-	files_search_var_lib($1)
-	allow $1 systemdunitfile:dir create;
-')
-
 ########################################
 ## <summary>
 ##   Manage systemd unit dirs
@@ -363,60 +344,6 @@ interface(`systemd_logind_dbus_send',`
 
 ########################################
 ## <summary>
-##   Allow the specified domain to start all systemd services.
-## </summary>
-## <param name="domain">
-##   <summary>
-##     Domain allowed access.
-##   </summary>
-## </param>
-#
-interface(`systemd_services_start',`
-	gen_require(`
-		attribute systemdunitfile;
-	')
-
-	allow $1 systemdunitfile:service start;
-')
-
-########################################
-## <summary>
-##   Allow the specified domain to access status of systemd services.
-## </summary>
-## <param name="domain">
-##   <summary>
-##     Domain allowed access.
-##   </summary>
-## </param>
-#
-interface(`systemd_services_status',`
-	gen_require(`
-		attribute systemdunitfile;
-	')
-
-	allow $1 systemdunitfile:service status;
-')
-
-#######################################
-## <summary>
-##   Allow the specified domain to reload all systemd services.
-## </summary>
-## <param name="domain">
-##   <summary>
-##     Domain allowed access.
-##    </summary>
-## </param>
-#
-interface(`systemd_services_reload',`
-	gen_require(`
-		attribute systemdunitfile;
-	')
-
-	allow $1 systemdunitfile:service reload;
-')
-
-########################################
-## <summary>
 ##   Allow the specified domain to modify the systemd configuration of
 ##   all systemd services
 ## </summary>
@@ -446,7 +373,7 @@ interface(`systemd_config_all_services',`
 ##   </summary>
 ## </param>
 #
-interface(`systemd_config_systemd_services',`
+interface(`systemd_config_unit_services',`
 	gen_require(`
 		type systemd_unit_file_t;
 	')
@@ -580,7 +507,7 @@ interface(`systemd_relabelto_kmod_files',`
 ## </summary>
 ## </param>
 #
-interface(`systemd_unit_file_filetrans',`
+interface(`systemd_unit_filetrans',`
 	gen_require(`
 		type systemd_unit_file_t;
 	')
@@ -599,7 +526,7 @@ interface(`systemd_unit_file_filetrans',`
 ##  </summary>
 ## </param>
 #
-interface(`systemd_create_unit_file_dirs',`
+interface(`systemd_create_unit_dirs',`
 	gen_require(`
 		type systemd_unit_file_t;
 	')
@@ -617,7 +544,7 @@ interface(`systemd_create_unit_file_dirs',`
 ##  </summary>
 ## </param>
 #
-interface(`systemd_create_unit_file_lnk',`
+interface(`systemd_create_unit_lnk_files',`
 	gen_require(`
 		type systemd_unit_file_t;
 	')
@@ -812,7 +739,7 @@ interface(`systemd_socket_activated',`
 
 ########################################
 ## <summary>
-## Allow specified domain to get status of systemd unit files
+## Allow specified domain to get status of all systemd services.
 ## </summary>
 ## <param name="domain">
 ## <summary>
@@ -820,9 +747,10 @@ interface(`systemd_socket_activated',`
 ## </summary>
 ## </param>
 #
-interface(`systemd_unit_files_service_status',`
+interface(`systemd_status_unit_services',`
 	gen_require(`
 		attribute systemdunitfile;
+		class service status;
 	')
 
 	allow $1 systemdunitfile:service status;
@@ -830,7 +758,7 @@ interface(`systemd_unit_files_service_status',`
 
 ########################################
 ## <summary>
-## Allow specified domain to start systemd unit files
+## Allow specified domain to start all systemd services.
 ## </summary>
 ## <param name="domain">
 ## <summary>
@@ -838,9 +766,10 @@ interface(`systemd_unit_files_service_status',`
 ## </summary>
 ## </param>
 #
-interface(`systemd_unit_files_service_start',`
+interface(`systemd_start_unit_services',`
 	gen_require(`
 		attribute systemdunitfile;
+		class service start;
 	')
 
 	allow $1 systemdunitfile:service start;
@@ -848,7 +777,7 @@ interface(`systemd_unit_files_service_start',`
 
 ########################################
 ## <summary>
-## Allow specified domain to stop systemd unit files
+## Allow specified domain to stop all systemd services.
 ## </summary>
 ## <param name="domain">
 ## <summary>
@@ -856,12 +785,32 @@ interface(`systemd_unit_files_service_start',`
 ## </summary>
 ## </param>
 #
-interface(`systemd_unit_files_service_stop',`
+interface(`systemd_stop_unit_services',`
 	gen_require(`
 		attribute systemdunitfile;
+		class service stop;
 	')
 
 	allow $1 systemdunitfile:service stop;
+')
+
+#######################################
+## <summary>
+##   Allow the specified domain to reload all systemd services.
+## </summary>
+## <param name="domain">
+##   <summary>
+##     Domain allowed access.
+##    </summary>
+## </param>
+#
+interface(`systemd_reload_unit_services',`
+	gen_require(`
+		attribute systemdunitfile;
+		class service reload;
+	')
+
+	allow $1 systemdunitfile:service reload;
 ')
 
 ########################################
@@ -874,10 +823,49 @@ interface(`systemd_unit_files_service_stop',`
 ## </summary>
 ## </param>
 #
-interface(`systemd_power_units_service_start',`
+interface(`systemd_start_power_unit_services',`
 	gen_require(`
 		type power_unit_file_t;
+		class service start;
 	')
 
 	allow $1 power_unit_file_t:service start;
+')
+
+########################################
+## <summary>
+## Allow specified domain to stop power units
+## </summary>
+## <param name="domain">
+## <summary>
+## Domain to not audit.
+## </summary>
+## </param>
+#
+interface(`systemd_stop_power_unit_services',`
+	gen_require(`
+		type power_unit_file_t;
+		class service stop;
+	')
+
+	allow $1 power_unit_file_t:service stop;
+')
+
+########################################
+## <summary>
+## Allow specified domain to reload power units
+## </summary>
+## <param name="domain">
+## <summary>
+## Domain to not audit.
+## </summary>
+## </param>
+#
+interface(`systemd_reload_power_unit_services',`
+	gen_require(`
+		type power_unit_file_t;
+		class service reload;
+	')
+
+	allow $1 power_unit_file_t:service reload;
 ')

@@ -13,8 +13,8 @@
 
 /usr/lib/hadoop.*/bin/hadoop	--	gen_context(system_u:object_r:hadoop_exec_t,s0)
 
-/usr/bin/zookeeper-client	--	gen_context(system_u:object_r:zookeeper_exec_t,s0)
-/usr/bin/zookeeper-server	--	gen_context(system_u:object_r:zookeeper_server_exec_t,s0)
+/bin/zookeeper-client	--	gen_context(system_u:object_r:zookeeper_exec_t,s0)
+/bin/zookeeper-server	--	gen_context(system_u:object_r:zookeeper_server_exec_t,s0)
 
 /var/lib/hadoop.*	gen_context(system_u:object_r:hadoop_var_lib_t,s0)
 /var/lib/hadoop.*/cache/hadoop/dfs/data(/.*)?	gen_context(system_u:object_r:hadoop_datanode_var_lib_t,s0)

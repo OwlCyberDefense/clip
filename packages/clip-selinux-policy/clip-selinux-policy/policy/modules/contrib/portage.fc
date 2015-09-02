@@ -4,10 +4,10 @@
 /etc/portage(/.*)?	gen_context(system_u:object_r:portage_conf_t,s0)
 /etc/portage/gpg(/.*)?	gen_context(system_u:object_r:portage_gpg_t,s0)
 
-/usr/bin/gcc-config	--	gen_context(system_u:object_r:gcc_config_exec_t,s0)
-/usr/bin/glsa-check	--	gen_context(system_u:object_r:portage_exec_t,s0)
-/usr/bin/layman	--	gen_context(system_u:object_r:portage_fetch_exec_t,s0)
-/usr/bin/sandbox	--	gen_context(system_u:object_r:portage_exec_t,s0)
+/bin/gcc-config	--	gen_context(system_u:object_r:gcc_config_exec_t,s0)
+/bin/glsa-check	--	gen_context(system_u:object_r:portage_exec_t,s0)
+/bin/layman	--	gen_context(system_u:object_r:portage_fetch_exec_t,s0)
+/bin/sandbox	--	gen_context(system_u:object_r:portage_exec_t,s0)
 
 /usr/lib/portage/bin/ebuild	--	gen_context(system_u:object_r:portage_exec_t,s0)
 /usr/lib/portage/bin/emerge	--	gen_context(system_u:object_r:portage_exec_t,s0)

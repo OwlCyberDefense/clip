@@ -5,8 +5,8 @@ system_r:sshd_t:s0		user_r:user_t:s0 staff_r:staff_t:s0 sysadm_r:sysadm_t:s0 unc
 system_r:sulogin_t:s0		sysadm_r:sysadm_t:s0
 system_r:xdm_t:s0		user_r:user_t:s0 staff_r:staff_t:s0 sysadm_r:sysadm_t:s0 unconfined_r:unconfined_t:s0
 
-staff_r:staff_su_t:s0		user_r:user_t:s0 staff_r:staff_t:s0 sysadm_r:sysadm_t:s0
-staff_r:staff_sudo_t:s0		sysadm_r:sysadm_t:s0 staff_r:staff_t:s0
+staff_r:staff_su_t:s0		sysadm_r:sysadm_t:s0 auditadm_r:auditadm_t:s0 secadm_r:secadm_t:s0 toor_r:toor_t:s0 sysadm_r:sysadm_t:s0 staff_r:staff_t:s0
+staff_r:staff_sudo_t:s0		sysadm_r:sysadm_t:s0 auditadm_r:auditadm_t:s0 secadm_r:secadm_t:s0 toor_r:toor_t:s0 sysadm_r:sysadm_t:s0 staff_r:staff_t:s0
 
 sysadm_r:sysadm_su_t:s0		user_r:user_t:s0 staff_r:staff_t:s0 sysadm_r:sysadm_t:s0
 sysadm_r:sysadm_sudo_t:s0	sysadm_r:sysadm_t:s0

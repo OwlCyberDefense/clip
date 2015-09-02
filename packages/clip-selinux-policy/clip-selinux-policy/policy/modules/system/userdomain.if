@@ -1148,17 +1148,19 @@ template(`userdom_admin_user_template',`
 	dev_rename_all_chr_files($1_t)
 	dev_create_generic_symlinks($1_t)
 
-	domain_setpriority_all_domains($1_t)
-	domain_read_all_domains_state($1_t)
-	domain_getattr_all_domains($1_t)
+	# SRS: removed for CLIP
+	#domain_setpriority_all_domains($1_t)
+	#domain_read_all_domains_state($1_t)
+	#domain_getattr_all_domains($1_t)
 	domain_dontaudit_ptrace_all_domains($1_t)
 	# signal all domains:
-	domain_kill_all_domains($1_t)
-	domain_signal_all_domains($1_t)
-	domain_signull_all_domains($1_t)
-	domain_sigstop_all_domains($1_t)
-	domain_sigstop_all_domains($1_t)
-	domain_sigchld_all_domains($1_t)
+	# SRS: removed for CLIP
+	#domain_kill_all_domains($1_t)
+	#domain_signal_all_domains($1_t)
+	#domain_signull_all_domains($1_t)
+	#domain_sigstop_all_domains($1_t)
+	#domain_sigstop_all_domains($1_t)
+	#domain_sigchld_all_domains($1_t)
 	# for lsof
 	domain_getattr_all_sockets($1_t)
 
@@ -1168,12 +1170,15 @@ template(`userdom_admin_user_template',`
 	fs_set_all_quotas($1_t)
 	fs_exec_noxattr($1_t)
 
-	storage_raw_read_removable_device($1_t)
-	storage_raw_write_removable_device($1_t)
+	# SRS: removed for CLIP
+	#storage_raw_read_removable_device($1_t)
+	#storage_raw_write_removable_device($1_t)
 
+	# SRS: TODO: figure out if term separation is handled by UBAC
 	term_use_all_terms($1_t)
 
 	auth_getattr_shadow($1_t)
+	# SRS: removed for CLIP
 	# Manage almost all files
 	files_manage_non_auth_files($1_t)
 	# Relabel almost all files
@@ -1183,16 +1188,20 @@ template(`userdom_admin_user_template',`
 
 	logging_send_syslog_msg($1_t)
 
-	modutils_domtrans_insmod($1_t)
+	# SRS: removed for CLIP
+	#modutils_domtrans_insmod($1_t)
 
 	# The following rule is temporary until such time that a complete
 	# policy management infrastructure is in place so that an administrator
 	# cannot directly manipulate policy files with arbitrary programs.
-	seutil_manage_src_policy($1_t)
+	# SRS: removed for CLIP
+	#seutil_manage_src_policy($1_t)
 	# Violates the goal of limiting write access to checkpolicy.
 	# But presently necessary for installing the file_contexts file.
-	seutil_manage_bin_policy($1_t)
+	# SRS: removed for CLIP
+	#seutil_manage_bin_policy($1_t)
 
+	# SRS: CLIP note - these interface calls do not compromise user separation due to UBAC
 	userdom_manage_user_home_content_dirs($1_t)
 	userdom_manage_user_home_content_files($1_t)
 	userdom_manage_user_home_content_symlinks($1_t)
@@ -1200,20 +1209,22 @@ template(`userdom_admin_user_template',`
 	userdom_manage_user_home_content_sockets($1_t)
 	userdom_user_home_dir_filetrans_user_home_content($1_t, { dir file lnk_file fifo_file sock_file })
 
-	tunable_policy(`user_rw_noexattrfile',`
-		fs_manage_noxattr_fs_files($1_t)
-		fs_manage_noxattr_fs_dirs($1_t)
-	',`
-		fs_read_noxattr_fs_files($1_t)
-	')
+	# SRS: removed for CLIP
+#	tunable_policy(`user_rw_noexattrfile',`
+#		fs_manage_noxattr_fs_files($1_t)
+#		fs_manage_noxattr_fs_dirs($1_t)
+#	',`
+#		fs_read_noxattr_fs_files($1_t)
+#	')
 
-	optional_policy(`
-		postgresql_unconfined($1_t)
-	')
+	# SRS: removed for CLIP
+#	optional_policy(`
+#		postgresql_unconfined($1_t)
+#	')
 
-	optional_policy(`
-		userhelper_exec($1_t)
-	')
+#	optional_policy(`
+#		userhelper_exec($1_t)
+#	')
 ')
 
 ########################################

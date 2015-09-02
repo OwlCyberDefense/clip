@@ -1,14 +1,14 @@
 /etc/courier(/.*)?	gen_context(system_u:object_r:courier_etc_t,s0)
 /etc/courier-imap(/.*)?	gen_context(system_u:object_r:courier_etc_t,s0)
 
-/usr/bin/imapd	--	gen_context(system_u:object_r:courier_pop_exec_t,s0)
+/bin/imapd	--	gen_context(system_u:object_r:courier_pop_exec_t,s0)
 
-/usr/sbin/authdaemond	--	gen_context(system_u:object_r:courier_authdaemon_exec_t,s0)
-/usr/sbin/courier-imapd	--	gen_context(system_u:object_r:courier_pop_exec_t,s0)
-/usr/sbin/courierlogger	--	gen_context(system_u:object_r:courier_exec_t,s0)
-/usr/sbin/courierldapaliasd	--	gen_context(system_u:object_r:courier_exec_t,s0)
-/usr/sbin/couriertcpd	--	gen_context(system_u:object_r:courier_tcpd_exec_t,s0)
-/usr/sbin/imaplogin	--	gen_context(system_u:object_r:courier_pop_exec_t,s0)
+/sbin/authdaemond	--	gen_context(system_u:object_r:courier_authdaemon_exec_t,s0)
+/sbin/courier-imapd	--	gen_context(system_u:object_r:courier_pop_exec_t,s0)
+/sbin/courierlogger	--	gen_context(system_u:object_r:courier_exec_t,s0)
+/sbin/courierldapaliasd	--	gen_context(system_u:object_r:courier_exec_t,s0)
+/sbin/couriertcpd	--	gen_context(system_u:object_r:courier_tcpd_exec_t,s0)
+/sbin/imaplogin	--	gen_context(system_u:object_r:courier_pop_exec_t,s0)
 
 /usr/lib/courier/authlib/.*	--	gen_context(system_u:object_r:courier_authdaemon_exec_t,s0)
 /usr/lib/courier/courier-authlib/.*	--	gen_context(system_u:object_r:courier_authdaemon_exec_t,s0)

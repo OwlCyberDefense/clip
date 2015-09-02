@@ -2,7 +2,7 @@ HOME_DIR/\.razor(/.*)?	gen_context(system_u:object_r:razor_home_t,s0)
 
 /etc/razor(/.*)?	gen_context(system_u:object_r:razor_etc_t,s0)
 
-/usr/bin/razor.*	--	gen_context(system_u:object_r:razor_exec_t,s0)
+/bin/razor.*	--	gen_context(system_u:object_r:razor_exec_t,s0)
 
 /var/lib/razor(/.*)?	gen_context(system_u:object_r:razor_var_lib_t,s0)
 

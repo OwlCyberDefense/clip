@@ -32,7 +32,8 @@ init_exec(toor_t)
 userdom_manage_user_home_dirs(toor_t)
 userdom_home_filetrans_user_home_dir(toor_t)
 
-files_unconfined(toor_t)
+#files_unconfined(toor_t)
+files_manage_all_files(toor_t)
 domain_unconfined(toor_t)
 
 ifdef(`direct_toor_daemon',`
@@ -49,7 +50,6 @@ ifdef(`direct_toor_daemon',`
 
 logging_dontaudit_send_audit_msgs(toor_t)
 logging_getattr_all_logs(toor_t)
-#allow toor_t auditd_log_t:{ dir file } getattr;
 
 tunable_policy(`aide_enable_write_db',`
 	aide_domtrans(toor_t)
@@ -462,3 +462,12 @@ ifndef(`distro_redhat',`
 	')
 ')
 
+ifdef(`init_systemd',`
+	optional_policy(`
+		systemd_start_unit_services(toor_t)
+		systemd_start_power_unit_services(toor_t)
+		systemd_stop_unit_services(toor_t)
+		systemd_status_unit_services(toor_t)
+		logging_send_audit_msgs(toor_t)
+	')
+')

@@ -1,13 +1,13 @@
 /etc/rc\.d/init\.d/((jabber)|(ejabberd)|(jabberd))	--	gen_context(system_u:object_r:jabberd_initrc_exec_t,s0)
 
-/usr/bin/router	--	gen_context(system_u:object_r:jabberd_router_exec_t,s0)
-/usr/bin/c2s	--	gen_context(system_u:object_r:jabberd_router_exec_t,s0)
-/usr/bin/s2s	--	gen_context(system_u:object_r:jabberd_exec_t,s0)
-/usr/bin/sm	--	gen_context(system_u:object_r:jabberd_exec_t,s0)
+/bin/router	--	gen_context(system_u:object_r:jabberd_router_exec_t,s0)
+/bin/c2s	--	gen_context(system_u:object_r:jabberd_router_exec_t,s0)
+/bin/s2s	--	gen_context(system_u:object_r:jabberd_exec_t,s0)
+/bin/sm	--	gen_context(system_u:object_r:jabberd_exec_t,s0)
 
-/usr/sbin/ejabberd	--	gen_context(system_u:object_r:jabberd_exec_t,s0)
-/usr/sbin/ejabberdctl	--	gen_context(system_u:object_r:jabberd_exec_t,s0)
-/usr/sbin/jabberd	--	gen_context(system_u:object_r:jabberd_exec_t,s0)
+/sbin/ejabberd	--	gen_context(system_u:object_r:jabberd_exec_t,s0)
+/sbin/ejabberdctl	--	gen_context(system_u:object_r:jabberd_exec_t,s0)
+/sbin/jabberd	--	gen_context(system_u:object_r:jabberd_exec_t,s0)
 
 /var/lock/ejabberdctl(/.*)	gen_context(system_u:object_r:jabberd_lock_t,s0)
 

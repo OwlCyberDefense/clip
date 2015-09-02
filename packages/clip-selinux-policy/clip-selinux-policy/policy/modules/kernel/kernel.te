@@ -36,10 +36,10 @@ role user_r;
 # here until order dependence is fixed:
 role unconfined_r;
 
-ifdef(`enable_mls',`
-	role secadm_r;
-	role auditadm_r;
-')
+#ifdef(`enable_mls',`
+#	role secadm_r;
+#	role auditadm_r;
+#')
 
 #
 # kernel_t is the domain of kernel threads.
