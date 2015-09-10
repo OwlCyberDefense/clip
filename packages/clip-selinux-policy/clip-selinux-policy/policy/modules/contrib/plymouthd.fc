@@ -2,6 +2,9 @@
 
 /sbin/plymouthd	--	gen_context(system_u:object_r:plymouthd_exec_t,s0)
 
+# Systemd unit file
+/usr/lib/systemd/system/[^/]*plymouth-.*		gen_context(system_u:object_r:plymouthd_unit_file_t)
+
 /var/lib/plymouth(/.*)?	gen_context(system_u:object_r:plymouthd_var_lib_t,s0)
 
 /var/log/boot\.log.*	--	gen_context(system_u:object_r:plymouthd_var_log_t,mls_systemhigh)

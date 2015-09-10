@@ -37,6 +37,9 @@ files_lock_file(rpm_lock_t)
 type rpm_log_t;
 logging_log_file(rpm_log_t)
 
+type rpm_unit_file_t;
+systemd_unit_file(rpm_unit_file_t)
+
 type rpm_var_lib_t;
 files_type(rpm_var_lib_t)
 typealias rpm_var_lib_t alias var_lib_rpm_t;

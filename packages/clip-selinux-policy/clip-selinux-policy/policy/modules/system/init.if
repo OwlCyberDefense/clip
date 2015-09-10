@@ -636,25 +636,6 @@ interface(`init_sigchld',`
 	allow $1 init_t:process sigchld;
 ')
 
-######################################
-## <summary>
-##	Allow domain dyntransition to init_t domain.
-## </summary>
-## <param name="domain">
-## 	<summary>
-## 	Domain allowed to transition.
-## 	</summary>
-## </param>
-#
-interface(`init_dyntrans',`
-	gen_require(`
-		type init_t;
-	')
-
-	dyntrans_pattern($1, init_t)
-	domain_dyntrans_type($1)
-')
-
 ########################################
 ## <summary>
 ##	Connect to init with a unix socket.
@@ -854,7 +835,7 @@ interface(`init_telinit',`
 
 ########################################
 ## <summary>
-##	Send unix_dgram_socket to init.
+##	Send messages to init unix datagram sockets.
 ## </summary>
 ## <param name="domain">
 ##	<summary>
@@ -1790,21 +1771,22 @@ interface(`init_script_tmp_filetrans',`
 
 ########################################
 ## <summary>
-##	Search init variable state and transition to specified label.
+##	Create files in /var/lib/systemd
+##	with an automatic type transition.
 ## </summary>
 ## <param name="domain">
 ##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-## <param name="file_type">
-##	<summary>
-##	The label to transition to.
+##	The type of object to be created
 ##	</summary>
 ## </param>
 ## <param name="object_class">
 ##	<summary>
 ##	The object class.
+##	</summary>
+## </param>
+## <param name="name" optional="true">
+##	<summary>
+##	The name of the object being created.
 ##	</summary>
 ## </param>
 #
@@ -1818,7 +1800,7 @@ interface(`init_var_lib_filetrans',`
 
 ########################################
 ## <summary>
-##	Create files in an init lib directory.
+##	Manage files in /var/lib/systemd/.
 ## </summary>
 ## <param name="domain">
 ##	<summary>

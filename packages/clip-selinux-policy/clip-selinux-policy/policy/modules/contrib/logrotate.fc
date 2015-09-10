@@ -1,6 +1,9 @@
 /etc/cron\.(daily|weekly)/logrotate	--	gen_context(system_u:object_r:logrotate_exec_t,s0)
 /etc/cron\.(daily|weekly)/sysklogd	--	gen_context(system_u:object_r:logrotate_exec_t,s0)
 
+# Systemd unit file
+/usr/lib/systemd/system/[^/]*logrotate.*		gen_context(system_u:object_r:logrotate_unit_file_t)
+
 /usr/sbin/logrotate	--	gen_context(system_u:object_r:logrotate_exec_t,s0)
 
 /var/lib/logrotate(/.*)?	gen_context(system_u:object_r:logrotate_var_lib_t,s0)

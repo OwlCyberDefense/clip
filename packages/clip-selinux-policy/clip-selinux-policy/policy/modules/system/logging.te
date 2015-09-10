@@ -30,6 +30,9 @@ init_daemon_domain(auditd_t, auditd_exec_t)
 type auditd_initrc_exec_t;
 init_script_file(auditd_initrc_exec_t)
 
+type auditd_unit_file_t;
+systemd_unit_file(auditd_unit_file_t);
+
 type auditd_var_run_t;
 files_pid_file(auditd_var_run_t)
 
@@ -71,6 +74,9 @@ init_script_file(syslogd_initrc_exec_t)
 
 type syslogd_tmp_t;
 files_tmp_file(syslogd_tmp_t)
+
+type syslogd_unit_file_t;
+systemd_unit_file(syslogd_unit_file_t)
 
 type syslogd_var_lib_t;
 files_type(syslogd_var_lib_t)
@@ -364,7 +370,7 @@ optional_policy(`
 # sys_admin for the integrated klog of syslog-ng and metalog
 # sys_nice for rsyslog
 # cjp: why net_admin!
-allow syslogd_t self:capability { dac_override sys_resource sys_tty_config net_admin sys_admin sys_nice sys_ptrace chown fsetid setuid setgid };
+allow syslogd_t self:capability { dac_override sys_resource sys_tty_config net_admin sys_admin sys_nice sys_ptrace fsetid };
 dontaudit syslogd_t self:capability sys_tty_config;
 # setpgid for metalog
 # setrlimit for syslog-ng
@@ -455,9 +461,6 @@ domain_use_interactive_fds(syslogd_t)
 # Allow access to /proc/ information for journald
 domain_read_all_domains_state(syslogd_t)
 
-# Allow journald to create an active socket connection
-systemd_socket_activated(syslogd_t, syslogd_var_run_t)
-
 files_read_etc_files(syslogd_t)
 files_read_usr_files(syslogd_t)
 files_read_var_files(syslogd_t)
@@ -493,6 +496,7 @@ userdom_dontaudit_use_unpriv_user_fds(syslogd_t)
 userdom_dontaudit_search_user_home_dirs(syslogd_t)
 
 ifdef(`init_systemd',`
+	allow syslogd_t self:capability { chown setuid setgid };
 	init_daemon_pid_file(syslogd_var_run_t, dir, "syslogd")
 	init_dgram_send(syslogd_t)
 	kernel_use_fds(syslogd_t)
@@ -500,6 +504,8 @@ ifdef(`init_systemd',`
 	kernel_rw_unix_dgram_sockets(syslogd_t)
 	kernel_rw_stream_sockets(syslogd_t)
 	udev_read_pid_files(syslogd_t)
+	# Allow journald to create an active socket connection
+	systemd_socket_activated(syslogd_t, syslogd_var_run_t)
 ')
 
 ifdef(`distro_gentoo',`

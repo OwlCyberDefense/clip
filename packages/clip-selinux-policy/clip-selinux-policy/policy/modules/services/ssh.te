@@ -47,6 +47,9 @@ init_daemon_domain(sshd_t, sshd_exec_t)
 type sshd_key_t;
 files_type(sshd_key_t)
 
+type sshd_unit_file_t;
+systemd_unit_file(sshd_unit_file_t)
+
 type sshd_tmp_t;
 files_tmp_file(sshd_tmp_t)
 files_poly_parent(sshd_tmp_t)

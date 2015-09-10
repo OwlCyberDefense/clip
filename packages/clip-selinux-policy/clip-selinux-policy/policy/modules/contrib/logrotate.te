@@ -25,6 +25,9 @@ files_tmp_file(logrotate_tmp_t)
 type logrotate_var_lib_t;
 files_type(logrotate_var_lib_t)
 
+type logrotate_unit_file_t;
+systemd_unit_file(logrotate_unit_file_t)
+
 mta_base_mail_template(logrotate)
 role system_r types logrotate_mail_t;
 

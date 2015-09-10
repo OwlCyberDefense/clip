@@ -11,6 +11,10 @@
 
 /sbin/yast2	--	gen_context(system_u:object_r:rpm_exec_t,s0)
 
+# Systemd unit file
+/usr/lib/systemd/system/[^/]*dnf-makecache.*		gen_context(system_u:object_r:rpm_unit_file_t)
+/usr/lib/systemd/system/[^/]*yum-makecache.*		gen_context(system_u:object_r:rpm_unit_file_t)
+
 /usr/libexec/packagekitd	--	gen_context(system_u:object_r:rpm_exec_t,s0)
 /usr/libexec/yumDBUSBackend.py	--	gen_context(system_u:object_r:rpm_exec_t,s0)
 

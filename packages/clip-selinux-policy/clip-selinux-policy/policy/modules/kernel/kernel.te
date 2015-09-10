@@ -300,7 +300,6 @@ ifdef(`distro_redhat',`
 ')
 
 ifdef(`init_systemd',`
-	init_dyntrans(kernel_t)
 	selinux_compute_create_context(kernel_t)
 	dev_filetrans_input_dev(kernel_t)
 	dev_manage_input_dev(kernel_t)

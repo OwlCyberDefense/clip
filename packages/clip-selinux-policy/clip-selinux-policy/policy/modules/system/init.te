@@ -198,7 +198,7 @@ ifdef(`init_systemd',`
 	kernel_getattr_proc(init_t)
 	files_read_all_pids(init_t)
 
-	read_files_pattern(init_t, hostname_etc_t, hostname_etc_t)
+	systemd_hostnamed_read_config(init_t)
 	shutdown_share_state(init_t)
 	kernel_read_fs_sysctls(init_t)
 
@@ -208,8 +208,9 @@ ifdef(`init_systemd',`
 	manage_sock_files_pattern(init_t, init_var_run_t, init_var_run_t)
 
 	manage_dirs_pattern(init_t, init_var_run_t, init_var_run_t)
-	manage_sock_files_pattern(init_t, syslogd_var_run_t, syslogd_var_run_t)
+	logging_manage_pid_sockets(init_t)
 
+	kernel_dyntrans_to(init_t)
 	kernel_read_network_state(init_t)
 	kernel_read_kernel_sysctls(init_t)
 	kernel_read_vm_sysctls(init_t)
@@ -226,18 +227,18 @@ ifdef(`init_systemd',`
 	fs_relabel_tmpfs_files(init_t)
 
 	fs_manage_cgroup_dirs(init_t)
-	relabel_dirs_pattern(init_t, cgroup_t, cgroup_t)
+	fs_relabel_cgroup_dirs(init_t)
 	fs_rw_cgroup_files(init_t)
 
 	# mount-setup
 	fs_unmount_autofs(init_t)
-	allow init_t pstore_t:dir getattr;
+	fs_getattr_pstore_dirs(init_t)
 
 	dev_rw_autofs(init_t)
 	fs_list_auto_mountpoints(init_t)
 	fs_mount_autofs(init_t)
 	fs_manage_hugetlbfs_dirs(init_t)
-	fs_mounton_sysctl_fs(init_t)
+	#fs_mounton_sysctl_fs(init_t)
 
 	dev_create_generic_dirs(init_t)
 	dev_manage_input_dev(init_t)
@@ -296,7 +297,7 @@ ifdef(`init_systemd',`
 	# udevd is a "systemd kobject uevent socket activated daemon"
 	udev_create_kobject_uevent_sockets(init_t)
 
-	term_relabel_pty_dir(init_t)
+	term_relabel_pty_dirs(init_t)
 
 	files_search_kernel_modules(init_t)
 

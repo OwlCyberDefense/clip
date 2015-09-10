@@ -31,6 +31,12 @@
 /var/lib/r?syslog(/.*)?		gen_context(system_u:object_r:syslogd_var_lib_t,s0)
 /var/lib/syslog-ng.persist --	gen_context(system_u:object_r:syslogd_var_lib_t,s0)
 
+ifdef(`init_systemd',`
+# Systemd unit files
+/usr/lib/systemd/system/auditd.*	--	gen_context(system_u:object_r:auditd_unit_file_t,s0)
+/usr/lib/systemd/system/[^/]*systemd-journal.*		gen_context(system_u:object_r:syslogd_unit_file_t)
+')
+
 ifdef(`distro_suse', `
 /var/lib/stunnel/dev/log -s	gen_context(system_u:object_r:devlog_t,s0)
 ')

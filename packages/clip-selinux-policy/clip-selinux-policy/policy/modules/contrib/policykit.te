@@ -34,6 +34,9 @@ files_type(policykit_reload_t)
 type policykit_tmp_t;
 files_tmp_file(policykit_tmp_t)
 
+type policykit_unit_file_t;
+systemd_unit_file(policykit_unit_file_t)
+
 type policykit_var_lib_t alias polkit_var_lib_t;
 files_type(policykit_var_lib_t)
 

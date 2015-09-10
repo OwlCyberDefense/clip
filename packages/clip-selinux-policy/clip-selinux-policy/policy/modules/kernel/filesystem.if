@@ -767,6 +767,25 @@ interface(`fs_manage_cgroup_dirs',`
 
 ########################################
 ## <summary>
+##	Relabel cgroup directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_relabel_cgroup_dirs',`
+	gen_require(`
+		type cgroup_t;
+
+	')
+
+	relabel_dirs_pattern($1, cgroup_t, cgroup_t)
+')
+
+########################################
+## <summary>
 ##	Read cgroup files.
 ## </summary>
 ## <param name="domain">
@@ -3342,6 +3361,24 @@ interface(`fs_rw_nfsd_fs',`
 
 ########################################
 ## <summary>
+##	Getattr on pstore dirs.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_getattr_pstore_dirs',`
+	gen_require(`
+		type pstore_t;
+	')
+
+	getattr_files_pattern($1, pstore_t, pstore_t)
+')
+
+########################################
+## <summary>
 ##	Allow the type to associate to ramfs filesystems.
 ## </summary>
 ## <param name="type">
@@ -3816,24 +3853,6 @@ interface(`fs_rw_rpc_named_pipes',`
 	')
 
 	allow $1 rpc_pipefs_t:fifo_file rw_fifo_file_perms;
-')
-
-########################################
-## <summary>
-##	Mount on sysclt_fs dirs.
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-#
-interface(`fs_mounton_sysctl_fs',`
-	gen_require(`
-		type sysctl_fs_t;
-	')
-
-	files_mountpoint(sysctl_fs_t)
 ')
 
 ########################################

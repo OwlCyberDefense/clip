@@ -194,35 +194,11 @@ systemd_unit_file(systemd_shutdown_t)
 type systemd_log_t;
 logging_log_file(systemd_log_t)
 
-type iptables_unit_file_t;
-systemd_unit_file(iptables_unit_file_t)
-
-type sshd_unit_file_t;
-systemd_unit_file(sshd_unit_file_t)
-
-type alsactl_unit_file_t;
-systemd_unit_file(alsactl_unit_file_t)
-
 type arp_unit_file_t;
 systemd_unit_file(arp_unit_file_t)
 
 type askpwdagent_unit_file_t;
 systemd_unit_file(askpwdagent_unit_file_t)
-
-type auditd_unit_file_t;
-systemd_unit_file(auditd_unit_file_t)
-
-type bluetoothd_unit_file_t;
-systemd_unit_file(bluetoothd_unit_file_t)
-
-type dbusd_unit_file_t;
-systemd_unit_file(dbusd_unit_file_t)
-
-type dmeventd_unit_file_t;
-systemd_unit_file(dmeventd_unit_file_t)
-
-type dnsmasq_unit_file_t;
-systemd_unit_file(dnsmasq_unit_file_t)
 
 type emacs_session_unit_file_t;
 systemd_unit_file(emacs_session_unit_file_t)
@@ -230,20 +206,8 @@ systemd_unit_file(emacs_session_unit_file_t)
 type fstrim_unit_file_t;
 systemd_unit_file(fstrim_unit_file_t)
 
-type getty_unit_file_t;
-systemd_unit_file(getty_unit_file_t)
-
-type journald_unit_file_t;
-systemd_unit_file(journald_unit_file_t)
-
-type kmod_unit_file_t;
-systemd_unit_file(kmod_unit_file_t)
-
 type ldconfig_unit_file_t;
 systemd_unit_file(ldconfig_unit_file_t)
-
-type lircd_unit_file_t;
-systemd_unit_file(lircd_unit_file_t)
 
 type lircmd_unit_file_t;
 systemd_unit_file(lircmd_unit_file_t)
@@ -251,56 +215,11 @@ systemd_unit_file(lircmd_unit_file_t)
 type logind_unit_file_t;
 systemd_unit_file(logind_unit_file_t)
 
-type logrotate_unit_file_t;
-systemd_unit_file(logrotate_unit_file_t)
-
-type lvm_unit_file_t;
-systemd_unit_file(lvm_unit_file_t)
-
-type lvmetad_unit_file_t;
-systemd_unit_file(lvmetad_unit_file_t)
-
-type mandb_unit_file_t;
-systemd_unit_file(mandb_unit_file_t)
-
-type mdadm_unit_file_t;
-systemd_unit_file(mdadm_unit_file_t)
-
-type mdmon_unit_file_t;
-systemd_unit_file(mdmon_unit_file_t)
-
-type nm_unit_file_t;
-systemd_unit_file(nm_unit_file_t)
-
-type ntpd_unit_file_t;
-systemd_unit_file(ntpd_unit_file_t)
-
 type obexd_session_unit_file_t;
 systemd_unit_file(obexd_session_unit_file_t)
 
-type pcscd_unit_file_t;
-systemd_unit_file(pcscd_unit_file_t)
-
-type plymouthd_unit_file_t;
-systemd_unit_file(plymouthd_unit_file_t)
-
-type polkitd_unit_file_t;
-systemd_unit_file(polkitd_unit_file_t)
-
 type power_unit_file_t;
 systemd_unit_file(power_unit_file_t)
-
-type qemuga_unit_file_t;
-systemd_unit_file(qemuga_unit_file_t)
-
-type rpm_unit_file_t;
-systemd_unit_file(rpm_unit_file_t)
-
-type rtkitd_unit_file_t;
-systemd_unit_file(rtkitd_unit_file_t)
-
-type sulogin_unit_file_t;
-systemd_unit_file(sulogin_unit_file_t)
 
 type systemd_kexec_unit_file_t;
 systemd_unit_file(systemd_kexec_unit_file_t)
@@ -310,15 +229,6 @@ systemd_unit_file(systemduser_unit_file_t)
 
 type sysusers_unit_file_t;
 systemd_unit_file(sysusers_unit_file_t)
-
-type tcsd_unit_file_t;
-systemd_unit_file(tcsd_unit_file_t)
-
-type udevd_unit_file_t;
-systemd_unit_file(udevd_unit_file_t)
-
-type wpa_unit_file_t;
-systemd_unit_file(wpa_unit_file_t)
 
 type xlock_unit_file_t;
 systemd_unit_file(xlock_unit_file_t)

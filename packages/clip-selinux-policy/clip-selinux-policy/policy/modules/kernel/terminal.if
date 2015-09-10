@@ -411,7 +411,7 @@ interface(`term_relabel_pty_fs',`
 ##	</summary>
 ## </param>
 #
-interface(`term_relabel_pty_dir',`
+interface(`term_relabel_pty_dirs',`
 	gen_require(`
 		type devpts_t;
 	')

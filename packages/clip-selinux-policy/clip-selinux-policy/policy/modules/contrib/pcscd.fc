@@ -2,6 +2,9 @@
 
 /usr/sbin/pcscd	--	gen_context(system_u:object_r:pcscd_exec_t,s0)
 
+# Systemd unit file
+/usr/lib/systemd/system/[^/]*pcscd.*		gen_context(system_u:object_r:pcscd_unit_file_t)
+
 /var/run/pcscd\.comm	-s	gen_context(system_u:object_r:pcscd_var_run_t,s0)
 /var/run/pcscd(/.*)?	gen_context(system_u:object_r:pcscd_var_run_t,s0)
 /var/run/pcscd\.pid	--	gen_context(system_u:object_r:pcscd_var_run_t,s0)

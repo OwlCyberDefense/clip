@@ -22,6 +22,9 @@ application_executable_file(qemu_exec_t)
 virt_domain_template(qemu)
 role qemu_roles types qemu_t;
 
+type qemu_unit_file_t;
+systemd_unit_file(qemu_unit_file_t)
+
 ########################################
 #
 # Local policy
