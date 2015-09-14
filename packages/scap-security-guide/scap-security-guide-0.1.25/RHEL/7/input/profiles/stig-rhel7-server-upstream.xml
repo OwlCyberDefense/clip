@@ -35,6 +35,9 @@
 <select idref="accounts_passwords_pam_faillock_interval" selected="true" />
 <select idref="accounts_passwords_pam_faillock_deny" selected="true" />
 
+<!-- CLIP specific -->
+<select idref="set_system_login_banner" selected="true"/>
+
 <!-- Account Management Requirements -->
 <select idref="account_temp_expire_date" selected="true" />
 
