@@ -1,4 +1,4 @@
-%global		redhatssgversion	20
+%global		redhatssgversion	25
 
 Name:		scap-security-guide
 Version:	0.1.%{redhatssgversion}
@@ -26,33 +26,46 @@ Enterprise Linux 6 system administrator can use the oscap command-line tool
 from the openscap-utils package to verify that the system conforms to provided
 guideline. Refer to scap-security-guide(8) manual page for further information.
 
+%package	doc
+Summary:	HTML formatted documents containing security guides generated from XCCDF benchmarks.
+Group:		System Environment/Base
+Requires:	%{name} = %{version}-%{release}
+
+%description	doc
+The %{name}-doc package contains HTML formatted documents containing
+hardening guidances that have been generated from XCCDF benchmarks
+present in %{name} package.
 %prep
 %setup -q -n %{name}-%{version}
 
 %build
-(cd RHEL/6 && make dist)
 (cd RHEL/7 && make dist)
 
 %install
-mkdir -p %{buildroot}%{_datadir}/xml/scap/ssg/content
 mkdir -p %{buildroot}%{_mandir}/en/man8/
-mkdir -p %{buildroot}%{_datadir}/%{name}
+cp -a docs/scap-security-guide.8 %{buildroot}%{_mandir}/en/man8/
 
-# Add in core content (SCAP)
-cp -a RHEL/6/dist/content/* %{buildroot}%{_datadir}/xml/scap/ssg/content/
+mkdir -p %{buildroot}%{_datadir}/%{name}
+mkdir -p %{buildroot}%{_datadir}/xml/scap/ssg/content
+
 cp -a RHEL/7/dist/content/* %{buildroot}%{_datadir}/xml/scap/ssg/content/
 
-# Add in RHEL-6 functions library for remediations
-cp -a RHEL/6/input/fixes/bash/templates/functions %{buildroot}%{_datadir}/%{name}/functions
+# Add in functions library for remediations
+cp -a shared/fixes/bash/templates/remediation_functions %{buildroot}%{_datadir}/%{name}/
 
-# Add in manpage
-cp -a RHEL/6/input/auxiliary/scap-security-guide.8 %{buildroot}%{_mandir}/en/man8/scap-security-guide.8
+# Docs
+mkdir -p %{buildroot}/%{_docdir}/%{name}/guides
+cp -a RHEL/7/output/*-guide-*.html %{buildroot}/%{_docdir}/%{name}/guides
 
 %files
 %{_datadir}/xml/scap
-%{_datadir}/%{name}/functions
-%lang(en) %{_mandir}/en/man8/scap-security-guide.8.gz
-%doc RHEL/6/LICENSE RHEL/6/output/rhel6-guide.html RHEL/6/output/table-rhel6-cces.html RHEL/6/output/table-rhel6-nistrefs-common.html RHEL/6/output/table-rhel6-nistrefs.html RHEL/6/output/table-rhel6-srgmap-flat.html RHEL/6/output/table-rhel6-srgmap-flat.xhtml RHEL/6/output/table-rhel6-srgmap.html RHEL/6/output/table-rhel6-stig.html RHEL/6/input/auxiliary/DISCLAIMER
+%{_datadir}/%{name}
+%lang(en) %{_mandir}/en/man8/scap-security-guide.8.*
+%doc LICENSE
+%doc README.md
+
+%files doc
+%doc %{_docdir}/%{name}/guides/*.html
 
 %changelog
 * Thu Jan 15 2015 Jan iankko Lieskovsky <jlieskov@redhat.com> 0.1.20-1
