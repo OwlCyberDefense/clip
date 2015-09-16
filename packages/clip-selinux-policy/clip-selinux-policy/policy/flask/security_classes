@@ -133,6 +133,10 @@ class db_view			# userspace
 class db_sequence		# userspace
 class db_language		# userspace
 
+# systemd services
 class service			# userspace
+
+# gssd services
+class proxy
 
 # FLASK

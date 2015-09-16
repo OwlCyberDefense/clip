@@ -506,6 +506,7 @@ ifdef(`init_systemd',`
 	udev_read_pid_files(syslogd_t)
 	# Allow journald to create an active socket connection
 	systemd_socket_activated(syslogd_t, syslogd_var_run_t)
+	shutdown_sigchld(syslogd_t)
 ')
 
 ifdef(`distro_gentoo',`

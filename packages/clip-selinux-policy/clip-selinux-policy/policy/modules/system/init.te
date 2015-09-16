@@ -193,7 +193,7 @@ ifdef(`init_systemd',`
 	allow init_t self:netlink_audit_socket nlmsg_readpriv;
 	allow init_t self:netlink_kobject_uevent_socket create_socket_perms;
 	allow init_t self:netlink_route_socket create_netlink_socket_perms;
-	allow init_t self:netlink_selinux_socket read;
+	allow init_t self:netlink_selinux_socket create_socket_perms;
 
 	kernel_getattr_proc(init_t)
 	files_read_all_pids(init_t)
@@ -769,7 +769,7 @@ ifdef(`init_systemd',`
 	systemd_manage_unit_files(initrc_t)
 	systemd_create_unit_dirs(initrc_t)
 	systemd_manage_unit_symlinks(initrc_t)
-	manage_dirs_pattern(initrc_t, init_var_run_t, init_var_run_t)
+	manage_files_pattern(initrc_t, init_var_run_t, init_var_run_t)
 	systemd_socket_activated(initrc_t, init_var_run_t)
 	init_manage_var_lib_files(initrc_t)
 	files_read_boot_files(initrc_t)
@@ -777,6 +777,9 @@ ifdef(`init_systemd',`
 	# systemd is conflating files and services.
 	files_status_etc_service(initrc_t)
 	files_setattr_pid_dirs(initrc_t)
+	fs_delete_tmpfs_files(initrc_t)
+	init_system_halt(initrc_t)
+	init_system_reboot(initrc_t)
 
 	# Create /etc/audit.rules.prev after firstboot remediation
 	logging_manage_audit_config(initrc_t)

@@ -329,6 +329,16 @@ class process
 	execheap
 	setkeycreate
 	setsockcreate
+	ptrace_child
+}
+
+#
+# Define the access vector interpretation for gssd service-related objects
+#
+
+class proxy
+{
+	read
 }
 
 #
@@ -343,6 +353,8 @@ class service
 	reload
 	enable
 	disable
+	kill
+	load
 }
 
 #
@@ -406,6 +418,14 @@ class system
 	syslog_mod
 	syslog_console
 	module_request
+	halt
+	reboot
+	status
+	undefined
+	enable
+	disable
+	reload
+	kill
 }
 
 #
@@ -459,7 +479,9 @@ class capability2
 	mac_admin	# unused by SELinux
 	syslog
 	wake_alarm
+	epolwakeup
 	block_suspend
+	compromise_kernel
 }
 
 #
@@ -703,6 +725,8 @@ class nscd
 	shmemhost
 	getserv
 	shmemserv
+	getnetgrp
+	shmemnetgrp
 }
 
 # Define the access vector interpretation for controlling

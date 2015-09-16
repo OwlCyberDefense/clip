@@ -359,7 +359,6 @@ interface(`systemd_config_all_services',`
 	')
 
 	allow $1 systemdunitfile:service all_service_perms;
-	init_config_all_script_files($1)
 ')
 
 ########################################
@@ -379,7 +378,6 @@ interface(`systemd_config_unit_services',`
 	')
 
 	allow $1 systemd_unit_file_t:service all_service_perms;
-	init_config_all_script_files($1)
 ')
 
 ########################################

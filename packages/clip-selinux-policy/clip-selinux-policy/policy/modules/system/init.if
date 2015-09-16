@@ -2141,3 +2141,39 @@ interface(`init_dbus_chat',`
 	allow $1 init_t:dbus send_msg;
 	allow init_t $1:dbus send_msg;
 ')
+
+########################################
+## <summary>
+##     Tell init to reboot the system.
+## </summary>
+## <param name="domain">
+##     <summary>
+##     Domain allowed access.
+##     </summary>
+## </param>
+#
+interface(`init_system_reboot',`
+       gen_require(`
+               type init_t;
+       ')
+
+       allow $1 init_t:system reboot;
+')
+
+########################################
+## <summary>
+##     Tell init to halt the system.
+## </summary>
+## <param name="domain">
+##     <summary>
+##     Domain allowed access.
+##     </summary>
+## </param>
+#
+interface(`init_system_halt',`
+       gen_require(`
+               type init_t;
+       ')
+
+       allow $1 init_t:system halt;
+')
