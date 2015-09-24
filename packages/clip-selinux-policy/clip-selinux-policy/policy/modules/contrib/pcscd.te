@@ -12,6 +12,9 @@ init_daemon_domain(pcscd_t, pcscd_exec_t)
 type pcscd_initrc_exec_t;
 init_script_file(pcscd_initrc_exec_t)
 
+type pcscd_unit_file_t;
+systemd_unit_file(pcscd_unit_file_t)
+
 type pcscd_var_run_t;
 files_pid_file(pcscd_var_run_t)
 init_daemon_pid_file(pcscd_var_run_t, dir, "pcscd")

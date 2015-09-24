@@ -18,6 +18,9 @@ files_config_file(dnsmasq_etc_t)
 type dnsmasq_lease_t;
 files_type(dnsmasq_lease_t)
 
+type dnsmasq_unit_file_t;
+systemd_unit_file(dnsmasq_unit_file_t)
+
 type dnsmasq_var_log_t;
 logging_log_file(dnsmasq_var_log_t)
 

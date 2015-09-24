@@ -11,6 +11,10 @@
 /sbin/mdmpd	--	gen_context(system_u:object_r:mdadm_exec_t,s0)
 /sbin/raid-check	--	gen_context(system_u:object_r:mdadm_exec_t,s0)
 
+# Systemd unit files
+/usr/lib/systemd/system/[^/]*mdadm-.*		gen_context(system_u:object_r:mdadm_unit_file_t)
+/usr/lib/systemd/system/[^/]*mdmon.*		gen_context(system_u:object_r:mdadm_unit_file_t)
+
 /usr/sbin/iprdump	--	gen_context(system_u:object_r:mdadm_exec_t,s0)
 /usr/sbin/iprinit	--	gen_context(system_u:object_r:mdadm_exec_t,s0)
 /usr/sbin/iprupdate	--	gen_context(system_u:object_r:mdadm_exec_t,s0)

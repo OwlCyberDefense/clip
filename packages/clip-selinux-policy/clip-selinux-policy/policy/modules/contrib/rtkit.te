@@ -12,6 +12,9 @@ init_system_domain(rtkit_daemon_t, rtkit_daemon_exec_t)
 type rtkit_daemon_initrc_exec_t;
 init_script_file(rtkit_daemon_initrc_exec_t)
 
+type rtkit_daemon_unit_file_t;
+systemd_unit_file(rtkit_daemon_unit_file_t)
+
 ########################################
 #
 # Local policy

@@ -41,6 +41,13 @@ init_stream_connect(sysadm_t)
 userdom_manage_user_home_dirs(sysadm_t)
 userdom_home_filetrans_user_home_dir(sysadm_t)
 
+ifdef(`init_systemd',`
+	systemd_status_unit_services(sysadm_t)
+	systemd_start_unit_services(sysadm_t)
+	systemd_stop_unit_services(sysadm_t)
+	systemd_start_power_unit_services(sysadm_t)
+')
+
 ifdef(`direct_sysadm_daemon',`
 	optional_policy(`
 		init_run_daemon(sysadm_t, sysadm_r)
@@ -478,4 +485,3 @@ ifndef(`distro_redhat',`
 		java_role(sysadm_r, sysadm_t)
 	')
 ')
-

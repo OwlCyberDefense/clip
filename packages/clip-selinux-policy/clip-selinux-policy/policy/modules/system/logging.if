@@ -689,6 +689,24 @@ interface(`logging_list_logs',`
 
 #######################################
 ## <summary>
+##	Relabel the generic log directory (/var/log).
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`logging_relabelto_log_dirs',`
+	gen_require(`
+		type var_log_t;
+	')
+
+	relabelto_dirs_pattern($1, var_log_t, var_log_t)
+')
+
+#######################################
+## <summary>
 ##	Read and write the generic log directory (/var/log).
 ## </summary>
 ## <param name="domain">
@@ -1088,22 +1106,18 @@ interface(`logging_admin_syslog',`
 
 ########################################
 ## <summary>
-##	All of the rules required to administrate
-##	the logging environment
+##   Create, read, write, and delete syslog PID sockets.
 ## </summary>
 ## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
+##   <summary>
+##     Domain allowed access.
+##   </summary>
 ## </param>
-## <param name="role">
-##	<summary>
-##	User role allowed access.
-##	</summary>
-## </param>
-## <rolecap/>
 #
-interface(`logging_admin',`
-	logging_admin_audit($1, $2)
-	logging_admin_syslog($1, $2)
+interface(`logging_manage_pid_sockets',`
+	gen_require(`
+		type syslogd_var_run_t;
+	')
+
+	manage_sock_files_pattern($1, syslogd_var_run_t, syslogd_var_run_t)
 ')

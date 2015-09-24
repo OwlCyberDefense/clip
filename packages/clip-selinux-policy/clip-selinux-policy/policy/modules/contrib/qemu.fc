@@ -3,4 +3,6 @@
 /bin/qemu-kvm	--	gen_context(system_u:object_r:qemu_exec_t,s0)
 /bin/kvm		--	gen_context(system_u:object_r:qemu_exec_t,s0)
 
+/usr/lib/systemd/system/[^/]*qemu-guest-agent.*		gen_context(system_u:object_r:qemu_unit_file_t)
+
 /usr/libexec/qemu.*	--	gen_context(system_u:object_r:qemu_exec_t,s0)

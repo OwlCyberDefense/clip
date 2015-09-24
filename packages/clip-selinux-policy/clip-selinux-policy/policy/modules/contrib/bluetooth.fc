@@ -16,6 +16,9 @@
 /sbin/hid2hci	--	gen_context(system_u:object_r:bluetooth_exec_t,s0)
 /sbin/sdpd	--	gen_context(system_u:object_r:bluetooth_exec_t,s0)
 
+# Systemd unit file
+/usr/lib/systemd/system/[^/]*bluetooth.*		gen_context(system_u:object_r:bluetooth_unit_file_t,s0)
+
 /var/lib/bluetooth(/.*)?	gen_context(system_u:object_r:bluetooth_var_lib_t,s0)
 
 /var/lock/subsys/bluetoothd	--	gen_context(system_u:object_r:bluetooth_lock_t,s0)

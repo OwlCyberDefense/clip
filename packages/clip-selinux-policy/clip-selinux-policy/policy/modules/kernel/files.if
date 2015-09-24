@@ -2892,10 +2892,7 @@ interface(`files_exec_etc_files',`
 
 ########################################
 ## <summary>
-##  Get etc_t service status??? This is
-##  appearing because of broken systemd
-##  service checks. Revisit once these
-##  have been fixed.
+##  Get etc_t service status.
 ## </summary>
 ## <param name="domain">
 ##  <summary>

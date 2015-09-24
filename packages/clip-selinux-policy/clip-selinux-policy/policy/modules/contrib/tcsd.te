@@ -12,6 +12,9 @@ init_daemon_domain(tcsd_t, tcsd_exec_t)
 type tcsd_initrc_exec_t;
 init_script_file(tcsd_initrc_exec_t)
 
+type tcsd_unit_file_t;
+systemd_unit_file(tcsd_unit_file_t)
+
 type tcsd_var_lib_t;
 files_type(tcsd_var_lib_t)
 

@@ -15,6 +15,11 @@
 
 /usr/lib/NetworkManager/nm-dispatcher\.action	--	gen_context(system_u:object_r:NetworkManager_initrc_exec_t,s0)
 /usr/lib/networkmanager/nm-dispatcher\.action	--	gen_context(system_u:object_r:NetworkManager_initrc_exec_t,s0)
+
+# Systemd unit files
+/usr/lib/systemd/system/[^/]*NetworkManager.*       gen_context(system_u:object_r:NetworkManager_unit_file_t)
+/usr/lib/systemd/system/[^/]*wpa_supplicant.*		gen_context(system_u:object_r:NetworkManager_unit_file_t)
+
 /usr/libexec/nm-dispatcher\.action	--	gen_context(system_u:object_r:NetworkManager_initrc_exec_t,s0)
 
 /bin/NetworkManager	--	gen_context(system_u:object_r:NetworkManager_exec_t,s0)

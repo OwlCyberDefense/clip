@@ -8,6 +8,9 @@ HOME_DIR/\.dbus(/.*)?	gen_context(system_u:object_r:session_dbusd_home_t,s0)
 
 /usr/lib/dbus-.*/dbus-daemon-launch-helper	--	gen_context(system_u:object_r:dbusd_exec_t,s0)
 
+# Systemd unit file
+/usr/lib/systemd/system/[^/]*dbus.*		gen_context(system_u:object_r:dbusd_unit_file_t)
+
 /usr/libexec/dbus-daemon-launch-helper	--	gen_context(system_u:object_r:dbusd_exec_t,s0)
 
 /var/lib/dbus(/.*)?	gen_context(system_u:object_r:system_dbusd_var_lib_t,s0)

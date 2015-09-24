@@ -3,6 +3,9 @@
 
 /etc/rc\.d/init\.d/dnsmasq	--	gen_context(system_u:object_r:dnsmasq_initrc_exec_t,s0)
 
+# Systemd unit file
+/usr/lib/systemd/system/[^/]*dnsmasq.*		gen_context(system_u:object_r:dnsmasq_unit_file_t)
+
 /usr/sbin/dnsmasq	--	gen_context(system_u:object_r:dnsmasq_exec_t,s0)
 
 /var/lib/misc/dnsmasq\.leases	--	gen_context(system_u:object_r:dnsmasq_lease_t,s0)

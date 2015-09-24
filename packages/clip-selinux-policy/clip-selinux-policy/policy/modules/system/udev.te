@@ -23,6 +23,9 @@ files_type(udev_tbl_t)
 type udev_rules_t;
 files_type(udev_rules_t)
 
+type udev_unit_file_t;
+systemd_unit_file(udev_unit_file_t)
+
 type udev_var_run_t;
 files_pid_file(udev_var_run_t)
 init_daemon_pid_file(udev_var_run_t, dir, "udev")
@@ -95,6 +98,7 @@ kernel_search_debugfs(udev_t)
 ifdef(`init_systemd',`
 	files_search_kernel_modules(udev_t)
 	init_dgram_send(udev_t)
+	shutdown_sigchld(udev_t)
 ')
 
 #https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=235182

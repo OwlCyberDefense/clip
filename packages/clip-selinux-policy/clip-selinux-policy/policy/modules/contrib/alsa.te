@@ -21,6 +21,9 @@ files_tmp_file(alsa_tmp_t)
 type alsa_tmpfs_t;
 files_tmpfs_file(alsa_tmpfs_t)
 
+type alsa_unit_file_t;
+systemd_unit_file(alsa_unit_file_t)
+
 type alsa_var_lib_t;
 files_type(alsa_var_lib_t)
 

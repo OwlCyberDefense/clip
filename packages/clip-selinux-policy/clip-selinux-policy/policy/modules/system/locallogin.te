@@ -27,6 +27,9 @@ init_domain(sulogin_t, sulogin_exec_t)
 init_system_domain(sulogin_t, sulogin_exec_t)
 role system_r types sulogin_t;
 
+type sulogin_unit_file_t;
+systemd_unit_file(sulogin_unit_file_t)
+
 ########################################
 #
 # Local login local policy

@@ -17,6 +17,9 @@ init_daemon_domain(plymouthd_t, plymouthd_exec_t)
 type plymouthd_spool_t;
 files_type(plymouthd_spool_t)
 
+type plymouthd_unit_file_t;
+systemd_unit_file(plymouthd_unit_file_t)
+
 type plymouthd_var_lib_t;
 files_type(plymouthd_var_lib_t)
 

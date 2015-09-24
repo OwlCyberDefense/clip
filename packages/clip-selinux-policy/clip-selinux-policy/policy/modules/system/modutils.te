@@ -18,6 +18,9 @@ application_domain(insmod_t, insmod_exec_t)
 mls_file_write_all_levels(insmod_t)
 role system_r types insmod_t;
 
+type insmod_unit_file_t;
+systemd_unit_file(insmod_unit_file_t)
+
 # module loading config
 type modules_conf_t;
 files_type(modules_conf_t)

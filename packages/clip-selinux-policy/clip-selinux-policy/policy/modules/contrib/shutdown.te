@@ -89,8 +89,20 @@ optional_policy(`
 ')
 
 ifdef(`init_systemd',`
-    kernel_use_fds(shutdown_t)
-    domain_signal_all_domains(shutdown_t)
-    domain_search_all_domains_state(shutdown_t)
-    domain_read_all_domains_state(shutdown_t)
+	allow shutdown_t self:capability { sys_admin sys_boot };
+	allow shutdown_t self:dir read_file_perms;
+
+	kernel_use_fds(shutdown_t)
+	domain_signal_all_domains(shutdown_t)
+	domain_search_all_domains_state(shutdown_t)
+	domain_read_all_domains_state(shutdown_t)
+	fs_remount_all_fs(shutdown_t)
+	fs_unmount_all_fs(shutdown_t)
+	fs_list_cgroup_dirs(shutdown_t)
+	fs_manage_cgroup_dirs(shutdown_t)
+	fs_read_cgroup_files(shutdown_t)
+	kernel_setsched(shutdown_t)
+	dev_rw_sysfs(shutdown_t)
+	dev_rw_lvm_control(shutdown_t)
+	storage_delete_fixed_disk_dev(shutdown_t)
 ')

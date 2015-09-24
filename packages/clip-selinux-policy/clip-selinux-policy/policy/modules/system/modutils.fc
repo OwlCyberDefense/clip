@@ -14,6 +14,9 @@ ifdef(`distro_gentoo',`
 
 /lib/modules/modprobe\.conf -- gen_context(system_u:object_r:modules_conf_t,s0)
 
+# Systemd unit file
+/usr/lib/systemd/system/[^/]*kmod-static-nodes.*		gen_context(system_u:object_r:insmod_unit_file_t)
+
 /sbin/depmod.*		--	gen_context(system_u:object_r:depmod_exec_t,s0)
 /sbin/generate-modprobe\.conf -- gen_context(system_u:object_r:update_modules_exec_t,s0)
 /sbin/insmod.*		--	gen_context(system_u:object_r:insmod_exec_t,s0)

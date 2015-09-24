@@ -469,5 +469,6 @@ ifdef(`init_systemd',`
 		systemd_stop_unit_services(toor_t)
 		systemd_status_unit_services(toor_t)
 		logging_send_audit_msgs(toor_t)
+		init_system_halt(toor_t)
 	')
 ')

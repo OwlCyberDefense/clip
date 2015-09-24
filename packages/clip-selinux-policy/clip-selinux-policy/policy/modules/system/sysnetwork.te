@@ -84,9 +84,6 @@ files_tmp_filetrans(dhcpc_t, dhcpc_tmp_t, { file dir })
 
 can_exec(dhcpc_t, dhcpc_exec_t)
 
-#seutil_exec_setfiles(dhcpc_t)
-#seutil_read_file_contexts(dhcpc_t)
-
 kernel_read_system_state(dhcpc_t)
 kernel_read_network_state(dhcpc_t)
 kernel_search_network_sysctl(dhcpc_t)

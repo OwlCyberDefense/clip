@@ -12,6 +12,9 @@ HOME_DIR/\.ssh(/.*)?			gen_context(system_u:object_r:ssh_home_t,s0)
 
 /usr/lib/openssh/ssh-keysign	 --	gen_context(system_u:object_r:ssh_keysign_exec_t,s0)
 
+# Systemd unit file
+/usr/lib/systemd/system/sshd.*			--	gen_context(system_u:object_r:sshd_unit_file_t,s0)
+
 /usr/libexec/openssh/ssh-keysign --	gen_context(system_u:object_r:ssh_keysign_exec_t,s0)
 
 /var/run/sshd(/.*)?			gen_context(system_u:object_r:sshd_var_run_t,s0)

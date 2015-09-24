@@ -43,6 +43,9 @@ files_lock_file(bluetooth_lock_t)
 type bluetooth_tmp_t;
 files_tmp_file(bluetooth_tmp_t)
 
+type bluetooth_unit_file_t;
+systemd_unit_file(bluetooth_unit_file_t)
+
 type bluetooth_var_lib_t;
 files_type(bluetooth_var_lib_t)
 
