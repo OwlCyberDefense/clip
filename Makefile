@@ -264,18 +264,18 @@ help:
 	@echo "	all (roll all packages and generate all installation ISOs)"
 	@for cd in $(INSTISOS); do echo "	$$cd"; done
 	@echo
-	@echo "The following make targets are available for generating Live CDs:"
-	@echo "	all (generate all installation ISOs and Live CDs)"
-	@for cd in $(LIVECDS); do echo "	$$cd"; done
-	@echo
-	@echo "	NOTE: if you need to debug a kickstart post script for Live CDs,"
-	@echo "	      add LIVECD_ARGS='--shell' to the make command-line."
-	@echo
-	@echo "To burn a livecd image to a thumbdrive:"
-	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
-	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB>"
-	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB> OVERLAY_HOME_SIZE=<size in MB>"
-	@echo
+#	@echo "The following make targets are available for generating Live CDs:"
+#	@echo "	all (generate all installation ISOs and Live CDs)"
+#	@for cd in $(LIVECDS); do echo "	$$cd"; done
+#	@echo
+#	@echo "	NOTE: if you need to debug a kickstart post script for Live CDs,"
+#	@echo "	      add LIVECD_ARGS='--shell' to the make command-line."
+#	@echo
+#	@echo "To burn a livecd image to a thumbdrive:"
+#	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
+#	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB>"
+#	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB> OVERLAY_HOME_SIZE=<size in MB>"
+#	@echo
 	@echo "To do a release of CLIP:"
 	@echo "	release"
 	@echo
@@ -341,10 +341,10 @@ srpms: $(SRPMS)
 	$(call MKDIR,$(SRPM_OUTPUT_DIR))
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
-$(LIVECDS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
-	$(call CHECK_DEPS)
-	$(call CHECK_LIVE_TOOLS)
-	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-live-iso/\1/'`" live-iso
+#$(LIVECDS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
+#	$(call CHECK_DEPS)
+#	$(call CHECK_LIVE_TOOLS)
+#	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-live-iso/\1/'`" live-iso
 
 $(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(call CHECK_DEPS)

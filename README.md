@@ -181,6 +181,8 @@ The logs from auditing and remediation are placed in `/root/ssg/` by default.
 
 ## Rolling a LiveCD and generating Live Media <a id="livecd"></a>
 
+**NOTE**: As of RHEL 7.0, LiveCDs are no longer functional. Please see issue #178 for more information.
+
 livecd-tools from EPEL has problems.  We have a patched version we're using.
 To generate Live Media you're going to have to install our version. Either run `./bootstrap.sh` or install manually:
 
