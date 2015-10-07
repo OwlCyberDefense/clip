@@ -532,3 +532,6 @@ The CLIP build system is designed to utilize mock to build your external package
 ##### VirtualBox
 There is a known issue when creating a Virtual Machine of CLIP using VirtualBox and a hard disk size less than 20 gigabytes. Please use a HDD
 size that is at least 20 GB when using CLIP on VirtualBox.
+
+##### 32-bit architecture
+Building CLIP on a 32-bit RHEL build system is currently not supported.
