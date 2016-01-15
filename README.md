@@ -537,3 +537,7 @@ size that is at least 20 GB when using CLIP on VirtualBox.
 
 ##### 32-bit architecture
 Building CLIP on a 32-bit RHEL build system is currently not supported.
+
+##### ctrl+c when entering password
+Hitting ctrl+c during a password prompt will result in all future password prompts failing for invalid password.
+Rebooting the system fixes the issue.
