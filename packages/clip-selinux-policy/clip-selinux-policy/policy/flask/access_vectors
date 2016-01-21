@@ -422,6 +422,8 @@ class system
 	reboot
 	status
 	undefined
+	start
+	stop
 	enable
 	disable
 	reload
