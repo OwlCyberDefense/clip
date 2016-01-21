@@ -541,3 +541,7 @@ Building CLIP on a 32-bit RHEL build system is currently not supported.
 ##### ctrl+c when entering password
 Hitting ctrl+c during a password prompt will result in all future password prompts failing for invalid password.
 Rebooting the system fixes the issue.
+
+##### Periodic "Pane is dead" error on installation
+Periodically, the CLIP build system will create an ISO that produces a "Pane is dead" error on install.
+If this occurs, running 'make bare', rerunning './bootsrap.sh', and rebuilding clip should produce an ISO without this issue.
