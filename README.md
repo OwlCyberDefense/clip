@@ -545,3 +545,7 @@ Rebooting the system fixes the issue.
 ##### Periodic "Pane is dead" error on installation
 Periodically, the CLIP build system will create an ISO that produces a "Pane is dead" error on install.
 If this occurs, running 'make bare', rerunning './bootsrap.sh', and rebuilding clip should produce an ISO without this issue.
+
+##### readahead.service policy not currently implemented
+Because developement has been done in a VM and readahead requires the system to be run on hardware, policy is not currently implemented for this service.
+
