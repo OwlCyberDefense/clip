@@ -378,3 +378,5 @@ tunable_policy(`systemd_tmpfiles_manage_all',`
 	files_relabel_non_security_dirs(systemd_tmpfiles_t)
 	files_relabel_non_security_files(systemd_tmpfiles_t)
 ')
+
+seutil_libselinux_linked(systemd_tmpfiles_t)
