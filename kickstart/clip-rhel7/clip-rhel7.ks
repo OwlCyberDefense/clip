@@ -291,6 +291,36 @@ if [ x"$CONFIG_BUILD_ENFORCING_MODE" != "xy" ]; then
 	/usr/sbin/grubby --update-kernel=ALL --args=enforcing=0
 fi
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
+
+###### START - ADD AUDIT RULES TO COMPLY WITH SSG ###########
+/bin/echo -e "-a always,exit -F arch=b32 -S adjtimex -k auidit_time_rules" >> /etc/audit/rules.d/time.rules
+/bin/echo -e "-a always,exit -F arch=b64 -S adjtimex -k auidit_time_rules" >> /etc/audit/rules.d/time.rules
+/bin/echo -e "-a always,exit -F arch=b32 -S settimeofday -k auidit_time_rules" >> /etc/audit/rules.d/time.rules
+/bin/echo -e "-a always,exit -F arch=b64 -S settimeofday -k auidit_time_rules" >> /etc/audit/rules.d/time.rules
+/bin/echo -e "-a always,exit -F arch=b32 -S stime -k auidit_time_rules" >> /etc/audit/rules.d/time.rules
+
+/bin/echo -e "-a always,exit -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/sbin/pam_timestamp_check -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/sbin/netreport -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/chfn -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/sudo -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/chage -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/su -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/write -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/wall -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/bin/chsh -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/libexec/utempter/utempter -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+/bin/echo -e "-a always,exit -F path=/usr/lib64/dbus-1/dbus-daemon-launch-helper -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+###### END - ADD AUDIT RULES TO COMPLY WITH SSG ###########
+
 echo "Done with post install scripts..."
 
 # This is rather unfortunate, but the remediation content 
