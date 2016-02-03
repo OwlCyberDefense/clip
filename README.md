@@ -14,7 +14,7 @@
 Here is a quick list of the things you need to do to get started.
 
 1. **CHANGE THE DEFAULT PASSWORD IN YOUR KICKSTART!**
-CLIP intentionally ships with an [unencrypted default password](https://github.com/TresysTechnology/clip/blob/master/kickstart/clip-rhel7/clip-rhel7.ks#L233)!
+CLIP intentionally ships with an [unencrypted default password](./kickstart/clip-rhel7/clip-rhel7.ks#L233)!
 It is "neutronbass". **DO NOT LEAVE THIS PASSWORD LINE INTACT!**
 2. Run `./bootstrap.sh`.
 3. After you have run bootstrap once you do not have to run it again unless there there has been a new release of CLIP.
@@ -67,10 +67,10 @@ Several repositories must be present for the build system to work:
 - RHEL Optional
 - Fedora Build Groups (for RHEL 5)
 
-The locations of these repos is defined in the [`CONFIG_REPOS`](https://github.com/TresysTechnology/clip/blob/master/CONFIG_REPOS) file:
--  [`rhel`](https://github.com/TresysTechnology/clip/blob/master/CONFIG_REPOS#L30)` = /mnt/repos/rhel`
--  [`opt`](https://github.com/TresysTechnology/clip/blob/master/CONFIG_REPOS#L35)` = /mnt/repos/opt`
--  [`buildgroups`](https://github.com/TresysTechnology/clip/blob/master/CONFIG_REPOS#L41)` = /mnt/repos/buildgroups`
+The locations of these repos is defined in the [`CONFIG_REPOS`](./CONFIG_REPOS) file:
+-  [`rhel`](./CONFIG_REPOS#L30)` = /mnt/repos/rhel`
+-  [`opt`](./CONFIG_REPOS#L35)` = /mnt/repos/opt`
+-  [`buildgroups`](./CONFIG_REPOS#L41)` = /mnt/repos/buildgroups`
 
 Remember that repositories are often architecture specific so you might have
 to update these variables to build for a different architecture.
@@ -86,7 +86,7 @@ the two options below, 2)1 or 2)2
 
 2. 
    1. If you want to include a package and you have a src.rpm that needs *no*
-  modifications refer to [`packages/examples/srcrpm`](https://github.com/TresysTechnology/clip/tree/master/packages/examples/srcrpm) as a reference.  You will copy
+  modifications refer to [`packages/examples/srcrpm`](./packages/examples/srcrpm) as a reference.  You will copy
   the src rpm, `Makefile.tmpl` and the `gen-makefile-from-src-rpm.sh` to the newly
   created (#1) package directory.  Now enter that directory and run
   `./gen-makefile-from-src-rpm.sh <package>.src.rpm`.  This will generate a
@@ -109,8 +109,8 @@ directory to the [`EXCLUDE_PKGS`](./Makefile#L50) variable in the top level Make
 
 ####ISO configuration (kickstart files)
 
-The [`kickstart/`](https://github.com/TresysTechnology/clip/tree/master/kickstart) directory contains the files needed to configure an ISO.  The
-Makefiles in this directory call out to tools in the [`support/`](https://github.com/TresysTechnology/clip/tree/master/support) directory and
+The [`kickstart/`](./kickstart) directory contains the files needed to configure an ISO.  The
+Makefiles in this directory call out to tools in the [`support/`](./support) directory and
 pass in a kickstart.  This kickstart is used to generate an ISO.
 
 To add a new ISO, first add an appropriate kickstart to the
@@ -136,7 +136,7 @@ the kickstart and it will be installed during the installation process.
 
 **Method 1:**
 
-1. Add the fully qualified path to the package to the [`PRE_ROLLED_PACKAGES`](https://github.com/TresysTechnology/clip/blob/master/CONFIG_BUILD#L12)
+1. Add the fully qualified path to the package to the [`PRE_ROLLED_PACKAGES`](./CONFIG_BUILD#L12)
 variable in the `CONFIG_BUILD` file.
 2. Reference the package from your kickstart.
 
@@ -163,7 +163,7 @@ kickstart.
 #### Configuring AIDE
 
 CLIP creates a systemd service unit which runs an AIDE check on first boot. The newly created database, AIDE binary, and aide.conf are moved to a file system which is mounted read-only after a reboot triggered by the AIDE service.
-A cron job is executed every 24 hours and logs detected changes to `/var/log/aide.log`. Where the AIDE files are written, the cron job, as well as `aide.conf`, are all configurable in the [kickstart script](https://github.com/TresysTechnology/clip/blob/master/kickstart/clip-rhel7/clip-rhel7.ks#L344). A typical use case is to disable networking on the system if the cron job fails. Another useful configuration is to write the AIDE files to read-only media that is kept off the box for added security.
+A cron job is executed every 24 hours and logs detected changes to `/var/log/aide.log`. Where the AIDE files are written, the cron job, as well as `aide.conf`, are all configurable in the [kickstart script](./kickstart/clip-rhel7/clip-rhel7.ks#L344). A typical use case is to disable networking on the system if the cron job fails. Another useful configuration is to write the AIDE files to read-only media that is kept off the box for added security.
 
 **NOTE:** `aide.conf` has not been modified by CLIP and will need to be configured to ignore files on a case by case basis.
 
@@ -184,7 +184,7 @@ The logs from auditing and remediation are placed in `/root/ssg/` by default.
 **NOTE**: As of RHEL 7.0, LiveCDs are no longer functional. Please see issue #178 for more information.
 
 livecd-tools from EPEL has problems.  We have a patched version we're using.
-To generate Live Media you're going to have to install our version. Either run [`./bootstrap.sh`](https://github.com/TresysTechnology/clip/blob/master/bootstrap.sh) or install manually:
+To generate Live Media you're going to have to install our version. Either run [`./bootstrap.sh`](./bootstrap.sh) or install manually:
 
 ```
 make livecd-tools-rpm
@@ -269,7 +269,7 @@ in CLIP:
   - Configuration management friendly yum repos and package lists
 
 Developers starting from scratch should insert any new sources into the
-[`packages/`](https://github.com/TresysTechnology/clip/tree/master/packages) directory.  This source will be rolled up into RPMs, placed into yum
+[`packages/`](./packages) directory.  This source will be rolled up into RPMs, placed into yum
 repositories, and can then be included and used in a kickstart ending up in the
 installed system.
 
@@ -285,7 +285,7 @@ following CLIP features:
 
 This developer uses the CLIP build system to roll ISOs with the remediation
 content, audit content, and existing custom packages present. This developer
-must add an entry to [`CONFIG_REPOS`](https://github.com/TresysTechnology/clip/blob/master/CONFIG_REPOS) that points to the developer’s custom yum
+must add an entry to [`CONFIG_REPOS`](./CONFIG_REPOS) that points to the developer’s custom yum
 repo.  Once the repo is added to the configuration file the developer will
 modify the kickstart adding to add the custom packages.  The custom packages
 will be installed and rolling ISOs.
@@ -302,7 +302,7 @@ based on our experiences developing cross domain solutions.  One of the issues
 we frequently encounter is the lack of reproducibility of builds.  This build
 system allows you to roll RPMs in mock eliminating build host dependencies.  By
 default, a clean chroot will be used for each RPM. This is configurable in
-[`CONFIG_BUILD`](https://github.com/TresysTechnology/clip/blob/master/CONFIG_BUILD#L65) with the `CLEAN_MOCK` option.  Mock allows you to version the packages
+[`CONFIG_BUILD`](./CONFIG_BUILD#L65) with the `CLEAN_MOCK` option.  Mock allows you to version the packages
 used to roll an RPM.  It manages yum repositories and carries patched versions of
 ISO generation tools to address a number of problems in those tools.
 
@@ -350,10 +350,10 @@ and accreditation process.
 
 ##### What is the default username and password for CLIP?
 The username is `toor` and the password is `neutronbass`.  You can
-change this in the `%post` of the [`kickstart`](https://github.com/TresysTechnology/clip/blob/master/kickstart/clip-rhel7/clip-rhel7.ks#L232).
+change this in the `%post` of the [`kickstart`](./kickstart/clip-rhel7/clip-rhel7.ks#L232).
 
 ##### What is the default bootloader password for GRUB?
-The default password for GRUB is `neutronbass` and the default user is `root`.  You can change this in the [`kickstart`](https://github.com/TresysTechnology/clip/blob/master/kickstart/clip-rhel7/clip-rhel7.ks#L29). It is highly recommended you change your password either in the kickstart or at runtime. Refer to [this guide](https://help.ubuntu.com/community/Grub2/Passwords) for runtime updating of the grub password.
+The default password for GRUB is `neutronbass` and the default user is `root`.  You can change this in the [`kickstart`](./kickstart/clip-rhel7/clip-rhel7.ks#L29). It is highly recommended you change your password either in the kickstart or at runtime. Refer to [this guide](https://help.ubuntu.com/community/Grub2/Passwords) for runtime updating of the grub password.
 
 ##### How do I set up local yum repos?
 Run `./bootstrap.sh` with an RHEL 7 DVD in the DVD-Drive.
@@ -483,8 +483,8 @@ The fix for this is to disable the setfiles check in samange.conf:
 echo -e "module-store = direct\n[setfiles]\npath=/bin/true\n[end]\n" > /etc/selinux/semanage.conf
 ```
 
-If you're using a [CLIP kickstart](https://github.com/TresysTechnology/clip/blob/master/kickstart/clip-rhel7/clip-rhel7.ks#L283) the ks handles this in response to the
-[`CONFIG_BUILD_ENFORCING_MODE`](https://github.com/TresysTechnology/clip/blob/master/CONFIG_BUILD#L35) flag.  In permissive mode this check is disabled.
+If you're using a [CLIP kickstart](./kickstart/clip-rhel7/clip-rhel7.ks#L283) the ks handles this in response to the
+[`CONFIG_BUILD_ENFORCING_MODE`](./CONFIG_BUILD#L35) flag.  In permissive mode this check is disabled.
 
 **Note**: This is only recommended when doing development.  Errors
 like this are a sign of a policy problem that needs to be fixed.
@@ -518,7 +518,7 @@ be pointing to additional yum repos at install time via the command-line
 us an email.
 
 The way you fix it is by making sure the referenced package is present in
-the repos in [`CONFIG_REPOS`](https://github.com/TresysTechnology/clip/blob/master/CONFIG_REPOS).  A common cause is lacking the Optional channel
+the repos in [`CONFIG_REPOS`](./CONFIG_REPOS).  A common cause is lacking the Optional channel
 repo when building on RHEL.  This typically results in libxslt-python dep
 errors.
 
