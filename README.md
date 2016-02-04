@@ -26,15 +26,13 @@ It is "neutronbass". **DO NOT LEAVE THIS PASSWORD LINE INTACT!**
 
 ###What is this thing?
 
-CLIP’s build system allows developers and administrators to create RPMs and LiveCDs
+CLIP’s build system allows developers and administrators to create RPMs and installation ISOs
 in a controlled environment.
 
 Specific features include:
 
 * Generation of RPMs using mock. 
 * Generation of installation media (ISOs).
-* Generation of LiveCD ISOs (currently broken for RHEL 6 due to dracut
-issues).
 
 Unique feature:
 
@@ -115,7 +113,7 @@ pass in a kickstart.  This kickstart is used to generate an ISO.
 
 To add a new ISO, first add an appropriate kickstart to the
 `kickstart/<productname>` directory.  Since this build system generates and
-manages yum repos we must "muck around" with the kickstart so ensure it has
+manages yum repos we must make changes to the kickstart, so ensure it has
 the `#REPO-REPLACEMENT-PLACEHOLDER` line somewhere near the top.
 
 **Note**: the string `#REPO-REPLACEMENT-PLACEHOLDER` *must* appear in the
@@ -182,74 +180,6 @@ The logs from auditing and remediation are placed in `/root/ssg/` by default.
 ## Rolling a LiveCD and generating Live Media <a id="livecd"></a>
 
 **NOTE**: As of RHEL 7.0, LiveCDs are no longer functional. Please see issue #178 for more information.
-
-livecd-tools from EPEL has problems.  We have a patched version we're using.
-To generate Live Media you're going to have to install our version. Either run [`./bootstrap.sh`](./bootstrap.sh) or install manually:
-
-```
-make livecd-tools-rpm
-cd repos/clip-repo
-sudo yum remove livecd-tools python-imgcreate -y
-sudo yum localinstall livecd-tools*x86_64.rpm python-imgcreate* -y
-```
-
-We can take a live CD ISO, write it to non-optical media like a
-hard drive or USB device.  This can be done with the following make
-commands:
-
-```
-make clip-rhel7-live-iso
-```
-
-That generates the live ISO image.  Now you can write that image
-to a hard drive or USB device.
-
-```
-make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel7-*-live.iso
-```
-
-This will generate stateless live media.  If you want to retain state
-across reboots specify an overlay size (in MB) as well:
-
-```
-make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel7-*-live.iso OVERLAY_SIZE=256
-```
-
-If you want to retain state in the home directory across boots, specify a home
-overlay size (in MB) and an overlay size (in MB) as well:
-
-```
-make iso-to-disk USB_DEV=/dev/sdb ISO_FILE=clip-rhel7-*-live.iso OVERLAY_SIZE=256 OVERLAY_HOME=128
-```
-## SELinux Policy <a id="selinux"></a>
-
-CLIP SELinux policy for Red Hat Enterprise Linux 7 (RHEL7) aims to provide a
-certifiable SELinux policy from which users can base their own policy. The
-policy is currently in an Alpha state and only supports booting/logins in
-Enforcing. Some caveats about the current policy state:
-- Remaining denials do not prevent booting/logins in Enforcing, but may cause
-  error messages on boot.
-- systemd_unit_file policy is not complete; therefore, starting and stopping
-  services may not be fully supported.
-- Login user policy is not stripped down to match least-privilege model and
-  lacks support for a super-user role. Any commands which would require a super
-  user will not be available in the Alpha (e.g. shutdown, reboot, mount).
-- Modules have not been stripped down to the smallest subset of CLIP-related
-  modules.
-
-The main design goals for this release are as follows:
-- First and foremost, get CLIP RHEL7 booting in Enforcing.
-- Support logins in Enforcing.
-- Put long-running processes in explicitly labeled domains.
-- Allow short-running processes/scripts to fall through to the initrc domain.
-  Any subsequent forks/execs (from initrc_t) should result in proper domain
-  transitions.
-
-The status of policy issues/developments can be tracked here:
-https://github.com/TresysTechnology/clip/labels/selinux
-
-The intent is to resolve all of the remaining issues outlined above by the next
-CLIP release (https://github.com/TresysTechnology/clip/milestones/RHEL_7-Beta).
 
 ## Use Cases (WIP) <a id="use"></a>
 
