@@ -319,7 +319,37 @@ fi
 /bin/echo -e "-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
 /bin/echo -e "-a always,exit -F path=/usr/libexec/utempter/utempter -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
 /bin/echo -e "-a always,exit -F path=/usr/lib64/dbus-1/dbus-daemon-launch-helper -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+
 ###### END - ADD AUDIT RULES TO COMPLY WITH SSG ###########
+
+###### START - ADD SECURITY CONFIGURATION CHANGES ###########
+#display error when auditing doesnt work
+echo "auditctl -f 1" >> /etc/audit/rules.d/priv.rules
+
+#make these the first 3 lines to /etc/pam.d/system-auth
+sed -i '4iauth        [default=die]  pam_faillock.so authfail audit deny=3 fail_interval=900' /etc/pam.d/system-auth
+sed -i '4iauth        sufficient     pam_unix.so try_first_pass' /etc/pam.d/system-auth
+sed -i '4iauth        required       pam_faillock.so preauth silent audit deny=3 fail_interval=900' /etc/pam.d/system-auth
+
+#set max logins to 10 in /etc/security/limits.conf
+sed -i '60i* hard maxlogins 10' /etc/security/limits.conf
+
+#set alive interval to 600 and max alive count to 0 in sshd_config
+sed -i "s/#ClientAliveInterval 0/ClientAliveInterval 600/" /etc/ssh/sshd_config
+sed -i "s/#ClientAliveCountMax 3/ClientAliveCountMax 0/" /etc/ssh/sshd_config
+
+#modify configs to limit DOS attacks
+echo "net/ipv4/tcp_timestamps=1" >> /etc/sysctl.d/sysctl-clip.conf
+echo "net/netfilter/nf_conntrack_max=2000000" >> /etc/sysctl.d/sysctl-clip.conf
+echo "net/netfilter/nf_conntrack_tcp_loose=0" >> /etc/sysctl.d/sysctl-clip.conf
+
+#set permissions on audit.rules to 600
+chmod 600 /etc/audit/audit.rules
+
+#set permissions of /var/log to 750
+chmod 750 /var/log
+###### END - ADD SECURITY CONFIGURATION CHANGES ###########
+
 
 echo "Done with post install scripts..."
 
@@ -375,6 +405,13 @@ cat <<- EOF > $AIDE_SCRIPT
 	#!/bin/sh
 	/bin/rm -f $AIDE_SCRIPT
 	/bin/mv /sbin/aide $AIDE_DIR/aide
+	echo "/sbin/auditctl NORMAL+b" >> /etc/aide.conf
+	echo "/sbin/auditd NORMAL+b" >> /etc/aide.conf
+	echo "/sbin/ausearch NORMAL+b" >> /etc/aide.conf
+	echo "/sbin/aureport NORMAL+b" >> /etc/aide.conf
+	echo "/sbin/autrace NORMAL+b" >> /etc/aide.conf
+	echo "/sbin/audispd NORMAL+b" >> /etc/aide.conf
+	echo "/sbin/augenrules NORMAL+b" >> /etc/aide.conf
 	/bin/mv /etc/aide.conf $AIDE_DIR/aide.conf
 	/bin/ln -s $AIDE_DIR/aide /usr/sbin/aide
 	# run aide cron job daily
