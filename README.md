@@ -481,3 +481,6 @@ Because developement has been done in a VM and readahead requires the system to 
 
 ##### Not all FIPS requirements are implemented
 CLIP is not a FIPS compliant system out of the box. It is up to the developer to make the necessary changes if FIPS compliance is required.
+
+##### Stopping/Restarting auditd does not currently work in enforcing
+SELinux currently prevents auditd from being stopped or restarted in enforcing
