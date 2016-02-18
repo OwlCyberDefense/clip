@@ -293,11 +293,11 @@ fi
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
 ###### START - ADD AUDIT RULES TO COMPLY WITH SSG ###########
-/bin/echo -e "-a always,exit -F arch=b32 -S adjtimex -k auidit_time_rules" >> /etc/audit/rules.d/time.rules
-/bin/echo -e "-a always,exit -F arch=b64 -S adjtimex -k auidit_time_rules" >> /etc/audit/rules.d/time.rules
-/bin/echo -e "-a always,exit -F arch=b32 -S settimeofday -k auidit_time_rules" >> /etc/audit/rules.d/time.rules
-/bin/echo -e "-a always,exit -F arch=b64 -S settimeofday -k auidit_time_rules" >> /etc/audit/rules.d/time.rules
-/bin/echo -e "-a always,exit -F arch=b32 -S stime -k auidit_time_rules" >> /etc/audit/rules.d/time.rules
+/bin/echo -e "-a always,exit -F arch=b32 -S adjtimex -k audit_time_rules" >> /etc/audit/rules.d/time.rules
+/bin/echo -e "-a always,exit -F arch=b64 -S adjtimex -k audit_time_rules" >> /etc/audit/rules.d/time.rules
+/bin/echo -e "-a always,exit -F arch=b32 -S settimeofday -k audit_time_rules" >> /etc/audit/rules.d/time.rules
+/bin/echo -e "-a always,exit -F arch=b64 -S settimeofday -k audit_time_rules" >> /etc/audit/rules.d/time.rules
+/bin/echo -e "-a always,exit -F arch=b32 -S stime -k audit_time_rules" >> /etc/audit/rules.d/time.rules
 
 /bin/echo -e "-a always,exit -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
 /bin/echo -e "-a always,exit -F path=/usr/sbin/pam_timestamp_check -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
@@ -316,7 +316,9 @@ fi
 /bin/echo -e "-a always,exit -F path=/usr/bin/wall -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
 /bin/echo -e "-a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
 /bin/echo -e "-a always,exit -F path=/usr/bin/chsh -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+if [ x"$CONFIG_BUILD_PRODUCTION" == "xn" ]; then
+	/bin/echo -e "-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+fi
 /bin/echo -e "-a always,exit -F path=/usr/libexec/utempter/utempter -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
 /bin/echo -e "-a always,exit -F path=/usr/lib64/dbus-1/dbus-daemon-launch-helper -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
 
@@ -324,30 +326,38 @@ fi
 
 ###### START - ADD SECURITY CONFIGURATION CHANGES ###########
 #display error when auditing doesnt work
-echo "auditctl -f 1" >> /etc/audit/rules.d/priv.rules
+/bin/echo "-f 1" >> /etc/audit/rules.d/priv.rules
 
 #make these the first 3 lines to /etc/pam.d/system-auth
-sed -i '4iauth        [default=die]  pam_faillock.so authfail audit deny=3 fail_interval=900' /etc/pam.d/system-auth
-sed -i '4iauth        sufficient     pam_unix.so try_first_pass' /etc/pam.d/system-auth
-sed -i '4iauth        required       pam_faillock.so preauth silent audit deny=3 fail_interval=900' /etc/pam.d/system-auth
+/bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/i auth        required      pam_faillock.so preauth silent audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/system-auth
+/bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/a auth        [default=die] pam_faillock.so authfail audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/system-auth
+/bin/sed -i --follow-symlinks "/^account.*required.*pam_unix.so/i account     required      pam_faillock.so" /etc/pam.d/system-auth
+
+/bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/i auth        required      pam_faillock.so preauth silent audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/password-auth
+/bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/a auth        [default=die] pam_faillock.so authfail audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/password-auth
+/bin/sed -i --follow-symlinks "/^account.*required.*pam_unix.so/i account     required      pam_faillock.so" /etc/pam.d/password-auth
+
 
 #set max logins to 10 in /etc/security/limits.conf
-sed -i '60i* hard maxlogins 10' /etc/security/limits.conf
+/bin/sed -i '60i* hard maxlogins 10' /etc/security/limits.conf
 
 #set alive interval to 600 and max alive count to 0 in sshd_config
-sed -i "s/#ClientAliveInterval 0/ClientAliveInterval 600/" /etc/ssh/sshd_config
-sed -i "s/#ClientAliveCountMax 3/ClientAliveCountMax 0/" /etc/ssh/sshd_config
+/bin/sed -i "s/#ClientAliveInterval 0/ClientAliveInterval 600/" /etc/ssh/sshd_config
+/bin/sed -i "s/#ClientAliveCountMax 3/ClientAliveCountMax 0/" /etc/ssh/sshd_config
 
 #modify configs to limit DOS attacks
-echo "net/ipv4/tcp_timestamps=1" >> /etc/sysctl.d/sysctl-clip.conf
-echo "net/netfilter/nf_conntrack_max=2000000" >> /etc/sysctl.d/sysctl-clip.conf
-echo "net/netfilter/nf_conntrack_tcp_loose=0" >> /etc/sysctl.d/sysctl-clip.conf
+/bin/echo "net/ipv4/tcp_timestamps=1" >> /etc/sysctl.d/sysctl-clip.conf
+/bin/echo "net/netfilter/nf_conntrack_max=2000000" >> /etc/sysctl.d/sysctl-clip.conf
+/bin/echo "net/netfilter/nf_conntrack_tcp_loose=0" >> /etc/sysctl.d/sysctl-clip.conf
 
 #set permissions on audit.rules to 600
-chmod 600 /etc/audit/audit.rules
+/bin/chmod 600 /etc/audit/audit.rules
 
 #set permissions of /var/log to 750
-chmod 750 /var/log
+/bin/chmod 750 /var/log
+
+#set timeout to 600
+/bin/echo TMOUT=600 >> /etc/profile
 ###### END - ADD SECURITY CONFIGURATION CHANGES ###########
 
 
@@ -367,6 +377,12 @@ if [ x"$CONFIG_BUILD_LIVE_MEDIA" == "xy" ]; then
 
 	# this one isn't actually due to remediation, but needs to be done too
 	/bin/kill $(jobs -p) 2>/dev/null 1>/dev/null
+fi
+
+if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
+	# Remove sshd and rsync if in a production build
+	/bin/echo "Removing ssh and rsync from the system"
+	/bin/yum remove -y openssh* rsync
 fi
 
 # Scan and remediate CLIP using SSG
@@ -455,9 +471,7 @@ if [ x"$ENABLE_NETWORKING" == "xn" ]; then
 fi
 
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
-	# Remove sshd and rsync if in a production build
-	/bin/echo "Removing ssh and rsync from the system"
-	/bin/yum remove -y openssh* rsync
+	# Remove rpm and yum if in a production build
 	/bin/rpm -e --nodeps rpm yum
 fi
 
