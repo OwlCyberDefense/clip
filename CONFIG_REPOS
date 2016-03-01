@@ -27,7 +27,7 @@
 #centos7.0 = /opt/repos/centos7.0-1406
 
 # A RHEL/CentOS repo must be available. Must be a local path (we use NFS mounts).
-rhel = /opt/rhel-7-x86_64/rhel-x86_64-server-7/Packages/
+rhel = /opt/rhel-7-x86_64/rhel-x86_64-server-7.2/Packages/
 
 # NOTE: If using RHEL, *not CentOS*, you must provide the Optional repo. 
 # An RHEL Optional repo must be available. Must be a local path (we use NFS 
@@ -39,3 +39,4 @@ rhel = /opt/rhel-7-x86_64/rhel-x86_64-server-7/Packages/
 # WARNING: The CLIP team is no longer testing or supporting RHEL 5 builds from this tree.  
 #          It might work, but probably will not.  
 #buildgroups = /mnt/repos/buildgroups
+opt = /home/mnapoli/opt/
