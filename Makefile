@@ -154,7 +154,6 @@ endef
 # This define directive is used to generate build rules.
 define RPM_RULE_template
 $(1): $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
-	if [ "$(call PKG_NAME_FROM_RPM,$(notdir $(1)))" = "scap-security-guide" ]; then make openscap-rpm; fi
 	$(call CHECK_DEPS)
 	$(call MKDIR,$(CLIP_REPO_DIR))
 	$(call CHECK_MOCK)

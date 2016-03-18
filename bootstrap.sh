@@ -238,21 +238,7 @@ check_and_build_rpm "lorax" "lorax-19.6.45-6.el7"
 # Roll pungi
 check_and_build_rpm "pungi" "pungi-2.13-4.el7"
 
-if ! rpm -q "openscap-1.2.1-1.el7.x86_64" > /dev/null; then
-	if rpm -q "openscap" > /dev/null; then
-		/bin/echo "You have openscap installed, but not our version. Our version is
-required to build scap-security-guide.
-Press the any key to continue or ctrl-c to exit.
-"
-		read user_input
-		/usr/bin/sudo /usr/bin/yum remove openscap* 2>/dev/null || true
-	fi
-	/usr/bin/make openscap-rpm
-	pushd . > /dev/null
-	cd repos/clip-repo
-	/usr/bin/sudo /usr/bin/yum localinstall -y openscap*
-	popd > /dev/null
-fi
+/usr/bin/sudo /usr/bin/yum install -y openscap*
 
 /bin/echo -e "Basic bootstrapping of build host is complete.\nRunning 'make clip-rhel7-iso'"
 /usr/bin/make clip-rhel7-iso
