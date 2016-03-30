@@ -1,15 +1,25 @@
 #Certifiable Linux Integration Platform (CLIP)
 
 ## Table of Contents
-  * [Getting Started](#gs)
-  * [Build System](#bs)
-  * [Creating a Live CD] (#livecd)
-  * [SELinux Policy] (#selinux)
-  * [Use Cases] (#use)
-  * [Frequently Asked Questions] (#faq)
-  * [Known Issues] (#issues)
+  * [Getting Started] (#getting-started-)
+  * [Build System] (#build-system-)
+    * [What is this thing?] (#what-is-this-thing-)
+    * [How do I use the build system?] (#how-do-i-use-the-build-system-)
+    * [Managing yum repos] (#managing-yum-repos-)
+    * [Custom Packages] (#custom-packages-)
+    * [ISO configuration (kickstarts)] (#iso-configuration-kickstart-files-)
+    * [Add existing binary packages to the image] (#add-existing-binary-packages-to-the-image-)
+    * [Update existing external packages] (#update-existing-external-packages-)
+    * [Configuring AIDE] (#configuring-aide-)
+    * [Configuring Scap Security Guide] (#configuring-scap-security-guide-)
+  * [Use Cases] (#use-cases-)
+    * [Developer starting from scratch](#developer-starting-from-scratch-)
+    * [Developer with existing custom yum repositories](#developer-with-existing-custom-yum-repositories-but-needs-help-rolling-isos-)
+    * [Developer who only wants the remediation and audit content](#developer-who-only-wants-the-remediation-and-audit-content-)
+  * [Frequently Asked Questions] (#frequently-asked-questions-)
+  * [Known Issues] (#known-issues-)
 
-##Getting Started <a id="gs"></a>
+##Getting Started <a id="getting-started"></a>
 
 Here is a quick list of the things you need to do to get started.
 
@@ -22,9 +32,9 @@ It is "neutronbass". **DO NOT LEAVE THIS PASSWORD LINE INTACT!**
 
 **Note**: for a complete list of targets available please run `make help`
 
-##Build System <a id="bs"></a>
+##Build System <a id="build-system"></a>
 
-###What is this thing?
+###What is this thing? <a id="what-is-this-thing"></a>
 
 CLIP’s build system allows developers and administrators to create RPMs and installation ISOs
 in a controlled environment.
@@ -45,7 +55,7 @@ with a build dependency bar-4.3-1, thus facilitating reproducibility of
 generated packages.
 
 
-###How do I use the build system?
+###How do I use the build system? <a id="how-do-i-use-the-build-system"></a>
 
 This build system has a few constructs that must be addressed by the
 user.
@@ -58,7 +68,8 @@ user.
 
 To view the list of available build targets run `make help`.
 
-####Managing yum repos
+####Managing yum repos <a id="managing-yum-repos"></a>
+
 
 Several repositories must be present for the build system to work:
 - RHEL/CentOS
@@ -105,7 +116,8 @@ update the appropriate kickstart file and add the package name to the kickstart'
 To exclude the package from future builds, add the package name as it appears in the `packages/`
 directory to the [`EXCLUDE_PKGS`](./Makefile#L50) variable in the top level Makefile.
 
-####ISO configuration (kickstart files)
+####ISO configuration (kickstart files) <a id=”iso-configuration-kickstart-files-”></a>
+
 
 The [`kickstart/`](./kickstart) directory contains the files needed to configure an ISO.  The
 Makefiles in this directory call out to tools in the [`support/`](./support) directory and
@@ -126,7 +138,8 @@ iso, you can run the following from `./kickstart/clip-rhel7`:
 A hostable kickstart is then located in
 `./tmp/clip-iso-build/1/x86_64/os/clip-rhel7.ks`
 
-####Adding existing binary packages to the image
+####Add existing binary packages to the image <a id=”add-existing-binary-packages-to-the-image”></a>
+
 
 There are two ways to add an existing binary package to this build system.
 Once one of these methods has been followed you can reference the package in
@@ -154,18 +167,21 @@ you have a yum repo created.
 kickstart.
 8. Build your image.
 
-#### Updated existing external packages:
+#### Update existing external packages <a id=”update-existing-external-packages”></a>
+
 1. Remove `conf/pkglist.<reponame>`
 2. Run `make conf/pkglist.<reponame>`
 
-#### Configuring AIDE
+#### Configuring AIDE <a id=”configuring-aide”></a>
+
 
 CLIP creates a systemd service unit which runs an AIDE check on first boot. The newly created database, AIDE binary, and aide.conf are moved to a file system which is mounted read-only after a reboot triggered by the AIDE service.
 A cron job is executed every 24 hours and logs detected changes to `/var/log/aide.log`. Where the AIDE files are written, the cron job, as well as `aide.conf`, are all configurable in the [kickstart script](./kickstart/clip-rhel7/clip-rhel7.ks#L344). A typical use case is to disable networking on the system if the cron job fails. Another useful configuration is to write the AIDE files to read-only media that is kept off the box for added security.
 
 **NOTE:** `aide.conf` has not been modified by CLIP and will need to be configured to ignore files on a case by case basis.
 
-#### Configuring Scap Security Guide
+#### Configuring Scap Security Guide <a id=”configuring-scap-security-guide”></a>
+
 
 CLIP uses Scap Security Guide (SSG) [1] to perform remediation and audit of our system. The profile used is
 based on the SSG stig-rhel7-server-upstream profile [2]. All SSG configuration is done in the CLIP kickstart script.
@@ -177,17 +193,14 @@ The logs from auditing and remediation are placed in `/root/ssg/` by default.
 
 [2] https://github.com/OpenSCAP/scap-security-guide/blob/master/RHEL/7/input/profiles/stig-rhel7-server-upstream.xml
 
-## Rolling a LiveCD and generating Live Media <a id="livecd"></a>
-
-**NOTE**: As of RHEL 7.0, LiveCDs are no longer functional. Please see issue #178 for more information.
-
-## Use Cases (WIP) <a id="use"></a>
+## Use Cases <a id="use-cases-"></a>
 
 CLIP targets several usage scenarios - each interacting and leveraging CLIP in
 different ways.  Please review the use cases described below to better
 understand how you can use CLIP.
 
-##### Developer starting from scratch
+##### Developer starting from scratch <a id=”developer-starting-from-scratch”></a>
+
 
 A developer starting from scratch will leverage all of the features available
 in CLIP:
@@ -203,7 +216,8 @@ Developers starting from scratch should insert any new sources into the
 repositories, and can then be included and used in a kickstart ending up in the
 installed system.
 
-#####Developer with existing custom yum repositories but needs help rolling ISOs
+#####Developer with existing custom yum repositories but needs help rolling ISOs <a id=”developer-with-existing-custom-yum-repositories-but-needs-help-rolling-isos”></a>
+
 
 This developer already has packages and yum repositories, but will use the
 following CLIP features:
@@ -220,7 +234,8 @@ repo.  Once the repo is added to the configuration file the developer will
 modify the kickstart adding to add the custom packages.  The custom packages
 will be installed and rolling ISOs.
 
-#####Developer who only wants the remediation and audit content
+#####Developer who only wants the remediation and audit content <a id=”developer-who-only-wants-the-remediation-and-audit-content”></a>
+
 
 These developers already have packages and yum repositories and can already
 roll ISOs.  They only want to leverage the following features:
@@ -242,7 +257,7 @@ running `make openscap-rpm; make scap-security-guide-rpm`.  The
 generated RPMs will be placed in `repos/clip-repo`.  You can then copy the RPMs
 into the build environment and roll ISOs.
 
-## Frequently Asked Questions <a id="faq"></a>
+## Frequently Asked Questions <a id="frequently-asked-questions"></a>
 
 ##### I deployed my system and everything is broken.  HELP!
 
@@ -459,7 +474,10 @@ of your tag. Then run `make release`. The repo will be tagged and pushed to orig
 ##### How do I add an external package to the build system?
 The CLIP build system is designed to utilize mock to build your external package in a chroot. Please see [Custom Packages](#custom-packages-) for more information.
 
-## Known Issues <a id="issues"></a>
+##### How do I create a LiveCD?
+As of RHEL 7.0, LiveCDs are no longer functional. Please see issue #178 for more information.
+
+## Known Issues <a id="known-issues"></a>
 
 ##### VirtualBox
 There is a known issue when creating a Virtual Machine of CLIP using VirtualBox and a hard disk size less than 20 gigabytes. Please use a HDD
