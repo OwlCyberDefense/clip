@@ -1,5 +1,0 @@
-auditd,audit
-chronyd,chrony
-firewalld,firewalld
-ntpd,ntp
-rsyslog,rsyslog
