@@ -183,6 +183,17 @@ seutil_read_config(init_t)
 
 miscfiles_read_localization(init_t)
 
+dev_relabel_generic_dev_dirs(init_t)
+dev_relabel_generic_symlinks(init_t)
+dev_create_generic_symlinks(init_t)
+fs_getattr_xattr_fs(init_t)
+kernel_search_key(init_t)
+modutils_read_module_config(init_t)
+fs_remount_tmpfs(init_t)
+#needed for the Arbitrary Executable File Formats File System Automount Point
+#proc-sys-fs-binfmt_misc.automount
+kernel_mounton_fs_sysctls_dirs(init_t);
+
 ifdef(`init_systemd',`
 	# handle instances where an old labeled init script is encountered.
 	typeattribute init_t init_run_all_scripts_domain;
@@ -590,6 +601,16 @@ userdom_read_user_home_content_files(initrc_t)
 # TTYs to any process in the initrc_t domain. Therefore, daemons and such
 # started from init should be placed in their own domain.
 userdom_use_user_terminals(initrc_t)
+
+#systemd-sysv-ge creates the following in /run/sytemd/generator.late/
+#	runlevel2.target.wants
+#	runlevel3.target.wants
+#	runlevel4.target.wants
+#	runlevel5.target.wants
+#	network.service
+allow initrc_t init_var_run_t:dir create;
+allow initrc_t init_var_run_t:lnk_file create;
+
 
 ifdef(`distro_debian',`
 	dev_setattr_generic_dirs(initrc_t)

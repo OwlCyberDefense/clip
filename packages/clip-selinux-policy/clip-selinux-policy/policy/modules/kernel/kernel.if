@@ -2024,6 +2024,25 @@ interface(`kernel_rw_kernel_sysctl',`
 
 ########################################
 ## <summary>
+##	Mount filesystem sysctls.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`kernel_mounton_fs_sysctls_dirs',`
+	gen_require(`
+		type sysctl_fs_t;
+	')
+
+	allow $1 sysctl_fs_t:dir mounton;
+')
+
+########################################
+## <summary>
 ##	Read filesystem sysctls.
 ## </summary>
 ## <param name="domain">

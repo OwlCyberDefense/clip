@@ -57,6 +57,7 @@ allow udev_t self:unix_dgram_socket sendto;
 allow udev_t self:unix_stream_socket connectto;
 allow udev_t self:netlink_kobject_uevent_socket create_socket_perms;
 allow udev_t self:rawip_socket create_socket_perms;
+allow udev_t self:netlink_route_socket nlmsg_write;
 
 allow udev_t udev_exec_t:file write;
 can_exec(udev_t, udev_exec_t)
@@ -94,6 +95,7 @@ kernel_rw_unix_dgram_sockets(udev_t)
 kernel_dgram_send(udev_t)
 kernel_signal(udev_t)
 kernel_search_debugfs(udev_t)
+kernel_search_key(udev_t)
 
 ifdef(`init_systemd',`
 	files_search_kernel_modules(udev_t)
@@ -156,6 +158,7 @@ auth_use_nsswitch(udev_t)
 init_read_utmp(udev_t)
 init_dontaudit_write_utmp(udev_t)
 init_getattr_initctl(udev_t)
+init_connect_private_bus(udev_t)
 
 logging_search_logs(udev_t)
 logging_send_syslog_msg(udev_t)

@@ -495,6 +495,9 @@ miscfiles_read_localization(syslogd_t)
 userdom_dontaudit_use_unpriv_user_fds(syslogd_t)
 userdom_dontaudit_search_user_home_dirs(syslogd_t)
 
+#/run/systemd/notify
+init_connect_private_bus(syslogd_t)
+
 ifdef(`init_systemd',`
 	allow syslogd_t self:capability { chown setuid setgid };
 	init_daemon_pid_file(syslogd_var_run_t, dir, "syslogd")

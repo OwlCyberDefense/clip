@@ -930,6 +930,24 @@ interface(`auth_exec_pam',`
 
 ########################################
 ## <summary>
+##	Mount on var auth dirs.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`auth_mounton_var_auth_dirs',`
+	gen_require(`
+		type var_auth_t;
+	')
+
+	allow systemd_logind_t var_auth_t:dir mounton;
+')
+
+########################################
+## <summary>
 ##	Read var auth files. Used by various other applications
 ##	and pam applets etc.
 ## </summary>
