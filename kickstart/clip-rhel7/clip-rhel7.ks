@@ -60,7 +60,7 @@ part pv.os --size=1   --grow        --asprimary
 volgroup vg00 --pesize=65536 pv.os
 logvol /              --vgname=vg00 --name=root  --fstype=ext4 --size 5500 --maxsize 21000 --grow
 logvol /var           --vgname=vg00 --name=var   --fstype=ext4 --size 4000 --fsoptions=defaults,nosuid --grow
-logvol /home          --vgname=vg00 --name=home  --fstype=ext4 --size=1    --fsoptions=defaults,nosuid,nodev --percent=10 --grow
+logvol /home          --vgname=vg00 --name=home  --fstype=ext4 --fsoptions=defaults,nosuid,nodev --percent=10 --grow
 logvol swap           --vgname=vg00 --name=swap  --fstype=swap --recommended
 
 logvol /var/log       --vgname=vg00 --name=log   --fstype=ext4 --size 1500 --fsoptions=defaults,nosuid,noexec,nodev --maxsize 25000 --grow
