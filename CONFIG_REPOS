@@ -39,4 +39,3 @@ rhel = /opt/rhel-7-x86_64/rhel-x86_64-server-7.2/Packages/
 # WARNING: The CLIP team is no longer testing or supporting RHEL 5 builds from this tree.  
 #          It might work, but probably will not.  
 #buildgroups = /mnt/repos/buildgroups
-opt = /home/mnapoli/opt/
