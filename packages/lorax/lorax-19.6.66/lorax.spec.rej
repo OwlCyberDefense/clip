@@ -1,0 +1,11 @@
+--- packages/lorax/lorax-19.6.66/lorax.spec
++++ packages/lorax/lorax-19.6.66/lorax.spec
+@@ -2,7 +2,7 @@
+ 
+ Name:           lorax
+ Version:        19.6.45
+-Release:        1%{?dist}
++Release:        %{release}
+ Summary:        Tool for creating the anaconda install images
+ 
+ Group:          Applications/System

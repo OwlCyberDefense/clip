@@ -1,0 +1,133 @@
+## runtime-postinstall.tmpl
+## post-install setup required to make the system work.
+
+<%page args="root, basearch, libdir, configdir"/>
+<%
+PYTHONDIR = glob("usr/"+libdir+"/python?.?")[0]
+stubs = ("list-harddrives", "raidstart", "raidstop")
+configdir = configdir + "/common"
+%>
+
+## move_stubs()
+move usr/share/anaconda/restart-anaconda usr/bin
+move ${PYTHONDIR}/site-packages/pyanaconda/sitecustomize.py ${PYTHONDIR}/site-packages
+%for stub in stubs:
+    -move usr/share/anaconda/${stub}-stub usr/bin/${stub}
+%endfor
+
+## move_repos()
+move etc/yum.repos.d etc/anaconda.repos.d
+
+## Configure systemd to start anaconda
+remove etc/systemd/system/default.target
+symlink /lib/systemd/system/anaconda.target etc/systemd/system/default.target
+
+## Make sure tmpfs is enabled
+mkdir etc/systemd/system/local-fs.target.wants/
+symlink /lib/systemd/system/tmp.mount etc/systemd/system/local-fs.target.wants/tmp.mount
+
+## Disable unwanted systemd services
+systemctl disable systemd-readahead-collect.service \
+                  systemd-readahead-replay.service \
+                  mdmonitor.service \
+                  mdmonitor-takeover.service \
+                  lvm2-monitor.service
+## These services can't be disabled normally (they're linked into place in
+## /usr/lib/systemd rather than /etc/systemd), so we have to mask them.
+systemctl mask rhel-configure.service rhel-loadmodules.service \
+               rhel-autorelabel.service rhel-autorelabel-mark.service \
+               rhel-wait-storage.service media.mount \
+               systemd-tmpfiles-clean.service systemd-tmpfiles-clean.timer
+
+## Make logind activate anaconda-shell@.service on switch to empty VT
+symlink anaconda-shell@.service lib/systemd/system/autovt@.service
+replace "#ReserveVT=6" "ReserveVT=2" etc/systemd/logind.conf
+
+## Don't write the journal to the overlay, just keep it in RAM
+remove var/log/journal
+
+## install some basic configuration files
+append etc/resolv.conf ""
+append etc/fstab ""
+install ${configdir}/i18n etc/sysconfig
+install ${configdir}/rsyslog.conf etc
+install ${configdir}/bash_history root/.bash_history
+install ${configdir}/profile root/.profile
+install ${configdir}/libuser.conf etc
+install ${configdir}/sysctl.conf etc/sysctl.d/anaconda.conf
+install ${configdir}/spice-vdagentd etc/sysconfig
+mkdir etc/NetworkManager/conf.d
+install ${configdir}/90-anaconda-no-auto-default.conf etc/NetworkManager/conf.d
+install ${configdir}/91-anaconda-autoconnect-slaves.conf etc/NetworkManager/conf.d
+%if exists(root+"/etc/selinux/targeted"):
+    install ${configdir}/selinux.config etc/selinux/config
+%endif
+
+## set up sshd
+install ${configdir}/sshd_config.anaconda etc/ssh
+install ${configdir}/pam.sshd etc/pam.d/sshd
+install ${configdir}/pam.sshd etc/pam.d/login
+install ${configdir}/pam.sshd etc/pam.d/remote
+
+## set up "install" user account
+append etc/passwd "install:x:0:0:root:/root:/usr/libexec/anaconda/run-anaconda"
+append etc/shadow "install::14438:0:99999:7:::"
+## remove root password
+replace "root:\*:" "root::" etc/shadow
+
+## s390-specific setup
+%if basearch in ("s390", "s390x"):
+    ## generate ssh keys
+    runcmd ssh-keygen -q -C "" -N "" -t rsa1 -f ${root}/etc/ssh/ssh_host_key
+    runcmd ssh-keygen -q -C "" -N "" -t rsa  -f ${root}/etc/ssh/ssh_host_rsa_key
+    runcmd ssh-keygen -q -C "" -N "" -t dsa  -f ${root}/etc/ssh/ssh_host_dsa_key
+    chmod etc/ssh/ssh_host*_key 600
+    chmod etc/ssh/ssh_host*_key.pub 644
+%endif
+
+## gconf settings
+gconfset /apps/metacity/general/button_layout string :
+gconfset /apps/metacity/general/action_right_click_titlebar string none
+gconfset /apps/metacity/general/num_workspaces int 1
+gconfset /apps/metacity/window_keybindings/close string disabled
+gconfset /apps/metacity/global_keybindings/run_command_window_screenshot string disabled
+gconfset /apps/metacity/global_keybindings/run_command_screenshot string disabled
+gconfset /apps/metacity/global_keybindings/switch_to_workspace_up string disabled
+gconfset /apps/metacity/global_keybindings/switch_to_workspace_down string disabled
+gconfset /apps/metacity/global_keybindings/switch_to_workspace_left string disabled
+gconfset /apps/metacity/global_keybindings/switch_to_workspace_right string disabled
+gconfset /apps/metacity/global_keybindings/switch_windows string disabled
+gconfset /desktop/gnome/interface/accessibility bool true
+gconfset /desktop/gnome/interface/at-spi-corba bool true
+
+## Replace the metacity theme file with one that hides the titlebar of maximized windows
+install ${configdir}/metacity-theme-2.xml usr/share/themes/Adwaita/metacity-1/
+
+## Some settings are controlled by gsettings now.
+install ${configdir}/org.gnome.desktop.wm.keybindings.gschema.override usr/share/glib-2.0/schemas
+runcmd chroot ${root} glib-compile-schemas /usr/share/glib-2.0/schemas
+
+move usr/libexec/anaconda/auditd sbin
+
+## for compatibility with Ancient Anaconda Traditions
+symlink lib/modules /modules
+symlink lib/firmware /firmware
+symlink ../run/install mnt/install
+
+## create_depmod_conf()
+append etc/depmod.d/dd.conf "search updates built-in"
+
+## create multipath.conf so multipath gets auto-started
+append etc/multipath.conf "defaults {\n\tfind_multipaths yes\n\tuser_friendly_names yes\n}\n"
+
+## make lvm auto-activate
+remove etc/lvm/archive/*
+remove etc/lvm/archive
+remove etc/lvm/backup/*
+remove etc/lvm/backup
+remove etc/lvm/cache/*
+remove etc/lvm/cache
+remove etc/lvm/lvm.conf
+append etc/lvm/lvm.conf "global {\n\tuse_lvmetad = 1\n}\n"
+
+## TODO: we could run prelink here if we wanted?
