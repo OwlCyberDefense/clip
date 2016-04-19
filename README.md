@@ -486,10 +486,6 @@ size that is at least 20 GB when using CLIP on VirtualBox.
 ##### 32-bit architecture
 Building CLIP on a 32-bit RHEL build system is currently not supported.
 
-##### ctrl+c when entering password
-Hitting ctrl+c during a password prompt will result in all future password prompts failing for invalid password.
-Rebooting the system fixes the issue.
-
 ##### Periodic "Pane is dead" error on installation
 Periodically, the CLIP build system will create an ISO that produces a "Pane is dead" error on install.
 If this occurs, running 'make bare', rerunning './bootsrap.sh', and rebuilding clip should produce an ISO without this issue.
@@ -502,3 +498,6 @@ CLIP is not a FIPS compliant system out of the box. It is up to the developer to
 
 ##### Stopping/Restarting auditd does not currently work in enforcing
 SELinux currently prevents auditd from being stopped or restarted in enforcing
+
+##### systemd-update-done fails on boot
+SELinux currently prevents systemd-update-done from working in enforcing
