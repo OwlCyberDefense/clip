@@ -96,14 +96,18 @@ def cpfile(src, dst):
 def mvfile(src, dst):
     if os.path.isdir(dst):
         dst = joinpaths(dst, os.path.basename(src))
-    os.rename(src, dst)
+    if not os.path.exists(dst):
+        os.rename(src, dst)
     return dst
 
 def remove(target):
     if os.path.isdir(target) and not os.path.islink(target):
         shutil.rmtree(target)
     else:
-        os.unlink(target)
+        try:
+            os.unlink(target)
+        except:
+            pass
 
 def linktree(src, dst):
-    runcmd(["/bin/cp", "-alx", src, dst])
+    runcmd(["/bin/cp", "-alxf", src, dst])

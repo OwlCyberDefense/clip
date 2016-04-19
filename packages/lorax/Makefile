@@ -11,11 +11,11 @@ PKGNAME := lorax
 
 # This is the version number of the RPM that will be
 # generated.  Typically you bump this for delivery.
-VERSION := 19.6.45
+VERSION := 19.6.66
 
 # bump this if creating multiple releases from the same
 # version (think about this... why are you doing this?)
-RELEASE := 6.el7
+RELEASE := 2.el7
 
 # The name of the Packager
 PACKAGER ?= Tresys Technology

@@ -343,6 +343,9 @@ class LoraxTemplateRunner(object):
         '''
         if isdir(self._out(dest)):
             dest = joinpaths(dest, basename(src))
+        if os.path.exists(self._out(dest)):
+            logger.debug("file %s exists...removing before linking" % (self._out(dest)))
+            os.remove(self._out(dest))
         os.link(self._out(src), self._out(dest))
 
     def symlink(self, target, dest):

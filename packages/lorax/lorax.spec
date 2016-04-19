@@ -1,8 +1,8 @@
 %define debug_package %{nil}
 
 Name:           lorax
-Version:        19.6.45
-Release:        %{release}
+Version:        19.6.66
+Release:        2%{?dist}
 Summary:        Tool for creating the anaconda install images
 
 Group:          Applications/System
@@ -84,7 +84,7 @@ make DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} install
 
 %files
 %defattr(-,root,root,-)
-%doc COPYING AUTHORS README.livemedia-creator
+%doc COPYING AUTHORS README.livemedia-creator README.product
 %doc docs/*ks
 %{python_sitelib}/pylorax
 %{python_sitelib}/*.egg-info
@@ -99,15 +99,124 @@ make DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} install
 %{_mandir}/man1/*.1*
 
 %changelog
+* Wed Sep 02 2015 Brian C. Lane <bcl@redhat.com> 19.6.66-1
+- livemedia-creator: Remove random-seed from images (bcl)
+  Resolves: rhbz#1258986
+
+* Tue Sep 01 2015 Brian C. Lane <bcl@redhat.com> 19.6.65-1
+- Don't include early microcode in initramfs (bcl)
+- Resolves: rhbz#1258498
+
+* Mon Aug 31 2015 Brian C. Lane <bcl@redhat.com> 19.6.64-1
+- Fix metacity theme path (bcl)
+  Related: rhbz#1231856
+- Run spice-vdagentd without systemd-logind integration (dshea)
+  Related: rhbz#1169991
+
+* Thu Aug 27 2015 Brian C. Lane <bcl@redhat.com> 19.6.63-1
+- Replace the metacity theme file. (dshea)
+  Related: rhbz#1231856
+
+* Sun Aug 16 2015 Brian C. Lane <bcl@redhat.com> 19.6.62-1
+- Change default releasever to 7 (bcl)
+- Resolves: rhbz#1253242
+
+* Wed Aug 12 2015 Brian C. Lane <bcl@redhat.com> 19.6.61-1
+- Add lldptool (rvykydal)
+  Related: rhbz#1085325
+
+* Wed Aug 05 2015 Brian C. Lane <bcl@redhat.com> 19.6.60-1
+- Fix tito tagger to bump version, not release (bcl)
+  Related: rhbz#1085013
+
+* Wed Aug 05 2015 Brian C. Lane <bcl@redhat.com> 19.6.59-2
+- Fix chronyd not working in the installation (jkonecny)
+  Related: rhbz#1085013
+
+* Tue Jul 14 2015 Brian C. Lane <bcl@redhat.com> 19.6.59-1
+- Add installimg command for use in the templates (bcl@redhat.com)
+  Related: rhbz#1202278
+
+* Tue Jun 30 2015 Brian C. Lane <bcl@redhat.com> 19.6.58-1
+- Keep hyperv_fb driver in the image (bcl@redhat.com)
+  Resolves: rhbz#834791
+
+* Fri Jun 26 2015 Brian C. Lane <bcl@redhat.com> 19.6.57-1
+- livemedia-creator: fix base repo log monitor (#1196721) (bcl@redhat.com)
+  Related: rhbz#1196721
+- network: turn slaves autoconnection on (rvykydal@redhat.com)
+  Resolves: rhbz#1172751
+  Resolves: rhbz#1134090
+
+* Thu Jun 25 2015 Brian C. Lane <bcl@redhat.com> 19.6.56-1
+- Add ability for external templates to graft content into boot.iso (walters@verbum.org)
+  Resolves: rhbz#1202278
+- Update templates to use installimg for product and updates (bcl@redhat.com)
+  Related: rhbz#1202278
+
+* Mon Jun 22 2015 Brian C. Lane <bcl@redhat.com> 19.6.55-1
+- Add ntp configuration file to installation (jkonecny@redhat.com)
+  Related: rhbz#1085013
+- livemedia-creator: Add option to create qcow2 disk images (bcl@redhat.com)
+  Resolves: rhbz#1210413
+- Add support for creating qcow2 images (bcl@redhat.com)
+  Related: rhbz#1210413
+- Install the oscap-anaconda-addon (vpodzime@redhat.com)
+  Resolves: rhbz#1190685
+
+* Mon Jun 15 2015 Brian C. Lane <bcl@redhat.com> 19.6.54-1
+- Add removekmod template command (bcl@redhat.com)
+  Resolves: rhbz#1230356
+- Disable systemd-tmpfiles-clean (bcl@redhat.com)
+  Resolves: rhbz#1202545
+- Add bridge-utils (bcl@redhat.com)
+  Resolves: rhbz#1188812
+
+* Fri Jun 05 2015 Brian C. Lane <bcl@redhat.com> 19.6.53-1
+- Keep the zram kernel module (bcl@redhat.com)
+- Keep seq and getconf utilities in the image (vpodzime@redhat.com)
+- Don't remove usr/lib/rpm/platform/ (#1116450) (bcl@redhat.com)
+- Include /sbin/ldconfig from glibc. (dlehman@redhat.com)
+
+* Fri Apr 17 2015 Brian C. Lane <bcl@redhat.com> 19.6.52-1
+- Backport --make-ostree-live (rvykydal)
+  Resolves: rhbz#1184021
+
+* Fri Jan 16 2015 Brian C. Lane <bcl@redhat.com> 19.6.51-1
+- Remove imggraft from aarch64.tmpl (bcl@redhat.com)
+  Related: rhbz#1174475
+
+* Wed Jan 14 2015 Brian C. Lane <bcl@redhat.com> 19.6.50-1
+- Use gcdaa64.efi and make boot.iso on aarch64 (pjones@redhat.com)
+  Resolves: rhbz#1174475
+
+* Wed Jan 07 2015 Brian C. Lane <bcl@redhat.com> 19.6.49-1
+- runtime-cleanup.tmpl: keep virtio-rng (#1179000) (lersek@redhat.com)
+  Resolves: rhbz#1179000
+
+* Fri Dec 19 2014 Brian C. Lane <bcl@redhat.com> 19.6.48-1
+- aarch64 no longer needs explicit console setting (#1170413) (bcl@redhat.com)
+  Resolves: rhbz#1170413
+
+* Tue Dec 02 2014 Brian C. Lane <bcl@redhat.com> 19.6.47-1
+- Drop 32 bit for loop from ppc64 grub2 config (#1169878) (bcl@redhat.com)
+  Resolves: rhbz#1169878
+
+* Thu Nov 20 2014 Brian C. Lane <bcl@redhat.com> 19.6.46-1
+- Add --add-template{,-var} (walters@verbum.org)
+  Resolves: rhbz#1157777
+
 * Fri Oct 31 2014 Brian C. Lane <bcl@redhat.com> 19.6.45-1
 - Don't include the stock lvm.conf. (dlehman@redhat.com)
 
 * Wed Oct 22 2014 Brian C. Lane <bcl@redhat.com> 19.6.44-1
 - move image-minimizer to lorax (bcl@redhat.com)
   Resolves: rhbz#1082642
+
 * Thu Oct 16 2014 Brian C. Lane <bcl@redhat.com> 19.6.43-1
 - Use all upper case for shim in live/efi.tmpl (bcl@redhat.com)
   Related: rhbz#1100048
+
 * Tue Oct 07 2014 Brian C. Lane <bcl@redhat.com> 19.6.42-1
 - Revert "Don't remove /usr/share/doc/anaconda." (mkolman@redhat.com)
   Related: rhbz#1072033
@@ -155,6 +264,7 @@ make DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} install
 * Mon Sep 15 2014 Brian C. Lane <bcl@redhat.com> 19.6.37-1
 - Let the plymouth dracut module back into the ppc64 upgrade.img (dshea@redhat.com)
   Resolves: rhbz#1069671
+
 * Tue Sep 09 2014 Brian C. Lane <bcl@redhat.com> 19.6.36-1
 - Add more tools for rescue mode (bcl@redhat.com)
   Resolves: rhbz#1109785

@@ -250,30 +250,36 @@ class Lorax(BaseLoraxClass):
                             add_templates=add_templates,
                             add_template_vars=add_template_vars)
 
-        logger.info("installing runtime packages")
-        rb.yum.conf.skip_broken = self.conf.getboolean("yum", "skipbroken")
-        rb.install()
-
-        # write .buildstamp
-        buildstamp = BuildStamp(self.product.name, self.product.version,
-                                self.product.bugurl, self.product.isfinal, self.arch.buildarch)
-
-        buildstamp.write(joinpaths(self.inroot, ".buildstamp"))
-
-        if self.debug:
-            rb.writepkglists(joinpaths(logdir, "pkglists"))
-            rb.writepkgsizes(joinpaths(logdir, "original-pkgsizes.txt"))
-
-        logger.info("doing post-install configuration")
-        rb.postinstall()
-
-        # write .discinfo
-        discinfo = DiscInfo(self.product.release, self.arch.basearch)
-        discinfo.write(joinpaths(self.outputdir, ".discinfo"))
-
-        logger.info("backing up installroot")
+        cache = joinpaths(self.workdir, "cache")
         installroot = joinpaths(self.workdir, "installroot")
-        linktree(self.inroot, installroot)
+        if not os.path.exists(cache):
+            logger.info("installing runtime packages")
+            rb.yum.conf.skip_broken = self.conf.getboolean("yum", "skipbroken")
+            rb.install()
+
+            # write .buildstamp
+            buildstamp = BuildStamp(self.product.name, self.product.version,
+                                    self.product.bugurl, self.product.isfinal, self.arch.buildarch)
+
+            buildstamp.write(joinpaths(self.inroot, ".buildstamp"))
+
+            if self.debug:
+                rb.writepkglists(joinpaths(logdir, "pkglists"))
+                rb.writepkgsizes(joinpaths(logdir, "original-pkgsizes.txt"))
+
+            logger.info("doing post-install configuration")
+            rb.postinstall()
+
+            # write .discinfo
+            discinfo = DiscInfo(self.product.release, self.arch.basearch)
+            discinfo.write(joinpaths(self.outputdir, ".discinfo"))
+            logger.info("backing up installroot")
+            remove(installroot)
+            linktree(self.inroot, installroot)
+            linktree(self.inroot, cache)
+        else:
+            remove(installroot)
+            linktree(cache, installroot)
 
         logger.info("generating kernel module metadata")
         rb.generate_module_data()
@@ -353,7 +359,11 @@ class Lorax(BaseLoraxClass):
 def get_buildarch(ybo):
     # get architecture of the available anaconda package
     buildarch = None
-    for anaconda in ybo.doPackageLists(patterns=["anaconda"]).available:
+    lists = ybo.doPackageLists(patterns=["anaconda"])
+    l = lists.available
+    if len(l) == 0:
+        l = lists.reinstall_available
+    for anaconda in l:
         if anaconda.arch != "src":
             buildarch = anaconda.arch
             break
