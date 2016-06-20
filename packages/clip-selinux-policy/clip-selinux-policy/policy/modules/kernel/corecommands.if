@@ -808,6 +808,24 @@ interface(`corecmd_check_exec_shell',`
 
 ########################################
 ## <summary>
+##	Read shell_exec_t file.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`corecmd_shell_exec_read',`
+	gen_require(`
+		type shell_exec_t;
+	')
+
+	allow $1 shell_exec_t:file read;
+')
+
+########################################
+## <summary>
 ##	Execute shells in the caller domain.
 ## </summary>
 ## <desc>

@@ -363,6 +363,8 @@ logging_send_syslog_msg(ssh_keygen_t)
 
 userdom_dontaudit_use_unpriv_user_fds(ssh_keygen_t)
 
+miscfiles_read_generic_certs(ssh_keygen_t)
+
 optional_policy(`
 	seutil_sigchld_newrole(ssh_keygen_t)
 ')
@@ -384,3 +386,10 @@ miscfiles_read_localization(sshd_keygen_t)
 kernel_read_system_state(sshd_keygen_t)
 
 ssh_domtrans_keygen(sshd_keygen_t)
+
+seutil_domtrans_setfiles(sshd_keygen_t)
+corecmd_shell_exec_read(sshd_keygen_t)
+kernel_read_sysctl(sshd_keygen_t)
+
+allow sshd_keygen_t self:fifo_file { read write getattr };
+allow sshd_keygen_t sshd_key_t:file { getattr setattr };
