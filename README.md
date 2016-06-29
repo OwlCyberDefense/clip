@@ -187,8 +187,6 @@ CLIP uses Scap Security Guide (SSG) [1] to perform remediation and audit of our 
 based on the SSG stig-rhel7-server-upstream profile [2]. All SSG configuration is done in the CLIP kickstart script.
 The logs from auditing and remediation are placed in `/root/ssg/` by default.
 
-**NOTE**: A more up to date version of SSG will be included in RHEL 7.1 Beta. Unfortunately, we must carry our own OpenScap and SSG RPMs to keep up with the newest profiles. Once CLIP for RHEL 7.1 is released, these RPMs may be dropped from our packages.
-
 [1] https://github.com/OpenSCAP/scap-security-guide
 
 [2] https://github.com/OpenSCAP/scap-security-guide/blob/master/RHEL/7/input/profiles/stig-rhel7-server-upstream.xml
@@ -250,12 +248,6 @@ default, a clean chroot will be used for each RPM. This is configurable in
 [`CONFIG_BUILD`](./CONFIG_BUILD#L65) with the `CLEAN_MOCK` option.  Mock allows you to version the packages
 used to roll an RPM.  It manages yum repositories and carries patched versions of
 ISO generation tools to address a number of problems in those tools.
-
-If the developer chooses to only use the remediation and audit content as
-described in the third scenario, the developer must roll the needed RPMs by
-running `make openscap-rpm; make scap-security-guide-rpm`.  The
-generated RPMs will be placed in `repos/clip-repo`.  You can then copy the RPMs
-into the build environment and roll ISOs.
 
 ## Frequently Asked Questions <a id="frequently-asked-questions"></a>
 
