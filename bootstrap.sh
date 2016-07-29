@@ -1,8 +1,10 @@
 #!/bin/bash -ue
 # Copyright (C) 2013 Quark Security, Inc
 # Copyright (C) 2013 Cubic Corporation
-#
+# Copyright (C) 2014-2016 Tresys Technology
 # Authors: Spencer Shimko <spencer@quarksecurity.com>
+# Authors: Yuli Khodorkovskiy <ykhodorkovskiy@tresys.com>
+# Authors: Michael Napolitano <mnapolitano@tresys.com>
 
 check_and_create_repo_dir ()
 {
