@@ -23,9 +23,6 @@
 # because we lose the benefit of rigorously versioning the packages used.
 # Anywho, we're thinking about it, but no timeline yet ;)
 
-# NOTE: this is the right path for Quark Security's build VM
-#centos7.0 = /opt/repos/centos7.0-1406
-
 # A RHEL/CentOS repo must be available. Must be a local path (we use NFS mounts).
 rhel = /opt/rhel-7-x86_64/rhel-x86_64-server-7.2/Packages/
 
