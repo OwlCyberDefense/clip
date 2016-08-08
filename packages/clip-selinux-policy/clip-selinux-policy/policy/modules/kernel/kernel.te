@@ -439,3 +439,5 @@ allow kern_unconfined unlabeled_t:filesystem *;
 allow kern_unconfined unlabeled_t:association *;
 allow kern_unconfined unlabeled_t:packet *;
 allow kern_unconfined unlabeled_t:process ~{ transition dyntransition execmem execstack execheap };
+auth_read_cache(kernel_t)
+fs_read_tmpfs_files(kernel_t)
