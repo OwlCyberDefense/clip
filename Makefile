@@ -82,6 +82,7 @@ export REPO_LINES := repo --name=clip-repo --baseurl=file://$(CLIP_REPO_DIR)\n
 
 export SRPM_OUTPUT_DIR := $(CLIP_SRPM_REPO_DIR)
 
+export LIVECD_CREATOR := /usr/bin/livecd-creator
 export MAYFLOWER := $(SUPPORT_DIR)/mayflower
 
 SED := /bin/sed
@@ -125,6 +126,7 @@ CHECK_REPO = $(VERBOSE)test -d $(1)/repodata || $(REPO_CREATE) $(1)
 
 SYSTEMS := $(shell ls $(KICKSTART_DIR))
 
+LIVECDS := $(foreach SYSTEM,$(SYSTEMS),$(addsuffix -live-iso,$(SYSTEM)))
 # These are targets supported by the kickstart/Makefile that will be used to generate installation ISOs.
 INSTISOS := $(foreach SYSTEM,$(SYSTEMS),$(addsuffix -iso,$(SYSTEM)))
 
@@ -148,6 +150,18 @@ define CHECK_MOCK
 	@if ps -eo comm= | grep -q mock; then echo "ERROR: Another instance of mock is running.  Please hangup and try your build again later." && exit 1; fi
 endef
 
+define CHECK_LIVE_TOOLS
+	if [ x"`rpm -q livecd-tools --queryformat '%{version}-%{release}\n'`" \
+		!= x"$$( rpm --eval `sed -n -e 's/Release: \(.*\)/\1/p' -e 's/Version: \(.*\)/\1/p' \
+		 packages/livecd-tools/livecd-tools.spec| sed 'N;s/\n/-/'` )" ]; then \
+		echo "Error: you have to use our version of livecd-tools."; \
+		echo "We will attempt to install them now.  Press ctrl-c to cancel."; \
+		sudo yum remove livecd-tools python-imgcreate -y 2>&1 >/dev/null || true ; \
+		$(MAKE) livecd-tools-rpm; \
+		cd $(CLIP_REPO_DIR); \
+		sudo yum localinstall livecd-tools*.$(ARCH).rpm python-imgcreate* -y; \
+	fi
+endef
 
 ######################################################
 # BEGIN RPM GENERATION RULES (BEWARE OF DRAGONS)
@@ -247,6 +261,18 @@ help:
 	@echo "	all (roll all packages and generate all installation ISOs)"
 	@for cd in $(INSTISOS); do echo "	$$cd"; done
 	@echo
+	@echo "The following make targets are available for generating Live CDs:"
+	@echo "	all (generate all installation ISOs and Live CDs)"
+	@for cd in $(LIVECDS); do echo "	$$cd"; done
+	@echo
+	@echo "	NOTE: if you need to debug a kickstart post script for Live CDs,"
+	@echo "	      add LIVECD_ARGS='--shell' to the make command-line."
+	@echo
+	@echo "To burn a livecd image to a thumbdrive:"
+	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname>"
+	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB>"
+	@echo "	iso-to-disk ISO_FILE=<isofilename> USB_DEV=<devname> OVERLAY_SIZE=<size in MB> OVERLAY_HOME_SIZE=<size in MB>"
+	@echo
 	@echo "To do a release of CLIP:"
 	@echo "	release"
 	@echo
@@ -274,7 +300,7 @@ help:
 	@echo "	clean-mock (deletes the yum and mock configuration we generate)"
 	@echo "	bare (deletes everything except ISOs)"
 
-all: create-repos $(INSTISOS)
+all: create-repos $(INSTISOS) $(LIVECDS)
 
 # Generate custom targets for managing the yum repos.  We have to generate the rules since the user provides the set of repos.
 $(foreach REPO,$(strip $(shell cat CONFIG_REPOS|$(GREP) -E '^[a-zA-Z].*=.*'|$(SED) -e 's/ \?= \?/=/')),$(eval $(call REPO_RULE_template,$(REPO))))
@@ -312,6 +338,11 @@ srpms: $(SRPMS)
 	$(call MKDIR,$(SRPM_OUTPUT_DIR))
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
+$(LIVECDS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
+	$(call CHECK_DEPS)
+	$(call CHECK_LIVE_TOOLS)
+	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-live-iso/\1/'`" live-iso
+
 $(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(call CHECK_DEPS)
 	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-iso/\1/'`" iso
@@ -330,6 +361,24 @@ ifneq ($(OVERLAY_SIZE),)
 OVERLAYS += --overlay-size-mb $(OVERLAY_SIZE)
 endif
 
+iso-to-disk:
+	@if [ x"$(ISO_FILE)" = "x" -o x"$(USB_DEV)" = "x" ]; then echo "Error: set ISO_FILE=<filename> and USB_DEV=<dev> on command line to generate a bootable thumbdrive." && exit 1; fi
+	@if echo "$(USB_DEV)" | $(GREP) -q "^.*[0-9]$$"; then echo "Error: it looks like you gave me a partition.  Set USB_DEV to a device root, eg /dev/sdb." && exit 1; fi
+	@if [ ! -b $(USB_DEV) ]; then echo "Error: $(USB_DEV) doesn't exist or isn't a block device." && exit 1; fi
+	@if `sudo mount | $(GREP) -q $(USB_DEV)`; then echo "Warning - device is currently mounted!  I will unmount it for you.  Press Ctrl-C to cancel or any other key to continue."; read; sudo umount $(USB_DEV)1 2>&1 > /dev/null; fi
+	@if `sudo pvdisplay 2>/dev/null | $(GREP) -q $(USB_DEV)`; then echo "Warning - device is currently a a physical volume in an LVM configuration!  This usually means you're pointing me at your root filesystem instead of a thumbdrive. Try again or kill the LVM label with pvremove"; exit 1; fi
+	@echo -e "WARNING: This will destroy the contents of $(USB_DEV)!\nPress Ctrl-C to cancel or any other key to continue." && read
+	@echo "Destroying MBR and partition table."
+	$(VERBOSE)sudo dd if=/dev/zero of=$(USB_DEV) bs=512 count=1
+	@echo "Creating partition..."
+	$(VERBOSE)sudo sh -c "echo -e 'n\np\n1\n\n\n\nt\nb\na\n1\nw\n' | /sbin/fdisk $(USB_DEV)" || true
+	@sleep 5
+	$(VERBOSE)sudo umount $(USB_DEV)1 2>&1 > /dev/null || true
+	@echo "Creating filesystem..."
+	$(VERBOSE)sudo /sbin/mkdosfs -n CLIP $(USB_DEV)1
+	$(VERBOSE)sudo umount $(USB_DEV)1 2>&1 > /dev/null || true
+	@echo "Writing image..."
+	$(VERBOSE)sudo /usr/bin/livecd-iso-to-disk $(OVERLAYS) --resetmbr $(ISO_FILE) $(USB_DEV)1
 clean-mock: $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
 	$(VERBOSE)$(RM) $(YUM_CONF_FILE)
 	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg

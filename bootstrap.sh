@@ -240,7 +240,28 @@ check_and_build_rpm "lorax" "lorax-19.6.66-2.el7"
 # Roll pungi
 check_and_build_rpm "pungi" "pungi-2.13-4.el7"
 
+check_and_build_rpm "livecd-tools" "livecd-tools-20.7.1.el7"
+
 /usr/bin/sudo /usr/bin/yum install -y openscap*
+
+if ! rpm -q "livecd-tools-20.7-1.el7.x86_64" > /dev/null; then
+	if rpm -q "livecd-tools" > /dev/null; then
+		/bin/echo "You have livecd-tools installed, but not our version. Our version contains 
+fixes for generating live media.  We will compile our version and replace your 
+version free of charge.
+Press the any key to continue or ctrl-c to exit.
+"
+		read user_input
+		/usr/bin/sudo /usr/bin/yum remove livecd-tools 2>/dev/null || true
+		/usr/bin/sudo /usr/bin/yum remove python-imgcreate 2>/dev/null || true
+	fi
+	/usr/bin/sudo /usr/bin/yum install -y syslinux-extlinux dumpet 2>/dev/null || true
+	/usr/bin/make livecd-tools-rpm
+	pushd . > /dev/null
+	cd repos/clip-repo
+	/usr/bin/sudo /usr/bin/yum localinstall -y livecd-tools* and python-imgcreate*
+	popd > /dev/null
+fi
 
 /bin/echo -e "Basic bootstrapping of build host is complete.\nRunning 'make clip-rhel7-iso'"
 /usr/bin/make clip-rhel7-iso
