@@ -342,12 +342,12 @@ class LoraxTemplateRunner(object):
 
     def hardlink(self, src, dest):
         '''
-        hardlink SRC DEST
+        symlink SRC DEST
           Create a hardlink at DEST which is linked to SRC.
         '''
         if isdir(self._out(dest)):
             dest = joinpaths(dest, basename(src))
-        os.link(self._out(src), self._out(dest))
+        os.symlink(self._out(src), self._out(dest))
 
     def symlink(self, target, dest):
         '''

@@ -47,7 +47,7 @@ def _link(local, target, logger, force=False):
             os.remove(target)
 
     try:
-        os.link(local, target)
+        os.symlink(local, target)
     except OSError, e:
         if e.errno != 18: # EXDEV
             logger.error('Got an error linking from cache: %s' % e)
