@@ -1404,6 +1404,7 @@ class Pungi(pypungi.PungiBase):
             domacboot = True
         else:
             domacboot = False
+        domacboot = False
 
         # run the command
         lorax = pylorax.Lorax()
