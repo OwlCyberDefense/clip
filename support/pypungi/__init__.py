@@ -1332,7 +1332,7 @@ class Pungi(pypungi.PungiBase):
 
         # setup the createrepo call
         self._makeMetadata(self.topdir, cachedir, compsfile,
-                           repoview=True, repoviewtitle=repoviewtitle,
+                           repoview=False, repoviewtitle=repoviewtitle,
                            compress_type=compress_type)
 
         # create repodata for debuginfo
