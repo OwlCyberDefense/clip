@@ -157,6 +157,7 @@ class Lorax(BaseLoraxClass):
             add_template_vars=None,
             add_arch_templates=None,
             add_arch_template_vars=None,
+            templatedir=None,
             template_tempdir=None):
 
         assert self._configured
@@ -246,7 +247,8 @@ class Lorax(BaseLoraxClass):
             logger.fatal("the volume id cannot be longer than 32 characters")
             sys.exit(1)
 
-        templatedir = self.conf.get("lorax", "sharedir")
+        if templatedir == None:
+            templatedir = self.conf.get("lorax", "sharedir")
         # NOTE: rb.root = ybo.conf.installroot (== self.inroot)
         rb = RuntimeBuilder(product=self.product, arch=self.arch,
                             yum=ybo, templatedir=templatedir,

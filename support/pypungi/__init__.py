@@ -1386,6 +1386,7 @@ class Pungi(pypungi.PungiBase):
         variant = self.config.get('pungi', 'flavor')
         bugurl = self.config.get('pungi', 'bugurl')
         isfinal = self.config.get('pungi', 'isfinal')
+        templatedir = self.config.get('pungi', 'templatedir')
 
         volid = self._shortenVolID()
         workdir = self.workdir
@@ -1412,7 +1413,7 @@ class Pungi(pypungi.PungiBase):
 
         lorax.run(self.ayum, product=product, version=version, release=release,
                   variant=variant, bugurl=bugurl, isfinal=isfinal, domacboot=domacboot,
-                  workdir=workdir, outputdir=outputdir, volid=volid)
+                  workdir=workdir, outputdir=outputdir, volid=volid, templatedir=templatedir)
 
         # write out the tree data for snake
         self.writeinfo('tree: %s' % self.mkrelative(self.topdir))

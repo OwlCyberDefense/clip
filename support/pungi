@@ -243,6 +243,9 @@ if __name__ == '__main__':
           help='disable resolving dependencies')
         parser.add_option("--sourceisos", default=False, action="store_true", dest="sourceisos",
           help='Create the source isos (other arch runs must be done)')
+        parser.add_option("--templatedir", dest="templatedir", type="string",
+          action="callback", callback=set_config, callback_args=(config, ),
+          help='Lorax template dir path')
         parser.add_option("--force", default=False, action="store_true",
           help='Force reuse of an existing destination directory (will overwrite files)')
         parser.add_option("--isfinal", default=False, action="store_true", 	
