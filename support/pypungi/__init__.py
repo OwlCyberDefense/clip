@@ -1568,7 +1568,7 @@ class Pungi(pypungi.PungiBase):
 
         # setup the base command
         mkisofs = ['/usr/bin/mkisofs']
-        mkisofs.extend(['-v', '-U', '-J', '-R', '-T', '-m', 'repoview', '-m', 'boot.iso']) # common mkisofs flags
+        mkisofs.extend(['-v', '-U', '-J', '-R', '-T', '-f', '-m', 'repoview', '-m', 'boot.iso']) # common mkisofs flags
 
         x86bootargs = ['-b', 'isolinux/isolinux.bin', '-c', 'isolinux/boot.cat', 
             '-no-emul-boot', '-boot-load-size', '4', '-boot-info-table']
