@@ -1672,7 +1672,8 @@ class Pungi(pypungi.PungiBase):
 
         # Now link the boot iso
         if not self.tree_arch == 'source' and \
-        os.path.exists(os.path.join(self.topdir, 'images', 'boot.iso')):
+        os.path.exists(os.path.join(self.topdir, 'images', 'boot.iso')) and \
+        self.config.get('pungi', 'bootiso') == True:
             isoname = '%s-netinst-%s-%s.iso' % (self.config.get('pungi', 'iso_basename'),
                 self.tree_arch, self.config.get('pungi', 'version'))
             isofile = os.path.join(self.isodir, isoname)

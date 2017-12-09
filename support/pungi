@@ -85,6 +85,8 @@ def main():
     # Set debuginfo flag
     if opts.nodebuginfo:
         config.set('pungi', 'debuginfo', "False")
+    if opts.bootiso:
+        config.set('pungi', 'bootiso', "True")
     if opts.greedy:
         config.set('pungi', 'greedy', opts.greedy)
     else:
@@ -229,6 +231,8 @@ if __name__ == '__main__':
           help='disable gathering of source packages (optional)')
         parser.add_option("--nodebuginfo", action="store_true", dest="nodebuginfo",
           help='disable gathering of debuginfo packages (optional)')
+        parser.add_option("--bootiso", action="store_true", dest="bootiso", default=False,
+          help='allow creation of a bootiso (netinst)')
         parser.add_option("--nodownload", action="store_true", dest="nodownload",
           help='disable downloading of packages. instead, print the package URLs (optional)')
         parser.add_option("--norelnotes", action="store_true", dest="norelnotes",
