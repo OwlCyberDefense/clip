@@ -151,10 +151,11 @@ class RuntimeBuilder(object):
         root = self.vars.root
         moddir = joinpaths(root, "lib/modules/")
         for kver in os.listdir(moddir):
-            ksyms = joinpaths(root, "boot/System.map-%s" % kver)
-            logger.info("doing depmod and module-info for %s", kver)
-            runcmd(["depmod", "-a", "-F", ksyms, "-b", root, kver])
-            generate_module_info(moddir+kver, outfile=moddir+"module-info")
+            if os.path.isdir(kver):
+                ksyms = joinpaths(root, "boot/System.map-%s" % kver)
+                logger.info("doing depmod and module-info for %s", kver)
+                runcmd(["depmod", "-a", "-F", ksyms, "-b", root, kver])
+                generate_module_info(moddir+kver, outfile=moddir+"module-info")
 
     def create_runtime(self, outfile="/var/tmp/squashfs.img", compression="xz", compressargs=[], size=2):
         # make live rootfs image - must be named "LiveOS/rootfs.img" for dracut
