@@ -31,16 +31,16 @@ Certifiable Linux Integration Platform SELinux core, non-policy components.
 # policycoreutils owns these manpage directories, we only own the files within them
 %{_mandir}/ru/*/*
 %dir %{_usr}/share/selinux
-%dir %{_usr}/share/selinux/devel
-%dir %{_usr}/share/selinux/devel/include
+%dir %{_usr}/share/selinux/clip
+%dir %{_usr}/share/selinux/clip/include
 %dir %{_usr}/share/selinux/packages
 %dir %{_sysconfdir}/selinux
 %ghost %config(noreplace) %{_sysconfdir}/selinux/config
 %ghost %{_sysconfdir}/sysconfig/selinux
-%{_usr}/share/selinux/devel/include/*
-%{_usr}/share/selinux/devel/Makefile
-%{_usr}/share/selinux/devel/example.*
-%{_usr}/share/selinux/devel/policy.*
+%{_usr}/share/selinux/clip/include/*
+%{_usr}/share/selinux/clip/Makefile
+%{_usr}/share/selinux/clip/example.*
+%{_usr}/share/selinux/clip/policy.*
 
 %package doc
 Summary: Certifiable Linux Integration Platform SELinux policy documentation
@@ -55,7 +55,7 @@ Certifiable Linux Integration Platform SELinux policy documentation package
 %files doc
 %defattr(-,root,root,-)
 %doc %{_usr}/share/doc/%{name}-%{version}
-%attr(755,root,root) %{_usr}/share/selinux/devel/policyhelp
+%attr(755,root,root) %{_usr}/share/selinux/clip/policyhelp
 
 %define makeCmds() \
 #make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 bare \
@@ -183,14 +183,14 @@ make %{?_smp_mflags} clean
 %installCmds mls mls n y deny
 
 make %{?_smp_mflags} UNK_PERMS=deny NAME=clip TYPE=mcs DISTRO=%{distro} UBAC=y DIRECT_INITRC=n MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} PKGNAME=%{name}-%{version} SYSTEMD=y POLY=y MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install-headers install-docs
-mkdir %{buildroot}%{_usr}/share/selinux/devel/
+#mkdir %{buildroot}%{_usr}/share/selinux/clip/
 mkdir %{buildroot}%{_usr}/share/selinux/packages/
-mv %{buildroot}%{_usr}/share/selinux/clip/include %{buildroot}%{_usr}/share/selinux/devel/include
-install -m 644 support/Makefile.devel %{buildroot}%{_usr}/share/selinux/devel/Makefile
-install -m 644 doc/example.* %{buildroot}%{_usr}/share/selinux/devel/
-install -m 644 doc/policy.* %{buildroot}%{_usr}/share/selinux/devel/
-echo  "xdg-open file:///usr/share/doc/clip-selinux-policy-%{version}/html/index.html"> %{buildroot}%{_usr}/share/selinux/devel/policyhelp
-chmod +x %{buildroot}%{_usr}/share/selinux/devel/policyhelp
+#mv %{buildroot}%{_usr}/share/selinux/clip/include %{buildroot}%{_usr}/share/selinux/clip/include
+install -m 644 support/Makefile.devel %{buildroot}%{_usr}/share/selinux/clip/Makefile
+install -m 644 doc/example.* %{buildroot}%{_usr}/share/selinux/clip/
+install -m 644 doc/policy.* %{buildroot}%{_usr}/share/selinux/clip/
+echo  "xdg-open file:///usr/share/doc/clip-selinux-policy-%{version}/html/index.html"> %{buildroot}%{_usr}/share/selinux/clip/policyhelp
+chmod +x %{buildroot}%{_usr}/share/selinux/clip/policyhelp
 %clean
 %{__rm} -fR %{buildroot}
 
