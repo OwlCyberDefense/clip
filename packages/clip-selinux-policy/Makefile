@@ -42,7 +42,7 @@ PATCH_DIR ?= patches
 
 PATCHES := $(wildcard $(PATCH_DIR)/*.patch)
 # exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
-TAR_DEPS := $(shell find $(PKGNAME) -type f -name '*.*')
+TAR_DEPS := $(wildcard $(PKGNAME)/*) $(wildcard refpolicy/*)
 RPM_DEPS := $(TARBALL) $(RPM_SPEC) $(CURDIR)/Makefile $(PATCHES)
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
@@ -98,7 +98,7 @@ $(PKGNAME)-srpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 
 $(TARBALL): $(TAR_DEPS)
 	@echo "Building $(PKGNAME) source tarball..."
-	tar -czf $@ $(PKGNAME)/
+	tar --exclude-vcs --transform=s/refpolicy/$(PKGNAME)/ --exclude=Changelog* --dereference -czf $@ refpolicy/ $(PKGNAME)/
 
 $(OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).$(ARCH).rpm: $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm
 	@echo "Building $(PKGNAME) RPM..."
