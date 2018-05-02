@@ -1,0 +1,54 @@
+diff --git a/policy/modules/kernel/domain.te b/policy/modules/kernel/domain.te
+index e44e3444..05c33eee 100644
+--- a/policy/modules/kernel/domain.te
++++ b/policy/modules/kernel/domain.te
+@@ -110,6 +110,10 @@ term_use_controlling_term(domain)
+ # list the root directory
+ files_list_root(domain)
+ 
++# allow all domains to search through base_file_type directory, since users
++# sometimes place labels within these directories.  (samba_share_t) for example.
++files_search_base_file_types(domain)
++
+ ifdef(`hide_broken_symptoms',`
+ 	# This check is in the general socket
+ 	# listen code, before protocol-specific
+diff --git a/policy/modules/kernel/files.if b/policy/modules/kernel/files.if
+index e9bc8dd9..4fadef47 100644
+--- a/policy/modules/kernel/files.if
++++ b/policy/modules/kernel/files.if
+@@ -7049,3 +7049,22 @@ interface(`files_unconfined',`
+ 
+ 	typeattribute $1 files_unconfined_type;
+ ')
++
++#######################################
++## <summary>
++##	Search all base file dirs.
++## </summary>
++## <param name="domain">
++##	<summary>
++##	Domain allowed access
++##	</summary>
++## </param>
++#
++interface(`files_search_base_file_types',`
++	gen_require(`
++		attribute base_file_type;
++	')
++
++	allow $1 base_file_type:dir search_dir_perms;
++')
++
+diff --git a/policy/modules/kernel/files.te b/policy/modules/kernel/files.te
+index f7cf321f..4e03508c 100644
+--- a/policy/modules/kernel/files.te
++++ b/policy/modules/kernel/files.te
+@@ -5,6 +5,7 @@ policy_module(files, 1.25.1)
+ # Declarations
+ #
+ 
++attribute base_file_type;
+ attribute file_type;
+ attribute files_unconfined_type;
+ attribute lockfile;

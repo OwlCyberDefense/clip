@@ -1,0 +1,25 @@
+--- refpolicy/policy/policy_capabilities	2018-05-02 09:15:22.952062843 -0400
++++ clip-selinux-policy/policy/policy_capabilities	2018-05-02 12:14:39.469268031 -0400
+@@ -82,14 +82,14 @@
+ # Available in kernel 4.11+.
+ # Requires libsepol 2.7+ to build policy with this enabled.
+ #
+-policycap extended_socket_class;
++#policycap extended_socket_class;
+ 
+ # Enable fine-grained labeling of cgroup and cgroup2 filesystems.
+ # Requires Linux v4.11 and later.
+ #
+ # Added checks:
+ # (none)
+-policycap cgroup_seclabel;
++#policycap cgroup_seclabel;
+ 
+ # Enable NoNewPrivileges support.  Requires libsepol 2.7+
+ # and kernel 4.14.
+@@ -97,4 +97,4 @@
+ # Checks enabled;
+ # process2: nnp_transition, nosuid_transition
+ #
+-policycap nnp_nosuid_transition;
++#policycap nnp_nosuid_transition;
