@@ -1,5 +1,0 @@
-/bin/gnatbind	--	gen_context(system_u:object_r:ada_exec_t,s0)
-/bin/gnatls	--	gen_context(system_u:object_r:ada_exec_t,s0)
-/bin/gnatmake	--	gen_context(system_u:object_r:ada_exec_t,s0)
-
-/usr/libexec/gcc(/.*)?/gnat1	--	gen_context(system_u:object_r:ada_exec_t,s0)

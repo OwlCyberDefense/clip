@@ -1,4 +1,4 @@
-policy_module(toor, 2.3.0)
+policy_module(toor, 2.5.0)
 
 ########################################
 #
@@ -19,7 +19,14 @@ ifndef(`enable_mls',`
 
 corecmd_exec_shell(toor_t)
 
-mls_process_read_up(toor_t)
+corenet_ib_access_unlabeled_pkeys(toor_t)
+corenet_ib_manage_subnet_unlabeled_endports(toor_t)
+
+dev_read_kmsg(toor_t)
+
+mls_process_read_all_levels(toor_t)
+
+selinux_read_policy(toor_t)
 
 # SRS: removed for CLIP for RHEL 6.2 since we want ubac on toor too.
 ubac_process_exempt(toor_t)
@@ -27,13 +34,14 @@ ubac_file_exempt(toor_t)
 ubac_fd_exempt(toor_t)
 
 init_exec(toor_t)
-
+init_admin(toor_t)
+init_shutdown_system(toor_t)
 # Add/remove user home directories
 userdom_manage_user_home_dirs(toor_t)
 userdom_home_filetrans_user_home_dir(toor_t)
 
 #files_unconfined(toor_t)
-files_manage_all_files(toor_t)
+#files_manage_all_files(toor_t)
 domain_unconfined(toor_t)
 
 ifdef(`direct_toor_daemon',`
@@ -50,39 +58,78 @@ ifdef(`direct_toor_daemon',`
 
 logging_dontaudit_send_audit_msgs(toor_t)
 logging_getattr_all_logs(toor_t)
+logging_send_audit_msgs(toor_t)
 
-tunable_policy(`aide_enable_write_db',`
-	aide_domtrans(toor_t)
+#tunable_policy(`aide_enable_write_db',`
+#	aide_domtrans(toor_t)
+#')
+
+# SRS: removed for CLIP
+ifndef(`enable_mls',`
+	logging_manage_audit_log(toor_t)
+	logging_manage_audit_config(toor_t)
+	logging_run_auditctl(toor_t, toor_r)
 ')
 
 # SRS: removed for CLIP
-#ifndef(`enable_mls',`
-#	logging_manage_audit_log(toor_t)
-#	logging_manage_audit_config(toor_t)
-#	logging_run_auditctl(toor_t, toor_r)
-#')
-
-# SRS: removed for CLIP
-#tunable_policy(`allow_ptrace',`
-#	domain_ptrace_all_domains(toor_t)
-#')
-
-# SRS: removed for CLIP
-#optional_policy(`
-#	amanda_run_recover(toor_t, toor_r)
-#')
-
-# SRS: removed for CLIP
-#optional_policy(`
-#	apache_run_helper(toor_t, toor_r)
-#	#apache_run_all_scripts(toor_t, toor_r)
-#	#apache_domtrans_sys_script(toor_t)
-#	apache_role(toor_r, toor_t)
-#')
+tunable_policy(`allow_ptrace',`
+	domain_ptrace_all_domains(toor_t)
+')
 
 optional_policy(`
-	# cjp: why is this not apm_run_client
-	apm_domtrans_client(toor_t)
+	abrt_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	accountsd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	acct_admin(toor_t, toor_r)
+')
+optional_policy(`
+	acpi_admin(toor_t, toor_r)
+	acpi_run_client(toor_t, toor_r)
+')
+
+optional_policy(`
+	afs_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	aiccu_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	aide_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	aisexecd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	amanda_run_recover(toor_t, toor_r)
+')
+
+optional_policy(`
+	amavis_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	amtu_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	apache_admin(toor_t, toor_r)
+	apache_run_helper(toor_t, toor_r)
+	#apache_run_all_scripts(toor_t, toor_r)
+	#apache_domtrans_sys_script(toor_t)
+	apache_role(toor_r, toor_t)
+')
+
+optional_policy(`
+	apcupsd_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -90,7 +137,24 @@ optional_policy(`
 ')
 
 optional_policy(`
+	arpwatch_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	asterisk_admin(toor_t, toor_r)
+	asterisk_stream_connect(toor_t)
+')
+
+optional_policy(`
 	auditadm_role_change(toor_r)
+')
+
+optional_policy(`
+	automount_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	avahi_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -98,7 +162,29 @@ optional_policy(`
 ')
 
 optional_policy(`
+	bacula_run_admin(toor_t, toor_r)
+	bacula_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	bcfg2_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	bind_admin(toor_t, toor_r)
 	bind_run_ndc(toor_t, toor_r)
+')
+
+optional_policy(`
+	bird_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	bitlbee_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	boinc_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -106,7 +192,63 @@ optional_policy(`
 ')
 
 optional_policy(`
+	bugzilla_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	cachefilesd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	calamaris_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	callweaver_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	canna_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	ccs_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	certmaster_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	certmonger_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	certwatch_run(toor_t, toor_r)
+')
+
+optional_policy(`
+	cfengine_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	cgroup_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	chkrootkit_run(toor_t, toor_r)
+')
+
+optional_policy(`
+	chronyd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	cipe_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	clamav_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -118,11 +260,60 @@ optional_policy(`
 ')
 
 optional_policy(`
+	cmirrord_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	cobbler_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	collectd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	condor_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	consoletype_run(toor_t, toor_r)
 ')
 
 optional_policy(`
+	corosync_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	couchdb_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	cron_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	ctdb_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	cups_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	cvs_admin(toor_t, toor_r)
 	cvs_exec(toor_t)
+')
+
+optional_policy(`
+	cyphesis_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	cyrus_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	dante_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -132,7 +323,39 @@ optional_policy(`
 ')
 
 optional_policy(`
+	ddclient_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	ddcprobe_run(toor_t, toor_r)
+')
+
+optional_policy(`
+	denyhosts_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	devicekit_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	dhcpd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	dictd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	dirmngr_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	distcc_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	dkim_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -144,7 +367,51 @@ optional_policy(`
 ')
 
 optional_policy(`
+	dnsmasq_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	dnssectrigger_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	dovecot_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	dpkg_run(toor_t, toor_r)
+')
+
+optional_policy(`
+	drbd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	dspam_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	entropyd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	exim_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	fail2ban_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	fcoe_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	fetchmail_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	firewalld_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -156,7 +423,31 @@ optional_policy(`
 ')
 
 optional_policy(`
-	hostname_run(toor_t, toor_r)
+	ftp_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	gatekeeper_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	gdomap_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	glance_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	glusterfs_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	gpm_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	gpsd_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -164,25 +455,130 @@ optional_policy(`
 ')
 
 optional_policy(`
-	# allow system administrator to use the ipsec script to look
-	# at things (e.g., ipsec auto --status)
-	# probably should create an ipsec_admin role for this kind of thing
-	ipsec_exec_mgmt(toor_t)
-	ipsec_stream_connect(toor_t)
-	# for lsof
-	ipsec_getattr_key_sockets(toor_t)
+	hddtemp_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
+	hostname_run(toor_t, toor_r)
+')
+
+optional_policy(`
+	hwloc_admin(toor_t)
+	hwloc_run_dhwd(toor_t, toor_r)
+')
+
+optional_policy(`
+	howl_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	hypervkvp_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	i18n_input_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	icecast_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	ifplugd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	inn_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	iodine_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	ipsec_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	iptables_admin(toor_t, toor_r)
 	iptables_run(toor_t, toor_r)
 ')
 
 optional_policy(`
+	irqbalance_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	iscsi_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	isnsd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	jabber_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	kdump_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	kerberos_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	kerneloops_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	keystone_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	kismet_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	ksmtuned_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	kudzu_admin(toor_t, toor_r)
 	kudzu_run(toor_t, toor_r)
 ')
 
 optional_policy(`
+	l2tp_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	ldap_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	libmtp_role(toor_r, toor_t)
+')
+
+optional_policy(`
 	libs_run_ldconfig(toor_t, toor_r)
+')
+
+optional_policy(`
+	lightsquid_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	likewise_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	lircd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	lldpad_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -199,13 +595,48 @@ optional_policy(`
 ')
 
 optional_policy(`
+	lsmd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	lvm_admin(toor_t, toor_r)
 	lvm_run(toor_t, toor_r)
 ')
 
 optional_policy(`
-	modutils_run_depmod(toor_t, toor_r)
-	modutils_run_insmod(toor_t, toor_r)
-	modutils_run_update_mods(toor_t, toor_r)
+	mandb_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	mcelog_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	memcached_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	minidlna_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	minissdpd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	modutils_run(toor_t, toor_r)
+')
+
+optional_policy(`
+	mongodb_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	monit_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	monop_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -217,7 +648,19 @@ optional_policy(`
 ')
 
 optional_policy(`
+	mpd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	mplayer_role(toor_r, toor_t)
+')
+
+optional_policy(`
+	mrtg_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	mscan_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -229,7 +672,16 @@ optional_policy(`
 ')
 
 optional_policy(`
+	mysql_admin(toor_t, toor_r)
 	mysql_stream_connect(toor_t)
+')
+
+optional_policy(`
+	nagios_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	nessus_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -239,8 +691,36 @@ optional_policy(`
 ')
 
 optional_policy(`
+	networkmanager_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	nis_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	nscd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	nslcd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	ntop_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	ntp_stub()
 	corenet_udp_bind_ntp_port(toor_t)
+')
+
+optional_policy(`
+	numad_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	nut_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -248,28 +728,157 @@ optional_policy(`
 ')
 
 optional_policy(`
+	oident_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	ooffice_role(toor_r, toor_t)
+')
+
+optional_policy(`
+	openct_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	openhpi_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	openvpn_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	openvswitch_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	pacemaker_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	pads_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	pcmcia_run_cardctl(toor_t, toor_r)
 ')
 
 optional_policy(`
+	pcscd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	pegasus_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	perdition_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	pingd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	pkcs_admin_slotd(toor_t, toor_r)
+')
+
+optional_policy(`
+	plymouthd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	polipo_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	portage_run(toor_t, toor_r)
+	portage_run_fetch(toor_t, toor_r)
 	portage_run_gcc_config(toor_t, toor_r)
 ')
 
 optional_policy(`
 	portmap_run_helper(toor_t, toor_r)
+	portmap_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
+	portreserve_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	postfix_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	postfixpolicyd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	postgrey_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	ppp_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	prelude_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	privoxy_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	psad_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	puppet_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	pxe_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	pyicqt_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	pyzor_admin(toor_t, toor_r)
 	pyzor_role(toor_r, toor_t)
 ')
 
 optional_policy(`
+	qpidd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	quantum_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	quota_run(toor_t, toor_r)
+	quota_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	rabbitmq_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	radius_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	radvd_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
 	raid_run_mdadm(toor_r, toor_t)
+	raid_admin_mdadm(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -277,11 +886,53 @@ optional_policy(`
 ')
 
 optional_policy(`
+	redis_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	resmgr_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	rgmanager_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	rhcs_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	rhsmcertd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	ricci_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	rkhunter_run(toor_t, toor_r)
+')
+
+optional_policy(`
+	rngd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	roundup_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	rpc_admin(toor_t, toor_r)
 	rpc_domtrans_nfsd(toor_t)
 ')
 
 optional_policy(`
+	rpcbind_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	rpm_run(toor_t, toor_r)
+	rpm_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -289,16 +940,40 @@ optional_policy(`
 ')
 
 optional_policy(`
+	rsync_admin(toor_t, toor_r)
 	rsync_exec(toor_t)
 ')
 
 optional_policy(`
+	rtkit_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	rwho_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	samba_admin(toor_t, toor_r)
+	samba_run_smbcontrol(toor_t, toor_r)
+	samba_run_smbmount(toor_t, toor_r)
 	samba_run_net(toor_t, toor_r)
 	samba_run_winbind_helper(toor_t, toor_r)
 ')
 
 optional_policy(`
 	samhain_admin(toor_t)
+')
+
+optional_policy(`
+	sanlock_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	sasl_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	sblim_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -310,11 +985,60 @@ optional_policy(`
 ')
 
 optional_policy(`
+	sensord_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	setrans_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	setroubleshoot_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	seutil_run_setfiles(toor_t, toor_r)
 	seutil_run_runinit(toor_t, toor_r)
 ')
 
 optional_policy(`
+	shorewall_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	shutdown_role(toor_r, toor_t)
+')
+
+optional_policy(`
+	slpd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	smartmon_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	smokeping_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	smstools_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	snmp_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	snort_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	soundserver_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	spamassassin_admin(toor_t, toor_r)
 	spamassassin_role(toor_r, toor_t)
 ')
 
@@ -323,7 +1047,15 @@ optional_policy(`
 ')
 
 optional_policy(`
+	sssd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	staff_role_change(toor_r)
+')
+
+optional_policy(`
+	stapserver_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -335,12 +1067,52 @@ optional_policy(`
 ')
 
 optional_policy(`
+	svnserve_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	sysnet_run_ifconfig(toor_t, toor_r)
 	sysnet_run_dhcpc(toor_t, toor_r)
 ')
 
 optional_policy(`
+	sysstat_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	init_start_generic_units(toor_t)
+	systemd_start_power_units(toor_t)
+	init_stop_generic_units(toor_t)
+	init_get_generic_units_status(toor_t)
+	init_get_all_units_status(toor_t)
+')
+
+optional_policy(`
+	tboot_run_txtstat(toor_t, toor_r)
+')
+
+optional_policy(`
+	tcsd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	tftp_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	tgtd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	thunderbird_role(toor_r, toor_t)
+')
+
+optional_policy(`
+	tor_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	transproxy_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -359,6 +1131,10 @@ optional_policy(`
 ')
 
 optional_policy(`
+	ulogd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	uml_role(toor_r, toor_t)
 ')
 
@@ -368,6 +1144,10 @@ optional_policy(`
 
 optional_policy(`
 	unprivuser_role_change(toor_r)
+')
+
+optional_policy(`
+	uptime_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -385,11 +1165,52 @@ optional_policy(`
 ')
 
 optional_policy(`
+	uucp_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	uuidd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	varnishd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	varnishd_admin_varnishlog(toor_t, toor_r)
+')
+
+optional_policy(`
+	vdagent_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	vhostmd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	virt_admin(toor_t, toor_r)
+	virt_stream_connect(toor_t)
+')
+
+optional_policy(`
 	vmware_role(toor_r, toor_t)
 ')
 
 optional_policy(`
+	vnstatd_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	vpn_run(toor_t, toor_r)
+')
+
+optional_policy(`
+	watchdog_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	wdmd_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -405,11 +1226,31 @@ optional_policy(`
 ')
 
 optional_policy(`
+	xscreensaver_role(toor_r, toor_t)
+')
+
+optional_policy(`
 	xserver_role(toor_r, toor_t)
 ')
 
 optional_policy(`
+	xfs_admin(toor_t, toor_r)
+')
+
+optional_policy(`
 	yam_run(toor_t, toor_r)
+')
+
+optional_policy(`
+	zabbix_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	zarafa_admin(toor_t, toor_r)
+')
+
+optional_policy(`
+	zebra_admin(toor_t, toor_r)
 ')
 
 ifndef(`distro_redhat',`
@@ -418,6 +1259,7 @@ ifndef(`distro_redhat',`
 	')
 
 	optional_policy(`
+		bluetooth_admin(toor_t, toor_r)
 		bluetooth_role(toor_r, toor_t)
 	')
 
@@ -431,6 +1273,18 @@ ifndef(`distro_redhat',`
 
 	optional_policy(`
 		dbus_role_template(toor, toor_r, toor_t)
+
+		optional_policy(`
+			gnome_role_template(toor, toor_r, toor_t)
+		')
+
+		optional_policy(`
+			wm_role_template(toor, toor_r, toor_t)
+		')
+	')
+
+	optional_policy(`
+		dirmngr_role(toor_r, toor_t)
 	')
 
 	optional_policy(`
@@ -446,10 +1300,6 @@ ifndef(`distro_redhat',`
 	')
 
 	optional_policy(`
-		gnome_role(toor_r, toor_t)
-	')
-
-	optional_policy(`
 		gpg_role(toor_r, toor_t)
 	')
 
@@ -458,17 +1308,10 @@ ifndef(`distro_redhat',`
 	')
 
 	optional_policy(`
-		java_role(toor_r, toor_t)
+		ircd_admin(toor_t, toor_r)
 	')
-')
 
-ifdef(`init_systemd',`
 	optional_policy(`
-		systemd_start_unit_services(toor_t)
-		systemd_start_power_unit_services(toor_t)
-		systemd_stop_unit_services(toor_t)
-		systemd_status_unit_services(toor_t)
-		logging_send_audit_msgs(toor_t)
-		init_system_halt(toor_t)
+		java_role(toor_r, toor_t)
 	')
 ')

@@ -1,4 +1,0 @@
-/bin/gnome-shell	--	gen_context(system_u:object_r:wm_exec_t,s0)
-/bin/openbox	--	gen_context(system_u:object_r:wm_exec_t,s0)
-/bin/metacity	--	gen_context(system_u:object_r:wm_exec_t,s0)
-/bin/twm	--	gen_context(system_u:object_r:wm_exec_t,s0)

@@ -76,7 +76,9 @@ fs_list_all(oscap_probe_t)
 kernel_read_all_sysctls(oscap_probe_t)
 kernel_read_network_state(oscap_probe_t)
 
+optional_policy(`
 userdom_use_user_ttys(oscap_probe_t)
+')
 
 # probe_partition
 fs_getattr_all_fs(oscap_probe_t)

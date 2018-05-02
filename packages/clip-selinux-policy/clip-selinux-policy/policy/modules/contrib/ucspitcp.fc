@@ -1,2 +1,0 @@
-/bin/rblsmtpd	--	gen_context(system_u:object_r:rblsmtpd_exec_t,s0)
-/bin/tcpserver	--	gen_context(system_u:object_r:ucspitcp_exec_t,s0)
