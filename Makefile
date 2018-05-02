@@ -37,11 +37,12 @@ export ROOT_DIR ?= $(CURDIR)
 export OUTPUT_DIR ?= $(ROOT_DIR)
 export RPM_TMPDIR ?= $(ROOT_DIR)/tmp
 export CONF_DIR ?= $(ROOT_DIR)/conf
+export MOCK_DIR ?= $(RPM_TMPDIR)/mockbuild
 
 # Config deps
 CONFIG_BUILD_DEPS = $(ROOT_DIR)/CONFIG_BUILD $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
 
-# MOCK_REL must be configured in MOCK_CONF_DIR/MOCK_REL.cfg
+# MOCK_REL_INSTANCE must be configured in MOCK_CONF_DIR/MOCK_REL_INSTANCE.cfg
 MOCK_REL := rhel-$(RHEL_VER)-$(TARGET_ARCH)
 
 # This directory contains all of our packages we will be building.
@@ -53,6 +54,9 @@ PACKAGES := $(filter-out $(EXCLUDE_PKGS),$(PACKAGES))
 
 # This is the directory that will contain all of our yum repos.
 REPO_DIR := $(CURDIR)/repos
+
+# This directory is used by repoquery and yum to cache a repository's repomd.xml.  The cachedir setting in yum.conf is ignored for a non-root user.
+YUM_TMP := $(REPO_DIR)/yumtmp
 
 # This directory contains images files, the Makefiles, and other files needed for ISO generation
 KICKSTART_DIR := $(CURDIR)/kickstart
@@ -91,7 +95,7 @@ REPO_LINK := /bin/ln -s
 REPO_WGET := /usr/bin/wget
 REPO_CREATE := /usr/bin/createrepo -d --workers $(shell /usr/bin/nproc) -c $(REPO_DIR)/yumcache
 REPO_QUERY :=  repoquery -c $(YUM_CONF_FILE) --quiet -a --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}.rpm'
-MOCK_ARGS += --resultdir=$(CLIP_REPO_DIR) -r $(MOCK_REL) --configdir=$(MOCK_CONF_DIR) --unpriv --rebuild
+MOCK_ARGS += --resultdir=$(CLIP_REPO_DIR) -r $(MOCK_CONF_DIR)/$(MOCK_REL_INSTANCE).cfg --configdir=$(MOCK_CONF_DIR) --unpriv --rebuild
 ifeq ($(CLEAN_MOCK),n)
     MOCK_ARGS += --no-clean --no-cleanup-after
 endif
@@ -144,19 +148,13 @@ define CHECK_DEPS
 	@if [ x"`cat /sys/fs/selinux/enforce`" == "x1" ]; then echo -e "This is embarassing but due to a bug (bz #861281) you must do builds in permissive.\nhttps://bugzilla.redhat.com/show_bug.cgi?id=861281" && exit 1; fi
 endef
 
-define CHECK_MOCK
-	@if ps -eo comm= | grep -q mock; then echo "ERROR: Another instance of mock is running.  Please hangup and try your build again later." && exit 1; fi
-endef
-
-
 ######################################################
 # BEGIN RPM GENERATION RULES (BEWARE OF DRAGONS)
 # This define directive is used to generate build rules.
 define RPM_RULE_template
-$(1): $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
+$(1): $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1))) $(MY_REPO_DEPS) $(MOCK_CONF_DIR)/$(MOCK_REL_INSTANCE).cfg
 	$(call CHECK_DEPS)
 	$(call MKDIR,$(CLIP_REPO_DIR))
-	$(call CHECK_MOCK)
 	$(call CHECK_REPO,$(CLIP_REPO_DIR))
 	$(VERBOSE)$(MOCK) $(MOCK_ARGS) $(SRPM_OUTPUT_DIR)/$(call SRPM_FROM_RPM,$(notdir $(1)))
 	cd $(CLIP_REPO_DIR) && $(REPO_CREATE) .
@@ -197,13 +195,16 @@ $(eval REPO_PATH := $(call GET_REPO_PATH,$(1)))
 $(eval REPO_URL := file://$(REPO_DIR)/$(REPO_ID)-repo)
 $(eval setup_all_repos += setup-$(REPO_ID)-repo)
 
-$(eval YUM_CONF := [$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=file://$(REPO_PATH)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
+$(eval YUM_CONF += \\n[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=file://$(REPO_PATH)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
 $(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
 $(eval MY_REPO_DEPS += $(REPO_DIR)/$(REPO_ID)-repo/last-updated)
 $(eval REPO_LINES := $(REPO_LINES)repo --name=$(REPO_ID) --baseurl=file://$(REPO_DIR)/$(REPO_ID)-repo\n)
 
 $(eval CLIP_REPO_DIRS += "$(REPO_DIR)/$(REPO_ID)-repo")
 $(eval PKG_LISTS += "./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID)")
+$(eval P_ARG_REPO += "$(REPO_PATH),$(CONF_DIR)/pkglist.$(REPO_ID)")
+
+$$(eval $$(call better_shell,$(call MKDIR,$(RPM_TMPDIR))))
 
 setup-$(REPO_ID)-repo:  $(REPO_DIR)/$(REPO_ID)-repo/last-updated
 
@@ -235,6 +236,25 @@ $(CONF_DIR)/pkglist.$(REPO_ID) ./$(shell basename $(CONF_DIR))/pkglist.$(REPO_ID
 
 endif
 endef
+
+define newline
+
+
+endef
+
+define error_ifneq
+ifneq ($(1),$(2))
+$$(error $(3))
+endif
+endef
+
+define better_shell
+$(eval $(subst #N#,$(newline),$(shell OUTPUT="`$(1) 2>&1`"; RC=$$?; ( echo "define output"; echo "$${OUTPUT}"; echo "endef"; echo "rc := $${RC}" ) | awk 1 ORS="#N#")))
+$(call info_quiet,command: $(1))
+$(call info_quiet,output: $$(output))
+$(call error_ifneq,$(rc),0,Command $(1) returned error code $(rc))
+endef
+
 # END REPO GENERATION RULES (BEWARE OF RMS)
 ######################################################
 
@@ -279,6 +299,60 @@ all: create-repos $(INSTISOS)
 # Generate custom targets for managing the yum repos.  We have to generate the rules since the user provides the set of repos.
 $(foreach REPO,$(strip $(shell cat CONFIG_REPOS|$(GREP) -E '^[a-zA-Z].*=.*'|$(SED) -e 's/ \?= \?/=/')),$(eval $(call REPO_RULE_template,$(REPO))))
 
+define ADD_IF_MISSING
+ifeq ($(shell if [ -e $(2) ]; then echo $(2); fi),)
+$(1) += $(2)
+endif
+endef
+
+P_ARG_SPEC := $(foreach SPEC,$(foreach PKG,$(PACKAGES),$(shell find $(PKG_DIR)/$(PKG) -iname '$(PKG)*.spec')),-s $(SPEC))
+P_ARG_KS := $(foreach SYSTEM,$(SYSTEMS),-k $(KICKSTART_DIR)/$(SYSTEM)/$(SYSTEM).ks)
+P_ARG_REQ := $(foreach REQ,$(shell sed -n "s/.*install \([^']*\).*/\1/p" $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl),-r $(REQ))
+
+P_ARGS := add -c $(YUM_CONF_FILE) $(P_ARG_KS) $(P_ARG_SPEC) $(P_ARG_REQ) $(P_ARG_REPO)
+
+# create pkglist files if they are missing 
+# PKG_LISTS is populated in the calls to REPO_RULE_template above
+# which is why this 
+MISSING_PKGLIST =
+$(foreach PKGLIST,$(PKG_LISTS),$(eval $(call ADD_IF_MISSING,MISSING_PKGLIST,$(PKGLIST))))
+ifneq ($(MISSING_PKGLIST),)
+$(shell $(RM) $(YUM_CONF_FILE))
+$(shell cat $(YUM_CONF_FILE).tmpl > $(YUM_CONF_FILE))
+$(shell echo -e $(YUM_CONF) >> $(YUM_CONF_FILE))
+$(shell rm -rf "$(YUM_TMP)")
+$(shell mkdir -p "$(YUM_TMP)")
+$(info generating missing pkglist file(s): $(MISSING_PKGLIST))
+$(eval $(call better_shell,TMPDIR="$(YUM_TMP)" ./support/manage_pkglist.py $(P_ARGS)))
+
+# make sure all pkglist files were actually created
+MISSING_PKGLIST =
+$(foreach PKGLIST,$(PKG_LISTS),$(eval $(call ADD_IF_MISSING,MISSING_PKGLIST,$(PKGLIST))))
+ifneq ($(MISSING_PKGLIST),)
+$(error The following pkglist files were not generated as expected: $(MISSING_PKGLIST))
+endif
+else
+$(info all pkglist files exist)
+endif
+
+
+
+# generate a hash from all pkglist files which will be used to provide a yum
+# repository to mock which is individualized based on the pkglist contents
+ifneq ($(PKG_LISTS),)
+PKG_LIST_HASH = $(strip $(shell cat $(sort $(PKG_LISTS)) | md5sum | cut -f1 -d' '))
+PREV_PKG_LIST_HASH = $(strip $(shell cat conf/pkglist_hash))
+MOCK_REL_INSTANCE = $(shell whoami | cut -f1 -d' ')-$(notdir $(abspath $(ROOT_DIR)))-$(PKG_LIST_HASH)
+ifneq ($(PKG_LIST_HASH),$(PREV_PKG_LIST_HASH))
+$(info Updating conf/pkglist_hash)
+$(shell echo $(PKG_LIST_HASH) > conf/pkglist_hash)
+else
+$(info conf/pkglist_hash up to date)
+endif
+else
+$(error no pkglists/repos)
+endif
+
 # The following line calls our RPM rule template defined above allowing us to build a proper dependency list.
 $(foreach RPM,$(RPMS),$(eval $(call RPM_RULE_template,$(RPM))))
 
@@ -316,11 +390,15 @@ $(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(call CHECK_DEPS)
 	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-iso/\1/'`" iso
 
-$(MOCK_CONF_DIR)/$(MOCK_REL).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl $(CONF_DIR)/pkglist.blacklist $(filter-out $(ROOT_DIR)/CONFIG_BUILD,$(CONFIG_BUILD_DEPS))
+$(MOCK_CONF_DIR)/$(MOCK_REL_INSTANCE).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl $(CONF_DIR)/pkglist.blacklist conf/pkglist_hash $(filter-out $(ROOT_DIR)/CONFIG_BUILD,$(CONFIG_BUILD_DEPS))
 	$(call CHECK_DEPS)
 	$(VERBOSE)cat $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl > $@
 	$(VERBOSE)echo -e $(MOCK_YUM_CONF) >> $@
-	$(VERBOSE)echo -e "[clip-repo]\\nname=clip-repo\\nbaseurl=file://$(CLIP_REPO_DIR)/\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n" >> $@
+	$(VERBOSE)sed -i '2i config_opts["basedir"] = "$(MOCK_DIR)"' $@
+	$(VERBOSE)sed -i '2i config_opts["cache_topdir"] = "$(MOCK_DIR)/cache"' $@
+	$(VERBOSE)sed -i '2i config_opts["root"] = "$(MOCK_REL_INSTANCE)"' $@
+	$(VERBOSE)sed -i '2i config_opts["rootdir"] = "$(MOCK_DIR)/$(MOCK_REL_INSTANCE)"' $@
+	$(VERBOSE)echo -e "[clip-repo]\\nname=clip-repo\\nbaseurl=file://$(CLIP_REPO_DIR)/\\nenabled=1\\ngpgcheck=0\\nexclude=$(strip $(PKG_BLACKLIST))\\n" >> $@
 	$(VERBOSE)echo '"""' >> $@
 
 ifneq ($(OVERLAY_HOME_SIZE),)
@@ -332,11 +410,12 @@ endif
 
 clean-mock: $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
 	$(VERBOSE)$(RM) $(YUM_CONF_FILE)
-	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL).cfg
+	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL_INSTANCE).cfg
 	$(VERBOSE)$(RM) -rf $(REPO_DIR)/yumcache
 
 bare-repos: clean-mock
 	$(VERBOSE)$(RM) -r $(CLIP_REPO_DIRS) $(CLIP_REPO_DIR)
+	$(VERBOSE)sudo $(RM) -r $(MOCK_DIR)
 
 clean:
 	@sudo $(RM) -rf $(RPM_TMPDIR)
