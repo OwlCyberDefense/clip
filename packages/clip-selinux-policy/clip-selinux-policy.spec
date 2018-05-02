@@ -1,10 +1,10 @@
 %define distro redhat 
 %define polyinstatiate n
 %define monolithic n
-%define POLICYVER 24
-%define libsepolver 2.0.41-1
-%define POLICYCOREUTILSVER 2.0.78-1
-%define CHECKPOLICYVER 2.0.21-1
+%define POLICYVER 30
+%define libsepolver 2.5
+%define POLICYCOREUTILSVER 2.5
+%define CHECKPOLICYVER 2.5
 Name:   %{pkgname}
 Version: %{version}
 Release: %{release}
@@ -15,6 +15,7 @@ Source: %{pkgname}-%{version}.tar.gz
 Url: http://oss.tresys.com/repos/refpolicy/
 BuildArch: noarch
 Requires: coreutils
+BuildRequires: policycoreutils-devel >= %{POLICYCOREUTILSVER}
 
 Patch0: remove-sctp.patch
 Patch1: add_file_base_type_attribute.patch
@@ -61,10 +62,10 @@ Certifiable Linux Integration Platform SELinux policy documentation package
 #make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024  conf \
 
 %define installCmds() \
-make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} INIT_SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" base.pp \
-make %{?_smp_mflags} validate UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} INIT_SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" modules \
-make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} INIT_SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install \
-make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} INIT_SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install-appconfig \
+make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" base.pp \
+make %{?_smp_mflags} validate UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" modules \
+make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install \
+make %{?_smp_mflags} UNK_PERMS=%5 NAME=%1 TYPE=%2 DISTRO=%{distro} SYSTEMD=y UBAC=y DIRECT_INITRC=%3 MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} POLY=%4 MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install-appconfig \
 #%{__cp} *.pp %{buildroot}/%{_usr}/share/selinux/%1/ \
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/selinux/%1/policy \
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/selinux/%1/modules/active \
@@ -181,11 +182,11 @@ make %{?_smp_mflags} clean
 #installCmds NAME TYPE DIRECT_INITRC POLY UNKNOWN
 %installCmds mls mls n y deny
 
-make %{?_smp_mflags} UNK_PERMS=deny NAME=clip TYPE=mcs DISTRO=%{distro} UBAC=y DIRECT_INITRC=n MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} PKGNAME=%{name}-%{version} POLY=y MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install-headers install-docs
+make %{?_smp_mflags} UNK_PERMS=deny NAME=clip TYPE=mcs DISTRO=%{distro} UBAC=y DIRECT_INITRC=n MONOLITHIC=%{monolithic} DESTDIR=%{buildroot} PKGNAME=%{name}-%{version} SYSTEMD=y POLY=y MLS_CATS=1024 MCS_CATS=1024 APPS_MODS=""%{enable_modules}"" install-headers install-docs
 mkdir %{buildroot}%{_usr}/share/selinux/devel/
 mkdir %{buildroot}%{_usr}/share/selinux/packages/
 mv %{buildroot}%{_usr}/share/selinux/clip/include %{buildroot}%{_usr}/share/selinux/devel/include
-install -m 644 config/Makefile.devel %{buildroot}%{_usr}/share/selinux/devel/Makefile
+install -m 644 support/Makefile.devel %{buildroot}%{_usr}/share/selinux/devel/Makefile
 install -m 644 doc/example.* %{buildroot}%{_usr}/share/selinux/devel/
 install -m 644 doc/policy.* %{buildroot}%{_usr}/share/selinux/devel/
 echo  "xdg-open file:///usr/share/doc/clip-selinux-policy-%{version}/html/index.html"> %{buildroot}%{_usr}/share/selinux/devel/policyhelp
@@ -239,8 +240,10 @@ Summary: Certifiable Linux Integration Platform SELinux clip base policy
 Provides: selinux-policy-base = %{version}-%{release}
 Group: System Environment/Base
 Requires(pre): policycoreutils >= %{POLICYCOREUTILSVER}
+Requires(pre): policycoreutils-python >= %{POLICYCOREUTILSVER}
 Requires(pre): coreutils
 Requires(pre): clip-selinux-policy = %{version}-%{release}
+Requires(pre): libsemanage
 Requires: clip-selinux-policy = %{version}-%{release}
 Conflicts:  audispd-plugins <= 1.7.7-1
 Conflicts:  seedit
@@ -251,6 +254,9 @@ Based off of reference policy refpolicy-2.20110726.tar.bz2
 
 %pre clip
 %saveFileContext clip
+
+# Turns out RHEL7 has the wrong default for modules - force the correct location
+echo "store-root = /var/lib/selinux" >> /etc/selinux/semanage.conf
 
 %post clip
 packages=`cat /usr/share/selinux/clip/modules.lst`
@@ -273,6 +279,8 @@ exit 0
 %{_sysconfdir}/selinux/clip/contexts/files/file_contexts.subs_dist
 %{_sysconfdir}/selinux/clip/contexts/virtual_domain_context
 %{_sysconfdir}/selinux/clip/contexts/virtual_image_context
+%{_sysconfdir}/selinux/clip/contexts/lxc_contexts
+%{_sysconfdir}/selinux/clip/contexts/openrc_contexts
 
 %package mls 
 Summary: Certifiable Linux Integration Platform SELinux mls base policy
@@ -311,6 +319,8 @@ exit 0
 %{_sysconfdir}/selinux/mls/contexts/files/file_contexts.subs_dist
 %{_sysconfdir}/selinux/mls/contexts/virtual_domain_context
 %{_sysconfdir}/selinux/mls/contexts/virtual_image_context
+%{_sysconfdir}/selinux/mls/contexts/lxc_contexts
+%{_sysconfdir}/selinux/mls/contexts/openrc_contexts
 
 
 %changelog
