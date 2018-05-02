@@ -199,7 +199,7 @@ SELINUX=%{enforcing_mode}
 # SELINUXTYPE= can take one of these two values:
 #     clip - Targeted processes are protected,
 #     mls - Multi Level Security protection.
-SELINUXTYPE=clip 
+SELINUXTYPE=clip
 AUTORELABEL=1
 
 " > /etc/selinux/config
