@@ -87,6 +87,8 @@ export REPO_LINES := repo --name=clip-repo --baseurl=file://$(CLIP_REPO_DIR)\n
 export SRPM_OUTPUT_DIR := $(CLIP_SRPM_REPO_DIR)
 
 export MAYFLOWER := $(SUPPORT_DIR)/mayflower
+export PUNGI := $(SUPPORT_DIR)/pungi
+export LORAX_TEMPLATES := $(SUPPORT_DIR)/lorax
 
 SED := /bin/sed
 GREP := /bin/egrep
@@ -307,9 +309,10 @@ endef
 
 P_ARG_SPEC := $(foreach SPEC,$(foreach PKG,$(PACKAGES),$(shell find $(PKG_DIR)/$(PKG) -iname '$(PKG)*.spec')),-s $(SPEC))
 P_ARG_KS := $(foreach SYSTEM,$(SYSTEMS),-k $(KICKSTART_DIR)/$(SYSTEM)/$(SYSTEM).ks)
+P_ARG_LORAX := $(foreach TMPL,$(shell find $(LORAX_TEMPLATES) -iname '*.tmpl*'),-l $(TMPL))
 P_ARG_REQ := $(foreach REQ,$(shell sed -n "s/.*install \([^']*\).*/\1/p" $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl),-r $(REQ))
 
-P_ARGS := add -c $(YUM_CONF_FILE) $(P_ARG_KS) $(P_ARG_SPEC) $(P_ARG_REQ) $(P_ARG_REPO)
+P_ARGS := add -c $(YUM_CONF_FILE) $(P_ARG_KS) $(P_ARG_SPEC) $(P_ARG_REQ) $(P_ARG_REPO) $(P_ARG_LORAX)
 
 # create pkglist files if they are missing 
 # PKG_LISTS is populated in the calls to REPO_RULE_template above

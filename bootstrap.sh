@@ -234,12 +234,6 @@ if [ x"`cat /sys/fs/selinux/enforce`" == "x1" ]; then
 	/usr/bin/sudo /bin/sed -i -e 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config
 fi
 
-# Roll lorax
-check_and_build_rpm "lorax" "lorax-19.6.66-2.el7"
-
-# Roll pungi
-check_and_build_rpm "pungi" "pungi-2.13-4.el7"
-
 /usr/bin/sudo /usr/bin/yum install -y openscap*
 
 /bin/echo -e "Basic bootstrapping of build host is complete.\nRunning 'make clip-rhel7-iso'"
