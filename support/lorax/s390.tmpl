@@ -4,6 +4,7 @@ configdir="tmp/config_files/s390"
 BOOTDIR="images"
 KERNELDIR=BOOTDIR
 INITRD_ADDRESS="0x02000000"
+LORAXDIR="usr/share/lorax/"
 # The assumption seems to be that there is only one s390 kernel, ever
 kernel = kernels[0]
 %>
@@ -16,6 +17,7 @@ treeinfo stage2 mainimage images/${runtime_base}
 install ${configdir}/redhat.exec ${BOOTDIR}
 install ${configdir}/generic.prm ${BOOTDIR}
 install ${configdir}/genericdvd.prm ${BOOTDIR}
+install ${configdir}/cdboot.prm ${BOOTDIR}
 install ${configdir}/generic.ins .
 
 ## configure bootloader
@@ -38,3 +40,33 @@ treeinfo images-${basearch} initrd.addrsize ${BOOTDIR}/initrd.addrsize
 treeinfo images-${basearch} generic.prm ${BOOTDIR}/generic.prm
 treeinfo images-${basearch} genericdvd.prm ${BOOTDIR}/genericdvd.prm
 treeinfo images-${basearch} generic.ins generic.ins
+
+# Create optional product.img and updates.img in /images/
+<% imggraft=""; images=["product", "updates"] %>
+%for img in images:
+    %if exists("%s/%s/" % (LORAXDIR, img)):
+        installimg ${LORAXDIR}/${img}/ images/${img}.img
+    %endif
+%endfor
+
+# Inherit iso-graft/ if it exists from external templates
+<%
+    import os
+    if os.path.exists(workdir + "/iso-graft"):
+        imggraft += " " + workdir + "/iso-graft"
+%>
+
+## Make a combined kernel+initrd image for the iso
+runcmd mk-s390-cdboot -i ${outroot}/${KERNELDIR}/kernel.img \
+                      -r ${outroot}/${KERNELDIR}/initrd.img \
+                      -p ${outroot}/${BOOTDIR}/cdboot.prm \
+                      -o ${outroot}/${BOOTDIR}/cdboot.img
+
+## make boot.iso
+runcmd mkisofs -o ${outroot}/images/boot.iso \
+       -b ${BOOTDIR}/cdboot.img -c ${BOOTDIR}/boot.cat \
+       -boot-load-size 4 -no-emul-boot \
+       -R -J -V '${isolabel}' -T -graft-points \
+       ${BOOTDIR}=${outroot}/${BOOTDIR} \
+       ${imggraft}
+treeinfo images-${basearch} boot.iso images/boot.iso

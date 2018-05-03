@@ -49,6 +49,14 @@ from treeinfo import TreeInfo
 from discinfo import DiscInfo
 from executils import runcmd, runcmd_output
 
+# get lorax version
+try:
+    import pylorax.version
+except ImportError:
+    vernum = "devel"
+else:
+    vernum = pylorax.version.num
+
 # List of drivers to remove on ppc64 arch to keep initrd < 32MiB
 REMOVE_PPC64_DRIVERS = "floppy scsi_debug nouveau radeon cirrus mgag200"
 REMOVE_PPC64_MODULES = "drm plymouth"
@@ -143,6 +151,7 @@ class Lorax(BaseLoraxClass):
     def run(self, ybo, product, version, release, variant="", bugurl="",
             isfinal=False, workdir=None, outputdir=None, buildarch=None, volid=None,
             domacboot=False, doupgrade=True, remove_temp=False,
+            installpkgs=None,
             size=2,
             add_templates=None,
             add_template_vars=None,
@@ -152,13 +161,7 @@ class Lorax(BaseLoraxClass):
 
         assert self._configured
 
-        # get lorax version
-        try:
-            import pylorax.version
-        except ImportError:
-            vernum = "devel"
-        else:
-            vernum = pylorax.version.num
+        installpkgs = installpkgs or []
 
         if domacboot:
             try:
@@ -247,39 +250,34 @@ class Lorax(BaseLoraxClass):
         # NOTE: rb.root = ybo.conf.installroot (== self.inroot)
         rb = RuntimeBuilder(product=self.product, arch=self.arch,
                             yum=ybo, templatedir=templatedir,
+                            installpkgs=installpkgs,
                             add_templates=add_templates,
                             add_template_vars=add_template_vars)
 
-        cache = joinpaths(self.workdir, "cache")
+        logger.info("installing runtime packages")
+        rb.yum.conf.skip_broken = self.conf.getboolean("yum", "skipbroken")
+        rb.install()
+
+        # write .buildstamp
+        buildstamp = BuildStamp(self.product.name, self.product.version,
+                                self.product.bugurl, self.product.isfinal, self.arch.buildarch)
+
+        buildstamp.write(joinpaths(self.inroot, ".buildstamp"))
+
+        if self.debug:
+            rb.writepkglists(joinpaths(logdir, "pkglists"))
+            rb.writepkgsizes(joinpaths(logdir, "original-pkgsizes.txt"))
+
+        logger.info("doing post-install configuration")
+        rb.postinstall()
+
+        # write .discinfo
+        discinfo = DiscInfo(self.product.release, self.arch.basearch)
+        discinfo.write(joinpaths(self.outputdir, ".discinfo"))
+
+        logger.info("backing up installroot")
         installroot = joinpaths(self.workdir, "installroot")
-        if not os.path.exists(cache):
-            logger.info("installing runtime packages")
-            rb.yum.conf.skip_broken = self.conf.getboolean("yum", "skipbroken")
-            rb.install()
-
-            # write .buildstamp
-            buildstamp = BuildStamp(self.product.name, self.product.version,
-                                    self.product.bugurl, self.product.isfinal, self.arch.buildarch)
-
-            buildstamp.write(joinpaths(self.inroot, ".buildstamp"))
-
-            if self.debug:
-                rb.writepkglists(joinpaths(logdir, "pkglists"))
-                rb.writepkgsizes(joinpaths(logdir, "original-pkgsizes.txt"))
-
-            logger.info("doing post-install configuration")
-            rb.postinstall()
-
-            # write .discinfo
-            discinfo = DiscInfo(self.product.release, self.arch.basearch)
-            discinfo.write(joinpaths(self.outputdir, ".discinfo"))
-            logger.info("backing up installroot")
-            remove(installroot)
-            linktree(self.inroot, installroot)
-            linktree(self.inroot, cache)
-        else:
-            remove(installroot)
-            linktree(cache, installroot)
+        linktree(self.inroot, installroot)
 
         logger.info("generating kernel module metadata")
         rb.generate_module_data()
@@ -313,7 +311,7 @@ class Lorax(BaseLoraxClass):
                                   workdir=self.workdir)
 
         logger.info("rebuilding initramfs images")
-        dracut_args = ["--xz", "--install", "/.buildstamp", "--no-early-microcode"]
+        dracut_args = ["--xz", "--install", "/.buildstamp", "--no-early-microcode", "--add", "fips"]
         anaconda_args = dracut_args + ["--add", "anaconda pollcdrom"]
 
         # ppc64 cannot boot an initrd > 32MiB so remove some drivers
@@ -359,11 +357,7 @@ class Lorax(BaseLoraxClass):
 def get_buildarch(ybo):
     # get architecture of the available anaconda package
     buildarch = None
-    lists = ybo.doPackageLists(patterns=["anaconda"])
-    l = lists.available
-    if len(l) == 0:
-        l = lists.reinstall_available
-    for anaconda in l:
+    for anaconda in ybo.doPackageLists(patterns=["anaconda"]).available:
         if anaconda.arch != "src":
             buildarch = anaconda.arch
             break

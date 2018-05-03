@@ -26,6 +26,10 @@ symlink /lib/systemd/system/anaconda.target etc/systemd/system/default.target
 mkdir etc/systemd/system/local-fs.target.wants/
 symlink /lib/systemd/system/tmp.mount etc/systemd/system/local-fs.target.wants/tmp.mount
 
+## Start rngd
+mkdir etc/systemd/system/basic.target.wants/
+symlink /lib/systemd/system/rngd.service etc/systemd/system/basic.target.wants/rngd.service
+
 ## Disable unwanted systemd services
 systemctl disable systemd-readahead-collect.service \
                   systemd-readahead-replay.service \
@@ -38,6 +42,9 @@ systemctl mask rhel-configure.service rhel-loadmodules.service \
                rhel-autorelabel.service rhel-autorelabel-mark.service \
                rhel-wait-storage.service media.mount \
                systemd-tmpfiles-clean.service systemd-tmpfiles-clean.timer
+
+## remove because it cannot be disabled
+remove usr/lib/systemd/system-generators/lvm2-activation-generator
 
 ## Make logind activate anaconda-shell@.service on switch to empty VT
 symlink anaconda-shell@.service lib/systemd/system/autovt@.service
@@ -59,9 +66,8 @@ install ${configdir}/spice-vdagentd etc/sysconfig
 mkdir etc/NetworkManager/conf.d
 install ${configdir}/90-anaconda-no-auto-default.conf etc/NetworkManager/conf.d
 install ${configdir}/91-anaconda-autoconnect-slaves.conf etc/NetworkManager/conf.d
-%if exists(root+"/etc/selinux/targeted"):
-    install ${configdir}/selinux.config etc/selinux/config
-%endif
+install ${configdir}/92-anaconda-loglevel-debug.conf etc/NetworkManager/conf.d
+install ${configdir}/vconsole.conf etc
 
 ## set up sshd
 install ${configdir}/sshd_config.anaconda etc/ssh
@@ -99,13 +105,6 @@ gconfset /apps/metacity/global_keybindings/switch_to_workspace_right string disa
 gconfset /apps/metacity/global_keybindings/switch_windows string disabled
 gconfset /desktop/gnome/interface/accessibility bool true
 gconfset /desktop/gnome/interface/at-spi-corba bool true
-
-## Replace the metacity theme file with one that hides the titlebar of maximized windows
-install ${configdir}/metacity-theme-2.xml usr/share/themes/Adwaita/metacity-1/
-
-## Some settings are controlled by gsettings now.
-install ${configdir}/org.gnome.desktop.wm.keybindings.gschema.override usr/share/glib-2.0/schemas
-runcmd chroot ${root} glib-compile-schemas /usr/share/glib-2.0/schemas
 
 move usr/libexec/anaconda/auditd sbin
 

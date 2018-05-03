@@ -10,7 +10,8 @@ remove usr/share/i18n
     removepkg perl*
 %endif
 ## no sound support, thanks
-removepkg alsa* flac gstreamer-tools libsndfile pulseaudio* sound-theme-freedesktop
+## ...except alsa-libs, which are needed by spice-vdagent
+removepkg alsa-*firmware* flac gstreamer-tools libsndfile pulseaudio* sound-theme-freedesktop
 removepkg midisport-firmware
 ## no fancy video, either
 removepkg libcrystalhd crystalhd-firmware ivtv-firmware cx18-firmware
@@ -25,6 +26,11 @@ removefrom dracut --allbut /usr/lib/dracut/modules.d/30convertfs/convertfs.sh \
                   /usr/lib/dracut/dracut-initramfs-restore
 ## we don't run SELinux (not in enforcing, anyway)
 removepkg checkpolicy selinux-policy libselinux-utils
+
+## selinux checks for the /etc/selinux/config file's existance
+## The removepkg above removes it, create an empty one. See rhbz#1243168
+append etc/selinux/config ""
+
 ## anaconda has its own repo files
 removefrom fedora-release --allbut /etc/os-release
 removepkg fedora-release-rawhide
@@ -53,7 +59,7 @@ removepkg avahi-autoipd coreutils-libs dash db4-utils diffutils file
 removepkg genisoimage gnome-python2 info iptables
 removepkg jasper-libs libXxf86misc
 removepkg libasyncns libhbaapi libhbalinux
-removepkg libmcpp libpcap libtiff libutempter linux-atm-libs
+removepkg libmcpp libtiff libutempter linux-atm-libs
 removepkg lvm2-libs m4 mailx makebootfat mcpp
 removepkg mingetty mobile-broadband-provider-info pkgconfig ppp pth
 removepkg rmt rpcbind squashfs-tools system-config-firewall-base
@@ -61,7 +67,7 @@ removepkg tigervnc-license ttmkfdir xml-common xorg-x11-font-utils
 removepkg xorg-x11-server-common yum-utils
 
 ## other removals
-remove /boot /home /media /opt /srv /tmp/*
+remove /home /media /opt /srv /tmp/*
 remove /usr/etc /usr/games /usr/local /usr/tmp
 remove /usr/share/doc /usr/share/info /usr/share/man /usr/share/gnome
 remove /usr/share/mime/application /usr/share/mime/audio /usr/share/mime/image
@@ -79,19 +85,20 @@ remove /usr/share/icons/*/icon-theme.cache
 removekmod sound drivers/media drivers/hwmon \
            net/atm net/bluetooth net/sched net/sctp \
            net/rds net/l2tp net/decnet net/netfilter net/ipv4 net/ipv6 \
-           drivers/watchdog drivers/target drivers/rtc drivers/input/joystick \
-           drivers/bluetooth drivers/hid drivers/edac \
-           drivers/usb/serial drivers/usb/host drivers/usb/misc \
-           fs/ocfs2 fs/ceph fs/nfsd fs/ubifs fs/nilfs2 \
-           arch/x86/kvm
+           drivers/watchdog drivers/rtc drivers/input/joystick \
+           drivers/bluetooth drivers/edac drivers/usb/serial \
+           drivers/usb/host drivers/usb/misc fs/ocfs2 fs/ceph fs/nfsd \
+           fs/ubifs fs/nilfs2 arch/x86/kvm
 ## Need to keep virtio_console.ko and ipmi stuff in drivers/char
 ## Also keep virtio-rng so that the installer can get sufficient randomness for
 ## LUKS setup.
 removekmod drivers/char --allbut virtio_console hw_random \
-                                  virtio-rng ipmi
+                                  virtio-rng ipmi hmcdrv
 removekmod drivers/staging --allbut zram
-removekmod drivers/video --allbut hyperv_fb
+removekmod drivers/video --allbut hyperv_fb syscopyarea sysfillrect sysimgblt fb_sys_fops
 remove lib/modules/*/{build,source,*.map}
+## Need to keep hid-multitouch and i2c-hid in drivers/hid, rhbz#1526323
+removekmod drivers/hid --allbut hid-multitouch i2c-hid
 ## NOTE: depmod gets re-run after cleanup finishes
 
 ## remove unused themes, theme engines, icons, etc.
@@ -139,7 +146,7 @@ removefrom bind-utils /usr/bin/dig /usr/bin/host /usr/bin/nsupdate
 removefrom bitmap-fangsongti-fonts /usr/share/fonts/*
 removefrom ca-certificates /etc/pki/java/*
 removefrom ca-certificates /etc/pki/tls/certs/ca-bundle.trust.crt /etc/ssl/*
-removefrom cairo /usr/${libdir}/libcairo-script*
+removefrom cairo /usr/${libdir}/libcairo-script* /usr/bin/cairo-sphinx
 removefrom coreutils /etc/* /usr/bin/link /usr/bin/nice /usr/bin/stty /usr/bin/su /usr/bin/unlink
 removefrom coreutils /usr/sbin/runuser /usr/bin/[ /usr/bin/base64 /usr/bin/chcon
 removefrom coreutils /usr/bin/cksum /usr/bin/comm /usr/bin/csplit
@@ -148,7 +155,7 @@ removefrom coreutils /usr/bin/expand /usr/bin/factor
 removefrom coreutils /usr/bin/fold /usr/bin/groups /usr/bin/hostid
 removefrom coreutils /usr/bin/install /usr/bin/join /usr/bin/logname
 removefrom coreutils /usr/bin/mkfifo /usr/bin/nl /usr/bin/nohup /usr/bin/nproc
-removefrom coreutils /usr/bin/paste /usr/bin/pathchk
+removefrom coreutils /usr/bin/pathchk
 removefrom coreutils /usr/bin/pinky /usr/bin/pr /usr/bin/printenv
 removefrom coreutils /usr/bin/printf /usr/bin/ptx /usr/bin/runcon
 removefrom coreutils /usr/bin/sha224sum /usr/bin/sha384sum
@@ -192,12 +199,13 @@ removefrom glibc /${libdir}/libSegFault* /${libdir}/libanl*
 removefrom glibc /${libdir}/libcidn* /${libdir}/libnss_compat*
 removefrom glibc /${libdir}/libnss_hesiod* /${libdir}/libnss_nis*
 # python-pyudev uses ctypes.util.find_library, which uses /sbin/ldconfig
-removefrom glibc /${libdir}/libthread* /${libdir}/rtkaio* /sbin/sln
+removefrom glibc /${libdir}/rtkaio* /sbin/sln
 removefrom glibc /usr/libexec/* /usr/sbin/*
 removefrom glibc-common /etc/* /usr/bin/catchsegv /usr/bin/gencat
 removefrom glibc-common /usr/bin/getent
 removefrom glibc-common /usr/bin/locale /usr/bin/rpcgen /usr/bin/sprof
-removefrom glibc-common /usr/bin/tzselect /usr/bin/localedef
+# NB: we keep /usr/bin/localedef so anaconda can inspect payload locale info
+removefrom glibc-common /usr/bin/tzselect
 removefrom glibc-common /usr/libexec/* /usr/sbin/*
 removefrom gmp /usr/${libdir}/libgmpxx.* /usr/${libdir}/libmp.*
 removefrom gnome-bluetooth-libs /usr/${libdir}/libgnome-bluetooth*
@@ -208,7 +216,6 @@ removefrom gnome-keyring /usr/share/glib-2.0/* /usr/share/gnome-keyring*
 removefrom gnome-keyring /usr/share/locale/*
 removefrom gnome-python2-gconf /usr/share/pygtk/*
 removefrom gnutls /usr/share/locale/*
-removefrom gpgme /usr/${libdir}/libgpgme-*
 removefrom grep /etc/* /usr/share/locale/*
 removefrom gstreamer /usr/bin/* /usr/${libdir}/gstreamer-0.10/*
 removefrom gstreamer /usr/${libdir}/libgst* /usr/libexec/* /usr/share/locale/*
@@ -285,7 +292,6 @@ removefrom openssh-clients /usr/libexec/*
 removefrom openssh-server /etc/ssh/* /usr/libexec/*
 removefrom openssl /etc/pki/* /usr/bin/* /usr/${libdir}/openssl/*
 removefrom pam /usr/sbin/* /usr/share/locale/*
-removefrom pciutils /usr/sbin/*
 removefrom policycoreutils /etc/* /usr/bin/* /usr/share/locale/*
 removefrom polkit /usr/bin/*
 removefrom polkit-desktop-policy /var/lib/*
@@ -318,7 +324,7 @@ removefrom util-linux --allbut \
     /usr/bin/{dmesg,getopt,kill,login,lsblk,more,mount,umount,mountpoint} \
     /etc/mtab /etc/pam.d/login /etc/pam.d/remote \
     /usr/sbin/{agetty,blkid,blockdev,clock,fdisk,fsck,fstrim,hwclock,losetup} \
-    /usr/sbin/{mkswap,nologin,sfdisk,swapoff,swapon,wipefs,partx} \
+    /usr/sbin/{mkswap,nologin,sfdisk,swapoff,swapon,wipefs,partx,fsfreeze} \
     /usr/bin/{logger,hexdump,flock}
 removefrom volume_key-libs /usr/share/locale/*
 removefrom wget /etc/* /usr/share/locale/*
@@ -341,6 +347,11 @@ removefrom subscription-manager --allbut /etc/rhsm/* /usr/share/rhsm/* /var/log/
 ## cleanup_python_files()
 runcmd find ${root} -name "*.pyo" -type f -delete
 runcmd find ${root} -name "*.pyc" -type f -exec ln -sf /dev/null {} \;
+
+## cleanup /boot/ leaving vmlinuz, and .*hmac files
+runcmd chroot ${root} find /boot \! -name "vmlinuz*" \
+                            -and \! -name ".vmlinuz*" \
+                            -and \! -name boot -delete
 
 ## remove any broken links in /etc or /usr
 ## (broken systemd service links lead to confusing noise at boot)

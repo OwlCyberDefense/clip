@@ -68,6 +68,7 @@ def generate_module_info(moddir, outfile=None):
 class RuntimeBuilder(object):
     '''Builds the anaconda runtime image.'''
     def __init__(self, product, arch, yum, templatedir=None,
+                 installpkgs=None,
                  add_templates=None,
                  add_template_vars=None):
         root = yum.conf.installroot
@@ -81,6 +82,7 @@ class RuntimeBuilder(object):
                                            yum=yum, templatedir=templatedir)
         self.add_templates = add_templates or []
         self.add_template_vars = add_template_vars or {}
+        self._installpkgs = installpkgs or []
         self._runner.defaults = self.vars
 
     def _install_branding(self):
@@ -107,6 +109,8 @@ class RuntimeBuilder(object):
     def install(self):
         '''Install packages and do initial setup with runtime-install.tmpl'''
         self._install_branding()
+        if len(self._installpkgs) > 0:
+            self._runner.installpkg(*self._installpkgs)
         self._runner.run("runtime-install.tmpl")
         for tmpl in self.add_templates:
             self._runner.run(tmpl, **self.add_template_vars)
@@ -146,17 +150,11 @@ class RuntimeBuilder(object):
     def generate_module_data(self):
         root = self.vars.root
         moddir = joinpaths(root, "lib/modules/")
-
-        # Generate_module_data creates a file called "module-info" in this
-        # directory. If we don't do something to exclude this file, depmod will fail
-        # on the second path of this loop. Let's check to see if kver is a directory 
-        # before generating module info from it.
         for kver in os.listdir(moddir):
-            if os.path.isdir(kver):
-                ksyms = joinpaths(root, "boot/System.map-%s" % kver)
-                logger.info("doing depmod and module-info for %s", kver)
-                runcmd(["depmod", "-a", "-F", ksyms, "-b", root, kver])
-                generate_module_info(moddir+kver, outfile=moddir+"module-info")
+            ksyms = joinpaths(root, "boot/System.map-%s" % kver)
+            logger.info("doing depmod and module-info for %s", kver)
+            runcmd(["depmod", "-a", "-F", ksyms, "-b", root, kver])
+            generate_module_info(moddir+kver, outfile=moddir+"module-info")
 
     def create_runtime(self, outfile="/var/tmp/squashfs.img", compression="xz", compressargs=[], size=2):
         # make live rootfs image - must be named "LiveOS/rootfs.img" for dracut
