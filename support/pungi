@@ -15,9 +15,7 @@
 import os
 import pypungi
 import pypungi.config
-import yum
-import pykickstart.parser
-import pykickstart.version
+import pypungi.ks
 import subprocess
 
 def main():
@@ -43,8 +41,7 @@ def main():
             pass
 
     # Set up the kickstart parser and pass in the kickstart file we were handed
-    ksparser = pykickstart.parser.KickstartParser(pykickstart.version.makeVersion())
-    ksparser.readKickstart(opts.config)
+    ksparser = pypungi.ks.get_ksparser(ks_path=opts.config)
 
     if opts.sourceisos:
         config.set('pungi', 'arch', 'source')
@@ -55,6 +52,8 @@ def main():
             
     config.set('pungi', 'force', str(opts.force))
 
+    if config.get('pungi', 'workdirbase') == '/work':
+        config.set('pungi', 'workdirbase', "%s/work" % config.get('pungi', 'destdir'))
     # Set up our directories
     if not os.path.exists(config.get('pungi', 'destdir')):
         try:
@@ -64,6 +63,15 @@ def main():
             sys.exit(1)
     else:
         print >> sys.stdout, "Warning: Reusing existing destination directory."
+
+    if not os.path.exists(config.get('pungi', 'workdirbase')):
+        try:
+            os.makedirs(config.get('pungi', 'workdirbase'))
+        except OSError, e:
+            print >> sys.stderr, "Error: Cannot create working base dir %s" % config.get('pungi', 'workdirbase')
+            sys.exit(1)
+    else:
+        print >> sys.stdout, "Warning: Reusing existing working base directory."
 
     cachedir = config.get('pungi', 'cachedir')
 
@@ -77,8 +85,15 @@ def main():
     # Set debuginfo flag
     if opts.nodebuginfo:
         config.set('pungi', 'debuginfo', "False")
-    if opts.nogreedy:
-        config.set('pungi', 'alldeps', "False")
+    if opts.greedy:
+        config.set('pungi', 'greedy', opts.greedy)
+    else:
+        # XXX: compatibility
+        if opts.nogreedy:
+            config.set('pungi', 'greedy', "none")
+        else:
+            config.set('pungi', 'greedy', "all")
+    config.set('pungi', 'resolve_deps', str(bool(opts.resolve_deps)))
     if opts.isfinal:
         config.set('pungi', 'isfinal', "True")
     if opts.nohash:
@@ -87,56 +102,66 @@ def main():
         config.set('pungi', 'full_archlist', "True")
     if opts.arch:
         config.set('pungi', 'arch', opts.arch)
+    if opts.multilib:
+        config.set('pungi', 'multilib', " ".join(opts.multilib))
+    if opts.lookaside_repos:
+        config.set('pungi', 'lookaside_repos', " ".join(opts.lookaside_repos))
+    if opts.no_dvd:
+        config.set('pungi', 'no_dvd', "True")
+    config.set("pungi", "fulltree", str(bool(opts.fulltree)))
+    config.set("pungi", "selfhosting", str(bool(opts.selfhosting)))
+    config.set("pungi", "nosource", str(bool(opts.nosource)))
+    config.set("pungi", "nodebuginfo", str(bool(opts.nodebuginfo)))
 
     # Actually do work.
     mypungi = pypungi.Pungi(config, ksparser)
 
-    if not opts.sourceisos:
-        if opts.do_all or opts.do_gather or opts.do_buildinstall:
-            mypungi._inityum() # initialize the yum object for things that need it
-        if opts.do_all or opts.do_gather:
-            mypungi.getPackageObjects()
-            if not opts.nosource or opts.selfhosting or opts.fulltree:
-                mypungi.createSourceHashes()
-                mypungi.getSRPMList()
-            if opts.selfhosting:
-                mypungi.resolvePackageBuildDeps()
-            if opts.fulltree:
-                mypungi.completePackageSet()
-            if opts.selfhosting and opts.fulltree:
-                # OUCH.
-                while 1:
-                    plen = len(mypungi.srpmpolist)
-                    mypungi.resolvePackageBuildDeps()
-                    if plen == len(mypungi.srpmpolist):
-                        break
-                    plen = len(mypungi.srpmpolist)
-                    mypungi.completePackageSet()
-                    if plen == len(mypungi.srpmpolist):
-                        break
-            if opts.nodownload:
-                for line in mypungi.listPackages():
-                    sys.stdout.write("RPM: %s\n" % line)
-                sys.stdout.flush()
-            else:
-                mypungi.downloadPackages()
-            mypungi.makeCompsFile()
-            if not opts.nodebuginfo:
-                mypungi.getDebuginfoList()
+    with mypungi.yumlock:
+        if not opts.sourceisos:
+            if opts.do_all or opts.do_gather or opts.do_buildinstall:
+                mypungi._inityum() # initialize the yum object for things that need it
+            if opts.do_all or opts.do_gather:
+                mypungi.gather()
                 if opts.nodownload:
-                    for line in mypungi.listDebuginfo():
-                        sys.stdout.write("DEBUGINFO: %s\n" % line)
+                    for line in mypungi.list_packages():
+                        flags_str = ",".join(line["flags"])
+                        if flags_str:
+                            flags_str = "(%s)" % flags_str
+                        sys.stdout.write("RPM%s: %s\n" % (flags_str, line["path"]))
                     sys.stdout.flush()
                 else:
-                    mypungi.downloadDebuginfo()
-            if not opts.nosource:
-                if opts.nodownload:
-                    for line in mypungi.listSRPMs():
-                        sys.stdout.write("SRPM: %s\n" % line)
-                    sys.stdout.flush()
-                else:
-                    mypungi.downloadSRPMs()
+                    mypungi.downloadPackages()
+                mypungi.makeCompsFile()
+                if not opts.nodebuginfo:
+                    mypungi.getDebuginfoList()
+                    if opts.nodownload:
+                        for line in mypungi.list_debuginfo():
+                            flags_str = ",".join(line["flags"])
+                            if flags_str:
+                                flags_str = "(%s)" % flags_str
+                            sys.stdout.write("DEBUGINFO%s: %s\n" % (flags_str, line["path"]))
+                        sys.stdout.flush()
+                    else:
+                        mypungi.downloadDebuginfo()
+                if not opts.nosource:
+                    if opts.nodownload:
+                        for line in mypungi.list_srpms():
+                            flags_str = ",".join(line["flags"])
+                            if flags_str:
+                                flags_str = "(%s)" % flags_str
+                            sys.stdout.write("SRPM%s: %s\n" % (flags_str, line["path"]))
+                        sys.stdout.flush()
+                    else:
+                        mypungi.downloadSRPMs()
 
+                print "RPM size:       %s MiB" % (mypungi.size_packages() / 1024 ** 2)
+                if not opts.nodebuginfo:
+                    print "DEBUGINFO size: %s MiB" % (mypungi.size_debuginfo() / 1024 ** 2)
+                if not opts.nosource:
+                    print "SRPM size:      %s MiB" % (mypungi.size_srpms() / 1024 ** 2)
+
+    # Furthermore (but without the yumlock...)
+    if not opts.sourceisos:
         if opts.do_all or opts.do_createrepo:
             mypungi.doCreaterepo()
 
@@ -169,7 +194,7 @@ if __name__ == '__main__':
     today = time.strftime('%Y%m%d', time.localtime())
 
     def get_arguments(config):
-        parser = OptionParser("%prog [--help] [options]", version="%prog 2.9")
+        parser = OptionParser("%prog [--help] [options]", version="%prog 3.12")
 
         def set_config(option, opt_str, value, parser, config):
             config.set('pungi', option.dest, value)
@@ -207,9 +232,11 @@ if __name__ == '__main__':
         parser.add_option("--nodownload", action="store_true", dest="nodownload",
           help='disable downloading of packages. instead, print the package URLs (optional)')
         parser.add_option("--norelnotes", action="store_true", dest="norelnotes",
-          help='disable gathering of release notes (optional)')
+          help='disable gathering of release notes (optional); DEPRECATED')
         parser.add_option("--nogreedy", action="store_true", dest="nogreedy",
           help='disable pulling of all providers of package dependencies (optional)')
+        parser.add_option("--nodeps", action="store_false", dest="resolve_deps", default=True,
+          help='disable resolving dependencies')
         parser.add_option("--sourceisos", default=False, action="store_true", dest="sourceisos",
           help='Create the source isos (other arch runs must be done)')
         parser.add_option("--force", default=False, action="store_true",
@@ -222,6 +249,17 @@ if __name__ == '__main__':
           help='Use the full arch list for x86_64 (include i686, i386, etc.)')
         parser.add_option("--arch",
           help='Override default (uname based) arch')
+        parser.add_option("--greedy", metavar="METHOD",
+          help='Greedy method; none, all, build')
+        parser.add_option("--multilib", action="append", metavar="METHOD",
+          help='Multilib method; can be specified multiple times; recommended: devel, runtime')
+        parser.add_option("--lookaside-repo", action="append", dest="lookaside_repos", metavar="NAME",
+          help='Specify lookaside repo name(s) (packages will used for depsolving but not be included in the output)')
+        parser.add_option("--workdirbase", dest="workdirbase", type="string",
+          action="callback", callback=set_config, callback_args=(config, ),
+          help='base working directory (defaults to destdir + /work)')
+        parser.add_option("--no-dvd", default=False, action="store_true", dest="no_dvd",
+          help='Do not make a install DVD/CD only the netinstall image and the tree')
 
         parser.add_option("-c", "--config", dest="config",
           help='Path to kickstart config file')
@@ -235,6 +273,12 @@ if __name__ == '__main__':
           help="Flag to enable processing the BuildInstall stage")
         parser.add_option("-I", action="store_true", default=False, dest="do_createiso",
           help="Flag to enable processing the CreateISO stage")
+        parser.add_option("--relnotepkgs", dest="relnotepkgs", type="string",
+          action="callback", callback=set_config, callback_args=(config, ),
+          help='Rpms which contain the release notes')
+        parser.add_option("--relnotefilere", dest="relnotefilere", type="string",
+          action="callback", callback=set_config, callback_args=(config, ),
+          help='Which files are the release notes -- GPL EULA')
 
 
         (opts, args) = parser.parse_args()
