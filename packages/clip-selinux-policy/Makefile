@@ -25,7 +25,7 @@ VENDOR := Tresys Technology, LLC
 PACKAGER ?= Tresys Technology, LLC
 
 # snag the architecture, hard code an arch if cross-compiling or going noarch
-ARCH ?= $(shell uname -i)
+ARCH ?= noarch
 
 # the filename of the tarball
 TARBALL = $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION).tar.gz
