@@ -54,9 +54,9 @@ ${make_efiboot("images/efiboot.img")}
     replace @INITRDPATH@ /${kdir}/initrd.img ${eficonf}
     replace @ISOLABEL@ '${isolabel}' ${eficonf}
     %if disk:
-        replace @ROOT@ inst.stage2=hd:LABEL=ANACONDA ${eficonf}
+        replace @ROOT@ 'ks=hd:LABEL=ANACONDA:/${product.name}.ks inst.stage2=hd:LABEL=ANACONDA' ${eficonf}
     %else:
-        replace @ROOT@ 'inst.stage2=hd:LABEL=${isolabel|udev}' ${eficonf}
+        replace @ROOT@ 'ks=hd:LABEL=${isolabel|udev}:/${product.name}-inst.ks inst.stage2=hd:LABEL=${isolabel|udev}' ${eficonf}
     %endif
     runcmd mkefiboot ${args} ${outroot}/${EFIBOOTDIR} ${outroot}/${img}
     %if include_kernel:
