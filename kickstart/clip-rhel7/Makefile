@@ -15,8 +15,10 @@ ISO_VERSION ?= 1
 
 ROOT_DIR ?= $(CURDIR)
 TMP_DIR ?= $(ROOT_DIR)/tmp
-BUILD_DIR ?= $(TMP_DIR)/clip-iso-build
+BUILD_DIR ?= $(TMP_DIR)/$(NAME)-iso-build
+LOG_DIR ?= $(BUILD_DIR)/logs
 SUPPORT_DIR ?= $(ROOT_DIR)/support
+CACHE_DIR ?= $(TMP_DIR)/pungi-cache
 
 OUTPUT_DIR ?= $(ROOT_DIR)
 
@@ -28,8 +30,11 @@ PUNGI_ISO_DIR := $(BUILD_DIR)/$(ISO_VERSION)/$(TARGET_ARCH)/iso/
 
 PY_LIB := $(shell python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
 
-PUNGI ?= /usr/bin/pungi
-PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(ISO_VERSION)" --name="$(NAME)" --nosource --force
+PUNGI ?= $(SUPPORT_DIR)/pungi
+PUNGI_ARGS := --destdir="$(BUILD_DIR)" --ver="$(ISO_VERSION)" --name="$(NAME)" --cachedir="$(CACHE_DIR)" --nosource --force --nodebuginfo --templatedir="$(LORAX_TEMPLATES)"
+ifeq ($(CONFIG_BUILD_PRODUCTION),y)
+	PUNGI_ARGS += --isfinal
+endif
 
 ISOLINUX_CFG=$(PUNGI_OS_DIR)/isolinux/isolinux.cfg
 
@@ -78,6 +83,8 @@ setup-inst-ks: $(SETUP_DEPS)
 	$(VERBOSE)test -d $(BUILD_DIR) || mkdir -p $(BUILD_DIR)
 	$(VERBOSE)test -d $(PUNGI_OS_DIR) || mkdir -p $(PUNGI_OS_DIR)
 	$(VERBOSE)cp --force $(KS) $(INST_KS)
+	$(VERBOSE)sudo rm -rf $(LOG_DIR)/*
+	@echo "REPO lines: $(REPO_LINES)"
 	@echo "Modifying kickstart with build variables..."
 	$(VERBOSE)sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(INST_KS)
 	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-PLACEHOLDER;$(CONFIG_BUILD_BASH_VARS);' $(INST_KS)
@@ -95,7 +102,7 @@ setup-live-ks: $(SETUP_DEPS)
 clean:
 	$(VERBOSE)sudo rm -rf $(BUILD_DIR)
 
-VEbare: clean
+bare: clean
 	rm -rf $(TMP_DIR)
 
 .PHONY: all live-iso iso clean bare setup-ks
