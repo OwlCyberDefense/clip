@@ -55,6 +55,7 @@ reboot
 zerombr
 clearpart --all --initlabel
 part /boot --size=200 --fstype ext4 --asprimary
+part /boot/efi --size=200 --fstype=vfat --asprimary
 part pv.os --size=1   --grow        --asprimary
 
 volgroup vg00 --pesize=65536 pv.os
@@ -99,9 +100,11 @@ dhclient
 dbus
 device-mapper
 e2fsprogs
+efibootmgr
 filesystem
 firewalld
 grub2
+grub2-efi-x64
 glibc
 initscripts
 iproute
@@ -133,6 +136,7 @@ ruby
 setup
 setools-console
 shadow-utils
+shim-x64
 systemd
 sudo
 util-linux-ng
