@@ -69,7 +69,7 @@ logvol /tmp           --vgname=vg00 --name=tmp   --fstype=ext4 --size 100  --max
 logvol /var/tmp       --vgname=vg00 --name=vtmp  --fstype=ext4 --size 100  --maxsize 5000  --grow
 logvol /var/lib/aide  --vgname=vg00 --name=aide  --fstype=ext4 --size 100  --maxsize 5000  --grow
 
-%packages --excludedocs
+%packages --excludedocs --nobase --nocore
 #CONFIG-BUILD-ADDTL-PACKAGES
 clip-selinux-policy
 # by default use MCS policy (clip-selinux-policy-clip)
