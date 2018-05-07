@@ -262,10 +262,10 @@ fi
 # Add the user to sudoers and setup an SELinux role/type transition.
 # This line enables a transition via sudo instead of requiring sudo and newrole.
 if [ x"$CONFIG_BUILD_UNCONFINED_TOOR" == "xy" ]; then
-	/bin/echo "$USERNAME        ALL=(ALL) ROLE=toor_r TYPE=toor_t      ALL" >> /etc/sudoers
+	/bin/echo "$USERNAME        ALL=(ALL) ROLE=toor_r TYPE=toor_t      ALL" >  /etc/sudoers.d/clip_toor
 	/bin/echo "WARNING: This is a debug build with a super user present.  DO NOT USE IN PRODUCTION!" > /etc/motd
 else
-	/bin/echo "$USERNAME        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" >> /etc/sudoers
+	/bin/echo "$USERNAME        ALL=(ALL) ROLE=sysadm_r TYPE=sysadm_t      ALL" > /etc/sudoers.d/clip_toor
 fi
 
 # Lock the root acct to prevent direct logins
