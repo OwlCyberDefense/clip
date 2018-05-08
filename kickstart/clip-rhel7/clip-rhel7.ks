@@ -410,19 +410,24 @@ if [ -e $CONTENT_PATH/$CONTENT_FILE ]; then
 --cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
 $CONTENT_PATH/$CONTENT_FILE
 
-/bin/echo "Scan complete. Beginning remediation..."
-/bin/oscap xccdf eval --remediate --profile $profile \
---results $SSG_PATH/clip-el7-ssg-remediation-results.xml \
---report $SSG_PATH/clip-el7-ssg-remediation-results.html \
---cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
-$CONTENT_PATH/$CONTENT_FILE 2>&1 | tee $SSG_PATH/clip-el7-ssg-fix_log.txt
 
-/bin/echo "Rescanning after remediation..."
-/bin/oscap xccdf eval --profile $profile \
---results $SSG_PATH/clip-el7-ssg-post-results.xml \
---report $SSG_PATH/clip-el7-ssg-post-results.html \
---cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
-$CONTENT_PATH/$CONTENT_FILE
+# DJS - TODO - removed - 8-May-2018 seeing problems where remediation
+#  is forcing policy to enforcing (which isn't helpful in non-production build)
+#  and also forcing policy to targeted which isn't helpful as we build clip policy.
+#
+#/bin/echo "Scan complete. Beginning remediation..."
+#/bin/oscap xccdf eval --remediate --profile $profile \
+#--results $SSG_PATH/clip-el7-ssg-remediation-results.xml \
+#--report $SSG_PATH/clip-el7-ssg-remediation-results.html \
+#--cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
+#$CONTENT_PATH/$CONTENT_FILE 2>&1 | tee $SSG_PATH/clip-el7-ssg-fix_log.txt
+#
+#/bin/echo "Rescanning after remediation..."
+#/bin/oscap xccdf eval --profile $profile \
+#--results $SSG_PATH/clip-el7-ssg-post-results.xml \
+#--report $SSG_PATH/clip-el7-ssg-post-results.html \
+#--cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
+#$CONTENT_PATH/$CONTENT_FILE
 
 else 
 	/bin/echo "XCCDF evaluation skipped - expected content unavailable" > $SSG_PATH/results.txt
