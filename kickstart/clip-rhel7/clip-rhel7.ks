@@ -484,6 +484,12 @@ fi
 
 /bin/kill $TAILPID 2>/dev/null 1>/dev/null
 
+# DJS - must unmount /var/log/audit so the directory gets labeled properly.
+# if not, then when rebooting the mount of /var/log/audit will fail during boot!
+/bin/umount /var/log/audit
+# SRS: leave this restorecon as the last line to ensure files created in the ks %post get the proper label
+/sbin/restorecon -e /proc -e /sys -F -R /
+
 %end
 
 %post --nochroot
