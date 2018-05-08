@@ -80,6 +80,7 @@ clip-selinux-policy
 # by default use MCS policy (clip-selinux-policy-clip)
 -clip-selinux-policy-mls
 clip-selinux-policy-clip
+clip-lockdown
 m4
 # TODO Add back in once we get everything installing
 scap-security-guide
@@ -326,40 +327,18 @@ fi
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
 ###### START - ADD AUDIT RULES TO COMPLY WITH SSG ###########
-/bin/echo -e "-a always,exit -F arch=b32 -S adjtimex -k audit_time_rules" >> /etc/audit/rules.d/time.rules
-/bin/echo -e "-a always,exit -F arch=b64 -S adjtimex -k audit_time_rules" >> /etc/audit/rules.d/time.rules
-/bin/echo -e "-a always,exit -F arch=b32 -S settimeofday -k audit_time_rules" >> /etc/audit/rules.d/time.rules
-/bin/echo -e "-a always,exit -F arch=b64 -S settimeofday -k audit_time_rules" >> /etc/audit/rules.d/time.rules
-/bin/echo -e "-a always,exit -F arch=b32 -S stime -k audit_time_rules" >> /etc/audit/rules.d/time.rules
-
-/bin/echo -e "-a always,exit -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/sbin/pam_timestamp_check -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/sbin/netreport -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/chfn -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/sudo -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/chage -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/su -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/write -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/wall -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/bin/chsh -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-if [ x"$CONFIG_BUILD_PRODUCTION" == "xn" ]; then
-	/bin/echo -e "-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
+if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
+	/bin/echo -e "# Production build - panic on fatal error" >> /etc/audit/rules.d/failure.rules
+	/bin/echo -e "-f 2" >> /etc/audit/rules.d/failure.rules
+	/bin/echo -e "# Production build - no changes allowed to audit rules" >> /etc/audit/rules.d/lock.rules
+	/bin/echo -e "-e 2" >> /etc/audit/rules.d/lock.rules
+else
+	/bin/echo -e "# Not a production build - log errors to kernel" >> /etc/audit/rules.d/failure.rules
+	/bin/echo -e "-f 1" >> /etc/audit/rules.d/failure.rules
 fi
-/bin/echo -e "-a always,exit -F path=/usr/libexec/utempter/utempter -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-/bin/echo -e "-a always,exit -F path=/usr/lib64/dbus-1/dbus-daemon-launch-helper -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/priv.rules
-
 ###### END - ADD AUDIT RULES TO COMPLY WITH SSG ###########
 
 ###### START - ADD SECURITY CONFIGURATION CHANGES ###########
-#display error when auditing doesnt work
-/bin/echo "-f 1" >> /etc/audit/rules.d/priv.rules
 
 #make these the first 3 lines to /etc/pam.d/system-auth
 /bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/i auth        required      pam_faillock.so preauth silent audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/system-auth
@@ -377,11 +356,6 @@ fi
 #set alive interval to 600 and max alive count to 0 in sshd_config
 /bin/sed -i "s/#ClientAliveInterval 0/ClientAliveInterval 600/" /etc/ssh/sshd_config
 /bin/sed -i "s/#ClientAliveCountMax 3/ClientAliveCountMax 0/" /etc/ssh/sshd_config
-
-#modify configs to limit DOS attacks
-/bin/echo "net/ipv4/tcp_timestamps=1" >> /etc/sysctl.d/sysctl-clip.conf
-/bin/echo "net/netfilter/nf_conntrack_max=2000000" >> /etc/sysctl.d/sysctl-clip.conf
-/bin/echo "net/netfilter/nf_conntrack_tcp_loose=0" >> /etc/sysctl.d/sysctl-clip.conf
 
 #set permissions on audit.rules to 600
 /bin/chmod 600 /etc/audit/audit.rules
