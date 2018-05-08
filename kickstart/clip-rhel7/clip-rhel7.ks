@@ -80,6 +80,8 @@ m4
 # TODO Add back in once we get everything installing
 scap-security-guide
 dracut
+dracut-fips
+dracut-fips-aesni
 clip-dracut-module
 # SRS: this will need python-simplejson from epel on RHEL 7
 
@@ -271,10 +273,13 @@ fi
 # Lock the root acct to prevent direct logins
 /sbin/usermod -L root
 
+
 # Disable all that GUI stuff during boot so we can actually see what is going on during boot.
 # The first users of a CLIP system will be devs. Lets make things a little easier on them.
 # by getting rid of the framebuffer effects, rhgb, and quiet.
-/usr/sbin/grubby --update-kernel=ALL --remove-args="rhgb quiet"
+GRUB_ARGS=""
+# NOTE: to quiet down the boot process
+#GRUB_ARGS=${GRUB_ARGS}" quiet"
 # This is ugly but when plymouth re-rolls the initrd it creates a new entry in grub.conf that is redundant.
 # Actually rather benign but may impact developers using grubby who think there is only one kernel to work with.
 /bin/echo "Modifying splash screen with plymouth..."
@@ -291,9 +296,28 @@ if [ x"$CONFIG_BUILD_ENFORCING_MODE" != "xy" ]; then
 	# This line is used to make policy development easier.  It disables the "setfiles" check used by 
 	# semodule/semanage that prevents transactions containing invalid and dupe fc entries from rolling forward.
 	/bin/echo -e "module-store = direct\n[setfiles]\npath=/bin/true\n[end]\n" > /etc/selinux/semanage.conf
-	/usr/sbin/grubby --update-kernel=ALL --remove-args=enforcing
-	/usr/sbin/grubby --update-kernel=ALL --args=enforcing=0
+	GRUB_ARGS=${GRUB_ARGS}" enforcing=0"
+else
+	GRUB_ARGS=${GRUB_ARGS}" enforcing=1"
 fi
+
+# enable FIPS mode
+if [ x"$CONFIG_BUILD_FIPS_MODE" == "xy" ]; then
+	uuid=$(findmnt -no uuid /boot)
+	if [ -n $uuid ]; then
+		GRUB_ARGS=${GRUB_ARGS}" boot=UUID=${uuid}"
+	fi
+	GRUB_ARGS=${GRUB_ARGS}" fips=1"
+else
+	GRUB_ARGS=${GRUB_ARGS}" fips=0"
+fi
+
+/bin/echo "GRUB args ${GRUB_ARGS}"
+/bin/sed -i "/^GRUB_CMDLINE_LINUX=/s/\"$/ ${GRUB_ARGS}\"/" /etc/default/grub
+# setup grub config for both BIOS and UEFI booting
+/sbin/grub2-mkconfig > /etc/grub2.cfg
+/sbin/grub2-mkconfig > /etc/grub2-efi.cfg
+
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
 ###### START - ADD AUDIT RULES TO COMPLY WITH SSG ###########

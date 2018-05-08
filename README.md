@@ -485,9 +485,6 @@ If this occurs, running 'make bare', rerunning './bootsrap.sh', and rebuilding c
 ##### readahead.service policy not currently implemented
 Because developement has been done in a VM and readahead requires the system to be run on hardware, policy is not currently implemented for this service.
 
-##### Not all FIPS requirements are implemented
-CLIP is not a FIPS compliant system out of the box. It is up to the developer to make the necessary changes if FIPS compliance is required.
-
 ##### Stopping/Restarting auditd does not currently work in enforcing
 SELinux currently prevents auditd from being stopped or restarted in enforcing
 
