@@ -36,6 +36,10 @@ bootloader --location=mbr --timeout=5 --append="audit=1" --password=neutronbass
 # rootpw correctbatteryhorsestaple
 rootpw neutronbass
 
+# CCE-80258-7
+%addon com_redhat_kdump --disable 
+%end
+
 lang en_US.UTF-8
 keyboard us
 
