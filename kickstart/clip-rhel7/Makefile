@@ -72,6 +72,8 @@ iso: $(DEPS) $(ADDTL_DEPS) setup-inst-ks
 	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
 	$(VERBOSE)cd $(BUILD_DIR);sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(INST_KS)
 	$(VERBOSE)sudo mv --force $(PUNGI_ISO_DIR)/$(NAME)*$(TARGET_ARCH)-$(ISO_VERSION).iso $(OUTPUT_DIR)/
+	# remove build directory after we are done.  Otherwize pungi complains during the next build.
+	$(VERBOSE)sudo rm -rf $(BUILD_DIR)
 
 live-iso: $(DEPS) $(ADDTL_DEPS) setup-live-ks
 	@echo "Live CD Creator needs root permissions - please enter your sudo password if prompted."
