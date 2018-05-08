@@ -389,32 +389,44 @@ if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
 	/bin/yum remove -y openssh* rsync
 fi
 
+# auditd rules complain if this directory doesn't exist on check for openssh-keysign
+/usr/bin/mkdir -p /usr/libexec/openssh
+
 # Scan and remediate CLIP using SSG
 profile="stig-rhel7-disa"
 SSG_PATH=/root/ssg
 CONTENT_PATH=/usr/share/xml/scap/ssg/content
 /usr/bin/mkdir $SSG_PATH
+CONTENT_FILE="ssg-rhel7-xccdf.xml"
+if [ -e $CONTENT_PATH/ssg-centos7-xccdf.xml ]; then
+	CONTENT_FILE=ssg-centos7-xccdf.xml
+fi
 
+if [ -e $CONTENT_PATH/$CONTENT_FILE ]; then
 /bin/echo "Beginning xccdf evaluation use the profile: $profile"
 /bin/oscap xccdf eval --profile $profile \
 --results $SSG_PATH/clip-el7-ssg-pre-results.xml \
 --report $SSG_PATH/clip-el7-ssg-pre-results.html \
 --cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
-$CONTENT_PATH/ssg-rhel7-xccdf.xml
+$CONTENT_PATH/$CONTENT_FILE
 
 /bin/echo "Scan complete. Beginning remediation..."
 /bin/oscap xccdf eval --remediate --profile $profile \
 --results $SSG_PATH/clip-el7-ssg-remediation-results.xml \
 --report $SSG_PATH/clip-el7-ssg-remediation-results.html \
 --cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
-$CONTENT_PATH/ssg-rhel7-xccdf.xml 2>&1 | tee $SSG_PATH/clip-el7-ssg-fix_log.txt
+$CONTENT_PATH/$CONTENT_FILE 2>&1 | tee $SSG_PATH/clip-el7-ssg-fix_log.txt
 
 /bin/echo "Rescanning after remediation..."
 /bin/oscap xccdf eval --profile $profile \
 --results $SSG_PATH/clip-el7-ssg-post-results.xml \
 --report $SSG_PATH/clip-el7-ssg-post-results.html \
 --cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
-$CONTENT_PATH/ssg-rhel7-xccdf.xml
+$CONTENT_PATH/$CONTENT_FILE
+
+else 
+	/bin/echo "XCCDF evaluation skipped - expected content unavailable" > $SSG_PATH/results.txt
+fi
 
 ### Setup AIDE ###
 AIDE_DIR=/var/lib/aide
