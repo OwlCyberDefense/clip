@@ -12,7 +12,7 @@ BUILD_CONFIG_TOOR ?= n
 
 # This is the version number of the RPM that will be
 # generated.  Typically you bump this for delivery.
-VERSION := 7.0
+VERSION := 7.5
 
 # bump this if creating multiple releases from the same
 # version (think about this... why are you doing this?)
