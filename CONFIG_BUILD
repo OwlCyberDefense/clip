@@ -30,6 +30,10 @@ endif
 # CONFIG_BUILD_FIPS_MODE is used to put the system in fips mode
 # ENABLE_NETWORKING is used to enable or disable networking. 'y' corresponds to enabled networking. 'n' will remove
 #                              all networking related RPMs.
+# CONFIG_REMOVE_SCAP is used to enable a boot-time SCAP review of the system.  'y' corresponds to remove SCAP and 
+#                              dependent RPMs after checks are run during kickstart.  'n' corresponds to leave SCAP
+#                              and dependent RPMs after install and run a SCAP test during first boot.  Please note 
+#                              that the 'rpm' command will be left on the running system if SCAP is not removed.
 # Note: these variables and values will be inserted into /root/clip-info.txt for inspection at run-time.
 CONFIG_BUILD_PRODUCTION := n
 ifeq ($(CONFIG_BUILD_PRODUCTION),y)
@@ -38,12 +42,14 @@ ifeq ($(CONFIG_BUILD_PRODUCTION),y)
   CONFIG_BUILD_AIDE := n
   CONFIG_BUILD_FIPS_MODE := y
   ENABLE_NETWORKING := n
+  CONFIG_REMOVE_SCAP := y
 else
   CONFIG_BUILD_ENFORCING_MODE := n
   CONFIG_BUILD_UNCONFINED_TOOR := y
   CONFIG_BUILD_AIDE := n
   CONFIG_BUILD_FIPS_MODE := y
   ENABLE_NETWORKING := y
+  CONFIG_REMOVE_SCAP := n
 endif
 
 ################################################
@@ -56,7 +62,7 @@ endif
 ADDTL_DEPS := $(CURDIR)/CONFIG_REPOS $(CURDIR)/CONFIG_BUILD
 
 # Translate the CONFIG_BUILD_* flags into BASH vars that we insert into things like a kickstart %post
-CONFIG_BUILD_BASH_VARS := export CONFIG_BUILD_PRODUCTION=$(strip $(CONFIG_BUILD_PRODUCTION)) CONFIG_BUILD_ENFORCING_MODE=$(strip $(CONFIG_BUILD_ENFORCING_MODE)) CONFIG_BUILD_UNCONFINED_TOOR=$(strip $(CONFIG_BUILD_UNCONFINED_TOOR)) ISO_VERSION=$(strip $(ISO_VERSION)) ENABLE_NETWORKING=$(strip $(ENABLE_NETWORKING)) CONFIG_BUILD_AIDE=$(strip $(CONFIG_BUILD_AIDE)) CONFIG_BUILD_FIPS_MODE=$(strip $(CONFIG_BUILD_FIPS_MODE))
+CONFIG_BUILD_BASH_VARS := export CONFIG_BUILD_PRODUCTION=$(strip $(CONFIG_BUILD_PRODUCTION)) CONFIG_BUILD_ENFORCING_MODE=$(strip $(CONFIG_BUILD_ENFORCING_MODE)) CONFIG_BUILD_UNCONFINED_TOOR=$(strip $(CONFIG_BUILD_UNCONFINED_TOOR)) ISO_VERSION=$(strip $(ISO_VERSION)) ENABLE_NETWORKING=$(strip $(ENABLE_NETWORKING)) CONFIG_BUILD_AIDE=$(strip $(CONFIG_BUILD_AIDE)) CONFIG_BUILD_FIPS_MODE=$(strip $(CONFIG_BUILD_FIPS_MODE)) CONFIG_REMOVE_SCAP=$(strip $(CONFIG_REMOVE_SCAP))
 
 # Typically we are rolling builds on the target arch.  Changing this may have dire consequences.
 # (read -> hasn't be tested at all and may result in broken builds and ultimately the end of the universe as we know it).
@@ -70,4 +76,4 @@ CLEAN_MOCK := y
 # Quiet down the build output a bit.
 QUIET := n
 
-export TARGET_ARCH ADDTL_DEPS QUIET CONFIG_BUILD_BASH_VARS CONFIG_BUILD_ENFORCING_MODE CONFIG_BUILD_UNCONFINED_TOOR CONFIG_BUILD_PRODUCTION ISO_VERSION ENABLE_NETWORKING CONFIG_BUILD_AIDE CONFIG_BUILD_FIPS_MODE
+export TARGET_ARCH ADDTL_DEPS QUIET CONFIG_BUILD_BASH_VARS CONFIG_BUILD_ENFORCING_MODE CONFIG_BUILD_UNCONFINED_TOOR CONFIG_BUILD_PRODUCTION ISO_VERSION ENABLE_NETWORKING CONFIG_BUILD_AIDE CONFIG_BUILD_FIPS_MODE CONFIG_REMOVE_SCAP

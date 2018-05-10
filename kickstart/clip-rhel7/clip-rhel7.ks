@@ -443,6 +443,11 @@ else
 	/bin/echo "XCCDF evaluation skipped - expected content unavailable" > $SSG_PATH/results.txt
 fi
 
+if [ x"$CONFIG_REMOVE_SCAP" == "xy" ]; then
+	rpm -e scap-security-guide rpmdevtools gdb rpm-build openscap-utils openscap-containers openscap-scanner openscap redhat-rpm-config man-db emacs-filesystem elfutils 
+	/usr/sbin/semodule -d oscap
+fi
+
 ### Setup AIDE ###
 AIDE_DIR=/var/lib/aide
 AIDE_SCRIPT=/root/aide.sh
@@ -502,8 +507,12 @@ if [ x"$ENABLE_NETWORKING" == "xn" ]; then
 fi
 
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
-	# Remove rpm and yum if in a production build
-	/bin/rpm -e --nodeps rpm yum
+	if [ x"$CONFIG_REMOVE_SCAP" == "xy" ]; then
+		# Remove yum (and dependencies, which are openscap dependencies) before removing rpm
+		/bin/rpm -e yum rpm-python rpm-build-libs
+	fi
+	# Force remove rpm if in a production build
+	/bin/rpm -e --nodeps rpm
 fi
 
 # Force password reset
