@@ -358,7 +358,7 @@ fi
 /bin/sed -i "s/#ClientAliveCountMax 3/ClientAliveCountMax 0/" /etc/ssh/sshd_config
 
 #set permissions on audit.rules to 600
-/bin/chmod 600 /etc/audit/audit.rules
+#/bin/chmod 600 /etc/audit/audit.rules
 
 #set permissions of /var/log to 750
 /bin/chmod 750 /var/log
