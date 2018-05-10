@@ -165,10 +165,10 @@ PACKAGES="mock pigz createrepo repoview rpm-build make python-kid"
 /usr/bin/sudo /usr/bin/yum install -y $PACKAGES
 
 # get the name/path for any existing yum repos from CONFIG_REPO
-rhelreponame=rhel
-rhelrepopath=`/bin/sed -rn 's/^rhel = (.*)/\1/p' CONFIG_REPOS`
-optreponame=opt
-optrepopath=`/bin/sed -rn 's/^opt = (.*)/\1/p' CONFIG_REPOS`
+rhelreponame=RHEL
+rhelrepopath=`/bin/sed -rn 's/^RHEL = (.*)/\1/p' CONFIG_REPOS`
+optreponame=RHEL_OPT
+optrepopath=`/bin/sed -rn 's/^RHEL_OPT = (.*)/\1/p' CONFIG_REPOS`
 
 # prompt user for rhel/opt path
 prompt_to_enter_repo_path $rhelreponame $rhelrepopath
