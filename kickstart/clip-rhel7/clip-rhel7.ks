@@ -307,6 +307,16 @@ else
 	GRUB_ARGS=${GRUB_ARGS}" enforcing=1"
 fi
 
+if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
+	# for production builds - hide the grub prompt
+	/bin/sed -i -e "s/\(^GRUB_TIMEOUT=\).*$/\10/" /etc/default/grub
+	/bin/echo "GRUB_HIDDEN_TIMEOUT=0" >> /etc/default/grub
+	/bin/echo "GRUB_HIDDEN_TIMEOUT_QUIET=true" >> /etc/default/grub
+else
+	# for non-production builds - remove the grub password
+	/bin/rm /boot/grub2/user.cfg
+fi
+
 # enable FIPS mode
 if [ x"$CONFIG_BUILD_FIPS_MODE" == "xy" ]; then
 	uuid=$(findmnt -no uuid /boot)
