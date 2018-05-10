@@ -181,6 +181,7 @@ endef
 GET_REPO_ID = $(strip $(shell echo "$(1)" | $(SED) -e 's/\(.*\)=.*/\1/'))
 GET_REPO_PATH = $(strip $(shell echo "$(1)" | $(SED) -e 's/.*=\(.*\)/\1/'))
 GET_REPO_URL = $(strip $(shell if `echo "$(1)" | $(GREP) -Eq '^\/.*$$'`; then echo "file://$(1)"; else echo "$(1)"; fi))
+GET_REPO_KEY_INFO = $(shell if [ -e $(CONF_DIR)/$(1) ]; then echo "gpgkey=file://$(CONF_DIR)/$(1)\\\ngpgcheck=1"; fi)
 
 ######################################################
 # BEGIN REPO GENERATION RULES (BEWARE OF RMS)
@@ -195,10 +196,11 @@ ifneq ($(strip $(1)),)
 $(eval REPO_PATH := $(call GET_REPO_PATH,$(1)))
 # puts the url into clip-repo.cfg
 $(eval REPO_URL := file://$(REPO_DIR)/$(REPO_ID)-repo)
+$(eval REPO_KEY := $(call GET_REPO_KEY_INFO,RPM-GPG-KEY-$(REPO_ID)-$(RHEL_VER)))
 $(eval setup_all_repos += setup-$(REPO_ID)-repo)
 
 $(eval YUM_CONF += \\n[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=file://$(REPO_PATH)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
-$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
+$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n$(REPO_KEY)\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
 $(eval MY_REPO_DEPS += $(REPO_DIR)/$(REPO_ID)-repo/last-updated)
 $(eval REPO_LINES := $(REPO_LINES)repo --name=$(REPO_ID) --baseurl=file://$(REPO_DIR)/$(REPO_ID)-repo\n)
 

@@ -12,6 +12,9 @@ logfile=/dev/null
 reposdir=/dev/null
 retries=20
 obsoletes=1
-gpgcheck=0
+# Option to force checking packages signatures. Certificates in support/RPM-GPG-KEY-<repoid>-<ver>
+#   0 - signatures will not be required but will be checked if certificate available.
+#   1 - signatures will always be checked. Certificates MUST be in conf directory.
+gpgcheck=1
 assumeyes=1
 
