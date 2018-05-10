@@ -138,6 +138,7 @@ rpm
 rsync
 rsyslog
 ruby
+screen
 -selinux-policy-targeted
 setup
 setools-console
