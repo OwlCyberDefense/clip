@@ -284,8 +284,10 @@ fi
 # The first users of a CLIP system will be devs. Lets make things a little easier on them.
 # by getting rid of the framebuffer effects, rhgb, and quiet.
 GRUB_ARGS=""
-# NOTE: to quiet down the boot process
-#GRUB_ARGS=${GRUB_ARGS}" quiet"
+# NOTE: to quiet down the boot process in production
+if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
+	GRUB_ARGS=${GRUB_ARGS}" quiet"
+fi
 # This is ugly but when plymouth re-rolls the initrd it creates a new entry in grub.conf that is redundant.
 # Actually rather benign but may impact developers using grubby who think there is only one kernel to work with.
 /bin/echo "Modifying splash screen with plymouth..."
