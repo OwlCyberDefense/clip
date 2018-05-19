@@ -17,7 +17,6 @@ BuildRoot: %{_tmppath}/%{name}-root
 %define share_dir		/usr/share/clip/
 %define sysctl_dir		%{_sysconfdir}/sysctl.d/
 
-
 Source0: %{pkgname}-%{version}.tgz
 
 %description
@@ -45,6 +44,102 @@ install limits/*.conf $RPM_BUILD_ROOT/%{limits_dir}
 
 install -d $RPM_BUILD_ROOT/%{remediation_dir}
 install remediation/* $RPM_BUILD_ROOT/%{remediation_dir}
+
+%triggerpostun -- openssh
+# auditd rules complain if this directory doesn't exist on check for openssh-keysign
+/usr/bin/mkdir -p /usr/libexec/openssh
+
+%triggerin -- openssh-server
+. %{remediation_dir}/replace_or_append.sh
+
+# sshd_allow_only_protocol2
+# CCE-27320-1
+# Only SSH protocol version 2 connections should be permitted.
+replace_or_append '/etc/ssh/sshd_config' '^Protocol' '2' 'CCE-27320-1' '%s %s'
+
+# sshd_disable_gssapi_auth
+# CCE-80220-7
+# Unless needed, SSH should not permit extraneous or unnecessary authentication mechanisms like GSSAPI
+replace_or_append '/etc/ssh/sshd_config' '^GSSAPIAuthentication' 'no' 'CCE-80220-7' '%s %s'
+
+# sshd_disable_kerb_auth
+# CCE-80221-5
+# Unless needed, SSH should not permit extraneous or unnecessary authentication mechanisms like Kerberos.
+replace_or_append '/etc/ssh/sshd_config' '^KerberosAuthentication' 'no' 'CCE-80221-5' '%s %s'
+
+# sshd_enable_strictmodes
+# CCE-80222-3
+# SSHs StrictModes option checks file and ownership permissions in the user's home directory .ssh folder before accepting login. If world- writable permissions are found, logon is rejected.
+replace_or_append '/etc/ssh/sshd_config' '^StrictModes' 'yes' 'CCE-80222-3' '%s %s'
+
+# sshd_use_priv_separation
+# CCE-80223-1
+# When enabled, SSH will create an unprivileged child process that has the privilege of the authenticated user. 
+replace_or_append '/etc/ssh/sshd_config' '^UsePrivilegeSeparation' 'sandbox' 'CCE-80223-1' '%s %s'
+
+# sshd_disable_compression
+#  CCE-80224-9
+# Compression is useful for slow network connections over long distances but can cause performance issues on local LANs. If use of compression is required, it should be enabled only after a user has authenticated; otherwise , it should be disabled.
+replace_or_append '/etc/ssh/sshd_config' '^Compression' 'no' 'CCE-80224-9' '%s %s'
+
+# sshd_print_last_log
+# CCE-80225-6
+# When enabled, SSH will display the date and time of the last successful account logon.
+replace_or_append '/etc/ssh/sshd_config' '^PrintLastLog' 'yes' 'CCE-80225-6' '%s %s'
+
+# sshd_set_idle_timeout
+# CCE-27433-2
+# SSH allows administrators to set an idle timeout interval. After this interval has passed, the idle user will be automatically logged out.
+replace_or_append '/etc/ssh/sshd_config' '^ClientAliveInterval' 600 'CCE-27433-2' '%s %s'
+
+# sshd_set_keepalive
+# CCE-27082-7
+# To ensure the SSH idle timeout occurs precisely when the ClientAliveCountMax is set
+replace_or_append '/etc/ssh/sshd_config' '^ClientAliveCountMax' '0' 'CCE-27082-7' '%s %s'
+
+
+# sshd_disable_rhosts
+# CCE-27377-1
+replace_or_append '/etc/ssh/sshd_config' '^IgnoreRhosts' 'yes' 'CCE-27377-1' '%s %s'
+
+# sshd_disable_user_known_hosts
+# CCE-80372-6
+# SSH can allow system users user host-based authentication to connect to systems if a cache of the remote systems public keys are available.
+replace_or_append '/etc/ssh/sshd_config' '^IgnoreUserKnownHosts' 'yes' 'CCE-80372-6' '%s %s'
+
+# sshd_disable_empty_passwords
+# CCE-27471-2
+# To explicitly disallow SSH login from accounts with empty passwords
+replace_or_append '/etc/ssh/sshd_config' '^PermitEmptyPasswords' 'no' 'CCE-27471-2' '%s %s'
+
+# sshd_enable_warning_banner
+# CCE-27314-4
+# To enable the warning banner and ensure it is consistent across the system
+replace_or_append '/etc/ssh/sshd_config' '^Banner' '/etc/issue' 'CCE-27314-4' '%s %s'
+
+# sshd_do_not_permit_user_env
+#  CCE-27363-1
+# To ensure users are not able to override environment options to the SSH daemon.
+replace_or_append '/etc/ssh/sshd_config' '^PermitUserEnvironment' 'no' 'CCE-27363-1' '%s %s'
+
+# sshd_use_approved_ciphers
+# CCE-27295-5
+# Limit the ciphers to those algorithms which are FIPS-approved. Counter (CTR) mode is also preferred over cipher-block chaining (CBC) mode.
+replace_or_append '/etc/ssh/sshd_config' '^Ciphers' 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc' 'CCE-27295-5' '%s %s'
+
+# sshd_use_approved_macs
+# CCE-27455-5
+# Limit the MACs to those hash algorithms which are FIPS-approved. The following line in /etc/ssh/sshd_config demonstrates use of FIPS-approved MACs: 
+replace_or_append '/etc/ssh/sshd_config' '^MACs' "hmac-sha2-512,hmac-sha2-256,hmac-sha1,hmac-sha1-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com" 'CCE-27455-5' '%s %s'
+
+
+
+%triggerin -- setup
+# CCE-27557-8
+# Terminating an idle session within a short time period reduces the window of
+# opportunity for unauthorized personnel to take control of a management session
+# enabled on the console or console port that has been left unattended.
+echo 'TMOUT=600' >> /etc/profile
 
 %triggerin -- shadow-utils
 . %{remediation_dir}/replace_or_append.sh
@@ -171,6 +266,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(440,root,root) %{sysctl_dir}/*conf
 
 %post
+
+# auditd rules complain if this directory doesn't exist on check for openssh-keysign
+/usr/bin/mkdir -p /usr/libexec/openssh
+
 
 %changelog
 * Wed May 09 2018 Dave Sugar <dsugar@tresys.com> 1.0-1

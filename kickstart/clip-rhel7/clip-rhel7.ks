@@ -358,9 +358,6 @@ fi
 /bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/a auth        [default=die] pam_faillock.so authfail audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/password-auth
 /bin/sed -i --follow-symlinks "/^account.*required.*pam_unix.so/i account     required      pam_faillock.so" /etc/pam.d/password-auth
 
-#set alive interval to 600 and max alive count to 0 in sshd_config
-/bin/sed -i "s/#ClientAliveInterval 0/ClientAliveInterval 600/" /etc/ssh/sshd_config
-/bin/sed -i "s/#ClientAliveCountMax 3/ClientAliveCountMax 0/" /etc/ssh/sshd_config
 
 #set permissions on audit.rules to 600
 #/bin/chmod 600 /etc/audit/audit.rules
@@ -368,8 +365,6 @@ fi
 #set permissions of /var/log to 750
 /bin/chmod 750 /var/log
 
-#set timeout to 600
-/bin/echo TMOUT=600 >> /etc/profile
 ###### END - ADD SECURITY CONFIGURATION CHANGES ###########
 
 
@@ -396,9 +391,6 @@ if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
 	/bin/echo "Removing ssh and rsync from the system"
 	/bin/yum remove -y openssh* rsync
 fi
-
-# auditd rules complain if this directory doesn't exist on check for openssh-keysign
-/usr/bin/mkdir -p /usr/libexec/openssh
 
 # Scan and remediate CLIP using SSG
 profile="stig-rhel7-disa"
