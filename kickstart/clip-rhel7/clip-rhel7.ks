@@ -358,10 +358,6 @@ fi
 /bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/a auth        [default=die] pam_faillock.so authfail audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/password-auth
 /bin/sed -i --follow-symlinks "/^account.*required.*pam_unix.so/i account     required      pam_faillock.so" /etc/pam.d/password-auth
 
-
-#set max logins to 10 in /etc/security/limits.conf
-/bin/sed -i '60i* hard maxlogins 10' /etc/security/limits.conf
-
 #set alive interval to 600 and max alive count to 0 in sshd_config
 /bin/sed -i "s/#ClientAliveInterval 0/ClientAliveInterval 600/" /etc/ssh/sshd_config
 /bin/sed -i "s/#ClientAliveCountMax 3/ClientAliveCountMax 0/" /etc/ssh/sshd_config
