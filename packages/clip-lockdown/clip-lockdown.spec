@@ -165,6 +165,11 @@ replace_or_append '/etc/login.defs' '^PASS_MAX_DAYS' 60 'CCE-26985-2' '%s\t%s'
 # To ensure the login failure dealy controlled by /etc/login.defs is set properly
 replace_or_append '/etc/login.defs' '^FAIL_DELAY' 4 'CCE-80352-8' '%s\t%s'
 
+# XCCDF rule: account_disable_post_pw_expiration
+# CCE-27355-7
+# disable an account if its password expires and the user does not reset it within 35 days
+replace_or_append '/etc/default/useradd' '^INACTIVE' "0" 'CCE-27355-7' '%s=%s'
+
 %triggerin -- initscripts
 . %{remediation_dir}/replace_or_append.sh
 
