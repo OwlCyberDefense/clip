@@ -4,6 +4,7 @@ Release: %{release}
 Summary: CLIP Module for system lockdown confinguration
 Requires: audit
 Requires: grep
+Requires: procps-ng
 Requires: sed
 License: GPL or BSD
 Group: System Environment/Base
@@ -266,6 +267,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(440,root,root) %{sysctl_dir}/*conf
 
 %post
+# reload sysctl rules so newly installed rules are used
+/sbin/sysctl --load=%{sysctl_dir}/60-clip.conf
 
 # auditd rules complain if this directory doesn't exist on check for openssh-keysign
 /usr/bin/mkdir -p /usr/libexec/openssh
