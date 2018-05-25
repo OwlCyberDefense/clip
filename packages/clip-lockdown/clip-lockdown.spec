@@ -282,6 +282,77 @@ replace_or_append '/etc/yum.conf' '^localpkg_gpgcheck' 1 ' CCE-80347-8' '%s=%s'
 # Yum should be configured to remove previous software components after previous versions have been installed.
 replace_or_append '/etc/yum.conf' '^clean_requirements_on_remove' 1 ' CCE-80346-0' '%s=%s'
 
+%triggerin -- aide
+
+aide_conf="/etc/aide.conf"
+
+# aide_verify_acls
+# CCE-80375-9
+groups=$(/bin/grep "^[A-Z]\+" $aide_conf | /bin/grep -v "^ALLXTRAHASHES" | /bin/cut -f1 -d '=' | /bin/tr -d ' ' | /bin/sort -u)
+
+for group in $groups
+do
+	config=$(/bin/grep "^$group\s*=" $aide_conf | /bin/cut -f2 -d '=' | /bin/tr -d ' ')
+
+	if ! [[ $config = *acl* ]]
+	then
+		if [[ -z $config ]]
+		then
+			config="acl"
+		else
+			config=$config"+acl"
+		fi
+	fi
+	sed -i "s/^$group\s*=.*/$group = $config/g" $aide_conf
+done
+
+# aide_verify_ext_attributes
+# CCE-80376-7
+groups=$(/bin/grep "^[A-Z]\+" $aide_conf | /bin/grep -v "^ALLXTRAHASHES" | /bin/cut -f1 -d '=' | /bin/tr -d ' ' | /bin/sort -u)
+
+for group in $groups
+do
+	config=$(/bin/grep "^$group\s*=" $aide_conf | /bin/cut -f2 -d '=' | /bin/tr -d ' ')
+
+	if ! [[ $config = *xattrs* ]]
+	then
+		if [[ -z $config ]]
+		then
+			config="xattrs"
+		else
+			config=$config"+xattrs"
+		fi
+	fi
+	sed -i "s/^$group\s*=.*/$group = $config/g" $aide_conf
+done
+
+# aide_use_fips_hashes
+# CCE-80377-5
+forbidden_hashes=(sha1 rmd160 sha256 whirlpool tiger haval gost crc32)
+
+groups=$(/bin/grep "^[A-Z]\+" $aide_conf | /bin/cut -f1 -d ' ' | /bin/tr -d ' ' | /bin/sort -u)
+
+for group in $groups
+do
+	config=$(/bin/grep "^$group\s*=" $aide_conf | /bin/cut -f2 -d '=' | /bin/tr -d ' ')
+
+	if ! [[ $config = *sha512* ]]
+	then
+		config=$config"+sha512"
+	fi
+
+	for hash in ${forbidden_hashes[@]}
+	do
+		config=$(echo $config | /bin/sed "s/$hash//")
+	done
+
+	config=$(echo $config | /bin/sed "s/^\+*//")
+	config=$(echo $config | /bin/sed "s/\+\++/+/")
+	config=$(echo $config | /bin/sed "s/\+$//")
+
+	/bin/sed -i "s/^$group\s*=.*/$group = $config/g" $aide_conf
+done
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
