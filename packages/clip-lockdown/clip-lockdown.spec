@@ -4,6 +4,7 @@ Release: %{release}
 Summary: CLIP Module for system lockdown confinguration
 Requires: audit
 Requires: grep
+Requires: pam
 Requires: procps-ng
 Requires: sed
 License: GPL or BSD
@@ -14,6 +15,7 @@ BuildRoot: %{_tmppath}/%{name}-root
 %define audit_dir		%{_sysconfdir}/audit/rules.d/
 %define limits_dir		%{_sysconfdir}/security/limits.d/
 %define modprobe_dir	%{_sysconfdir}/modprobe.d/
+%define pam_dir			%{_sysconfdir}/pam.d/
 %define remediation_dir	%{share_dir}/remediation_functions
 %define share_dir		/usr/share/clip/
 %define ssh_config_dir	%{_sysconfdir}/ssh_config.d/
@@ -40,6 +42,9 @@ install sysctl/*.conf $RPM_BUILD_ROOT/%{sysctl_dir}
 
 install -d $RPM_BUILD_ROOT/%{modprobe_dir}
 install modprobe/*.conf $RPM_BUILD_ROOT/%{modprobe_dir}
+
+install -d $RPM_BUILD_ROOT/%{pam_dir}
+install pam/* $RPM_BUILD_ROOT/%{pam_dir}
 
 install -d $RPM_BUILD_ROOT/%{limits_dir}
 install limits/*.conf $RPM_BUILD_ROOT/%{limits_dir}
@@ -427,6 +432,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(440,root,root) %{audit_dir}/*rules
 %attr(440,root,root) %{limits_dir}/*conf
 %attr(440,root,root) %{modprobe_dir}/*conf
+%attr(440,root,root) %{pam_dir}/*
 %attr(440,root,root) %{remediation_dir}/*
 %attr(440,root,root) %{ssh_config_dir}/*conf
 %attr(440,root,root) %{sysctl_dir}/*conf
@@ -438,6 +444,8 @@ rm -rf $RPM_BUILD_ROOT
 # auditd rules complain if this directory doesn't exist on check for openssh-keysign
 /usr/bin/mkdir -p /usr/libexec/openssh
 
+ln -sf password-auth-clip %{pam_dir}/password-auth
+ln -sf system-auth-clip %{pam_dir}/system-auth
 
 %changelog
 * Wed May 09 2018 Dave Sugar <dsugar@tresys.com> 1.0-1

@@ -338,15 +338,6 @@ fi
 
 ###### START - ADD SECURITY CONFIGURATION CHANGES ###########
 
-#make these the first 3 lines to /etc/pam.d/system-auth
-/bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/i auth        required      pam_faillock.so preauth silent audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/system-auth
-/bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/a auth        [default=die] pam_faillock.so authfail audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/system-auth
-/bin/sed -i --follow-symlinks "/^account.*required.*pam_unix.so/i account     required      pam_faillock.so" /etc/pam.d/system-auth
-
-/bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/i auth        required      pam_faillock.so preauth silent audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/password-auth
-/bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/a auth        [default=die] pam_faillock.so authfail audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/password-auth
-/bin/sed -i --follow-symlinks "/^account.*required.*pam_unix.so/i account     required      pam_faillock.so" /etc/pam.d/password-auth
-
 #set permissions of /var/log to 750
 /bin/chmod 750 /var/log
 
