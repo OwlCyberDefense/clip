@@ -398,6 +398,26 @@ replace_or_append '/etc/audit/auditd.conf' '^space_left_action' 'halt' 'CCE-2737
 # The auditd service can be configured to take an action when disk space is running low but prior to running out of space completely.
 replace_or_append '/etc/audit/auditd.conf' '^space_left' 100 'CCE-80537-4' '%s = %s'
 
+%triggerin -- chrony, ntp
+
+# chronyd_or_ntpd_set_maxpoll
+# CCE-80439-3
+# The maxpoll should be configured to 10 in /etc/ntp.conf or /etc/chrony.conf to continuously poll time servers
+var_time_service_set_maxpoll="10"
+
+for config_file in "/etc/chrony.conf" "/etc/ntp.conf"; do
+	if [ ! -e "$config_file" ]; then
+		continue;
+	fi
+
+	# Set maxpoll values to var_time_service_set_maxpoll
+	/bin/sed -i "s/^\(server.*maxpoll\) [0-9][0-9]*\(.*\)$/\1 $var_time_service_set_maxpoll \2/" "$config_file"
+
+	# Add maxpoll to server entries without maxpoll
+	/bin/grep -P "^server((?!maxpoll).)*$" $config_file | while read -r line ; do
+		/bin/sed -i "s/$line/&1 maxpoll $var_time_service_set_maxpoll/" "$config_file"
+	done
+done
 
 %clean
 rm -rf $RPM_BUILD_ROOT
