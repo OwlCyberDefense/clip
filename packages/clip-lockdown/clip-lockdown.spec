@@ -264,6 +264,11 @@ replace_or_append '/etc/security/pwquality.conf' '^difok' 8 'CCE-26631-2' '%s = 
 # differing categories of characters when changing passwords. 
 replace_or_append '/etc/security/pwquality.conf' '^minclass' 4 'CCE-27115-5' '%s = %s'
 
+%triggerin -- systemd
+# CCE-27511-5
+# Disable control-alt-delete
+/bin/systemctl mask ctrl-alt-del.target
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
