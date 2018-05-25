@@ -16,6 +16,7 @@ BuildRoot: %{_tmppath}/%{name}-root
 %define modprobe_dir	%{_sysconfdir}/modprobe.d/
 %define remediation_dir	%{share_dir}/remediation_functions
 %define share_dir		/usr/share/clip/
+%define ssh_config_dir	%{_sysconfdir}/ssh_config.d/
 %define sysctl_dir		%{_sysconfdir}/sysctl.d/
 
 Source0: %{pkgname}-%{version}.tgz
@@ -45,6 +46,9 @@ install limits/*.conf $RPM_BUILD_ROOT/%{limits_dir}
 
 install -d $RPM_BUILD_ROOT/%{remediation_dir}
 install remediation/* $RPM_BUILD_ROOT/%{remediation_dir}
+
+install -d $RPM_BUILD_ROOT/%{ssh_config_dir}
+install ssh_config/* $RPM_BUILD_ROOT/%{ssh_config_dir}
 
 %triggerpostun -- openssh
 # auditd rules complain if this directory doesn't exist on check for openssh-keysign
@@ -269,6 +273,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(440,root,root) %{limits_dir}/*conf
 %attr(440,root,root) %{modprobe_dir}/*conf
 %attr(440,root,root) %{remediation_dir}/*
+%attr(440,root,root) %{ssh_config_dir}/*conf
 %attr(440,root,root) %{sysctl_dir}/*conf
 
 %post
