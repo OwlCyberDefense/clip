@@ -165,6 +165,11 @@ set_umask $USER_UMASK /etc/csh.cshrc
 # set user umask in /etc/profile
 set_umask $USER_UMASK /etc/profile
 
+# XCCDF rule
+# CCE-26855-7
+# Disable root login altogether
+echo > /etc/securetty
+
 
 %triggerin -- shadow-utils
 . %{remediation_dir}/replace_or_append.sh
