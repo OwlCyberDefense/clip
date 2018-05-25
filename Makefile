@@ -392,8 +392,9 @@ srpms: $(SRPMS)
 	$(MAKE) -C $(PKG_DIR)/$(call PKG_NAME_FROM_RPM,$(notdir $@)) srpm
 
 $(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
+	$(eval SYSTEM_NAME=$(shell echo '$(@)'|$(SED) -e 's/\(.*\)-iso/\1/'))
 	$(call CHECK_DEPS)
-	$(MAKE) -C $(KICKSTART_DIR)/"`echo '$(@)'|$(SED) -e 's/\(.*\)-iso/\1/'`" iso
+	$(MAKE) SYSTEM_NAME=$(SYSTEM_NAME) -C $(KICKSTART_DIR)/$(SYSTEM_NAME) iso
 
 $(MOCK_CONF_DIR)/$(MOCK_REL_INSTANCE).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl $(CONF_DIR)/pkglist.blacklist conf/pkglist_hash $(filter-out $(ROOT_DIR)/CONFIG_BUILD,$(CONFIG_BUILD_DEPS))
 	$(call CHECK_DEPS)

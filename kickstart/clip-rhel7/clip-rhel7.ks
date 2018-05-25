@@ -220,6 +220,7 @@ yum
 %post --interpreter=/bin/bash
 # DO NOT REMOVE THE FOLLOWING LINE. NON-EXISTENT WARRANTY VOID IF REMOVED.
 #CONFIG-BUILD-PLACEHOLDER
+SYSTEM_NAME=#SYSTEM-NAME-PLACEHOLDER
 export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
 if [ x"$CONFIG_BUILD_LIVE_MEDIA" != "y" ]; then
 	exec >/root/clip_post_install.log 2>&1
@@ -405,8 +406,8 @@ fi
 if [ -e $CONTENT_PATH/$CONTENT_FILE ]; then
 /bin/echo "Beginning xccdf evaluation use the profile: $profile"
 /bin/oscap xccdf eval --profile $profile \
---results $SSG_PATH/clip-el7-ssg-pre-results.xml \
---report $SSG_PATH/clip-el7-ssg-pre-results.html \
+--results $SSG_PATH/$SYSTEM_NAME-ssg-pre-results.xml \
+--report $SSG_PATH/$SYSTEM_NAME-ssg-pre-results.html \
 --cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
 $CONTENT_PATH/$CONTENT_FILE
 
