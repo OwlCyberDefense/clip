@@ -353,6 +353,21 @@ do
 	/bin/sed -i "s/^$group\s*=.*/$group = $config/g" $aide_conf
 done
 
+%triggerin -- audit
+. %{remediation_dir}/replace_or_append.sh
+
+# auditd_data_retention_space_left_action
+# CCE-27375-5
+# The auditd service can be configured to take an action when disk space starts to run low. 
+replace_or_append '/etc/audit/auditd.conf' '^space_left_action' 'halt' 'CCE-27375-5' '%s = %s'
+
+
+# auditd_data_retention_space_left
+# CCE-80537-4
+# The auditd service can be configured to take an action when disk space is running low but prior to running out of space completely.
+replace_or_append '/etc/audit/auditd.conf' '^space_left' 100 'CCE-80537-4' '%s = %s'
+
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
