@@ -140,11 +140,31 @@ replace_or_append '/etc/ssh/sshd_config' '^MACs' "hmac-sha2-512,hmac-sha2-256,hm
 
 
 %triggerin -- setup
+. %{remediation_dir}/set_umask.sh
+
 # CCE-27557-8
 # Terminating an idle session within a short time period reduces the window of
 # opportunity for unauthorized personnel to take control of a management session
 # enabled on the console or console port that has been left unattended.
 echo 'TMOUT=600' >> /etc/profile
+
+USER_UMASK=077
+
+# XCCDF rule: user_umask_bashrc
+# CCE-26917-5
+# set user bash umask
+set_umask $USER_UMASK /etc/bashrc
+
+# XCCDF rule: user_umask_cshrc
+# CCE-27034-8
+# set user csh umask
+set_umask $USER_UMASK /etc/csh.cshrc
+
+# XCCDF rule: user_umask_profile
+# CCE-26669-2
+# set user umask in /etc/profile
+set_umask $USER_UMASK /etc/profile
+
 
 %triggerin -- shadow-utils
 . %{remediation_dir}/replace_or_append.sh
@@ -176,11 +196,17 @@ replace_or_append '/etc/default/useradd' '^INACTIVE' "0" 'CCE-27355-7' '%s=%s'
 
 %triggerin -- initscripts
 . %{remediation_dir}/replace_or_append.sh
+. %{remediation_dir}/set_umask.sh
 
 # XCCDF rule: require_singleuser_auth
 # CCE-27040-5
 # require the root password for access to single-user mode shell
 replace_or_append '/etc/sysconfig/init' '^SINGLE' '/sbin/sulogin 'CCE-27040-5' '%s = %s'
+
+# XCCDF rule: umask_for_daemons
+# CCE-27031-4
+# set daemon umask
+set_umask 027 /etc/init.d/functions
 
 %triggerin -- libpwquality
 . %{remediation_dir}/replace_or_append.sh
