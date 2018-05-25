@@ -336,18 +336,6 @@ fi
 
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
-###### START - ADD AUDIT RULES TO COMPLY WITH SSG ###########
-if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
-	/bin/echo -e "# Production build - panic on fatal error" >> /etc/audit/rules.d/failure.rules
-	/bin/echo -e "-f 2" >> /etc/audit/rules.d/failure.rules
-	/bin/echo -e "# Production build - no changes allowed to audit rules" >> /etc/audit/rules.d/lock.rules
-	/bin/echo -e "-e 2" >> /etc/audit/rules.d/lock.rules
-else
-	/bin/echo -e "# Not a production build - log errors to kernel" >> /etc/audit/rules.d/failure.rules
-	/bin/echo -e "-f 1" >> /etc/audit/rules.d/failure.rules
-fi
-###### END - ADD AUDIT RULES TO COMPLY WITH SSG ###########
-
 ###### START - ADD SECURITY CONFIGURATION CHANGES ###########
 
 #make these the first 3 lines to /etc/pam.d/system-auth
@@ -358,10 +346,6 @@ fi
 /bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/i auth        required      pam_faillock.so preauth silent audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/password-auth
 /bin/sed -i --follow-symlinks "/^auth.*sufficient.*pam_unix.so.*/a auth        [default=die] pam_faillock.so authfail audit deny=3 unlock_time=604800 fail_interval=900" /etc/pam.d/password-auth
 /bin/sed -i --follow-symlinks "/^account.*required.*pam_unix.so/i account     required      pam_faillock.so" /etc/pam.d/password-auth
-
-
-#set permissions on audit.rules to 600
-#/bin/chmod 600 /etc/audit/audit.rules
 
 #set permissions of /var/log to 750
 /bin/chmod 750 /var/log
@@ -455,6 +439,13 @@ if [ x"$CONFIG_REMOVE_SCAP" == "xy" ]; then
 else
 	/usr/bin/systemctl enable xccdf_review.service
 fi
+
+###### START - ADD AUDIT RULES TO COMPLY WITH SSG ###########
+if [ x"$CONFIG_BUILD_PRODUCTION" == "xn" ]; then
+	/bin/echo -e "# Not a production build - log errors to kernel - this overwrote the default file" > /etc/audit/rules.d/failure.rules
+	/bin/echo -e "-f 1" >> /etc/audit/rules.d/failure.rules
+fi
+###### END - ADD AUDIT RULES TO COMPLY WITH SSG ###########
 
 ### Setup AIDE ###
 AIDE_DIR=/var/lib/aide

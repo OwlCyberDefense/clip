@@ -1,0 +1,2 @@
+# Production build - panic on fatal error
+-f 2
