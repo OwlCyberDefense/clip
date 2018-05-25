@@ -269,6 +269,19 @@ replace_or_append '/etc/security/pwquality.conf' '^minclass' 4 'CCE-27115-5' '%s
 # Disable control-alt-delete
 /bin/systemctl mask ctrl-alt-del.target
 
+%triggerin -- yum
+. %{remediation_dir}/replace_or_append.sh
+
+# ensure_gpgcheck_local_packages
+#  CCE-80347-8
+# Yum should be configured to verify the signature(s) of local packages prior to installation
+replace_or_append '/etc/yum.conf' '^localpkg_gpgcheck' 1 ' CCE-80347-8' '%s=%s'
+
+# clean_components_post_updating
+#  CCE-80346-0
+# Yum should be configured to remove previous software components after previous versions have been installed.
+replace_or_append '/etc/yum.conf' '^clean_requirements_on_remove' 1 ' CCE-80346-0' '%s=%s'
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
