@@ -16,6 +16,8 @@ type oscap_probe_exec_t;
 application_domain(oscap_probe_t, oscap_probe_exec_t)
 role system_r types oscap_probe_t;
 
+init_script_domain(oscap_t,oscap_exec_t)
+
 # oscap plays with ssg files
 type ssg_file_t;
 files_type(ssg_file_t)
@@ -25,31 +27,45 @@ files_type(ssg_file_t)
 # oscap local policy
 #
 
-allow oscap_t self:process signal;   
+allow oscap_t self:process signal;
 
-allow oscap_t oscap_probe_t:process signal;   
+allow oscap_t oscap_probe_t:process signal;
 
 allow oscap_t self:fifo_file manage_fifo_file_perms;
 allow oscap_t self:unix_stream_socket create_stream_socket_perms;
+
+create_files_pattern(oscap_t, ssg_file_t, ssg_file_t)
+write_files_pattern(oscap_t, ssg_file_t, ssg_file_t)
 
 domain_use_interactive_fds(oscap_t)
 
 files_read_etc_files(oscap_t)
 files_read_usr_files(oscap_t)
 files_read_usr_symlinks(oscap_t)
+files_search_default(oscap_t)
 
-#userdom_use_inherited_user_ptys(oscap_t)
+init_rw_stream_sockets(oscap_t)
+
+kernel_read_crypto_sysctls(oscap_t)
+kernel_read_system_state(oscap_t)
+
+logging_send_syslog_msg(oscap_t)
+
+userdom_use_inherited_user_terminals(oscap_t)
 #userdom_use_inherited_user_ptys(oscap_probe_t)
 
+miscfiles_read_generic_certs(oscap_t)
 miscfiles_read_localization(oscap_t)
+
+oscap_probe_domtrans(oscap_t)
 
 #######################################
 #
 # oscap-probe local policy
 #
 
-allow oscap_probe_t self:capability { net_admin sys_nice dac_override };
-allow oscap_probe_t self:process { setsched signal signull getcap getsched };   
+allow oscap_probe_t self:capability { dac_override net_admin sys_nice sys_ptrace sys_rawio };
+allow oscap_probe_t self:process { setsched signal signull getcap getsched };
 
 allow oscap_probe_t self:netlink_route_socket r_netlink_socket_perms;
 allow oscap_probe_t self:udp_socket create_socket_perms;;
@@ -57,27 +73,58 @@ allow oscap_probe_t self:udp_socket create_socket_perms;;
 
 # probe_system_info
 allow oscap_probe_t oscap_t:unix_stream_socket { rw_stream_socket_perms };
-
+allow oscap_probe_t oscap_t:unix_dgram_socket { getattr };
+allow oscap_probe_t oscap_t:file { read_file_perms };
+allow oscap_probe_t oscap_t:dir { list_dir_perms };
+allow oscap_probe_t oscap_t:lnk_file { read_lnk_file_perms };
 
 # probe_selinuxsecuritycontext
 logging_send_syslog_msg(oscap_probe_t)
 kernel_getattr_core_if(oscap_probe_t)
 
 # probe_file, probe_textfilecontent
+files_getattr_all_pipes(oscap_probe_t)
+files_getattr_all_sockets(oscap_probe_t)
+files_list_all(oscap_probe_t)
+files_read_config_files(oscap_probe_t)
+files_read_all_blk_files(oscap_probe_t)
+files_read_all_chr_files(oscap_probe_t)
+files_read_all_files(oscap_probe_t)
+files_read_all_symlinks(oscap_probe_t)
 
-oscap_read_all_files_except(oscap_probe_t)
- 
 dev_getattr_all_blk_files(oscap_probe_t)
 dev_getattr_all_chr_files(oscap_probe_t)
+dev_getattr_mtrr_dev(oscap_probe_t)
+
+domain_getattr_all_domains(oscap_probe_t)
+domain_getattr_all_entry_files(oscap_probe_t)
+domain_getattr_all_pipes(oscap_probe_t)
+domain_getattr_all_sockets(oscap_probe_t)
+domain_read_all_domains_state(oscap_probe_t)
+domain_search_all_domains_state(oscap_probe_t)
 
 fs_list_all(oscap_probe_t)
 
-# probe_textfilecontent54
+init_dbus_chat(oscap_probe_t)
+init_get_all_units_status(oscap_probe_t)
+init_get_system_status(oscap_probe_t)
+init_service_status(oscap_probe_t)
+init_rw_stream_sockets(oscap_probe_t)
+
+kernel_getattr_message_if(oscap_probe_t)
 kernel_read_all_sysctls(oscap_probe_t)
 kernel_read_network_state(oscap_probe_t)
+kernel_read_software_raid_state(oscap_probe_t)
+
+logging_read_all_logs(oscap_probe_t)
+logging_read_audit_log(oscap_probe_t)
+logging_read_audit_config(oscap_probe_t)
+
+
+storage_raw_read_fixed_disk(oscap_probe_t)
 
 optional_policy(`
-userdom_use_user_ttys(oscap_probe_t)
+	userdom_use_user_ttys(oscap_probe_t)
 ')
 
 # probe_partition
@@ -89,5 +136,21 @@ dev_read_urand(oscap_probe_t)
 optional_policy(`
 	rpm_dontaudit_manage_db(oscap_probe_t)
 	rpm_read_db(oscap_probe_t)
+')
+
+optional_policy(`
+	chronyd_status(oscap_probe_t)
+')
+
+optional_policy(`
+	dbus_system_bus_client(oscap_probe_t)
+')
+
+optional_policy(`
+	mcs_file_read_all(oscap_probe_t)
+')
+
+optional_policy(`
+	mls_file_read_all_levels(oscap_probe_t)
 ')
 

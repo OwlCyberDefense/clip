@@ -424,11 +424,26 @@ $CONTENT_PATH/$CONTENT_FILE
 #$CONTENT_PATH/$CONTENT_FILE 2>&1 | tee $SSG_PATH/clip-el7-ssg-fix_log.txt
 #
 #/bin/echo "Rescanning after remediation..."
-#/bin/oscap xccdf eval --profile $profile \
-#--results $SSG_PATH/clip-el7-ssg-post-results.xml \
-#--report $SSG_PATH/clip-el7-ssg-post-results.html \
-#--cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
-#$CONTENT_PATH/$CONTENT_FILE
+
+/usr/bin/cat <<- EOF > /etc/systemd/system/xccdf_review.service
+	[Unit]
+	Description=XCCDF review one time service
+	Before=systemd-user-sessions.service
+	ConditionFileIsExecutable=/bin/oscap
+
+	[Service]
+	User=root
+	Group=root
+	Type=oneshot
+	ExecStart=/bin/oscap xccdf eval --profile $profile --results $SSG_PATH/$SYSTEM_NAME-ssg-post-results.xml --report $SSG_PATH/$SYSTEM_NAME-ssg-post-results.html --cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml $CONTENT_PATH/$CONTENT_FILE
+	ExecStartPost=/usr/bin/systemctl disable xccdf_review.service
+	RemainAfterExit=true
+	SuccessExitStatus=2
+
+	[Install]
+	WantedBy=multi-user.target
+EOF
+
 
 else 
 	/bin/echo "XCCDF evaluation skipped - expected content unavailable" > $SSG_PATH/results.txt
@@ -437,6 +452,8 @@ fi
 if [ x"$CONFIG_REMOVE_SCAP" == "xy" ]; then
 	rpm -e scap-security-guide rpmdevtools gdb rpm-build openscap-utils openscap-containers openscap-scanner openscap redhat-rpm-config man-db emacs-filesystem elfutils 
 	/usr/sbin/semodule -d oscap
+else
+	/usr/bin/systemctl enable xccdf_review.service
 fi
 
 ### Setup AIDE ###
