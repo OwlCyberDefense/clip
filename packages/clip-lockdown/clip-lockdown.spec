@@ -55,6 +55,10 @@ install remediation/* $RPM_BUILD_ROOT/%{remediation_dir}
 install -d $RPM_BUILD_ROOT/%{ssh_config_dir}
 install ssh_config/* $RPM_BUILD_ROOT/%{ssh_config_dir}
 
+%triggerpostun -- dbus
+# auditd rules complain if this directory doesn't exist on check for dbus-daemon-launch-helper
+/usr/bin/mkdir -p /usr/lib64/dbus-1
+
 %triggerpostun -- openssh
 # auditd rules complain if this directory doesn't exist on check for openssh-keysign
 /usr/bin/mkdir -p /usr/libexec/openssh
@@ -443,6 +447,9 @@ rm -rf $RPM_BUILD_ROOT
 
 # auditd rules complain if this directory doesn't exist on check for openssh-keysign
 /usr/bin/mkdir -p /usr/libexec/openssh
+
+# auditd rules complain if this directory doesn't exist on check for dbus-daemon-launch-helper
+/usr/bin/mkdir -p /usr/lib64/dbus-1
 
 ln -sf password-auth-clip %{pam_dir}/password-auth
 ln -sf system-auth-clip %{pam_dir}/system-auth
