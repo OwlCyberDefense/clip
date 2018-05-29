@@ -42,7 +42,7 @@ PATCH_DIR ?= patches
 
 PATCHES := $(wildcard $(PATCH_DIR)/*.patch)
 # exhaustive list of deps for the RPM, used to determine if RPM needs to be rebuilt
-TAR_DEPS := $(wildcard $(PKGNAME)/*) $(wildcard refpolicy/*)
+TAR_DEPS := $(shell find -L $(PKGNAME) -type f) $(shell find -L refpolicy -type f)
 RPM_DEPS := $(TARBALL) $(RPM_SPEC) $(CURDIR)/Makefile $(PATCHES)
 
 RPM_TMPDIR ?= $(ROOT_DIR)/tmp
