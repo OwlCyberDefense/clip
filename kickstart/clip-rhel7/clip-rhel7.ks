@@ -496,13 +496,14 @@ if [ x"$ENABLE_NETWORKING" == "xn" ]; then
 	/usr/bin/systemctl disable network.service
 fi
 
+#DJS - SCAP tests require rpm to be installed - only remove if SCAP also being removed
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
 	if [ x"$CONFIG_REMOVE_SCAP" == "xy" ]; then
 		# Remove yum (and dependencies, which are openscap dependencies) before removing rpm
 		/bin/rpm -e yum rpm-python rpm-build-libs
+		# Force remove rpm if in a production build (and SCAP being removed)
+		/bin/rpm -e --nodeps rpm
 	fi
-	# Force remove rpm if in a production build
-	/bin/rpm -e --nodeps rpm
 fi
 
 # Force password reset
