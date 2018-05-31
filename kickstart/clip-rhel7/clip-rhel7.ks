@@ -336,14 +336,6 @@ fi
 
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
-###### START - ADD SECURITY CONFIGURATION CHANGES ###########
-
-#set permissions of /var/log to 750
-/bin/chmod 750 /var/log
-
-###### END - ADD SECURITY CONFIGURATION CHANGES ###########
-
-
 echo "Done with post install scripts..."
 
 # This is rather unfortunate, but the remediation content 

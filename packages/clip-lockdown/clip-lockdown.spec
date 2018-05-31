@@ -55,6 +55,9 @@ install remediation/* $RPM_BUILD_ROOT/%{remediation_dir}
 install -d $RPM_BUILD_ROOT/%{ssh_config_dir}
 install ssh_config/* $RPM_BUILD_ROOT/%{ssh_config_dir}
 
+%triggerin -- filesystem
+/bin/chmod 750 /var/log
+
 %triggerpostun -- dbus
 # auditd rules complain if this directory doesn't exist on check for dbus-daemon-launch-helper
 /usr/bin/mkdir -p /usr/lib64/dbus-1
