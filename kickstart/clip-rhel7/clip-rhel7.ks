@@ -336,6 +336,11 @@ fi
 
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
+# we do not really want these packages installed but they are required earlier during the iso build process so force their removal now
+if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
+	rpm -e dracut dracut-fips dracut-fips-aesni dracut-network --nodeps --allmatches
+fi
+
 echo "Done with post install scripts..."
 
 # This is rather unfortunate, but the remediation content 
