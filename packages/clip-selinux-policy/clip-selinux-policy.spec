@@ -15,6 +15,7 @@ Source: %{pkgname}-%{version}.tar.gz
 Url: http://oss.tresys.com/repos/refpolicy/
 BuildArch: noarch
 Requires: coreutils
+Requires: sed
 BuildRequires: policycoreutils-devel >= %{POLICYCOREUTILSVER}
 
 Patch0: remove-sctp.patch
@@ -217,6 +218,12 @@ AUTORELABEL=1
      ln -sf /etc/selinux/config /etc/sysconfig/selinux 
      restorecon /etc/selinux/config 2> /dev/null || :
 else
+#
+#     selinux-policy already installd, update to default to clip policy
+#
+
+     /bin/sed -i "s/^\(SELINUXTYPE=.*\)/#     clip - Certifiable Linux Integration Platform Policy from %{name}\n#\1\nSELINUXTYPE=clip/" /etc/selinux/config
+
      . /etc/selinux/config
      # if first time update booleans.local needs to be copied to sandbox
      [ -f /etc/selinux/${SELINUXTYPE}/booleans.local ] && mv /etc/selinux/${SELINUXTYPE}/booleans.local /etc/selinux/clip/modules/active/
@@ -230,7 +237,7 @@ if [ $1 = 0 ]; then
      if [ ! -s /etc/selinux/config ]; then
           echo "SELINUX=disabled" > /etc/selinux/config
      else
-          sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
+          /bin/sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
      fi
 fi
 exit 0
