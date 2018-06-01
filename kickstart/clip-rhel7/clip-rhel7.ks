@@ -223,15 +223,15 @@ yum
 SYSTEM_NAME=#SYSTEM-NAME-PLACEHOLDER
 export PATH="/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/bin"
 if [ x"$CONFIG_BUILD_LIVE_MEDIA" != "y" ]; then
-	exec >/root/clip_post_install.log 2>&1
+	exec >/root/${SYSTEM_NAME}_post_install.log 2>&1
 	# Print the log to tty7 so that the user know what's going on
-	/usr/bin/tail -f /root/clip_post_install.log >/dev/tty7 &
+	/usr/bin/tail -f /root/${SYSTEM_NAME}_post_install.log >/dev/tty7 &
 	TAILPID=$!
 	chvt 7
 fi
 
-echo "Installation timestamp: `date`" > /root/clip-info.txt
-echo "#CONFIG-BUILD-PLACEHOLDER" >> /root/clip-info.txt
+echo "Installation timestamp: `date`" > /root/${SYSTEM_NAME}-info.txt
+echo "#CONFIG-BUILD-PLACEHOLDER" >> /root/${SYSTEM_NAME}-info.txt
 
 # FIXME: Change the username and password.
 #        If a hashed password is specified it will be used
@@ -522,7 +522,7 @@ fi
 #CONFIG-BUILD-PLACEHOLDER
 
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
-    /bin/echo "Deleting anaconda-ks.cfg as this is a production build" >> /mnt/sysimage/root/clip_post_install.log
+    /bin/echo "Deleting anaconda-ks.cfg as this is a production build" >> /mnt/sysimage/root/${SYSTEM_NAME}_post_install.log
     /bin/rm /mnt/sysimage/root/anaconda-ks.cfg
 fi
 
