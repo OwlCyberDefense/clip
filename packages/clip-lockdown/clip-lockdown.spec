@@ -55,6 +55,9 @@ install remediation/* $RPM_BUILD_ROOT/%{remediation_dir}
 install -d $RPM_BUILD_ROOT/%{ssh_config_dir}
 install ssh_config/* $RPM_BUILD_ROOT/%{ssh_config_dir}
 
+install -d $RPM_BUILD_ROOT/%{_unitdir}
+install service/* $RPM_BUILD_ROOT/%{_unitdir}
+
 %triggerin -- filesystem
 /bin/chmod 750 /var/log
 
@@ -443,6 +446,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(440,root,root) %{remediation_dir}/*
 %attr(440,root,root) %{ssh_config_dir}/*conf
 %attr(440,root,root) %{sysctl_dir}/*conf
+%attr(644,root,root) %{_unitdir}/*
 
 %post
 # reload sysctl rules so newly installed rules are used

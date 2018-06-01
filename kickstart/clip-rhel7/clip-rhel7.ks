@@ -394,30 +394,24 @@ $CONTENT_PATH/$CONTENT_FILE
 #--report $SSG_PATH/clip-el7-ssg-remediation-results.html \
 #--cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml \
 #$CONTENT_PATH/$CONTENT_FILE 2>&1 | tee $SSG_PATH/clip-el7-ssg-fix_log.txt
-#
-#/bin/echo "Rescanning after remediation..."
 
-/usr/bin/cat <<- EOF > /etc/systemd/system/xccdf_review.service
-	[Unit]
-	Description=XCCDF review one time service
-	Before=systemd-user-sessions.service
-	ConditionFileIsExecutable=/bin/oscap
-
+# setup service to run xccdf evaluation after boot
+install -D --mode=644 /dev/stdin /etc/systemd/system/xccdf_review@$SYSTEM_NAME.service.d/$SYSTEM_NAME.conf <<- EOF
 	[Service]
-	User=root
-	Group=root
-	Type=oneshot
-	ExecStart=/bin/oscap xccdf eval --profile $profile --results $SSG_PATH/$SYSTEM_NAME-ssg-post-results.xml --report $SSG_PATH/$SYSTEM_NAME-ssg-post-results.html --cpe $CONTENT_PATH/ssg-rhel7-cpe-dictionary.xml $CONTENT_PATH/$CONTENT_FILE
-	ExecStartPost=/usr/bin/systemctl disable xccdf_review.service
-	RemainAfterExit=true
-	SuccessExitStatus=2
+	Environment="SSG_PATH=$SSG_PATH"
+	Environment="SYSTEM_NAME=$SYSTEM_NAME"
+	Environment="PROFILE=$profile"
+	Environment="CONTENT_PATH=$CONTENT_PATH"
+	Environment="CONTENT_FILE=$CONTENT_FILE"
 
-	[Install]
-	WantedBy=multi-user.target
+	[Unit]
+	AssertPathExists=${CONTENT_PATH}/ssg-rhel7-cpe-dictionary.xml
+	AssertPathExists=${CONTENT_PATH}/${CONTENT_FILE}
+	ConditionPathExists=!${SSG_PATH}/${SYSTEM_NAME}-ssg-post-results.html
+	ConditionPathExists=!${SSG_PATH}/${SYSTEM_NAME}-ssg-post-results.xml
 EOF
 
-
-else 
+else
 	/bin/echo "XCCDF evaluation skipped - expected content unavailable" > $SSG_PATH/results.txt
 fi
 
@@ -425,7 +419,7 @@ if [ x"$CONFIG_REMOVE_SCAP" == "xy" ]; then
 	rpm -e scap-security-guide rpmdevtools gdb rpm-build openscap-utils openscap-containers openscap-scanner openscap redhat-rpm-config man-db emacs-filesystem elfutils 
 	/usr/sbin/semodule -d oscap
 else
-	/usr/bin/systemctl enable xccdf_review.service
+	/usr/bin/systemctl enable xccdf_review@$SYSTEM_NAME.service
 fi
 
 ###### START - ADD AUDIT RULES TO COMPLY WITH SSG ###########
