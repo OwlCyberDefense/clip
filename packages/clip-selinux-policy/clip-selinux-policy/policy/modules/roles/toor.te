@@ -1051,6 +1051,7 @@ optional_policy(`
 ')
 
 optional_policy(`
+	staff_role_change_to(toor_r)
 	staff_role_change(toor_r)
 ')
 
