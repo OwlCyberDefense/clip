@@ -314,7 +314,8 @@ if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
 	/bin/echo "GRUB_HIDDEN_TIMEOUT_QUIET=true" >> /etc/default/grub
 else
 	# for non-production builds - remove the grub password
-	/bin/rm /boot/grub2/user.cfg
+	/bin/echo "Non-production mode - remove grub password:"
+	find /boot -name user.cfg -print -exec rm {} \;
 fi
 
 # enable FIPS mode
