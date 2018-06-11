@@ -57,7 +57,7 @@ reboot
 #REPO-REPLACEMENT-PLACEHOLDER
 
 zerombr
-clearpart --all --initlabel
+clearpart --all
 part /boot --size=200 --fstype ext4 --asprimary
 part /boot/efi --size=200 --fstype=vfat --asprimary
 part pv.os --size=1   --grow        --asprimary
