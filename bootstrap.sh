@@ -1,10 +1,11 @@
 #!/bin/bash -ue
 # Copyright (C) 2013 Quark Security, Inc
 # Copyright (C) 2013 Cubic Corporation
-# Copyright (C) 2014-2016 Tresys Technology
+# Copyright (C) 2014-2018 Tresys Technology
 # Authors: Spencer Shimko <spencer@quarksecurity.com>
 # Authors: Yuli Khodorkovskiy <ykhodorkovskiy@tresys.com>
 # Authors: Michael Napolitano <mnapolitano@tresys.com>
+# Authors: Dave Sugar <dsugar@tresys.com>
 
 check_and_create_repo_dir ()
 {
@@ -52,8 +53,8 @@ q - abort the bootstrap process\n\
 	while :; do
 		/bin/echo -e "Please provide a full path where to rsync RPMs from.\n
 If you enter 'optical', we will try to find, mount, and copy RPMs from your CD/DVD drive
-Please ensure your RHEL DVD is inserted into the disk drive if you select 'optical'
-If you enter 'yum', we will try to copy RPMs from the yum from repo '$repo_id.'"
+Please ensure your RHEL/CentOS DVD is inserted into the disk drive if you select 'optical'
+If you enter 'yum', we will try to copy RPMs from the yum from repo '$repo_id'."
 		read user_input
 		[ x"$user_input" == "x" ] && break
 
@@ -148,13 +149,36 @@ repositories like this available CLIP will not work!  Please see Help-FAQ.txt!\n
 /bin/echo "Checking if $USER is in the sudoers file"
 /usr/bin/sudo -l -U $USER | grep -q "User $USER is not allowed to run sudo" && /usr/sbin/sudoers adduser $USER sudo
 
-/bin/echo "Checking if registered with RHN. We will attempt to register if we are not current. Please enter your RHN credentials if prompted."
-/usr/bin/sudo /usr/bin/subscription-manager status | grep -q "Current" || /usr/bin/sudo /usr/bin/subscription-manager --auto-attach register
 
+ostype=""
+if [ -e /etc/system-release ]; then
+	ostype=`cut /etc/system-release -f 1 -d " "`
+	if [ $ostype == "Red" ]; then
+		ostype="RHEL"
+	fi
+else
+	/bin/echo "Unable to determine RHEL or CentOS - aborting"
+	exit -1
+fi
+
+/bin/echo "Selecting to build '${ostype}' system"
+
+if [ $ostype == "RHEL" ]; then
+	/bin/echo "Checking if registered with RHN. We will attempt to register if we are not current. Please enter your RHN credentials if prompted."
+	/usr/bin/sudo /usr/bin/subscription-manager status | grep -q "Current" || /usr/bin/sudo /usr/bin/subscription-manager --auto-attach register
+fi
+
+if [ $ostype == "RHEL" ]; then
+	/bin/sed -i "s/^#\(RHEL.*\)/\1/" CONFIG_REPOS
+	/bin/sed -i "s/^\(CentOS.*\)/#\1/" CONFIG_REPOS
+elif [ $ostype == "CentOS" ]; then
+	/bin/sed -i "s/^#\(CentOS.*\)/\1/" CONFIG_REPOS
+	/bin/sed -i "s/^\(RHEL.*\)/#\1/" CONFIG_REPOS
+fi
 
 arch=`rpm --eval %_host_cpu`
 # TODO Using the yum variable $releasever evaluates to 7Server which is incorrect.
-# For now, this variable needs to be incremented during each major RHEL release until we
+# For now, this variable needs to be incremented during each major RHEL/CentOS release until we
 # find a better way to get the release version to set for EPEL
 releasever="7"
 
@@ -177,16 +201,18 @@ PACKAGES="mock pigz createrepo repoview rpm-build make python-kid pykickstart pu
 /usr/bin/sudo /usr/bin/yum install -y $PACKAGES
 
 # get the name/path for any existing yum repos from CONFIG_REPO
-rhelreponame=RHEL
-rhelrepopath=`/bin/sed -rn 's/^RHEL = (.*)/\1/p' CONFIG_REPOS`
-optreponame=RHEL_OPT
-optrepopath=`/bin/sed -rn 's/^RHEL_OPT = (.*)/\1/p' CONFIG_REPOS`
+basereponame=$ostype
+baserepopath=`/bin/sed -rn "s/^${basereponame} = (.*)/\1/p" CONFIG_REPOS`
 epelreponame=EPEL
-epelrepopath=`/bin/sed -rn 's/^EPEL = (.*)/\1/p' CONFIG_REPOS`
+epelrepopath=`/bin/sed -rn "s/^${epelreponame} = (.*)/\1/p" CONFIG_REPOS`
 
-# prompt user for rhel/opt path
-prompt_to_enter_repo_path $rhelreponame $rhelrepopath
-prompt_to_enter_repo_path $optreponame $optrepopath
+# prompt user for paths path
+prompt_to_enter_repo_path $basereponame $baserepopath
+if [ $ostype == "RHEL" ]; then
+	optreponame=RHEL_OPT
+	optrepopath=`/bin/sed -rn "s/^${optreponame} = (.*)/\1/p" CONFIG_REPOS`
+	prompt_to_enter_repo_path $optreponame $optrepopath
+fi
 prompt_to_enter_repo_path $epelreponame $epelrepopath
 
 # prompt the user to add additional yum repos if necessary
@@ -204,28 +230,44 @@ Enter a fully qualified path for this yum repo.  Just leave empty if you are don
 	/bin/echo -e "# INSERTED BY BOOTSTRAP.SH\n$name = $path" >> CONFIG_REPOS
 done
 
-check_and_create_repo_dir "RHEL"
-check_and_create_repo_dir "RHEL_OPT"
+check_and_create_repo_dir $ostype
+if [ $ostype == "RHEL" ]; then
+	check_and_create_repo_dir "RHEL_OPT"
+fi
 check_and_create_repo_dir "EPEL"
 
 # Refresh repo variables
-rhelrepopath=`/bin/sed -rn 's/^RHEL = (.*)/\1/p' CONFIG_REPOS`
-optrepopath=`/bin/sed -rn 's/^RHEL_OPT = (.*)/\1/p' CONFIG_REPOS`
-epelrepopath=`/bin/sed -rn 's/^EPEL = (.*)/\1/p' CONFIG_REPOS`
-rsync_and_createrepo $rhelrepopath "rhel-7-server-rpms"
-
-/bin/echo "Checking if RHEL optional repo is enabled..."
-/usr/bin/sudo /bin/yum repolist enabled | /usr/bin/grep -q rhel-7-server-optional-rpms && OPT_SUBSCRIBED=1 || OPT_SUBSCRIBED=0
-if [ $OPT_SUBSCRIBED -eq 0 ]; then
-	/bin/echo "RHEL optional channel is disabled...enabling"
-	/usr/bin/sudo /usr/bin/subscription-manager repos --enable=rhel-7-server-optional-rpms
-else
-	/bin/echo "RHEL optional channel is already enabled"
+baserepopath=`/bin/sed -rn "s/^${ostype} = (.*)/\1/p" CONFIG_REPOS`
+optrepopath=${baserepopath}
+repoid="base"
+if [ $ostype == "RHEL" ]; then
+	optrepopath=`/bin/sed -rn "s/^${optreponame} = (.*)/\1/p" CONFIG_REPOS`
+	repoid="rhel-7-server-rpms"
 fi
+epelrepopath=`/bin/sed -rn "s/^${epelreponame} = (.*)/\1/p" CONFIG_REPOS`
+rsync_and_createrepo $baserepopath $repoid
+
+if [ $ostype == "RHEL" ]; then
+	/bin/echo "Checking if RHEL optional repo is enabled..."
+	/usr/bin/sudo /bin/yum repolist enabled | /usr/bin/grep -q rhel-7-server-optional-rpms && OPT_SUBSCRIBED=1 || OPT_SUBSCRIBED=0
+	if [ $OPT_SUBSCRIBED -eq 0 ]; then
+		/bin/echo "RHEL optional channel is disabled...enabling"
+		/usr/bin/sudo /usr/bin/subscription-manager repos --enable=rhel-7-server-optional-rpms
+	else
+		/bin/echo "RHEL optional channel is already enabled"
+	fi
+fi
+
 # pull opt package versions from pkglist.opt. Otherwise just download the newest
 # versions available
 OPT_PACKAGES="anaconda-dracut at-spi tigervnc-server-module bitmap-fangsongti-fonts \
 GConf2-devel grub2-efi-ia32-cdboot grub2-efi-x64-cdboot grub2-tools-efi kexec-tools-anaconda-addon"
+
+# additional packages needed from CentOS (that appear to be on RHEL DVD) for building to work
+if [ $ostype == "CentOS" ]; then
+	OPT_PACKAGES=${OPT_PACKAGES}" shim-ia32 "
+fi
+
 CONF=./conf/pkglist.RHEL_OPT
 VERSIONED_LIST=
 if [ -s $CONF ]; then
