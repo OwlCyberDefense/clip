@@ -24,6 +24,7 @@ check_and_create_repo_dir ()
 rsync_and_createrepo ()
 {
 	repo_path=$1
+	repo_id=$2
 	usage="y - update the directory with RPMs from a provided path\n\
 q - abort the bootstrap process\n\
 ? - print help\n"
@@ -50,17 +51,20 @@ q - abort the bootstrap process\n\
 
 	while :; do
 		/bin/echo -e "Please provide a full path where to rsync RPMs from.\n
-If you enter 'rhel', we will try to find, mount, and copy RPMs from your CD/DVD drive\n
-Please ensure your RHEL DVD is inserted into the disk drive if you select 'rhel'\n"
+If you enter 'optical', we will try to find, mount, and copy RPMs from your CD/DVD drive
+Please ensure your RHEL DVD is inserted into the disk drive if you select 'optical'
+If you enter 'yum', we will try to copy RPMs from the yum from repo '$repo_id.'"
 		read user_input
 		[ x"$user_input" == "x" ] && break
 
-		if [ x"${user_input,,}" == x"rhel" ]; then
+		if [ x"${user_input,,}" == x"optical" ]; then
 			tmpdir=`/bin/mktemp -d`
 			/usr/bin/sudo /usr/bin/mount /dev/sr0 $tmpdir
 			/usr/bin/sudo /usr/bin/rsync -r --progress $tmpdir/Packages/ $repo_path/
 			/usr/bin/sudo /usr/bin/umount $tmpdir
 			/usr/bin/sudo /bin/rm -rf $tmpdir
+		elif [ x"${user_input,,}" == x"yum" ]; then
+			/usr/bin/sudo /usr/bin/reposync --norepopath -m -n --repoid=$repo_id -l -p `dirname $repo_path/`
 		else
 			/usr/bin/sudo /usr/bin/rsync -r --progress $user_input $repo_path/
 		fi
@@ -68,44 +72,49 @@ Please ensure your RHEL DVD is inserted into the disk drive if you select 'rhel'
 		break
 	done
 
-	/usr/bin/sudo /usr/bin/createrepo -d $repo_path/
+	comps_xml=""
+	if [ -e $repo_path/comps.xml ]; then
+		comps_xml="-g $repo_path/comps.xml"
+	fi
+
+	/usr/bin/sudo /usr/bin/createrepo -d $comps_xml $repo_path/
 }
 
 prompt_to_enter_repo_path ()
 {
-    local originalname=${1-}
-    local originalpath=${2-}
-    if [ -z $originalpath ]; then
-            /bin/echo -e "
+	local originalname=${1-}
+	local originalpath=${2-}
+	if [ -z $originalpath ]; then
+		/bin/echo -e "
 There is no default path set for the [ $originalname ] repo.  You must provide a path for the [ $originalname ] repo to be created on your system
 or the script will exit immediately. For example: [ /home/`whoami`/$originalname/ ]"
-            /bin/echo -e "
+		/bin/echo -e "
 Enter a fully qualified path for the $originalname repo.\n"
-            read path
-            if [ x"$path" == "x" ]; then
-                /bin/echo -e"
+		read path
+		if [ x"$path" == "x" ]; then
+			/bin/echo -e"
 No default path exists for the $originalname repo and none provided - Exiting"
-                exit
-            else
-                tmpfile=`/bin/mktemp`
-                /bin/sed -r "s/^($originalname.*)$/#\1/" CONFIG_REPOS > $tmpfile
-                /bin/echo "$originalname = $path" >> $tmpfile
-                /bin/mv $tmpfile CONFIG_REPOS
-            fi
-    else
-            /bin/echo -e "
+			exit
+		else
+			tmpfile=`/bin/mktemp`
+			/bin/sed -r "s/^($originalname.*)$/#\1/" CONFIG_REPOS > $tmpfile
+			/bin/echo "$originalname = $path" >> $tmpfile
+			/bin/mv $tmpfile CONFIG_REPOS
+		fi
+	else
+		/bin/echo -e "
 Enter a fully qualified path for the $originalname repo.  If you do not enter a path then the default path
 will be used in CONFIG_REPOS.  The default path for the $originalname yum repo is $originalpath\n"
-            /bin/echo -e "
+		/bin/echo -e "
 Enter a fully qualified path for the [ $originalname ] repo [ default: $originalpath ]\n"
-            read path
-            if [ ! x"$path" == "x" ]; then
-                tmpfile=`/bin/mktemp`
-                /bin/sed -r "s/^($originalname.*)$/#\1/" CONFIG_REPOS > $tmpfile
-                /bin/echo "$originalname = $path" >> $tmpfile
-                /bin/mv $tmpfile CONFIG_REPOS
-            fi
-    fi
+		read path
+		if [ ! x"$path" == "x" ]; then
+			tmpfile=`/bin/mktemp`
+			/bin/sed -r "s/^($originalname.*)$/#\1/" CONFIG_REPOS > $tmpfile
+			/bin/echo "$originalname = $path" >> $tmpfile
+			/bin/mv $tmpfile CONFIG_REPOS
+		fi
+	fi
 
 }
 
@@ -149,6 +158,7 @@ arch=`rpm --eval %_host_cpu`
 # find a better way to get the release version to set for EPEL
 releasever="7"
 
+if [ ! -s /etc/yum.repos.d/epel.repo ]; then
 # always have the latest epel rpm
 /bin/echo "Checking if epel is installed and updating to the latest version if our version is older"
 /bin/echo "
@@ -159,9 +169,11 @@ failovermethod=priority
 enabled=1
 gpgcheck=0
 " | /usr/bin/sudo tee --append /etc/yum.repos.d/epel.repo
+fi
 /usr/bin/sudo yum --enablerepo=epel -y install epel-release
 
-PACKAGES="mock pigz createrepo repoview rpm-build make python-kid"
+PACKAGES="mock pigz createrepo repoview rpm-build make python-kid pykickstart pungi"
+
 /usr/bin/sudo /usr/bin/yum install -y $PACKAGES
 
 # get the name/path for any existing yum repos from CONFIG_REPO
@@ -169,10 +181,13 @@ rhelreponame=RHEL
 rhelrepopath=`/bin/sed -rn 's/^RHEL = (.*)/\1/p' CONFIG_REPOS`
 optreponame=RHEL_OPT
 optrepopath=`/bin/sed -rn 's/^RHEL_OPT = (.*)/\1/p' CONFIG_REPOS`
+epelreponame=EPEL
+epelrepopath=`/bin/sed -rn 's/^EPEL = (.*)/\1/p' CONFIG_REPOS`
 
 # prompt user for rhel/opt path
 prompt_to_enter_repo_path $rhelreponame $rhelrepopath
 prompt_to_enter_repo_path $optreponame $optrepopath
+prompt_to_enter_repo_path $epelreponame $epelrepopath
 
 # prompt the user to add additional yum repos if necessary
 /bin/echo -e "
@@ -184,19 +199,20 @@ Enter a name for this yum repo.  Just leave empty if you are done adding, or don
 	[ x"$name" == "x" ] && break
 	/bin/echo -e "
 Enter a fully qualified path for this yum repo.  Just leave empty if you are done adding, or don't wish to change, the repositories.\n"
-    read path
-    [ x"$path" == "x" ] && break
-    /bin/echo -e "# INSERTED BY BOOTSTRAP.SH\n$name = $path" >> CONFIG_REPOS
+	read path
+	[ x"$path" == "x" ] && break
+	/bin/echo -e "# INSERTED BY BOOTSTRAP.SH\n$name = $path" >> CONFIG_REPOS
 done
 
-check_and_create_repo_dir "rhel"
-check_and_create_repo_dir "opt"
+check_and_create_repo_dir "RHEL"
+check_and_create_repo_dir "RHEL_OPT"
+check_and_create_repo_dir "EPEL"
 
 # Refresh repo variables
-rhelrepopath=`/bin/sed -rn 's/^rhel = (.*)/\1/p' CONFIG_REPOS`
-optrepopath=`/bin/sed -rn 's/^opt = (.*)/\1/p' CONFIG_REPOS`
-
-rsync_and_createrepo $rhelrepopath
+rhelrepopath=`/bin/sed -rn 's/^RHEL = (.*)/\1/p' CONFIG_REPOS`
+optrepopath=`/bin/sed -rn 's/^RHEL_OPT = (.*)/\1/p' CONFIG_REPOS`
+epelrepopath=`/bin/sed -rn 's/^EPEL = (.*)/\1/p' CONFIG_REPOS`
+rsync_and_createrepo $rhelrepopath "rhel-7-server-rpms"
 
 /bin/echo "Checking if RHEL optional repo is enabled..."
 /usr/bin/sudo /bin/yum repolist enabled | /usr/bin/grep -q rhel-7-server-optional-rpms && OPT_SUBSCRIBED=1 || OPT_SUBSCRIBED=0
@@ -209,19 +225,36 @@ fi
 # pull opt package versions from pkglist.opt. Otherwise just download the newest
 # versions available
 OPT_PACKAGES="anaconda-dracut at-spi tigervnc-server-module bitmap-fangsongti-fonts \
-GConf2-devel"
-CONF=./conf/pkglist.opt
+GConf2-devel grub2-efi-ia32-cdboot grub2-efi-x64-cdboot grub2-tools-efi kexec-tools-anaconda-addon"
+CONF=./conf/pkglist.RHEL_OPT
 VERSIONED_LIST=
 if [ -s $CONF ]; then
-    for pkg in $OPT_PACKAGES; do
-        pkg=`/bin/sed -rn "s/$pkg-(.*).rpm/$pkg-\1/p" $CONF`
-        VERSIONED_LIST="$VERSIONED_LIST $pkg"
-    done
+	for pkg in $OPT_PACKAGES; do
+		pkg=`/bin/sed -rn "s/$pkg-(.*).rpm/$pkg-\1/p" $CONF`
+		VERSIONED_LIST="$VERSIONED_LIST $pkg"
+	done
 else
-    VERSIONED_LIST=$OPT_PACKAGES
+	VERSIONED_LIST=$OPT_PACKAGES
 fi
 /usr/bin/sudo /bin/yumdownloader --destdir $optrepopath $VERSIONED_LIST
 /usr/bin/sudo /usr/bin/createrepo -d $optrepopath
+
+# pull EPEL package versions from pkglist.EPEL. Otherwise just download the newest
+# versions available
+EPEL_PACKAGES="python34 python34-libs"
+CONF=./conf/pkglist.EPEL
+VERSIONED_LIST=
+if [ -s $CONF ]; then
+	for pkg in $EPEL_PACKAGES; do
+		pkg=`/bin/sed -rn "s/$pkg-(.*).rpm/$pkg-\1/p" $CONF`
+		VERSIONED_LIST="$VERSIONED_LIST $pkg"
+	done
+else
+	VERSIONED_LIST=$EPEL_PACKAGES
+fi
+/usr/bin/sudo /bin/yumdownloader --destdir $epelrepopath $VERSIONED_LIST
+/usr/bin/sudo /usr/bin/createrepo -d $epelrepopath
+
 
 /usr/bin/sudo /usr/sbin/usermod -aG mock `id -un`
 
