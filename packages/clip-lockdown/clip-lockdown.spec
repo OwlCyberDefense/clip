@@ -7,6 +7,7 @@ Requires: grep
 Requires: pam
 Requires: procps-ng
 Requires: sed
+BuildRequires: systemd
 License: GPL or BSD
 Group: System Environment/Base
 
