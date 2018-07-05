@@ -58,16 +58,19 @@ REPO_LINES ?= repo --name=centos --baseurl=http://mirror.centos.org/centos/6.2/o
 
 DEPS := $(PUNGI)
 SETUP_DEPS := $(CURDIR)/Makefile $(KS)
+PRODUCT_IMG := product_img/product.img
+PRODUCT_DEPS := $(shell find -L customize -type f)
 
 all: iso live-iso setup-ks
 
-iso: $(DEPS) $(ADDTL_DEPS) setup-inst-ks
+iso: $(DEPS) $(ADDTL_DEPS) $(PRODUCT_IMG) setup-inst-ks
 	@echo "Gathering things with pungi..."
 	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
 	$(VERBOSE)cd $(BUILD_DIR); sudo $(PUNGI) $(PUNGI_ARGS) -GCB -c "$(INST_KS)"
 	@echo "Fixing the boot menu..."
 	$(VERBOSE)sudo sed -i "s/^label linux$$/label $(NAME)/" $(ISOLINUX_CFG)
 	$(VERBOSE)sudo sed -i "s/or upgrade an existing system/$(NAME)/" $(ISOLINUX_CFG)
+	$(VERBOSE)sudo cp $(TMP_DIR)/$(PRODUCT_IMG) $(PUNGI_OS_DIR)/images/
 	@echo "Building ISO with pungi..."
 	@echo "Pungi needs root permissions - please enter your sudo password if prompted."
 	$(VERBOSE)cd $(BUILD_DIR);sudo $(PUNGI) $(PUNGI_ARGS) -I -c $(INST_KS)
@@ -101,6 +104,9 @@ setup-live-ks: $(SETUP_DEPS)
 	$(VERBOSE)sed -i -e 's;#REPO-REPLACEMENT-PLACEHOLDER;$(REPO_LINES);' $(LIVE_KS)
 	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-PLACEHOLDER;$(LIVE_CONFIG_BUILD_BASH_VARS);' $(LIVE_KS)
 	$(VERBOSE)sed -i -e 's;#CONFIG-BUILD-ADDTL-PACKAGES;$(LIVE_CONFIG_BUILD_ADDTL_PACKAGES);' $(LIVE_KS)
+
+$(PRODUCT_IMG): $(PRODUCT_DEPS)
+	$(VERBOSE)cd customize; make
 
 clean:
 	$(VERBOSE)sudo rm -rf $(BUILD_DIR)
