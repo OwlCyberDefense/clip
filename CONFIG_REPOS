@@ -33,7 +33,7 @@ RHEL = /mnt/repos/rhel7/rhel-x86_64-server-7/Packages
 RHEL_OPT = /mnt/repos/rhel7/rhel-x86_64-server-optional-7/Packages
 
 # Packages from EPEL needed to build policy (python 3.4)
-EPEL = /mnt/repos/epel
+EPEL = /mnt/repos/epel/final
 
 # NOTE: <= RHEL 5 requires BUILDGROUPS repo.  RHEL 6 has the BUILDGROUPS stuff built-in.
 # A groups repo must be available. Can be a local path or an http/ftp location.
