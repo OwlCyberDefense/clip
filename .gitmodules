@@ -1,3 +1,3 @@
 [submodule "packages/clip-selinux-policy/refpolicy"]
 	path = packages/clip-selinux-policy/refpolicy
-	url = https://github.com/TresysTechnology/refpolicy
+	url = http://github.com/SELinuxProject/refpolicy
