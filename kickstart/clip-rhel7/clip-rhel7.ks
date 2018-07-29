@@ -521,4 +521,7 @@ if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
     /bin/rm /mnt/sysimage/root/anaconda-ks.cfg
 fi
 
+# Back to VT 6 so the installer will complete
+/bin/chvt 6
+
 %end
