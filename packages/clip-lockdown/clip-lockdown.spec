@@ -1,4 +1,4 @@
-Name:	clip-lockdown
+Name: %{pkgname}
 Version: %{version}
 Release: %{release}
 Summary: CLIP Module for system lockdown confinguration
