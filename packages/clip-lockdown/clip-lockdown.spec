@@ -483,6 +483,9 @@ rm -rf $RPM_BUILD_ROOT
 ln -sf password-auth-clip %{pam_dir}/password-auth
 ln -sf system-auth-clip %{pam_dir}/system-auth
 
+# CCE-80258-7
+/bin/systemctl disable kdump.service
+
 %changelog
 * Wed May 09 2018 Dave Sugar <dsugar@tresys.com> 1.0-1
 - Initial CLIP lockdown RPM
