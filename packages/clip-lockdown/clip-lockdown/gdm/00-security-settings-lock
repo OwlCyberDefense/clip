@@ -1,0 +1,21 @@
+
+
+# CCE-80544-0
+# CCE-80110-0
+/org/gnome/desktop/session/idle-delay
+
+# CCE-80371-8
+# CCE-80370-0
+/org/gnome/desktop/screensaver/lock-delay
+
+# CCE-26970-4
+/org/gnome/login-screen/banner-message-enable
+
+# CCE-80111-8
+/org/gnome/desktop/screensaver/idle-activation-enabled
+
+# CCE-80112-6
+/org/gnome/desktop/screensaver/lock-enabled
+
+# CCE-26892-0
+/org/gnome/login-screen/banner-message-text

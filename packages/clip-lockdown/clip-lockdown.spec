@@ -19,8 +19,12 @@ BuildRoot: %{_tmppath}/%{name}-root
 %define pam_dir			%{_sysconfdir}/pam.d/
 %define remediation_dir	%{share_dir}/remediation_functions
 %define share_dir		/usr/share/clip/
+%define hold_dir		%{share_dir}/hold_config
 %define ssh_config_dir	%{_sysconfdir}/ssh_config.d/
 %define sysctl_dir		%{_sysconfdir}/sysctl.d/
+%define gdm_dir			%{_sysconfdir}/gdm
+%define dconf_local_dir	%{_sysconfdir}/dconf/db/local.d/
+
 
 Source0: %{pkgname}-%{version}.tgz
 
@@ -59,12 +63,26 @@ install ssh_config/* $RPM_BUILD_ROOT/%{ssh_config_dir}
 install -d $RPM_BUILD_ROOT/%{_unitdir}
 install service/* $RPM_BUILD_ROOT/%{_unitdir}
 
+install -d $RPM_BUILD_ROOT/%{dconf_local_dir}/locks
+install gdm/00-security-settings $RPM_BUILD_ROOT/%{dconf_local_dir}
+install gdm/00-security-settings-lock $RPM_BUILD_ROOT/%{dconf_local_dir}/locks
+
+install -d $RPM_BUILD_ROOT/%{hold_dir}
+install gdm/custom.conf $RPM_BUILD_ROOT/%{hold_dir}
+
 %triggerin -- filesystem
 /bin/chmod 750 /var/log
 
 %triggerpostun -- dbus
 # auditd rules complain if this directory doesn't exist on check for dbus-daemon-launch-helper
 /usr/bin/mkdir -p /usr/lib64/dbus-1
+
+%triggerin -- dconf
+dconf update
+
+%triggerin -- gdm
+/usr/bin/install -m 644 %{hold_dir}/custom.conf %{gdm_dir}/custom.conf
+dconf update
 
 %triggerpostun -- openssh
 # auditd rules complain if this directory doesn't exist on check for openssh-keysign
@@ -448,6 +466,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(440,root,root) %{ssh_config_dir}/*conf
 %attr(440,root,root) %{sysctl_dir}/*conf
 %attr(644,root,root) %{_unitdir}/*
+%attr(644,root,root) %{dconf_local_dir}/00-security-settings
+%attr(644,root,root) %{dconf_local_dir}/locks/00-security-settings-lock
+%attr(644,root,root) %{hold_dir}/*
 
 %post
 # reload sysctl rules so newly installed rules are used

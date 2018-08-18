@@ -1,0 +1,21 @@
+
+[org/gnome/desktop/screensaver]
+# CCE-80370-0
+lock-delay=uint32 5
+
+# CCE-80112-6
+lock-enabled=true
+
+# CCE-80111-8
+idle_activation_enabled=true
+
+# CCE-80110-0
+[org/gnome/desktop/session]
+idle-delay='uint32 900'
+
+[org/gnome/login-screen]
+# CCE-26970-4
+banner-message-enable=true
+
+# CCE-26892-0
+banner-message-text=string 'This is a CLIP system'
