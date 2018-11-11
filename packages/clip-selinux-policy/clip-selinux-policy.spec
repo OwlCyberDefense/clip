@@ -50,7 +50,7 @@ Certifiable Linux Integration Platform SELinux core, non-policy components.
 %package doc
 Summary: Certifiable Linux Integration Platform SELinux policy documentation
 Group: System Environment/Base
-Requires(pre): clip-selinux-policy = %{version}-%{release}
+Requires(pre): %{pkgname} = %{version}-%{release}
 Requires: /usr/bin/xdg-open
 BuildRequires: policycoreutils-python m4 policycoreutils policycoreutils-devel python34 make gcc checkpolicy >= %{CHECKPOL_VERSION}
 
@@ -200,7 +200,7 @@ mkdir %{buildroot}%{_usr}/share/selinux/packages/
 install -m 644 support/Makefile.devel %{buildroot}%{devel_dir}/Makefile
 install -m 644 doc/example.* %{buildroot}%{devel_dir}/
 install -m 644 doc/policy.* %{buildroot}%{devel_dir}/
-echo  "xdg-open file:///usr/share/doc/clip-selinux-policy-%{version}/html/index.html"> %{buildroot}%{devel_dir}/policyhelp
+echo  "xdg-open file:///usr/share/doc/%{pkgname}-%{version}/html/index.html"> %{buildroot}%{devel_dir}/policyhelp
 chmod +x %{buildroot}%{devel_dir}/policyhelp
 %clean
 %{__rm} -fR %{buildroot}
@@ -259,9 +259,9 @@ Group: System Environment/Base
 Requires(pre): policycoreutils >= %{POLICYCOREUTILSVER}
 Requires(pre): policycoreutils-python >= %{POLICYCOREUTILSVER}
 Requires(pre): coreutils
-Requires(pre): clip-selinux-policy = %{version}-%{release}
+Requires(pre): %{pkgname} = %{version}-%{release}
 Requires(pre): libsemanage
-Requires: clip-selinux-policy = %{version}-%{release}
+Requires: %{pkgname} = %{version}-%{release}
 Conflicts:  audispd-plugins <= 1.7.7-1
 Conflicts:  seedit
 
@@ -306,8 +306,8 @@ Provides: selinux-policy-base = %{version}-%{release}
 Requires: policycoreutils-newrole >= %{POLICYCOREUTILSVER} setransd
 Requires(pre): policycoreutils >= %{POLICYCOREUTILSVER}
 Requires(pre): coreutils
-Requires(pre): clip-selinux-policy = %{version}-%{release}
-Requires: clip-selinux-policy = %{version}-%{release}
+Requires(pre): %{pkgname} = %{version}-%{release}
+Requires: %{pkgname} = %{version}-%{release}
 Conflicts:  seedit
 
 %description mls 
