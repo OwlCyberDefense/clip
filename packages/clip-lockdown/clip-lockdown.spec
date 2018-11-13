@@ -240,7 +240,7 @@ replace_or_append '/etc/default/useradd' '^INACTIVE' "0" 'CCE-27355-7' '%s=%s'
 # XCCDF rule: require_singleuser_auth
 # CCE-27040-5
 # require the root password for access to single-user mode shell
-replace_or_append '/etc/sysconfig/init' '^SINGLE' '/sbin/sulogin 'CCE-27040-5' '%s = %s'
+replace_or_append '/etc/sysconfig/init' '^SINGLE' '/sbin/sulogin' 'CCE-27040-5' '%s = %s'
 
 # XCCDF rule: umask_for_daemons
 # CCE-27031-4
