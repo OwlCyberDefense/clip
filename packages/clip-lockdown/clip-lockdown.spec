@@ -247,6 +247,10 @@ replace_or_append '/etc/sysconfig/init' '^SINGLE' '/sbin/sulogin 'CCE-27040-5' '
 # set daemon umask
 set_umask 027 /etc/init.d/functions
 
+%triggerin -- kexec-tools
+# CCE-80258-7
+/bin/systemctl disable kdump.service
+
 %triggerin -- libpwquality
 . %{remediation_dir}/replace_or_append.sh
 
@@ -482,9 +486,6 @@ rm -rf $RPM_BUILD_ROOT
 
 ln -sf password-auth-clip %{pam_dir}/password-auth
 ln -sf system-auth-clip %{pam_dir}/system-auth
-
-# CCE-80258-7
-/bin/systemctl disable kdump.service
 
 %changelog
 * Wed May 09 2018 Dave Sugar <dsugar@tresys.com> 1.0-1
