@@ -261,8 +261,8 @@ replace_or_append '/etc/security/pwquality.conf' '^maxrepeat' 2 'CCE-27333-4' '%
 # The pam_pwquality module's maxclassrepeat parameter controls requirements for consecutive 
 # repeating characters. When set to a positive number, it will reject passwords which 
 # contain more than that number of consecutive characters. Modify the maxclassrepeat setting 
-# in /etc/security/pwquality.conf to equal 2 to prevent a run of (2 + 1) or more identical characters. 
-replace_or_append '/etc/security/pwquality.conf' '^maxclassrepeat' 2 'CCE-27333-4' '%s = %s'
+# in /etc/security/pwquality.conf to equal 4 to prevent a run of (4 + 1) or more identical characters. 
+replace_or_append '/etc/security/pwquality.conf' '^maxclassrepeat' 4 'CCE-27512-3' '%s = %s'
 
 # CCE-27214-6
 # The pam_pwquality module's dcredit parameter controls requirements for usage of digits in a password. 
