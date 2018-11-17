@@ -115,7 +115,17 @@ $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm: $(RPM_DEPS)
 	$(call rpm-prep)
 	cp $(TARBALL) $(RPM_TOPDIR)/SOURCES/
 	cp $(PATCHES) $(RPM_TOPDIR)/SOURCES/
-	echo -e "%define enable_modules $(ENABLE_MODULES)\n%define enforcing_mode $(ENFORCING_MODE)\n%define pkgname $(PKGNAME)\n%define _sysconfdir /etc\n%define version $(VERSION)\n%define release $(RELEASE)\n%define vendor $(VENDOR)\n%define packager $(PACKAGER)\nBuildArch: $(ARCH)\n"> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo -n "" > $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "%define enable_base \"$(ENABLE_BASE)\"" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "%define enable_modules \"$(ENABLE_MODULES)\"" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "%define enforcing_mode $(ENFORCING_MODE)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "%define pkgname $(PKGNAME)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "%define _sysconfdir /etc" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "%define version $(VERSION)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "%define release $(RELEASE)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "%define vendor $(VENDOR)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "%define packager $(PACKAGER)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "BuildArch: $(ARCH)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cat $(RPM_SPEC) >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cd $(RPM_TOPDIR) && rpmbuild $(RPMBUILD_ARGS) -bs SPECS/$(notdir $(RPM_SPEC)) --nodeps
 	mv  $(RPM_TOPDIR)/SRPMS/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(SRPM_OUTPUT_DIR)
