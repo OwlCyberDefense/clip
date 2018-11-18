@@ -178,8 +178,8 @@ mkdir -p %{buildroot}%{_usr}/share/selinux/{clip,mls,modules}/
 
 mkdir -p %{buildroot}/%{rpmmacrodir}
 cat << EOF > $RPM_BUILD_ROOT/%{rpmmacrodir}/macros.clip
-%_clip_base %{devel_dir}
-%_clip_include %{_clip_base}/include
+%%_clip_base %{devel_dir}
+%%_clip_include %{_clip_base}/include
 EOF
 
 # Install devel
