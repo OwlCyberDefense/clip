@@ -72,10 +72,18 @@ else
 	ENFORCING_MODE := permissive
 endif
 
+ENABLE_BASE := %{nil}
+
 ifneq ($(CONFIG_BUILD_UNCONFINED_TOOR),n)
 	ENABLE_MODULES := toor
 else
 	ENABLE_MODULES := %{nil}
+endif
+
+ifneq ($(CONFIG_REMOVE_SCAP),y)
+	ENABLE_MODULES += oscap
+else
+	ENABLE_BASE += oscap
 endif
 
 RPMQ_DEFS := --query --define 'pkgname $(PKGNAME)' --define '_sysconfdir /etc' --define 'version $(VERSION)' --define 'release $(RELEASE)' --define 'vendor $(VENDOR)' --define 'packager $(PACKAGER)' --qf '%{NAME}\n'
