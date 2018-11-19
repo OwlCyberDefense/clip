@@ -42,6 +42,7 @@ userdom_home_filetrans_user_home_dir(toor_t)
 
 #files_unconfined(toor_t)
 #files_manage_all_files(toor_t)
+domain_ptrace_all_domains(toor_t)
 domain_unconfined(toor_t)
 
 ifdef(`direct_toor_daemon',`
@@ -69,11 +70,6 @@ ifndef(`enable_mls',`
 	logging_manage_audit_log(toor_t)
 	logging_manage_audit_config(toor_t)
 	logging_run_auditctl(toor_t, toor_r)
-')
-
-# SRS: removed for CLIP
-tunable_policy(`allow_ptrace',`
-	domain_ptrace_all_domains(toor_t)
 ')
 
 optional_policy(`
