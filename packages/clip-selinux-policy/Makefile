@@ -53,7 +53,7 @@ RPM_BUILDROOT ?= $(RPM_TMPDIR)/rpm-buildroot
 
 MKDIR = test -d $(1) || mkdir -p $(1)
 
-RPMBUILD_ARGS := --define '_topdir $(RPM_TOPDIR)'  --define '_tmppath $(RPM_TMPDIR)' --buildroot $(RPM_BUILDROOT)
+RPMBUILD_ARGS := --define '_topdir $(RPM_TOPDIR)' --define '_tmppath $(RPM_TMPDIR)' --buildroot $(RPM_BUILDROOT)
 
 define rpm-prep
 	$(call MKDIR,$(RPM_TOPDIR)/SOURCES)
@@ -124,8 +124,8 @@ $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm: $(RPM_DEPS)
 	cp $(TARBALL) $(RPM_TOPDIR)/SOURCES/
 	cp $(PATCHES) $(RPM_TOPDIR)/SOURCES/
 	echo -n "" > $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
-	echo "%define enable_base \"$(ENABLE_BASE)\"" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
-	echo "%define enable_modules \"$(ENABLE_MODULES)\"" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "%define enable_base $(ENABLE_BASE)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo "%define enable_modules $(ENABLE_MODULES)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	echo "%define enforcing_mode $(ENFORCING_MODE)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	echo "%define pkgname $(PKGNAME)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	echo "%define _sysconfdir /etc" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
