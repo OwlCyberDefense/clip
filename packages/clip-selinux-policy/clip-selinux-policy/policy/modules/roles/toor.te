@@ -1128,6 +1128,10 @@ optional_policy(`
 ')
 
 optional_policy(`
+	udevadm_run(toor_t, toor_r)
+')
+
+optional_policy(`
 	ulogd_admin(toor_t, toor_r)
 ')
 
