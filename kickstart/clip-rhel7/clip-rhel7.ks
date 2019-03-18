@@ -515,6 +515,7 @@ fi
 
 # DO NOT REMOVE THE FOLLOWING LINE. NON-EXISTENT WARRANTY VOID IF REMOVED.
 #CONFIG-BUILD-PLACEHOLDER
+SYSTEM_NAME=#SYSTEM-NAME-PLACEHOLDER
 
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
     /bin/echo "Deleting anaconda-ks.cfg as this is a production build" >> /mnt/sysimage/root/${SYSTEM_NAME}_post_install.log
