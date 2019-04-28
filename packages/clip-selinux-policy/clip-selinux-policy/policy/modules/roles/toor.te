@@ -237,6 +237,7 @@ optional_policy(`
 
 optional_policy(`
 	chronyd_admin(toor_t, toor_r)
+	chronyd_run_cli(toor_t, toor_r)
 ')
 
 optional_policy(`
