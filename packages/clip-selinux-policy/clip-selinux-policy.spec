@@ -52,7 +52,7 @@ Summary: Certifiable Linux Integration Platform SELinux policy documentation
 Group: System Environment/Base
 Requires(pre): %{pkgname} = %{version}-%{release}
 Requires: /usr/bin/xdg-open
-BuildRequires: policycoreutils-python m4 policycoreutils policycoreutils-devel python34 make gcc checkpolicy >= %{CHECKPOL_VERSION}
+BuildRequires: policycoreutils-python m4 policycoreutils policycoreutils-devel python36 make gcc checkpolicy >= %{CHECKPOL_VERSION}
 
 %description doc
 Certifiable Linux Integration Platform SELinux policy documentation package
