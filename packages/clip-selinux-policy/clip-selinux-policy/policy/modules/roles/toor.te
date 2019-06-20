@@ -1069,6 +1069,11 @@ optional_policy(`
 ')
 
 optional_policy(`
+	sysadm_role_change_to(toor_r)
+	sysadm_role_change(toor_r)
+')
+
+optional_policy(`
 	sysnet_run_ifconfig(toor_t, toor_r)
 	sysnet_run_dhcpc(toor_t, toor_r)
 ')
