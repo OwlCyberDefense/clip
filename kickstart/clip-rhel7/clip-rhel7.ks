@@ -58,8 +58,7 @@ reboot
 
 zerombr
 clearpart --all
-part /boot --size=200 --fstype ext4 --asprimary
-part /boot/efi --size=200 --fstype=vfat --asprimary
+reqpart --add-boot
 part pv.os --size=1   --grow        --asprimary
 
 volgroup vg00 --pesize=65536 pv.os
