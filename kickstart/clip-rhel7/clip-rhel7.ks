@@ -150,6 +150,7 @@ sudo
 util-linux-ng
 vim-minimal
 vlock
+xfsprogs
 yum
 -Red_Hat_Enterprise_Linux-Release_Notes-7-en-US
 -abrt-addon-ccpp
