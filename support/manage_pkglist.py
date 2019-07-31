@@ -6,8 +6,6 @@ import sys
 import subprocess
 import argparse
 
-#import rpm
-
 from pykickstart.parser import KickstartParser
 from pykickstart.version import makeVersion
 
@@ -28,12 +26,26 @@ def reqs_to_packages(config, reqs, arch):
 	repoquery_args = ["/usr/bin/repoquery", "-c", config, "--whatprovides", "--queryformat", "%{NAME}", "--archlist",arch]
 	# TODO: see if this can be collapsed into a single call
 	for r in reqs:
-		verbose ("executing: %s" % (repoquery_args + [r],))
-		repoquery = subprocess.Popen(repoquery_args + [r], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		final_arch = arch
+		match = arch_regex.match (r)
+		if match:
+			r = match.group("req")
+			final_arch = match.group("arch")
+					# hack - the name in the spec need x86-32 but the RPM name is i686 - ugh
+			if final_arch == "x86-32":
+				final_arch = "i686"
+
+		final_query = repoquery_args + ["--archlist",final_arch] + [r]
+		verbose ("Finding RPM name for dependency: %s" % " ".join (final_query))
+		repoquery = subprocess.Popen(final_query, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		for line in repoquery.stdout:
 			if line.strip():
 				verbose ("Req %s provided by %s" % (r, line.strip()))
-				package_names.add(line.strip())
+				match = line.strip().split(",")
+				pkg_arch = match[1].strip ()
+				if pkg_arch not in package_names.keys ():
+					package_names[pkg_arch] = set ()
+				package_names[pkg_arch].add(match[0].strip())
 			rc = repoquery.wait()
 			if rc != 0:
 				print "ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read())
@@ -45,31 +57,39 @@ def reqs_to_packages(config, reqs, arch):
 
 	# resolve package names to nvra form
 	packages = set()
-	repoquery_args = ["/usr/bin/repoquery", "-c", config, "--qf", "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}","--archlist",arch]
-	for p in package_names:
-		repoquery_args.append(p)
-	repoquery = subprocess.Popen(repoquery_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	for line in repoquery.stdout:
-		if line.strip():
-			packages.add(line.strip())
-	rc = repoquery.wait()
-	if rc != 0:
-		print "ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read())
-		raise Exception("ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read()))
+	repoquery_args = ["/usr/bin/repoquery", "-c", config, "--qf", "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}"]
+	for k in package_names.keys ():
+		repoquery = repoquery_args + ["--archlist", k]
+		for p in package_names[k]:
+			repoquery.append(p)
+
+		verbose ("Query package name: %s" % " ".join (repoquery))
+		repoquery = subprocess.Popen(repoquery, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		for line in repoquery.stdout:
+			if line.strip():
+				packages.add(line.strip())
+		rc = repoquery.wait()
+		if rc != 0:
+			print "ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read())
+			raise Exception("ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read()))
 	return packages
 
 dep_tree_regex = re.compile(r"(?: (?:\|   )*(?:\\_  ))?(?:\d+:)?(?P<pkg>.+) \[.*\]\n?")
 def update_deps(config, reqs, deps, arch):
 	# gather deps for all reqs
-	repoquery_args = ["/usr/bin/repoquery", "-c", config, "--tree-requires", "--qf", "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}", "--archlist",arch]
+	repoquery_args = ["/usr/bin/repoquery", "-c", config, "--tree-requires", "--qf", "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}"]
 	repoquery_args = repoquery_args + reposfrompath
+
 	for p in reqs:
 		if p in deps:
 			verbose ("not gathering deps for package %s because it has already been resolved" % (p,))
 			continue
 
-		verbose ("executing: %s" % (repoquery_args + [p],))
-		repoquery = subprocess.Popen(repoquery_args + [p], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		if final_arch == "noarch":
+			final_arch = arch
+		final_query = repoquery_args + ["--archlist", "%s,noarch" % final_arch] + [p]
+		verbose ("build dependency tree for requirement: %s" % " ".join (final_query))
+		repoquery = subprocess.Popen(final_query, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		for line in repoquery.stdout:
 			match = dep_tree_regex.search(line)
 			if match:
@@ -146,7 +166,7 @@ def get_build_reqs_using_librpm(package_paths):
 	return build_reqs
 '''
 
-spec_req_regex = re.compile(r"^(?P<req>[a-zA-Z0-9_.\+-]+)")
+spec_req_regex = re.compile(r"^(?P<req>[a-zA-Z0-9_\(\).\+-]+)")
 # grep for BuildRequires in a .spec file
 def get_build_reqs_from_spec(spec_path):
 	reqs = set()
