@@ -11,9 +11,16 @@ import argparse
 from pykickstart.parser import KickstartParser
 from pykickstart.version import makeVersion
 
+verbose_output = False
+
 buildrequires_regex = re.compile(r"^BuildRequires:\s*(?P<reqs>.+)$")
 lorax_regex = re.compile(r"^installpkg\s*(?P<reqs>.+)$")
 reposfrompath=[]
+
+def verbose(info):
+	global verbose_output
+	if verbose_output:
+		print info
 
 def reqs_to_packages(config, reqs, arch):
 	# resolve the reqs to package names
@@ -21,11 +28,11 @@ def reqs_to_packages(config, reqs, arch):
 	repoquery_args = ["/usr/bin/repoquery", "-c", config, "--whatprovides", "--queryformat", "%{NAME}", "--archlist",arch]
 	# TODO: see if this can be collapsed into a single call
 	for r in reqs:
-		print "executing: %s" % (repoquery_args + [r],)
+		verbose ("executing: %s" % (repoquery_args + [r],))
 		repoquery = subprocess.Popen(repoquery_args + [r], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		for line in repoquery.stdout:
 			if line.strip():
-				print "Req %s provided by %s" % (r, line.strip())
+				verbose ("Req %s provided by %s" % (r, line.strip()))
 				package_names.add(line.strip())
 			rc = repoquery.wait()
 			if rc != 0:
@@ -58,16 +65,16 @@ def update_deps(config, reqs, deps, arch):
 	repoquery_args = repoquery_args + reposfrompath
 	for p in reqs:
 		if p in deps:
-			print "not gathering deps for package %s because it has already been resolved" % (p,)
+			verbose ("not gathering deps for package %s because it has already been resolved" % (p,))
 			continue
 
-		print "executing: %s" % (repoquery_args + [p],)
+		verbose ("executing: %s" % (repoquery_args + [p],))
 		repoquery = subprocess.Popen(repoquery_args + [p], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		for line in repoquery.stdout:
 			match = dep_tree_regex.search(line)
 			if match:
 				pkg = match.group("pkg")
-				print "match: '%s' from: '%s'" % (pkg, line)
+				verbose ("match: '%s' from: '%s'" % (pkg, line))
 				deps.add(pkg)
 			else:
 				print "no match: %s" % (line,)
@@ -249,10 +256,12 @@ def main():
 	parser.add_argument("-l", "--lorax", action="append")
 	parser.add_argument("-a", "--arch", default="x86_64,noarch")
 	parser.add_argument("-r", "--require", action="append")
+	parser.add_argument('-v', "--verbose", action="store_true", default=False)
 	parser.add_argument("repo", help="repository information.  for each repository, 2 components must be supplied in the following form:  repo_path,pkglis", nargs="+", metavar="PATH,PKGLIST")
 	parser.add_argument("-t", "--runtime", action='store_true', help="Generate list of run time dependencies instead of build time dependencies")
 	args = parser.parse_args()
 
+	global verbose_output
 	global buildrequires_regex
 	if args.runtime:
 		print "Using only Requires tags"
@@ -275,6 +284,7 @@ def main():
 	manual_reqs = args.require
 	if manual_reqs is None:
 		manual_reqs = list()
+	verbose_output = args.verbose
 
 	arch = args.arch
 	repos = repos_from_args(args.repo)
@@ -292,16 +302,16 @@ def main():
 		if not os.path.exists(s):
 			raise Exception("ERROR: spec file %s does not exist" % (s,))
 		tmp = get_build_reqs_from_spec(s)
-		print "List of requirements (%s) from spec: %s" % (tmp, s)
+		verbose ("List of requirements (%s) from spec: %s" % (tmp, s))
 		reqs.update(tmp)
 
 	for l in lorax:
 		if not os.path.exists(l):
 			raise Exception("ERROR: lorax file %s does not exist" % (l,))
 		tmp = get_build_reqs_from_lorax(l)
-		print "List of requirements (%s) from spec: %s" % (tmp, l)
+		verbose ("List of requirements (%s) from spec: %s" % (tmp, l))
 		reqs.update(tmp)
-	
+
 	# requirement strings (capabilities, files, packages)
 	reqs.update(manual_reqs)
 
