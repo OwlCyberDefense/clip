@@ -283,7 +283,7 @@ fi
 
 # pull EPEL package versions from pkglist.EPEL. Otherwise just download the newest
 # versions available
-EPEL_PACKAGES="python34 python34-libs"
+EPEL_PACKAGES="python36 python36-libs"
 CONF=./conf/pkglist.EPEL
 VERSIONED_LIST=
 if [ -s $CONF ]; then
