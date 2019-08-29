@@ -299,7 +299,7 @@ Run `./bootstrap.sh` with an RHEL 7 DVD in the DVD-Drive.
 The bootstrap script will subscribe to EPEL and install the necessary packages needed for the build system. Simply run `./bootstrap.sh`.
 
 ##### I want to use CentOS instead of RHEL. What do I need to do?
-CentOS is not currently supported at this time.
+In the CONFIG_BUILD file point to a CentOS mirror rather than a RHEL mirror or provide a CentOS DVD for bootstrap.
 
 ##### Do I have to subscribe to the RHEL optional channel?
 If you don't have credentials or you're out of entitlements there is a work-around.
@@ -444,6 +444,11 @@ to above.
 One other workflow I want to mention is to simply point CLIP at a pre-rolled
 RPM or yum repo.  In that way you can use your existing build system/SCM to
 generate the package(s).
+
+Additionally you can include CLIP as a git submodule in your project. Setup your
+source tree in the CLIP structure.  Then symlink the required packages from the 
+CLIP submodule into your packages directory.  This allows for easy updating of
+CLIP as updates are available AND easy ability to customize everything as needed.
 
 ##### How do I get the dependencies for the host?
 Run `./bootstrap.sh` from within the clip directory.
