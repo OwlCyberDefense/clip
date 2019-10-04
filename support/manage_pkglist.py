@@ -14,6 +14,8 @@ verbose_output = False
 buildrequires_regex = re.compile(r"^BuildRequires:\s*(?P<reqs>.+)$")
 lorax_regex = re.compile(r"^installpkg\s*(?P<reqs>.+)$")
 reposfrompath=[]
+spec_req_regex = re.compile(r"^(?P<req>[a-zA-Z0-9_\(\).\+-]+)")
+arch_regex = re.compile(r"^(?P<req>[a-zA-Z0-9_.\+-]+)\((?P<arch>[0-9a-zA-Z-]+)\)$")
 
 def verbose(info):
 	global verbose_output
@@ -22,8 +24,8 @@ def verbose(info):
 
 def reqs_to_packages(config, reqs, arch):
 	# resolve the reqs to package names
-	package_names = set()
-	repoquery_args = ["/usr/bin/repoquery", "-c", config, "--whatprovides", "--queryformat", "%{NAME}", "--archlist",arch]
+	package_names = dict()
+	repoquery_args = ["/usr/bin/repoquery", "-c", config, "--whatprovides", "--queryformat", "%{NAME},%{ARCH}"]
 	# TODO: see if this can be collapsed into a single call
 	for r in reqs:
 		final_arch = arch
@@ -81,6 +83,7 @@ def update_deps(config, reqs, deps, arch):
 	repoquery_args = repoquery_args + reposfrompath
 
 	for p in reqs:
+		final_arch = p.split(".")[-1]
 		if p in deps:
 			verbose ("not gathering deps for package %s because it has already been resolved" % (p,))
 			continue
