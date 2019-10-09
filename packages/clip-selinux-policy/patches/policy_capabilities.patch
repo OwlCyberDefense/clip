@@ -1,5 +1,14 @@
 --- refpolicy/policy/policy_capabilities	2018-05-02 09:15:22.952062843 -0400
 +++ clip-selinux-policy/policy/policy_capabilities	2018-05-02 12:14:39.469268031 -0400
+@@ -40,7 +40,7 @@
+ # packet: send recv
+ # peer: recv
+ #
+-# policycap always_check_network;
++policycap always_check_network;
+ 
+ # Enable separate security classes for
+ # all network address families previously
 @@ -82,14 +82,14 @@
  # Available in kernel 4.11+.
  # Requires libsepol 2.7+ to build policy with this enabled.
