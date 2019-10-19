@@ -1,7 +1,7 @@
 Name: %{pkgname}
 Version: %{version}
 Release: %{release}
-Summary: CLIP Module for system lockdown confinguration
+Summary: CLIP Module for system lockdown configuration
 Requires: audit
 Requires: grep
 Requires: pam
