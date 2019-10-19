@@ -1,8 +1,39 @@
 
--a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -F key=perm_mod
--a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -F key=perm_mod
--a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -F key=perm_mod
--a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -F key=perm_mod
--a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -F key=perm_mod
--a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -F key=perm_mod
+-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+
+-a always,exit -F arch=b32 -S chown,fchown,lchown,fchownat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b32 -S chown,fchown,lchown,fchownat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b64 -S chown,fchown,lchown,fchownat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b64 -S chown,fchown,lchown,fchownat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+
+-a always,exit -F arch=b32 -S rename,renameat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccessful-delete
+-a always,exit -F arch=b32 -S rename,renameat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccessful-delete
+-a always,exit -F arch=b64 -S rename,renameat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccessful-delete
+-a always,exit -F arch=b64 -S rename,renameat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccessful-delete
+
+-a always,exit -F arch=b32 -S removexattr,lremovexattr,fremovexattr -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b32 -S removexattr,lremovexattr,fremovexattr -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b64 -S removexattr,lremovexattr,fremovexattr -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b64 -S removexattr,lremovexattr,fremovexattr -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+
+-a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+-a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccesful-perm-change
+
+-a always,exit -F arch=b32 -S unlink,unlinkat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccessful-delete
+-a always,exit -F arch=b32 -S unlink,unlinkat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccessful-delete
+-a always,exit -F arch=b64 -S unlink,unlinkat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=unsuccessful-delete
+-a always,exit -F arch=b64 -S unlink,unlinkat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=unsuccessful-delete
+
+-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b32 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b64 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+
+-a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
 

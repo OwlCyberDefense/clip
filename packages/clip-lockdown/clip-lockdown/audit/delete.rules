@@ -1,12 +1,12 @@
--a always,exit -F arch=b32 -S rmdir -F auid>=1000 -F auid!=4294967295 -F key=delete
--a always,exit -F arch=b32 -S unlink -F auid>=1000 -F auid!=4294967295 -F key=delete
--a always,exit -F arch=b32 -S unlinkat -F auid>=1000 -F auid!=4294967295 -F key=delete
--a always,exit -F arch=b32 -S rename -F auid>=1000 -F auid!=4294967295 -F key=delete
--a always,exit -F arch=b32 -S renameat -F auid>=1000 -F auid!=4294967295 -F key=delete
+-a always,exit -F arch=b32 -S rmdir -F auid>=1000 -F auid!=unset -F key=delete
+-a always,exit -F arch=b32 -S unlink -F auid>=1000 -F auid!=unset -F key=delete
+-a always,exit -F arch=b32 -S unlinkat -F auid>=1000 -F auid!=unset -F key=delete
+-a always,exit -F arch=b32 -S rename -F auid>=1000 -F auid!=unset -F key=delete
+-a always,exit -F arch=b32 -S renameat -F auid>=1000 -F auid!=unset -F key=delete
 
--a always,exit -F arch=b64 -S rmdir -F auid>=1000 -F auid!=4294967295 -F key=delete
--a always,exit -F arch=b64 -S unlink -F auid>=1000 -F auid!=4294967295 -F key=delete
--a always,exit -F arch=b64 -S unlinkat -F auid>=1000 -F auid!=4294967295 -F key=delete
--a always,exit -F arch=b64 -S rename -F auid>=1000 -F auid!=4294967295 -F key=delete
--a always,exit -F arch=b64 -S renameat -F auid>=1000 -F auid!=4294967295 -F key=delete
+-a always,exit -F arch=b64 -S rmdir -F auid>=1000 -F auid!=unset -F key=delete
+-a always,exit -F arch=b64 -S unlink -F auid>=1000 -F auid!=unset -F key=delete
+-a always,exit -F arch=b64 -S unlinkat -F auid>=1000 -F auid!=unset -F key=delete
+-a always,exit -F arch=b64 -S rename -F auid>=1000 -F auid!=unset -F key=delete
+-a always,exit -F arch=b64 -S renameat -F auid>=1000 -F auid!=unset -F key=delete
 
