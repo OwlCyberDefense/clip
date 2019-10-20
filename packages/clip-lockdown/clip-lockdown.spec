@@ -204,6 +204,8 @@ set_umask $USER_UMASK /etc/profile
 # Disable root login altogether
 echo > /etc/securetty
 
+# CCE-80154-8,  CCE-80153-0, CCE-80152-2
+sed -i -e "s/\(tmpfs.*shm.*\)defaults/\1noexec,nosuid,nodev/" /etc/fstab
 
 %triggerin -- shadow-utils
 . %{remediation_dir}/replace_or_append.sh
