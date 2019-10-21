@@ -397,11 +397,10 @@ $CONTENT_PATH/$CONTENT_FILE
 #$CONTENT_PATH/$CONTENT_FILE 2>&1 | tee $SSG_PATH/clip-el7-ssg-fix_log.txt
 
 # setup service to run xccdf evaluation after boot
-install -D --mode=644 /dev/stdin /etc/systemd/system/xccdf_review@$SYSTEM_NAME.service.d/$SYSTEM_NAME.conf <<- EOF
+install -D --mode=644 /dev/stdin /etc/systemd/system/xccdf_review@service.d/$SYSTEM_NAME.conf <<- EOF
 	[Service]
 	Environment="SSG_PATH=$SSG_PATH"
 	Environment="SYSTEM_NAME=$SYSTEM_NAME"
-	Environment="PROFILE=$profile"
 	Environment="CONTENT_PATH=$CONTENT_PATH"
 	Environment="CONTENT_FILE=$CONTENT_FILE"
 
@@ -420,7 +419,7 @@ if [ x"$CONFIG_REMOVE_SCAP" == "xy" ]; then
 	rpm -e scap-security-guide rpmdevtools gdb rpm-build openscap-utils openscap-containers openscap-scanner openscap redhat-rpm-config man-db emacs-filesystem elfutils 
 	/usr/sbin/semodule -d oscap
 else
-	/usr/bin/systemctl enable xccdf_review@$SYSTEM_NAME.service
+	/usr/bin/systemctl enable xccdf_review@$profile.service
 fi
 
 ###### START - ADD AUDIT RULES TO COMPLY WITH SSG ###########
