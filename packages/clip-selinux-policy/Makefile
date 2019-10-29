@@ -80,7 +80,7 @@ else
 	ENABLE_MODULES := %{nil}
 endif
 
-ifneq ($(CONFIG_REMOVE_SCAP),y)
+ifneq ($(CONFIG_REMOVE_SCAP),n)
 	ENABLE_MODULES += oscap
 else
 	ENABLE_BASE += oscap
