@@ -145,3 +145,20 @@ interface(`oscap_role',`
 	allow $2 oscap_t:process signal;
 ')
 
+########################################
+## <summary>
+##	Read the files that contain the results of the STIG san
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`oscap_read_results',`
+	gen_require(`
+		type ssg_file_t;
+	')
+
+	read_files_pattern($1, ssg_file_t, ssg_file_t)
+')
