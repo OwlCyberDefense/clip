@@ -32,7 +32,9 @@ allow oscap_t self:process signal;
 allow oscap_t oscap_probe_t:process signal;
 
 allow oscap_t self:fifo_file manage_fifo_file_perms;
+allow oscap_t self:netlink_route_socket create_netlink_socket_perms;
 allow oscap_t self:unix_stream_socket create_stream_socket_perms;
+allow oscap_t self:udp_socket create_socket_perms;
 
 create_files_pattern(oscap_t, ssg_file_t, ssg_file_t)
 write_files_pattern(oscap_t, ssg_file_t, ssg_file_t)
@@ -64,11 +66,11 @@ oscap_probe_domtrans(oscap_t)
 # oscap-probe local policy
 #
 
-allow oscap_probe_t self:capability { dac_override net_admin sys_nice sys_ptrace sys_rawio };
+allow oscap_probe_t self:capability { dac_override net_admin sys_admin sys_nice sys_ptrace sys_rawio };
 allow oscap_probe_t self:process { setsched signal signull getcap getsched };
 
 allow oscap_probe_t self:netlink_route_socket r_netlink_socket_perms;
-allow oscap_probe_t self:udp_socket create_socket_perms;;
+allow oscap_probe_t self:udp_socket create_socket_perms;
 
 
 # probe_system_info
@@ -109,6 +111,7 @@ init_dbus_chat(oscap_probe_t)
 init_get_all_units_status(oscap_probe_t)
 init_get_system_status(oscap_probe_t)
 init_service_status(oscap_probe_t)
+init_use_fds(oscap_probe_t)
 init_rw_stream_sockets(oscap_probe_t)
 
 kernel_getattr_message_if(oscap_probe_t)
@@ -120,8 +123,8 @@ logging_read_all_logs(oscap_probe_t)
 logging_read_audit_log(oscap_probe_t)
 logging_read_audit_config(oscap_probe_t)
 
-
 storage_raw_read_fixed_disk(oscap_probe_t)
+storage_raw_read_removable_device(oscap_probe_t)
 
 optional_policy(`
 	userdom_use_user_ttys(oscap_probe_t)
