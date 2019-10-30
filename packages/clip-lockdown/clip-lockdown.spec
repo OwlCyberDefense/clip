@@ -340,6 +340,9 @@ replace_or_append '/etc/security/pwquality.conf' '^minclass' 4 'CCE-27115-5' '%s
 # Disable control-alt-delete
 /bin/systemctl mask ctrl-alt-del.target
 
+/bin/systemctl disable proc-sys-fs-binfmt_misc.automount
+/bin/systemctl mask proc-sys-fs-binfmt_misc.automount
+
 %triggerin -- yum
 . %{remediation_dir}/replace_or_append.sh
 
