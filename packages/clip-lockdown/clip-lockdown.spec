@@ -37,38 +37,38 @@ This package contains various configuration files and lockdown for a CLIP based 
 %build
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
-install -d $RPM_BUILD_ROOT/%{audit_dir}
-install audit/*.rules $RPM_BUILD_ROOT/%{audit_dir}
+install -d %{buildroot}/%{audit_dir}
+install audit/*.rules %{buildroot}/%{audit_dir}
 
-install -d $RPM_BUILD_ROOT/%{sysctl_dir}
-install sysctl/*.conf $RPM_BUILD_ROOT/%{sysctl_dir}
+install -d %{buildroot}/%{sysctl_dir}
+install sysctl/*.conf %{buildroot}/%{sysctl_dir}
 
-install -d $RPM_BUILD_ROOT/%{modprobe_dir}
-install modprobe/*.conf $RPM_BUILD_ROOT/%{modprobe_dir}
+install -d %{buildroot}/%{modprobe_dir}
+install modprobe/*.conf %{buildroot}/%{modprobe_dir}
 
-install -d $RPM_BUILD_ROOT/%{pam_dir}
-install pam/* $RPM_BUILD_ROOT/%{pam_dir}
+install -d %{buildroot}/%{pam_dir}
+install pam/* %{buildroot}/%{pam_dir}
 
-install -d $RPM_BUILD_ROOT/%{limits_dir}
-install limits/*.conf $RPM_BUILD_ROOT/%{limits_dir}
+install -d %{buildroot}/%{limits_dir}
+install limits/*.conf %{buildroot}/%{limits_dir}
 
-install -d $RPM_BUILD_ROOT/%{remediation_dir}
-install remediation/* $RPM_BUILD_ROOT/%{remediation_dir}
+install -d %{buildroot}/%{remediation_dir}
+install remediation/* %{buildroot}/%{remediation_dir}
 
-install -d $RPM_BUILD_ROOT/%{ssh_config_dir}
-install ssh_config/* $RPM_BUILD_ROOT/%{ssh_config_dir}
+install -d %{buildroot}/%{ssh_config_dir}
+install ssh_config/* %{buildroot}/%{ssh_config_dir}
 
-install -d $RPM_BUILD_ROOT/%{_unitdir}
-install service/* $RPM_BUILD_ROOT/%{_unitdir}
+install -d %{buildroot}/%{_unitdir}
+install service/* %{buildroot}/%{_unitdir}
 
-install -d $RPM_BUILD_ROOT/%{dconf_local_dir}/locks
-install gdm/00-security-settings $RPM_BUILD_ROOT/%{dconf_local_dir}
-install gdm/00-security-settings-lock $RPM_BUILD_ROOT/%{dconf_local_dir}/locks
+install -d %{buildroot}/%{dconf_local_dir}/locks
+install gdm/00-security-settings %{buildroot}/%{dconf_local_dir}
+install gdm/00-security-settings-lock %{buildroot}/%{dconf_local_dir}/locks
 
-install -d $RPM_BUILD_ROOT/%{hold_dir}
-install gdm/custom.conf $RPM_BUILD_ROOT/%{hold_dir}
+install -d %{buildroot}/%{hold_dir}
+install gdm/custom.conf %{buildroot}/%{hold_dir}
 
 %triggerin -- filesystem
 /bin/chmod 750 /var/log
@@ -463,7 +463,7 @@ for config_file in "/etc/chrony.conf" "/etc/ntp.conf"; do
 done
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files
 %defattr(755,root,root,-)
