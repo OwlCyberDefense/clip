@@ -20,6 +20,7 @@ VENDOR := Tresys Technology
 PACKAGER ?= Tresys Technology
 
 # snag the architecture, hard code an arch if cross-compiling or going noarch
+TARGET_ARCH ?= $(shell uname -i)
 ARCH := noarch
 
 CWD := $(shell pwd)
