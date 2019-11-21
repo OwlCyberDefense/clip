@@ -134,7 +134,7 @@ def update_deps(config, reqs, deps, arch):
 			print "packages found only in the single query method: %s" % (only_in_single_query,)
 		if only_in_multiple_query:
 			print "packages found only in the multiple query method: %s" % (only_in_multiple_query,)
-		
+
 	all_packages = all_packages_single_repoquery + all_packages_multiple_repoquery
 	'''
 
@@ -152,7 +152,7 @@ def get_build_deps_using_repoquery():
 		if rc != 0:
 			print "ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read())
 			raise Exception("ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read()))
-			
+
 	return build_reqs
 '''
 
@@ -230,8 +230,15 @@ def resolve_packages_to_repos(pkgs, repos):
 	for pkg in pkgs:
 		found = False
 		for repo in repos:
-			pkg_path = os.path.join(repo["path"], "%s.rpm" % (pkg,))
-			if os.path.exists(pkg_path):
+			pkg_paths = [
+                    os.path.join(repo["path"], "%s.rpm" % (pkg,)),
+                    os.path.join(repo["path"], "Packages", "%s.rpm" % (pkg,)),
+                    os.path.join(repo["path"], pkg.lower()[0],
+                        "%s.rpm" % (pkg,)),
+                    os.path.join(repo["path"], "Packages", pkg.lower()[0],
+                        "%s.rpm" % (pkg,)),
+                    ]
+			if any([os.path.exists(x) for x in pkg_paths]):
 				repo["pkgs"].add(pkg)
 				found = True
 				break
