@@ -453,13 +453,11 @@ for config_file in "/etc/chrony.conf" "/etc/ntp.conf"; do
 		continue;
 	fi
 
-	# Set maxpoll values to var_time_service_set_maxpoll
-	/bin/sed -i "s/^\(server.*maxpoll\) [0-9][0-9]*\(.*\)$/\1 $var_time_service_set_maxpoll \2/" "$config_file"
+	# Delete maxpoll if it already exists
+	/bin/sed -i "/^server/ s/ maxpoll [0-9][0-9]*//" "$config_file"
 
-	# Add maxpoll to server entries without maxpoll
-	/bin/grep -P "^server((?!maxpoll).)*$" $config_file | while read -r line ; do
-		/bin/sed -i "s/$line/&1 maxpoll $var_time_service_set_maxpoll/" "$config_file"
-	done
+	# Add maxpoll to server entries with the right value
+	/bin/sed -i "/^server/ s/$/ maxpoll $var_time_service_set_maxpoll/" "$config_file"
 done
 
 %clean
