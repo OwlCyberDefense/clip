@@ -441,6 +441,11 @@ replace_or_append '/etc/audit/auditd.conf' '^space_left_action' 'halt' 'CCE-2737
 # The auditd service can be configured to take an action when disk space is running low but prior to running out of space completely.
 replace_or_append '/etc/audit/auditd.conf' '^space_left' 100 'CCE-80537-4' '%s = %s'
 
+# auditd_audispd_syslog_plugin_activated
+# CCE-27341-7
+# Configure auditd to use audispd's syslog plugin
+replace_or_append '/etc/audisp/plugins.d/syslog.conf' '^active' "yes" "CCE-27341-7" '%s = %s'
+
 %triggerin -- chrony, ntp
 
 # chronyd_or_ntpd_set_maxpoll
