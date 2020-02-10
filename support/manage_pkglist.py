@@ -231,13 +231,11 @@ def resolve_packages_to_repos(pkgs, repos):
 		found = False
 		for repo in repos:
 			pkg_paths = [
-                    os.path.join(repo["path"], "%s.rpm" % (pkg,)),
-                    os.path.join(repo["path"], "Packages", "%s.rpm" % (pkg,)),
-                    os.path.join(repo["path"], pkg.lower()[0],
-                        "%s.rpm" % (pkg,)),
-                    os.path.join(repo["path"], "Packages", pkg.lower()[0],
-                        "%s.rpm" % (pkg,)),
-                    ]
+				os.path.join(repo["path"], "%s.rpm" % (pkg,)),
+				os.path.join(repo["path"], "Packages", "%s.rpm" % (pkg,)),
+				os.path.join(repo["path"], pkg.lower()[0], "%s.rpm" % (pkg,)),
+				os.path.join(repo["path"], "Packages", pkg.lower()[0], "%s.rpm" % (pkg,)),
+			]
 			if any([os.path.exists(x) for x in pkg_paths]):
 				repo["pkgs"].add(pkg)
 				found = True
