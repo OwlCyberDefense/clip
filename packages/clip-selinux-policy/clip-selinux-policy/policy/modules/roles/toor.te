@@ -1070,7 +1070,7 @@ optional_policy(`
 
 optional_policy(`
 	sysadm_role_change_to(toor_r)
-	sysadm_role_change(toor_r)
+	sysadm_role_change(toor_r, toor_t)
 ')
 
 optional_policy(`
