@@ -9,26 +9,3 @@
  
  # Enable separate security classes for
  # all network address families previously
-@@ -82,14 +82,14 @@
- # Available in kernel 4.11+.
- # Requires libsepol 2.7+ to build policy with this enabled.
- #
--policycap extended_socket_class;
-+#policycap extended_socket_class;
- 
- # Enable fine-grained labeling of cgroup and cgroup2 filesystems.
- # Requires Linux v4.11 and later.
- #
- # Added checks:
- # (none)
--policycap cgroup_seclabel;
-+#policycap cgroup_seclabel;
- 
- # Enable NoNewPrivileges support.  Requires libsepol 2.7+
- # and kernel 4.14.
-@@ -97,4 +97,4 @@
- # Checks enabled;
- # process2: nnp_transition, nosuid_transition
- #
--policycap nnp_nosuid_transition;
-+#policycap nnp_nosuid_transition;
