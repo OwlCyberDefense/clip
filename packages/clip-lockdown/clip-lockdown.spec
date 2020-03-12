@@ -83,6 +83,10 @@ dconf update
 /usr/bin/install -m 644 %{hold_dir}/custom.conf %{gdm_dir}/custom.conf
 dconf update
 
+%triggerin -- libsemanage
+# turn on 'expand-check' so neverallow rules will be enforced
+/bin/sed -i -e 's/\(expand-check=\).*/\11/' /etc/selinux/semanage.conf
+
 %triggerpostun -- openssh
 # auditd rules complain if this directory doesn't exist on check for openssh-keysign
 /usr/bin/mkdir -p /usr/libexec/openssh
