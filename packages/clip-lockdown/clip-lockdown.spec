@@ -339,12 +339,18 @@ replace_or_append '/etc/security/pwquality.conf' '^difok' 8 'CCE-26631-2' '%s = 
 replace_or_append '/etc/security/pwquality.conf' '^minclass' 4 'CCE-27115-5' '%s = %s'
 
 %triggerin -- systemd
+. %{remediation_dir}/replace_or_append.sh
+
 # CCE-27511-5
 # Disable control-alt-delete
 /bin/systemctl mask ctrl-alt-del.target
 
 /bin/systemctl disable proc-sys-fs-binfmt_misc.automount
 /bin/systemctl mask proc-sys-fs-binfmt_misc.automount
+
+# CCE-80449-2
+# Disable control-alt-delete Burst Action
+replace_or_append '/etc/systemd/system.conf' '^CtrlAltDelBurstAction=' 'none' 'CCE-80449-2' '%s=%s'
 
 %triggerin -- yum
 . %{remediation_dir}/replace_or_append.sh
