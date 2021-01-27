@@ -368,10 +368,6 @@ optional_policy(`
 ')
 
 optional_policy(`
-	dnssectrigger_admin(toor_t, toor_r)
-')
-
-optional_policy(`
 	dovecot_admin(toor_t, toor_r)
 ')
 
@@ -539,11 +535,6 @@ optional_policy(`
 
 optional_policy(`
 	ksmtuned_admin(toor_t, toor_r)
-')
-
-optional_policy(`
-	kudzu_admin(toor_t, toor_r)
-	kudzu_run(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -757,10 +748,6 @@ optional_policy(`
 ')
 
 optional_policy(`
-	pcmcia_run_cardctl(toor_t, toor_r)
-')
-
-optional_policy(`
 	pcscd_admin(toor_t, toor_r)
 ')
 
@@ -912,10 +899,6 @@ optional_policy(`
 
 optional_policy(`
 	rngd_admin(toor_t, toor_r)
-')
-
-optional_policy(`
-	roundup_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -1245,10 +1228,6 @@ optional_policy(`
 ')
 
 optional_policy(`
-	yam_run(toor_t, toor_r)
-')
-
-optional_policy(`
 	zabbix_admin(toor_t, toor_r)
 ')
 
@@ -1300,10 +1279,6 @@ ifndef(`distro_redhat',`
 
 	optional_policy(`
 		games_role(toor_r, toor_t)
-	')
-
-	optional_policy(`
-		gift_role(toor_r, toor_t)
 	')
 
 	optional_policy(`
