@@ -19,7 +19,6 @@ Requires: sed
 BuildRequires: policycoreutils-devel >= %{POLICYCOREUTILSVER}
 
 Patch1: add_file_base_type_attribute.patch
-Patch2:	file_contexts.subs_dist.patch
 Patch3: policy_capabilities.patch
 
 %define rpmmacrodir %{_usr}/lib/rpm/macros.d/
@@ -158,7 +157,6 @@ Certifiable Linux Integration Platform SELinux Reference Policy - modular.
 %prep 
 %setup -n %{pkgname} -q
 %patch1 -p1
-%patch2 -p1
 %patch3 -p1
 
 %install
