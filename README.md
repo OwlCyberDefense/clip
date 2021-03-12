@@ -474,6 +474,9 @@ The CLIP build system is designed to utilize mock to build your external package
 ##### How do I create a LiveCD?
 As of RHEL 7.0, LiveCDs are no longer functional. Please see issue #178 for more information.
 
+##### Where are my USB devices?
+There is a STIG requirement (CCE-27277-3) to not allow USB storage devices.  This is accomplished by not allowing the usb_storage module to be loaded.  To allow USB storage devices, remove /etc/modprobe.d/usb_storage.conf.
+
 ## Known Issues <a id="known-issues"></a>
 
 ##### VirtualBox
