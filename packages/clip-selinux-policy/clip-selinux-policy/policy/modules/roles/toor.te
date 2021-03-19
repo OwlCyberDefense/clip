@@ -93,10 +93,6 @@ optional_policy(`
 ')
 
 optional_policy(`
-	aiccu_admin(toor_t, toor_r)
-')
-
-optional_policy(`
 	aide_admin(toor_t, toor_r)
 ')
 
@@ -163,10 +159,6 @@ optional_policy(`
 ')
 
 optional_policy(`
-	bcfg2_admin(toor_t, toor_r)
-')
-
-optional_policy(`
 	bind_admin(toor_t, toor_r)
 	bind_run_ndc(toor_t, toor_r)
 ')
@@ -200,16 +192,9 @@ optional_policy(`
 ')
 
 optional_policy(`
-	callweaver_admin(toor_t, toor_r)
-')
-
-optional_policy(`
 	canna_admin(toor_t, toor_r)
 ')
 
-optional_policy(`
-	ccs_admin(toor_t, toor_r)
-')
 
 optional_policy(`
 	certmaster_admin(toor_t, toor_r)
@@ -241,23 +226,11 @@ optional_policy(`
 ')
 
 optional_policy(`
-	cipe_admin(toor_t, toor_r)
-')
-
-optional_policy(`
 	clamav_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
 	clock_run(toor_t, toor_r)
-')
-
-optional_policy(`
-	clockspeed_run_cli(toor_t, toor_r)
-')
-
-optional_policy(`
-	cmirrord_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -314,21 +287,7 @@ optional_policy(`
 ')
 
 optional_policy(`
-	dcc_run_cdcc(toor_t, toor_r)
-	dcc_run_client(toor_t, toor_r)
-	dcc_run_dbclean(toor_t, toor_r)
-')
-
-optional_policy(`
 	ddclient_admin(toor_t, toor_r)
-')
-
-optional_policy(`
-	ddcprobe_run(toor_t, toor_r)
-')
-
-optional_policy(`
-	denyhosts_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -377,10 +336,6 @@ optional_policy(`
 
 optional_policy(`
 	drbd_admin(toor_t, toor_r)
-')
-
-optional_policy(`
-	dspam_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -458,10 +413,6 @@ optional_policy(`
 optional_policy(`
 	hwloc_admin(toor_t)
 	hwloc_run_dhwd(toor_t, toor_r)
-')
-
-optional_policy(`
-	howl_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
@@ -570,10 +521,6 @@ optional_policy(`
 ')
 
 optional_policy(`
-	lockdev_role(toor_r, toor_t)
-')
-
-optional_policy(`
 	logrotate_run(toor_t, toor_r)
 ')
 
@@ -648,10 +595,6 @@ optional_policy(`
 ')
 
 optional_policy(`
-	mscan_admin(toor_t, toor_r)
-')
-
-optional_policy(`
 	mta_role(toor_r, toor_t)
 ')
 
@@ -712,10 +655,6 @@ optional_policy(`
 ')
 
 optional_policy(`
-	oav_run_update(toor_t, toor_r)
-')
-
-optional_policy(`
 	oident_admin(toor_t, toor_r)
 ')
 
@@ -772,10 +711,6 @@ optional_policy(`
 ')
 
 optional_policy(`
-	polipo_admin(toor_t, toor_r)
-')
-
-optional_policy(`
 	portage_run(toor_t, toor_r)
 	portage_run_fetch(toor_t, toor_r)
 	portage_run_gcc_config(toor_t, toor_r)
@@ -827,10 +762,6 @@ optional_policy(`
 ')
 
 optional_policy(`
-	pyicqt_admin(toor_t, toor_r)
-')
-
-optional_policy(`
 	pyzor_admin(toor_t, toor_r)
 	pyzor_role(toor_r, toor_t)
 ')
@@ -878,19 +809,7 @@ optional_policy(`
 ')
 
 optional_policy(`
-	rgmanager_admin(toor_t, toor_r)
-')
-
-optional_policy(`
-	rhcs_admin(toor_t, toor_r)
-')
-
-optional_policy(`
 	rhsmcertd_admin(toor_t, toor_r)
-')
-
-optional_policy(`
-	ricci_admin(toor_t, toor_r)
 ')
 
 optional_policy(`
