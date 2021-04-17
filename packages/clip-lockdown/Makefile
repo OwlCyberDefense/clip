@@ -88,7 +88,7 @@ $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm: $(RPM_DEPS)
 	@echo "Building $(PKGNAME) SRPM..."
 	$(call rpm-prep)
 	cp $(TARBALL) $(RPM_TOPDIR)/SOURCES/
-	echo -e "%define pkgname $(PKGNAME)\n%define _sysconfdir /etc\n%define version $(VERSION)\n%define release $(RELEASE)\n%define vendor $(VENDOR)\n%define packager $(PACKAGER)\nBuildArch: $(ARCH)\n"> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
+	echo -e "%define pkgname $(PKGNAME)\n%define version $(VERSION)\n%define release $(RELEASE)\n%define vendor $(VENDOR)\n%define packager $(PACKAGER)\nBuildArch: $(ARCH)\n"> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cat $(RPM_SPEC) >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	cd $(RPM_TOPDIR) && rpmbuild $(RPMBUILD_ARGS) -bs SPECS/$(notdir $(RPM_SPEC)) --nodeps
 	mv  $(RPM_TOPDIR)/SRPMS/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm $(SRPM_OUTPUT_DIR)
