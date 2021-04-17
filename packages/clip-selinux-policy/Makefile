@@ -87,7 +87,7 @@ else
 	ENABLE_BASE += oscap
 endif
 
-RPMQ_DEFS := --query --define 'pkgname $(PKGNAME)' --define '_sysconfdir /etc' --define 'version $(VERSION)' --define 'release $(RELEASE)' --define 'vendor $(VENDOR)' --define 'packager $(PACKAGER)' --qf '%{NAME}\n'
+RPMQ_DEFS := --query --define 'pkgname $(PKGNAME)' --define 'version $(VERSION)' --define 'release $(RELEASE)' --define 'vendor $(VENDOR)' --define 'packager $(PACKAGER)' --qf '%{NAME}\n'
 
 ifneq ($(ENABLE_MODULES),)
 RPM_DEFS := --define 'enable_modules $(ENABLE_MODULES)' $(RPM_DEFS)
@@ -129,7 +129,6 @@ $(SRPM_OUTPUT_DIR)/$(PKGNAME)-$(VERSION)-$(RELEASE).src.rpm: $(RPM_DEPS)
 	echo "%define enable_modules $(ENABLE_MODULES)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	echo "%define enforcing_mode $(ENFORCING_MODE)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	echo "%define pkgname $(PKGNAME)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
-	echo "%define _sysconfdir /etc" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	echo "%define version $(VERSION)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	echo "%define release $(RELEASE)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
 	echo "%define vendor $(VENDOR)" >> $(RPM_TOPDIR)/SPECS/$(notdir $(RPM_SPEC))
