@@ -71,9 +71,9 @@ TARGET_ARCH := $(shell uname -i)
 # If you want to reuse the same chroot for all RPMs, set CLEAN_MOCK to n
 # This should decrease the build time since we won't have to install common
 # packages in the chroot for each RPM
-CLEAN_MOCK := y
+CLEAN_MOCK ?= y
 
 # Quiet down the build output a bit.
-QUIET := n
+QUIET ?= n
 
 export TARGET_ARCH ADDTL_DEPS QUIET CONFIG_BUILD_BASH_VARS CONFIG_BUILD_ENFORCING_MODE CONFIG_BUILD_UNCONFINED_TOOR CONFIG_BUILD_PRODUCTION ISO_VERSION ENABLE_NETWORKING CONFIG_BUILD_AIDE CONFIG_BUILD_FIPS_MODE CONFIG_REMOVE_SCAP
