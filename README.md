@@ -1,25 +1,25 @@
-#Certifiable Linux Integration Platform (CLIP)
+# Certifiable Linux Integration Platform (CLIP)
 
 ## Table of Contents
-  * [Getting Started] (#getting-started-)
-  * [Build System] (#build-system-)
-    * [What is this thing?] (#what-is-this-thing-)
-    * [How do I use the build system?] (#how-do-i-use-the-build-system-)
-    * [Managing yum repos] (#managing-yum-repos-)
-    * [Custom Packages] (#custom-packages-)
-    * [ISO configuration (kickstarts)] (#iso-configuration-kickstart-files-)
-    * [Add existing binary packages to the image] (#add-existing-binary-packages-to-the-image-)
-    * [Update existing external packages] (#update-existing-external-packages-)
-    * [Configuring AIDE] (#configuring-aide-)
-    * [Configuring Scap Security Guide] (#configuring-scap-security-guide-)
-  * [Use Cases] (#use-cases-)
+  * [Getting Started](#getting-started-)
+  * [Build System](#build-system-)
+    * [What is this thing?](#what-is-this-thing-)
+    * [How do I use the build system?](#how-do-i-use-the-build-system-)
+    * [Managing yum repos](#managing-yum-repos-)
+    * [Custom Packages](#custom-packages-)
+    * [ISO configuration (kickstarts)](#iso-configuration-kickstart-files-)
+    * [Add existing binary packages to the image](#add-existing-binary-packages-to-the-image-)
+    * [Update existing external packages](#update-existing-external-packages-)
+    * [Configuring AIDE](#configuring-aide-)
+    * [Configuring Scap Security Guide](#configuring-scap-security-guide-)
+  * [Use Cases](#use-cases-)
     * [Developer starting from scratch](#developer-starting-from-scratch-)
     * [Developer with existing custom yum repositories](#developer-with-existing-custom-yum-repositories-but-needs-help-rolling-isos-)
     * [Developer who only wants the remediation and audit content](#developer-who-only-wants-the-remediation-and-audit-content-)
-  * [Frequently Asked Questions] (#frequently-asked-questions-)
-  * [Known Issues] (#known-issues-)
+  * [Frequently Asked Questions](#frequently-asked-questions-)
+  * [Known Issues](#known-issues-)
 
-##Getting Started <a id="getting-started"></a>
+## Getting Started <a id="getting-started"></a>
 
 Here is a quick list of the things you need to do to get started.
 
@@ -32,9 +32,9 @@ It is "neutronbass". **DO NOT LEAVE THIS PASSWORD LINE INTACT!**
 
 **Note**: for a complete list of targets available please run `make help`
 
-##Build System <a id="build-system"></a>
+## Build System <a id="build-system"></a>
 
-###What is this thing? <a id="what-is-this-thing"></a>
+### What is this thing? <a id="what-is-this-thing"></a>
 
 CLIP’s build system allows developers and administrators to create RPMs and installation ISOs
 in a controlled environment.
@@ -55,7 +55,7 @@ with a build dependency bar-4.3-1, thus facilitating reproducibility of
 generated packages.
 
 
-###How do I use the build system? <a id="how-do-i-use-the-build-system"></a>
+### How do I use the build system? <a id="how-do-i-use-the-build-system"></a>
 
 This build system has a few constructs that must be addressed by the
 user.
@@ -68,7 +68,7 @@ user.
 
 To view the list of available build targets run `make help`.
 
-####Managing yum repos <a id="managing-yum-repos"></a>
+#### Managing yum repos <a id="managing-yum-repos"></a>
 
 
 Several repositories must be present for the build system to work:
@@ -84,7 +84,7 @@ The locations of these repos is defined in the [`CONFIG_REPOS`](./CONFIG_REPOS) 
 Remember that repositories are often architecture specific so you might have
 to update these variables to build for a different architecture.
 
-####Custom Packages <a id=”custom-packages”></a>
+#### Custom Packages <a id=”custom-packages”></a>
 
 The most common task is adding your own packages to be included in a rolled
 ISO.
@@ -116,7 +116,7 @@ update the appropriate kickstart file and add the package name to the kickstart'
 To exclude the package from future builds, add the package name as it appears in the `packages/`
 directory to the [`EXCLUDE_PKGS`](./Makefile#L50) variable in the top level Makefile.
 
-####ISO configuration (kickstart files) <a id=”iso-configuration-kickstart-files-”></a>
+#### ISO configuration (kickstart files) <a id=”iso-configuration-kickstart-files-”></a>
 
 
 The [`kickstart/`](./kickstart) directory contains the files needed to configure an ISO.  The
@@ -138,7 +138,7 @@ iso, you can run the following from `./kickstart/clip-rhel7`:
 A hostable kickstart is then located in
 `./tmp/clip-iso-build/1/x86_64/os/clip-rhel7.ks`
 
-####Add existing binary packages to the image <a id=”add-existing-binary-packages-to-the-image”></a>
+#### Add existing binary packages to the image <a id=”add-existing-binary-packages-to-the-image”></a>
 
 
 There are two ways to add an existing binary package to this build system.
@@ -214,7 +214,7 @@ Developers starting from scratch should insert any new sources into the
 repositories, and can then be included and used in a kickstart ending up in the
 installed system.
 
-#####Developer with existing custom yum repositories but needs help rolling ISOs <a id=”developer-with-existing-custom-yum-repositories-but-needs-help-rolling-isos”></a>
+##### Developer with existing custom yum repositories but needs help rolling ISOs <a id=”developer-with-existing-custom-yum-repositories-but-needs-help-rolling-isos”></a>
 
 
 This developer already has packages and yum repositories, but will use the
@@ -232,7 +232,7 @@ repo.  Once the repo is added to the configuration file the developer will
 modify the kickstart adding to add the custom packages.  The custom packages
 will be installed and rolling ISOs.
 
-#####Developer who only wants the remediation and audit content <a id=”developer-who-only-wants-the-remediation-and-audit-content”></a>
+##### Developer who only wants the remediation and audit content <a id=”developer-who-only-wants-the-remediation-and-audit-content”></a>
 
 
 These developers already have packages and yum repositories and can already
