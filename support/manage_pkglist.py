@@ -5,6 +5,7 @@ import dnf
 import os
 import re
 import sys
+import rpm
 
 from configparser import ConfigParser
 from pykickstart.parser import KickstartParser
@@ -95,6 +96,17 @@ def get_build_reqs_from_spec(spec_path):
 					reqs.add(match.group("req"))
 	return reqs
 
+def get_build_reqs_from_rpm(rpm_path):
+	reqs = set()
+	fdno = os.open(rpm_path, os.O_RDONLY)
+	ts = rpm.ts()
+	hdr = ts.hdrFromFdno(fdno)
+	os.close(fdno)
+
+	for line in hdr[rpm.RPMTAG_REQUIRES]:
+		reqs.add(line)
+
+	return reqs
 
 def get_build_reqs_from_lorax(lorax_path):
 	reqs = set()
@@ -198,6 +210,7 @@ def main():
 	parser.add_argument("-l", "--lorax", action="append")
 	parser.add_argument("-a", "--arch", default="x86_64,noarch")
 	parser.add_argument("-d", "--dnf_cache", default="tmp", action="store")
+	parser.add_argument("-p", "--package", action="append")
 	parser.add_argument("-r", "--require", action="append")
 	parser.add_argument("-R", "--required-versions-file", action="append")
 	parser.add_argument('-v', "--verbose", action="store_true", default=False)
@@ -225,6 +238,9 @@ def main():
 	lorax = args.lorax
 	if lorax is None:
 		lorax = list()
+	packages= args.package
+	if packages is None:
+		packages = list ()
 	manual_reqs = args.require
 	if manual_reqs is None:
 		manual_reqs = list()
@@ -258,6 +274,13 @@ def main():
 			raise Exception("ERROR: lorax file %s does not exist" % (l,))
 		tmp = get_build_reqs_from_lorax(l)
 		verbose ("INFO: Requirements from lorax: %s %s" % (l, tmp))
+		reqs.update(tmp)
+
+	for p in packages:
+		if not os.path.exists(p):
+			raise Exception("ERROR: package file %s does not exist" % (p,))
+		tmp = get_build_reqs_from_rpm(p)
+		verbose ("List of requirements (%s) from rpm: %s" % (tmp, p))
 		reqs.update(tmp)
 
 	# load repodata
