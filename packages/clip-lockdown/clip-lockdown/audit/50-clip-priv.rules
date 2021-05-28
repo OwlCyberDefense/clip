@@ -37,9 +37,3 @@
 -a always,exit -F path=/usr/lib64/dbus-1/dbus-daemon-launch-helper -F auid>=1000 -F auid!=unset -k privileged
 
 
--a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=unset -F key=export
--a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -F key=export
-
--w /etc/sudoers -p wa -k actions
--w /etc/sudoers.d/ -p wa -k actions
-

@@ -73,7 +73,7 @@ logvol /tmp           --vgname=vg00 --name=tmp   --fstype=ext4 --size 100  --max
 logvol /var/tmp       --vgname=vg00 --name=vtmp  --fstype=ext4 --size 100  --maxsize 5000  --grow
 logvol /var/lib/aide  --vgname=vg00 --name=aide  --fstype=ext4 --size 100  --maxsize 5000  --grow
 
-%packages --excludedocs --nobase --nocore
+%packages --nobase --nocore
 #CONFIG-BUILD-ADDTL-PACKAGES
 clip-selinux-policy
 # by default use MCS policy (clip-selinux-policy-clip)
@@ -424,8 +424,8 @@ fi
 
 ###### START - ADD AUDIT RULES TO COMPLY WITH SSG ###########
 if [ x"$CONFIG_BUILD_PRODUCTION" == "xn" ]; then
-	/bin/echo -e "# Not a production build - log errors to kernel - this overwrote the default file" > /etc/audit/rules.d/failure.rules
-	/bin/echo -e "-f 1" >> /etc/audit/rules.d/failure.rules
+	/bin/echo -e "# Not a production build - log errors to kernel - this overwrote the default file" > /etc/audit/rules.d/50-clip-failure.rules
+	/bin/echo -e "-f 1" >> /etc/audit/rules.d/50-clip-failure.rules
 fi
 ###### END - ADD AUDIT RULES TO COMPLY WITH SSG ###########
 

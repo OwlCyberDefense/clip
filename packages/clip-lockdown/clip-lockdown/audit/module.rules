@@ -1,6 +1,0 @@
--a always,exit -F arch=b32 -S init_module,finit_module,delete_module,create_module -F key=modules
--a always,exit -F arch=b64 -S init_module,finit_module,delete_module,create_module -F key=modules
-
--w /usr/sbin/insmod -p x -k modules
--w /usr/sbin/rmmod -p x -k modules
--w /usr/sbin/modprobe -p x -k modules
