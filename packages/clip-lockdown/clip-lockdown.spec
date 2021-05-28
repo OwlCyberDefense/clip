@@ -69,6 +69,26 @@ install gdm/00-security-settings-lock %{buildroot}/%{dconf_local_dir}/locks
 install -d %{buildroot}/%{hold_dir}
 install gdm/custom.conf %{buildroot}/%{hold_dir}
 
+%triggerin -- audit
+# This copies default audit rules from 'audit' rpm to keep OSPP42 scap test happy
+# Note that these files are specified as documentation.
+
+copy_audit_rules() {
+	RULE_FILE=$1
+	if [ -e /usr/share/doc/audit-*/rules/${RULE_FILE} ]; then
+		/bin/cp -f /usr/share/doc/audit-*/rules/${RULE_FILE} /etc/audit/rules.d/
+	else
+		echo "Missing '${RULE_FILE}' from /usr/share/doc/audit-<version>/rules."
+		echo " Please make sure audit rpm is installed, with documentation."
+	fi
+}
+
+copy_audit_rules '10-base-config.rules'
+copy_audit_rules '11-loginuid.rules'
+copy_audit_rules '30-ospp-v42.rules'
+copy_audit_rules '30-stig.rules'
+copy_audit_rules '43-module-load.rules'
+
 %triggerin -- filesystem
 /bin/chmod 750 /var/log
 

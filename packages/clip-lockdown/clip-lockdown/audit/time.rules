@@ -1,9 +1,0 @@
--a always,exit -F arch=b32 -S adjtimex,settimeofday,stime -k audit_time_rules
-
-# This is correct - stime doesn't exist on 64bit
--a always,exit -F arch=b64 -S adjtimex,settimeofday -k audit_time_rules
-
--a always,exit -F arch=b32 -S clock_settime -F a0=0x0 -F key=time-change
--a always,exit -F arch=b64 -S clock_settime -F a0=0x0 -F key=time-change
-
--w /etc/localtime -p wa -k audit_time_rules
