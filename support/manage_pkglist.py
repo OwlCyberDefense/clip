@@ -48,10 +48,10 @@ def reqs_to_packages(config, reqs, arch):
 				if pkg_arch not in package_names.keys ():
 					package_names[pkg_arch] = set ()
 				package_names[pkg_arch].add(match[0].strip())
-			rc = repoquery.wait()
-			if rc != 0:
-				print "ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read())
-				raise Exception("ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read()))
+		rc = repoquery.wait()
+		if rc != 0:
+			print "ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read())
+			raise Exception("ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read()))
 
 	if not package_names:
 		print "Unmatched regs: %s" % reqs
