@@ -89,6 +89,25 @@ copy_audit_rules '30-ospp-v42.rules'
 copy_audit_rules '30-stig.rules'
 copy_audit_rules '43-module-load.rules'
 
+. %{remediation_dir}/replace_or_append.sh
+
+# auditd_data_retention_space_left_action
+# CCE-27375-5
+# The auditd service can be configured to take an action when disk space starts to run low. 
+replace_or_append '/etc/audit/auditd.conf' '^space_left_action' 'halt' 'CCE-27375-5' '%s = %s'
+
+
+# auditd_data_retention_space_left
+# CCE-80537-4
+# The auditd service can be configured to take an action when disk space is running low but prior to running out of space completely.
+replace_or_append '/etc/audit/auditd.conf' '^space_left' 100 'CCE-80537-4' '%s = %s'
+
+# auditd_audispd_syslog_plugin_activated
+# CCE-27341-7
+# Configure auditd to use audispd's syslog plugin
+replace_or_append '/etc/audisp/plugins.d/syslog.conf' '^active' "yes" "CCE-27341-7" '%s = %s'
+
+
 %triggerin -- filesystem
 /bin/chmod 750 /var/log
 
@@ -455,25 +474,6 @@ do
 
 	/bin/sed -i "s/^$group\s*=.*/$group = $config/g" $aide_conf
 done
-
-%triggerin -- audit
-. %{remediation_dir}/replace_or_append.sh
-
-# auditd_data_retention_space_left_action
-# CCE-27375-5
-# The auditd service can be configured to take an action when disk space starts to run low. 
-replace_or_append '/etc/audit/auditd.conf' '^space_left_action' 'halt' 'CCE-27375-5' '%s = %s'
-
-
-# auditd_data_retention_space_left
-# CCE-80537-4
-# The auditd service can be configured to take an action when disk space is running low but prior to running out of space completely.
-replace_or_append '/etc/audit/auditd.conf' '^space_left' 100 'CCE-80537-4' '%s = %s'
-
-# auditd_audispd_syslog_plugin_activated
-# CCE-27341-7
-# Configure auditd to use audispd's syslog plugin
-replace_or_append '/etc/audisp/plugins.d/syslog.conf' '^active' "yes" "CCE-27341-7" '%s = %s'
 
 %triggerin -- chrony, ntp
 
