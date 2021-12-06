@@ -84,6 +84,9 @@ allow oscap_probe_t oscap_t:lnk_file { read_lnk_file_perms };
 logging_send_syslog_msg(oscap_probe_t)
 kernel_getattr_core_if(oscap_probe_t)
 
+# probe selinux booleans
+selinux_get_all_booleans(oscap_probe_t)
+
 # probe_file, probe_textfilecontent
 files_getattr_all_pipes(oscap_probe_t)
 files_getattr_all_sockets(oscap_probe_t)

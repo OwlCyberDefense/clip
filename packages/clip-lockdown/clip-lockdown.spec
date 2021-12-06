@@ -107,6 +107,21 @@ replace_or_append '/etc/audit/auditd.conf' '^space_left' 100 'CCE-80537-4' '%s =
 # Configure auditd to use audispd's syslog plugin
 replace_or_append '/etc/audisp/plugins.d/syslog.conf' '^active' "yes" "CCE-27341-7" '%s = %s'
 
+# set permissions for cron directories as specified by CIS profile
+%triggerin -- crontabs
+# CCE-82229-6
+/usr/bin/chmod 0700 /etc/cron.hourly
+# CCE-82239-5 
+/usr/bin/chmod 0700 /etc/cron.daily
+# CCE-82262-7
+/usr/bin/chmod 0700 /etc/cron.monthly
+# CCE-82250-2
+/usr/bin/chmod 0700 /etc/cron.weekly
+# CCE-82276-7
+/usr/bin/chmod 0700 /etc/cron.d
+
+# CCE-82205-6
+/usr/bin/chmod 0600 /etc/crontab
 
 %triggerin -- filesystem
 /bin/chmod 750 /var/log
@@ -493,6 +508,12 @@ for config_file in "/etc/chrony.conf" "/etc/ntp.conf"; do
 	# Add maxpoll to server entries with the right value
 	/bin/sed -i "/^server/ s/$/ maxpoll $var_time_service_set_maxpoll/" "$config_file"
 done
+
+# CCE-82878-0
+# run chronyd as user 'chrony' (which is default anyway)
+if [ -e "/etc/sysconfig/chronyd" ]; then
+	/bin/sed -i 's/^OPTIONS=\"\([^"]*\)\"/OPTIONS=\"-u chrony \1\"/' /etc/sysconfig/chronyd
+fi
 
 %clean
 rm -rf %{buildroot}
