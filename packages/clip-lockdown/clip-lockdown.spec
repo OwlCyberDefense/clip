@@ -21,6 +21,7 @@ BuildRoot: %{_tmppath}/%{name}-root
 %define share_dir		/usr/share/clip/
 %define hold_dir		%{share_dir}/hold_config
 %define ssh_config_dir	%{_sysconfdir}/ssh_config.d/
+%define systemd_conf_dir	%{_sysconfdir}/systemd
 %define gdm_dir			%{_sysconfdir}/gdm
 %define dconf_local_dir	%{_sysconfdir}/dconf/db/local.d/
 
@@ -58,6 +59,9 @@ install remediation/* %{buildroot}/%{remediation_dir}
 
 install -d %{buildroot}/%{ssh_config_dir}
 install ssh_config/* %{buildroot}/%{ssh_config_dir}
+
+install -d  %{buildroot}/%{systemd_conf_dir}
+install systemd/clip-coredump.conf %{buildroot}/%{systemd_conf_dir}/clip-coredump.conf
 
 install -d %{buildroot}/%{_unitdir}
 install service/* %{buildroot}/%{_unitdir}
@@ -414,6 +418,8 @@ sed -i --follow-symlinks -E -e 's/^([^#]+pam_lastlog\.so[^#]*)\ssilent/\1/' '/et
 # Disable control-alt-delete Burst Action
 replace_or_append '/etc/systemd/system.conf' '^CtrlAltDelBurstAction=' 'none' 'CCE-80449-2' '%s=%s'
 
+/bin/ln -sf clip-coredump.conf %{systemd_conf_dir}/coredump.conf
+
 %triggerin -- yum
 . %{remediation_dir}/replace_or_append.sh
 
@@ -535,6 +541,7 @@ rm -rf %{buildroot}
 %attr(440,root,root) %{remediation_dir}/*
 %attr(440,root,root) %{ssh_config_dir}/*conf
 %attr(440,root,root) %{_sysctldir}/*conf
+%attr(440,root,root) %{systemd_conf_dir}/clip-coredump.conf
 %attr(644,root,root) %{_unitdir}/*
 %attr(644,root,root) %{dconf_local_dir}/00-security-settings
 %attr(644,root,root) %{dconf_local_dir}/locks/00-security-settings-lock
