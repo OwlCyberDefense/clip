@@ -392,6 +392,14 @@ replace_or_append '/etc/security/pwquality.conf' '^difok' 8 'CCE-26631-2' '%s = 
 # differing categories of characters when changing passwords. 
 replace_or_append '/etc/security/pwquality.conf' '^minclass' 4 'CCE-27115-5' '%s = %s'
 
+%triggerin -- pam
+# CCE-27275-7
+. %{remediation_dir}/ensure_pam_module_options.sh
+ensure_pam_module_options '/etc/pam.d/postlogin' 'session' 'required' 'pam_lastlog.so' 'showfailed' "" ""
+
+# remove 'silent' option
+sed -i --follow-symlinks -E -e 's/^([^#]+pam_lastlog\.so[^#]*)\ssilent/\1/' '/etc/pam.d/postlogin'
+
 %triggerin -- systemd
 . %{remediation_dir}/replace_or_append.sh
 
