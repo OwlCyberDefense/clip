@@ -404,6 +404,11 @@ ensure_pam_module_options '/etc/pam.d/postlogin' 'session' 'required' 'pam_lastl
 # remove 'silent' option
 sed -i --follow-symlinks -E -e 's/^([^#]+pam_lastlog\.so[^#]*)\ssilent/\1/' '/etc/pam.d/postlogin'
 
+#CCE-85855-5
+# uncomment the pam_wheel.so option
+sed '/^[[:space:]]*#[[:space:]]*auth[[:space:]]\+required[[:space:]]\+pam_wheel\.so[[:space:]]\+use_uid$/s/^[[:space:]]*#//' -i /etc/pam.d/su
+
+
 %triggerin -- systemd
 . %{remediation_dir}/replace_or_append.sh
 
