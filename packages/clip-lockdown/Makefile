@@ -7,7 +7,7 @@ PKGNAME := clip-lockdown
 
 # This is the version number of the RPM that will be
 # generated.  Typically you bump this for delivery.
-VERSION := 1.0
+VERSION := 1.0.0.1
 
 # bump this if creating multiple releases from the same
 # version (think about this... why are you doing this?)
