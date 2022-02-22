@@ -102,9 +102,9 @@ replace_or_append '/etc/audit/auditd.conf' '^space_left_action' 'halt' 'CCE-2737
 
 
 # auditd_data_retention_space_left
-# CCE-80537-4
+# CCE-86056-9
 # The auditd service can be configured to take an action when disk space is running low but prior to running out of space completely.
-replace_or_append '/etc/audit/auditd.conf' '^space_left' 100 'CCE-80537-4' '%s = %s'
+replace_or_append '/etc/audit/auditd.conf' '^space_left' '25%' 'CCE-86056-9' '%s = %s'
 
 # auditd_audispd_syslog_plugin_activated
 # CCE-27341-7
