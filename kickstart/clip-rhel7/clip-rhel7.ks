@@ -102,6 +102,7 @@ chkconfig
 chrony
 coreutils
 cpio
+crontabs
 dhclient
 dbus
 device-mapper
