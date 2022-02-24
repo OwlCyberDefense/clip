@@ -22,6 +22,7 @@ BuildRoot: %{_tmppath}/%{name}-root
 %define hold_dir		%{share_dir}/hold_config
 %define ssh_config_dir	%{_sysconfdir}/ssh_config.d/
 %define systemd_conf_dir	%{_sysconfdir}/systemd
+%define sudo_conf_dir	%{_sysconfdir}/sudoers.d
 %define gdm_dir			%{_sysconfdir}/gdm
 %define dconf_local_dir	%{_sysconfdir}/dconf/db/local.d/
 
@@ -59,6 +60,9 @@ install remediation/* %{buildroot}/%{remediation_dir}
 
 install -d %{buildroot}/%{ssh_config_dir}
 install ssh_config/* %{buildroot}/%{ssh_config_dir}
+
+install -d %{buildroot}/%{sudo_conf_dir}
+install sudo/10-clip.conf %{buildroot}/%{sudo_conf_dir}/10-clip.conf
 
 install -d  %{buildroot}/%{systemd_conf_dir}
 install systemd/clip-coredump.conf %{buildroot}/%{systemd_conf_dir}/clip-coredump.conf
@@ -545,6 +549,7 @@ rm -rf %{buildroot}
 %attr(440,root,root) %{pam_dir}/*
 %attr(440,root,root) %{remediation_dir}/*
 %attr(440,root,root) %{ssh_config_dir}/*conf
+%attr(440,root,root) %{sudo_conf_dir}/*conf
 %attr(440,root,root) %{_sysctldir}/*conf
 %attr(440,root,root) %{systemd_conf_dir}/clip-coredump.conf
 %attr(644,root,root) %{_unitdir}/*
