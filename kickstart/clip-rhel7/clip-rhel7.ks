@@ -397,7 +397,7 @@ $CONTENT_PATH/$CONTENT_FILE
 #$CONTENT_PATH/$CONTENT_FILE 2>&1 | tee $SSG_PATH/clip-el7-ssg-fix_log.txt
 
 # setup service to run xccdf evaluation after boot
-install -D --mode=644 /dev/stdin /etc/systemd/system/xccdf_review@service.d/$SYSTEM_NAME.conf <<- EOF
+install -D --mode=644 /dev/stdin /etc/systemd/system/xccdf_review@.service.d/$SYSTEM_NAME.conf <<- EOF
 	[Service]
 	Environment="SSG_PATH=$SSG_PATH"
 	Environment="SYSTEM_NAME=$SYSTEM_NAME"
@@ -407,8 +407,8 @@ install -D --mode=644 /dev/stdin /etc/systemd/system/xccdf_review@service.d/$SYS
 	[Unit]
 	AssertPathExists=${CONTENT_PATH}/ssg-rhel7-cpe-dictionary.xml
 	AssertPathExists=${CONTENT_PATH}/${CONTENT_FILE}
-	ConditionPathExists=!${SSG_PATH}/${SYSTEM_NAME}-ssg-post-results.html
-	ConditionPathExists=!${SSG_PATH}/${SYSTEM_NAME}-ssg-post-results.xml
+	ConditionPathExists=!${SSG_PATH}/${SYSTEM_NAME}-ssg-post-%i-results.html
+	ConditionPathExists=!${SSG_PATH}/${SYSTEM_NAME}-ssg-post-%i-results.xml
 EOF
 
 else
