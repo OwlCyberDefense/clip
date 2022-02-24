@@ -336,6 +336,9 @@ fi
 /sbin/grub2-mkconfig > /etc/grub2.cfg
 /sbin/grub2-mkconfig > /etc/grub2-efi.cfg
 
+# CCE-26957-1 - import RPM keys
+rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-*-release
+
 ###### END - ADJUST SYSTEM BASED ON BUILD CONFIGURATION VARIABLES ###########
 
 # we do not really want these packages installed but they are required earlier during the iso build process so force their removal now
