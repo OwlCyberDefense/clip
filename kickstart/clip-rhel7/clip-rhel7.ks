@@ -367,7 +367,7 @@ if [ x"$CONFIG_BUILD_PRODUCTION" == "xy" ]; then
 fi
 
 # Scan and remediate CLIP using SSG
-profile="stig-rhel7-disa"
+profile="stig"
 SSG_PATH=/root/ssg
 CONTENT_PATH=/usr/share/xml/scap/ssg/content
 /usr/bin/mkdir $SSG_PATH
