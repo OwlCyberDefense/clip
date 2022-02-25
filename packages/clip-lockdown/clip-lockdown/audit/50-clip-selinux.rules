@@ -1,7 +1,8 @@
--a always,exit -F path=/usr/sbin/semanage -F auid>=1000 -F auid!=unset -F key=privileged-priv_change
--a always,exit -F path=/usr/sbin/setsebool -F auid>=1000 -F auid!=unset -F key=privileged-priv_change
--a always,exit -F path=/usr/bin/chcon -F auid>=1000 -F auid!=unset -F key=privileged-priv_change
--a always,exit -F path=/usr/sbin/restorecon -F auid>=1000 -F auid!=unset -F key=privileged-priv_change
--a always,exit -F path=/usr/sbin/seunshare -F auid>=1000 -F auid!=unset -F key=privileged-priv_change
+-a always,exit -F path=/usr/sbin/semanage -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
+-a always,exit -F path=/usr/sbin/setsebool -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
+-a always,exit -F path=/usr/bin/chcon -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
+-a always,exit -F path=/usr/sbin/restorecon -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
+-a always,exit -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
+-a always,exit -F path=/usr/sbin/setfiles -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
 
 -w /etc/selinux/ -p wa -k MAC-policy

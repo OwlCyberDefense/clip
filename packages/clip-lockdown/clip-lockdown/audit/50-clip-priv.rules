@@ -6,7 +6,6 @@
 -a always,exit -F path=/usr/sbin/usernetctl -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/usr/sbin/postdrop -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/usr/sbin/postqueue -F auid>=1000 -F auid!=unset -F key=privileged
--a always,exit -F path=/usr/sbin/setfiles -F auid>=1000 -F auid!=unset -F key=privileged
 
 -a always,exit -F path=/usr/bin/at -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/usr/bin/chage -F auid>=1000 -F auid!=unset -F key=privileged
@@ -34,6 +33,3 @@
 -a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/usr/libexec/pt_chown -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/usr/libexec/utempter/utempter -F auid>=1000 -F auid!=unset -F key=privileged
-
-
-
