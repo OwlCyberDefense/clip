@@ -1,5 +1,11 @@
--a always,exit -F arch=b32 -S create_module -F key=module-create
--a always,exit -F arch=b64 -S create_module -F key=module-create
+-a always,exit -F arch=b32 -S create_module -F auid>=1000 -F auid!=unset -k module_chng
+-a always,exit -F arch=b64 -S create_module -F auid>=1000 -F auid!=unset -k module_chng
+
+-a always,exit -F arch=b32 -S delete_module -F auid>=1000 -F auid!=unset -k module_chng
+-a always,exit -F arch=b64 -S delete_module -F auid>=1000 -F auid!=unset -k module_chng
+
+-a always,exit -F arch=b32 -S init_module,finit_module -F auid>=1000 -F auid!=unset -k module_chng
+-a always,exit -F arch=b64 -S init_module,finit_module -F auid>=1000 -F auid!=unset -k module_chng
 
 -w /sbin/insmod -p x -k modules
 -w /sbin/rmmod -p x -k modules
