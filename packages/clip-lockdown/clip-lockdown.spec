@@ -25,7 +25,7 @@ BuildRoot: %{_tmppath}/%{name}-root
 %define sudo_conf_dir	%{_sysconfdir}/sudoers.d
 %define gdm_dir			%{_sysconfdir}/gdm
 %define dconf_local_dir	%{_sysconfdir}/dconf/db/local.d/
-
+%define sysctl_conf_dir	%{_sysconfdir}/sysctl.d/
 
 Source0: %{pkgname}-%{version}.tgz
 
@@ -43,8 +43,8 @@ rm -rf %{buildroot}
 install -d %{buildroot}/%{audit_dir}
 install audit/*.rules %{buildroot}/%{audit_dir}
 
-install -d %{buildroot}/%{_sysctldir}
-install sysctl/*.conf %{buildroot}/%{_sysctldir}
+install -d %{buildroot}/%{sysctl_conf_dir}
+install sysctl/*.conf %{buildroot}/%{sysctl_conf_dir}
 
 install -d %{buildroot}/%{modprobe_dir}
 install modprobe/*.conf %{buildroot}/%{modprobe_dir}
@@ -556,7 +556,7 @@ rm -rf %{buildroot}
 %attr(440,root,root) %{remediation_dir}/*
 %attr(440,root,root) %{ssh_config_dir}/*conf
 %attr(440,root,root) %{sudo_conf_dir}/*conf
-%attr(440,root,root) %{_sysctldir}/*conf
+%attr(440,root,root) %{sysctl_conf_dir}/*conf
 %attr(440,root,root) %{systemd_conf_dir}/clip-coredump.conf
 %attr(644,root,root) %{_unitdir}/*
 %attr(644,root,root) %{dconf_local_dir}/00-security-settings
@@ -565,7 +565,7 @@ rm -rf %{buildroot}
 
 %post
 # reload sysctl rules so newly installed rules are used
-/sbin/sysctl --load=%{_sysctldir}/60-clip.conf
+%sysctl_apply 60-clip.conf
 
 # auditd rules complain if this directory doesn't exist on check for openssh-keysign
 /usr/bin/mkdir -p /usr/libexec/openssh
