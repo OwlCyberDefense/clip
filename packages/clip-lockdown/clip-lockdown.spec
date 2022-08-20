@@ -115,6 +115,12 @@ replace_or_append '/etc/audit/auditd.conf' '^space_left' '25%' 'CCE-86056-9' '%s
 # Configure auditd to use audispd's syslog plugin
 replace_or_append '/etc/audisp/plugins.d/syslog.conf' '^active' "yes" "CCE-27341-7" '%s = %s'
 
+%triggerin -- cronie
+# CCE-86850-5
+if [ -f /etc/cron.deny ]; then
+	/usr/bin/rm -f /etc/cron.deny
+fi
+
 # set permissions for cron directories as specified by CIS profile
 %triggerin -- crontabs
 # CCE-82229-6
