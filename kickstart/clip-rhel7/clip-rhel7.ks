@@ -26,7 +26,7 @@
 #
 
 # FIXME: Set your initial bootloader password below.
-bootloader --location=mbr --timeout=5 --append="audit=1 audit_backlog_limit=8192 vsyscall=none page_poison=1 slub_debug=P pti=on systemd.confirm_spawn=no loglevel=4 ipv6.disable=1" --password=neutronbass
+bootloader --location=mbr --timeout=5 --append="audit=1 audit_backlog_limit=8192 vsyscall=none page_poison=1 slub_debug=P pti=on systemd.confirm_spawn=no loglevel=4 ipv6.disable=0" --password=neutronbass
 
 # FIXME: Change the root password.
 #        CLIP locks the root account in the post below so this password won't 
