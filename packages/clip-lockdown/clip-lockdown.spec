@@ -26,6 +26,7 @@ BuildRoot: %{_tmppath}/%{name}-root
 %define gdm_dir			%{_sysconfdir}/gdm
 %define dconf_local_dir	%{_sysconfdir}/dconf/db/local.d/
 %define sysctl_conf_dir	%{_sysconfdir}/sysctl.d/
+%define profile_dir		%{_sysconfdir}/profile.d/
 
 Source0: %{pkgname}-%{version}.tgz
 
@@ -69,6 +70,9 @@ install systemd/clip-coredump.conf %{buildroot}/%{systemd_conf_dir}/clip-coredum
 
 install -d %{buildroot}/%{_unitdir}
 install service/* %{buildroot}/%{_unitdir}
+
+install -d %{buildroot}/%{profile_dir}
+install profile/* %{buildroot}/%{profile_dir}
 
 install -d %{buildroot}/%{dconf_local_dir}/locks
 install gdm/00-security-settings %{buildroot}/%{dconf_local_dir}
@@ -246,12 +250,6 @@ replace_or_append '/etc/ssh/sshd_config' '^MACs' "hmac-sha2-512,hmac-sha2-256,hm
 
 %triggerin -- setup
 . %{remediation_dir}/set_umask.sh
-
-# CCE-27557-8
-# Terminating an idle session within a short time period reduces the window of
-# opportunity for unauthorized personnel to take control of a management session
-# enabled on the console or console port that has been left unattended.
-echo 'TMOUT=600' >> /etc/profile
 
 USER_UMASK=077
 
@@ -553,6 +551,7 @@ rm -rf %{buildroot}
 %attr(440,root,root) %{limits_dir}/*conf
 %attr(440,root,root) %{modprobe_dir}/*conf
 %attr(440,root,root) %{pam_dir}/*
+%attr(440,root,root) %{profile_dir}/*sh
 %attr(440,root,root) %{remediation_dir}/*
 %attr(440,root,root) %{ssh_config_dir}/*conf
 %attr(440,root,root) %{sudo_conf_dir}/*conf
