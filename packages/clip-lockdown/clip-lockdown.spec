@@ -433,6 +433,18 @@ replace_or_append '/etc/systemd/system.conf' '^CtrlAltDelBurstAction=' 'none' 'C
 
 /bin/ln -sf clip-coredump.conf %{systemd_conf_dir}/coredump.conf
 
+# CCE-85929-8
+# Ensure journald is configured to compress large log files
+replace_or_append '/etc/systemd/journald.conf' '^Compress' 'yes' 'CCE-85929-8' '%s=%s'
+
+# CCE-85994-2
+# Ensure journald is configured to send logs to rsyslog
+replace_or_append '/etc/systemd/journald.conf' '^ForwardToSyslog' 'yes' 'CCE-85994-2' '%s=%s'
+
+# CCE-86044-5
+# Ensure journald is configured to write log files to persistent disk
+replace_or_append '/etc/systemd/journald.conf' '^Storage' 'persistent' 'CCE-86044-5' '%s=%s'
+
 %triggerin -- yum
 . %{remediation_dir}/replace_or_append.sh
 
