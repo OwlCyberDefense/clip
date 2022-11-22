@@ -4,7 +4,7 @@ auth        required      pam_env.so
 auth        required      pam_faildelay.so delay=2000000
 auth        required      pam_faillock.so preauth silent audit even_deny_root deny=3 unlock_time=0 fail_interval=900
 auth        sufficient    pam_unix.so try_first_pass
-auth        [default=die] pam_faillock.so authfail audit even_deny_root deny=3 unlock_time=0 fail_interval=900
+auth        required      pam_faillock.so authfail audit even_deny_root deny=3 unlock_time=0 fail_interval=900
 auth        requisite     pam_succeed_if.so uid >= 1000 quiet_success
 auth        required      pam_deny.so
 
@@ -16,7 +16,7 @@ account     required      pam_permit.so
 
 password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=
 password    sufficient    pam_unix.so sha512 shadow try_first_pass use_authtok remember=5
-password    required      pam_pwhistory.so remember=5 use_authtok
+password    requisite     pam_pwhistory.so remember=5 use_authtok
 password    required      pam_deny.so
 
 session     optional      pam_keyinit.so revoke
