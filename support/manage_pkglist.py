@@ -1,11 +1,12 @@
 #!/usr/bin/python
 
+import argparse
+import dnf
 import os
 import re
 import sys
-import subprocess
-import argparse
 
+from configparser import ConfigParser
 from pykickstart.parser import KickstartParser
 from pykickstart.version import makeVersion
 
@@ -13,192 +14,102 @@ verbose_output = False
 
 buildrequires_regex = re.compile(r"^BuildRequires:\s*(?P<reqs>.+)$")
 lorax_regex = re.compile(r"^installpkg\s*(?P<reqs>.+)$")
-reposfrompath=[]
-spec_req_regex = re.compile(r"^(?P<req>[a-zA-Z0-9_\(\).\+-]+)")
-arch_regex = re.compile(r"^(?P<req>[a-zA-Z0-9_.\+-]+)\((?P<arch>[0-9a-zA-Z-]+)\)$")
+spec_req_regex = re.compile(r"^(?P<req>[a-zA-Z0-9_\(\).\+/\-]+)")
 
 def verbose(info):
 	global verbose_output
 	if verbose_output:
-		print info
+		print(info)
 
-def reqs_to_packages(config, reqs, arch):
-	# resolve the reqs to package names
-	package_names = dict()
-	repoquery_args = ["/usr/bin/repoquery", "-c", config, "--whatprovides", "--queryformat", "%{NAME},%{ARCH}"]
-	# TODO: see if this can be collapsed into a single call
-	for r in reqs:
-		final_arch = arch
-		match = arch_regex.match (r)
-		if match:
-			r = match.group("req")
-			final_arch = match.group("arch")
-					# hack - the name in the spec need x86-32 but the RPM name is i686 - ugh
-			if final_arch == "x86-32":
-				final_arch = "i686"
+def load_repodata(dnf_file, cache_dir, arch='x86_64'):
 
-		final_query = repoquery_args + ["--archlist",final_arch] + [r]
-		verbose ("Finding RPM name for dependency: %s" % " ".join (final_query))
-		repoquery = subprocess.Popen(final_query, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		for line in repoquery.stdout:
-			if line.strip():
-				verbose ("Req %s provided by %s" % (r, line.strip()))
-				match = line.strip().split(",")
-				pkg_arch = match[1].strip ()
-				if pkg_arch not in package_names.keys ():
-					package_names[pkg_arch] = set ()
-				package_names[pkg_arch].add(match[0].strip())
-		rc = repoquery.wait()
-		if rc != 0:
-			print "ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read())
-			raise Exception("ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read()))
+	dnf_config = ConfigParser ()
+	dnf_config.read (dnf_file)
 
-	if not package_names:
-		print "Unmatched regs: %s" % reqs
-		return set()
+	base = dnf.Base ()
+	base.conf.read (dnf_file)
 
-	# resolve package names to nvra form
-	packages = set()
-	repoquery_args = ["/usr/bin/repoquery", "-c", config, "--qf", "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}"]
-	for k in package_names.keys ():
-		repoquery = repoquery_args + ["--archlist", k]
-		for p in package_names[k]:
-			repoquery.append(p)
+	base.conf.fastestmirror=True
+	base.conf.zchunk = False
+	base.conf.timeout = 5
 
-		verbose ("Query package name: %s" % " ".join (repoquery))
-		repoquery = subprocess.Popen(repoquery, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		for line in repoquery.stdout:
-			if line.strip():
-				packages.add(line.strip())
-		rc = repoquery.wait()
-		if rc != 0:
-			print "ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read())
-			raise Exception("ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read()))
-	return packages
+#	base.conf.config_file_path = "/dev/null"
+	base.conf.persistdir = cache_dir
+	base.conf.cachedir = cache_dir
+	base.conf.substitutions["arch"] = arch
+	base.conf.substitutions["basearch"] = dnf.rpm.basearch (arch)
 
-dep_tree_regex = re.compile(r"(?: (?:\|   )*(?:\\_  ))?(?:\d+:)?(?P<pkg>.+) \[.*\]\n?")
-def update_deps(config, reqs, deps, arch):
-	# gather deps for all reqs
-	repoquery_args = ["/usr/bin/repoquery", "-c", config, "--tree-requires", "--qf", "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}"]
-	repoquery_args = repoquery_args + reposfrompath
+	for section in dnf_config.sections ():
+		enabled = False
+		url = None
+		name = None
 
-	for p in reqs:
-		final_arch = p.split(".")[-1]
-		if p in deps:
-			verbose ("not gathering deps for package %s because it has already been resolved" % (p,))
+		if dnf_config.has_option (section, "enabled"):
+			enabled = dnf_config.getboolean (section, "enabled")
+		if not enabled:
 			continue
 
-		if final_arch == "noarch":
-			final_arch = arch
-		final_query = repoquery_args + ["--archlist", "%s,noarch" % final_arch] + [p]
-		verbose ("build dependency tree for requirement: %s" % " ".join (final_query))
-		repoquery = subprocess.Popen(final_query, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		for line in repoquery.stdout:
-			match = dep_tree_regex.search(line)
-			if match:
-				pkg = match.group("pkg")
-				verbose ("match: '%s' from: '%s'" % (pkg, line))
-				deps.add(pkg)
-			else:
-				print "no match: %s" % (line,)
-		rc = repoquery.wait()
-		if rc != 0:
-			print "ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read())
-			raise Exception("ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read()))
+		repo = dnf.repo.Repo (section, base.conf)
+		if dnf_config.has_option (section, "name"):
+			name = dnf_config.get (section, "name")
+		if dnf_config.has_option (section, "baseurl"):
+			repo.baseurl = dnf_config.get (section, "baseurl")
+		if dnf_config.has_option (section, "mirrorlist"):
+			repo.mirrorlist = dnf_config.get (section, "mirrorlist")
+		if dnf_config.has_option (section, "metalink"):
+			repo.metalink = dnf_config.get (section, "metalink")
+		if dnf_config.has_option (section, "gpgcheck"):
+			repo.gpgcheck = dnf_config.get (section, "gpgcheck")
+		if dnf_config.has_option (section, "gpgkey"):
+			repo.gpgkey = dnf_config.get (section, "gpgkey")
 
-	'''
-	for p in explicit_packages:
-		print p
-		repoquery_args.append(p)
-	all_packages_single_repoquery = set()
-	if True:
-		print "executing: %s" % (repoquery_args,)
-		repoquery = subprocess.Popen(repoquery_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		for line in repoquery.stdout:
-			match = dep_tree_regex.search(line)
-			if match:
-				print "match s: '%s' from: '%s'" % (match.group("pkg"), line)
-				all_packages_single_repoquery.add(match.group("pkg"))
-			else:
-				print "no match s: %s" % (line,)
-		rc = repoquery.wait()
-		if rc != 0:
-			print "ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read())
-			raise Exception("ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read()))
-	only_in_single_query = all_packages_single_repoquery - all_packages_multiple_repoquery
-	only_in_multiple_query = all_packages_multiple_repoquery - all_packages_single_repoquery
-	if not only_in_single_query and not only_in_multiple_query:
-		print "both repoquery usages produced the same results"
-	else:
-		if only_in_single_query:
-			print "packages found only in the single query method: %s" % (only_in_single_query,)
-		if only_in_multiple_query:
-			print "packages found only in the multiple query method: %s" % (only_in_multiple_query,)
+		if dnf_config.has_option (section, "sslverify"):
+			repo.sslverify = dnf_config.get (section, "sslverify")
+		if dnf_config.has_option (section, "sslcacert"):
+			repo.sslcacert = dnf_config.get (section, "sslcacert")
+		if dnf_config.has_option (section, "sslclientkey"):
+			repo.sslclientkey = dnf_config.get (section, "sslclientkey")
+		if dnf_config.has_option (section, "sslclientcert"):
+			repo.sslclientcert = dnf_config.get (section, "sslclientcert")
 
-	all_packages = all_packages_single_repoquery + all_packages_multiple_repoquery
-	'''
+		base.repos.add (repo)
+	base.fill_sack(load_system_repo=False)
 
-'''
-def get_build_deps_using_repoquery():
-	build_reqs = set()
-	package_names = get_local_package_names()
-	repoquery_args = ["repoquery", "-c", "test_yum.conf", "--requires", "--srpm"]
-	for p in package_names:
-		repoquery = subprocess.Popen(repoquery_args + [p], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		for line in repoquery.stdout:
-			if line.strip():
-				build_reqs.add(line.strip())
-		rc = repoquery.wait()
-		if rc != 0:
-			print "ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read())
-			raise Exception("ERROR: repoquery exited with rc %s: stderr: %s" % (rc, repoquery.stderr.read()))
+	return base
 
-	return build_reqs
-'''
-
-'''
-# use the rpm module to query a srpm for BuildRequires
-def get_build_reqs_using_librpm(package_paths):
-	build_reqs = list()
-	ts = rpm.TransactionSet()
-
-	for package_path in package_paths:
-		fd = os.open(package_path, os.O_RDONLY)
-		h = ts.hdrFromFdno(fd)
-		build_reqs.update(h.dsFromHeader('requirename'))
-	return build_reqs
-'''
-
-spec_req_regex = re.compile(r"^(?P<req>[a-zA-Z0-9_\(\).\+-]+)")
 # grep for BuildRequires in a .spec file
 def get_build_reqs_from_spec(spec_path):
 	reqs = set()
-	for line in file(spec_path):
-		match = buildrequires_regex.match(line.strip())
-		if not match:
-			continue
+	with open(spec_path, "r") as spec:
+		for line in spec:
+			match = buildrequires_regex.match(line.strip())
+			if not match:
+				continue
 
-		reqs_str = match.group("reqs")
-		reqs_list = reqs_str.split(' ')
-		for req_str in reqs_list:
-			match = spec_req_regex.match(req_str)
-			if match:
-				reqs.add(match.group("req"))
+			reqs_str = match.group("reqs")
+			reqs_list = reqs_str.split(' ')
+			for req_str in reqs_list:
+				print("Requirement: %s" % reqs_list)
+				match = spec_req_regex.match(req_str)
+				if match:
+					reqs.add(match.group("req"))
 	return reqs
+
 
 def get_build_reqs_from_lorax(lorax_path):
 	reqs = set()
-	for line in file(lorax_path):
-		match = lorax_regex.match(line.strip())
-		if not match:
-			continue
+	with open(lorax_path, "r") as lorax:
+		for line in lorax:
+			match = lorax_regex.match(line.strip())
+			if not match:
+				continue
 
-		reqs_str = match.group("reqs")
-		reqs_list = reqs_str.split(' ')
-		for req_str in reqs_list:
-			match = spec_req_regex.match(req_str)
-			if match:
-				reqs.add(match.group("req"))
+			reqs_str = match.group("reqs")
+			reqs_list = reqs_str.split(' ')
+			for req_str in reqs_list:
+				match = spec_req_regex.match(req_str)
+				if match:
+					reqs.add(match.group("req"))
 	return reqs
 
 
@@ -212,68 +123,71 @@ def get_kickstart_reqs(kickstart_path):
 	reqs.update(ksparser.handler.packages.packageList)
 	return reqs
 
+
 def repos_from_args(repo_args):
-	global reposfrompath
-	repos = list()
+	repos = dict()
 	for r in repo_args:
 		repo = dict()
 		repo["pkgs"] = set()
 		repo["path"], repo["pkglist"] = r.split(",")
-		reposfrompath.append("--repofrompath")
-		reposfrompath.append("%s,%s" % (os.path.basename(repo["pkglist"]), repo["path"]))
-		if not os.path.exists(repo["path"]):
-			raise Exception("ERROR: repo path %s does not exist" % (repo["path"],))
-		repos.append(repo)
+		# add 'file://' prefix or local directories (to match dnf config)
+		if repo["path"].find ("://") == -1:
+			repo["path"] = "file://" + repo["path"]
+		# if path begins with file:// - check if it really exists
+		if repo["path"].startswith ("file://"):
+			local_path = repo["path"][7:]
+			if not os.path.exists(local_path):
+				raise Exception("ERROR: repo path %s does not exist" % (repo["path"],))
+		repos[repo["path"]] = repo
 	return repos
 
-def resolve_packages_to_repos(pkgs, repos):
-	for pkg in pkgs:
-		found = False
-		for repo in repos:
-			pkg_paths = [
-				os.path.join(repo["path"], "%s.rpm" % (pkg,)),
-				os.path.join(repo["path"], "Packages", "%s.rpm" % (pkg,)),
-				os.path.join(repo["path"], pkg.lower()[0], "%s.rpm" % (pkg,)),
-				os.path.join(repo["path"], "Packages", pkg.lower()[0], "%s.rpm" % (pkg,)),
-			]
-			if any([os.path.exists(x) for x in pkg_paths]):
-				repo["pkgs"].add(pkg)
-				found = True
-				break
-			elif pkg in repo["pkgs"]:
-				found = True
-				break
-		if not found:
-			print "ERROR: package %s could not be found" % (pkg,)
-			#raise Exception("ERROR: package %s could not be found" % (pkg,))
 
 def read_pkglist(pkglist_path):
 	packages = set()
 	if not os.path.exists(pkglist_path):
 		return packages
 
-	f = file(pkglist_path, "r")
-	for line in f:
-		line = line.strip()[:-4]
-		if line:
-			packages.add(line)
+	with open(pkglist_path, "r") as f:
+		for line in f:
+			line = line.strip()[:-4]
+			if line:
+				packages.add(line)
 	return packages
+
 
 def read_pkglists(repos):
 	for repo in repos:
 		repo["pkgs"].update(read_pkglist(repo["pkglist"]))
 
 def dump_pkglist(pkglist_path, pkgs):
-	f = file(pkglist_path, "w")
-	pkg_list = list(pkgs)
-	pkg_list.sort()
-	f.write("\n".join(["%s.rpm" % (p,) for p in pkg_list]) + "\n")
-	f.close()
-	print "Updated %s" % (pkglist_path,)
+	with open(pkglist_path, "w") as f:
+		pkg_list = list(pkgs)
+		pkg_list.sort()
+		for p in pkg_list:
+			f.write("%s\n" % os.path.basename (p.location))
+	verbose("INFO: Updated %s" % (pkglist_path,))
 
-def dump_pkglists(repos):
+
+def dump_pkglists(repos, dnf_conf):
+	for pkg in dnf_conf.transaction.install_set:
+		repo = dnf_conf.repos[pkg.repoid]
+
+		if repo.mirrorlist is not None:
+			# works when using mirror list
+			rid = repo.mirrorlist
+		elif repo.metalink is not None:
+			rid = repo.metalink
+		elif repo.baseurl is not None:
+			# works when giving URLs for repos to this script
+			rid = repo.baseurl[0]
+		else:
+			# work when giving local path for repo
+			rid = repo.pkgdir
+		repos[rid]["pkgs"].add (pkg)
+
 	for repo in repos:
-		dump_pkglist(repo["pkglist"], repo["pkgs"])
+		d = repos[repo]
+		dump_pkglist(d["pkglist"], d["pkgs"])
 
 def main():
 	parser = argparse.ArgumentParser(description="Create a minimal list of dependencies from kickstarts, .spec files, and requirement strings.")
@@ -283,7 +197,9 @@ def main():
 	parser.add_argument("-s", "--spec", action="append")
 	parser.add_argument("-l", "--lorax", action="append")
 	parser.add_argument("-a", "--arch", default="x86_64,noarch")
+	parser.add_argument("-d", "--dnf_cache", default="tmp", action="store")
 	parser.add_argument("-r", "--require", action="append")
+	parser.add_argument("-R", "--required-versions-file", action="append")
 	parser.add_argument('-v', "--verbose", action="store_true", default=False)
 	parser.add_argument("repo", help="repository information.  for each repository, 2 components must be supplied in the following form:  repo_path,pkglis", nargs="+", metavar="PATH,PKGLIST")
 	parser.add_argument("-t", "--runtime", action='store_true', help="Generate list of run time dependencies instead of build time dependencies")
@@ -292,10 +208,10 @@ def main():
 	global verbose_output
 	global buildrequires_regex
 	if args.runtime:
-		print "Using only Requires tags"
+		verbose("Using only Requires tags")
 		buildrequires_regex = re.compile(r"^Requires:\s*(?P<reqs>.+)$")
 	else:
-		print "Using both Requires and BuildRequires tags"
+		verbose("Using both Requires and BuildRequires tags")
 		buildrequires_regex = re.compile(r"^(Build)?Requires:\s*(?P<reqs>.+)$")
 
 	config = args.config
@@ -312,6 +228,9 @@ def main():
 	manual_reqs = args.require
 	if manual_reqs is None:
 		manual_reqs = list()
+	required_versions_file = args.required_versions_file
+	if required_versions_file is None:
+		required_versions_file = list()
 	verbose_output = args.verbose
 
 	arch = args.arch
@@ -323,6 +242,7 @@ def main():
 		if not os.path.exists(k):
 			raise Exception("ERROR: Kickstart %s does not exist" % (k,))
 		tmp = get_kickstart_reqs(k)
+		verbose ("INFO: Requirements from kickstart: %s %s" % (k, tmp))
 		reqs.update(tmp)
 
 	# gather build requirements from .spec file
@@ -330,39 +250,38 @@ def main():
 		if not os.path.exists(s):
 			raise Exception("ERROR: spec file %s does not exist" % (s,))
 		tmp = get_build_reqs_from_spec(s)
-		verbose ("List of requirements (%s) from spec: %s" % (tmp, s))
+		verbose ("INFO: Requirements from spec: %s %s" % (s, tmp))
 		reqs.update(tmp)
 
 	for l in lorax:
 		if not os.path.exists(l):
 			raise Exception("ERROR: lorax file %s does not exist" % (l,))
 		tmp = get_build_reqs_from_lorax(l)
-		verbose ("List of requirements (%s) from spec: %s" % (tmp, l))
+		verbose ("INFO: Requirements from lorax: %s %s" % (l, tmp))
 		reqs.update(tmp)
+
+	# load repodata
+	dnf_conf = load_repodata(config, args.dnf_cache)
 
 	# requirement strings (capabilities, files, packages)
 	reqs.update(manual_reqs)
 
-
 	dependencies = set()
 
-	# convert req strings to specific packages
-	required_packages = reqs_to_packages(config, reqs, arch)
+	for req in reqs:
+		try:
+			dnf_conf.install_specs ([req], strict=False)
+		except dnf.exceptions.MarkingErrors as me:
+			print ("ERROR: Unable find package %s: %s" % (req, me))
 
-	# gather all dependent packages
-	update_deps(config, required_packages, dependencies, arch)
-
-	# incorporate existing pkglist contents
-	if command == "add":
-		read_pkglists(repos)
-		for repo in repos:
-			dependencies.update(repo["pkgs"])
-
-	# sort packages into the right repos
-	resolve_packages_to_repos(dependencies, repos)
+	try:
+#		dnf_conf.install_specs (reqs, strict=False)
+		dnf_conf.resolve ()
+	except dnf.exceptions.MarkingErrors as me:
+		print ("dnf errors: %s" % me)
 
 	# write new pkglist files
-	dump_pkglists(repos)
+	dump_pkglists(repos, dnf_conf)
 
 
 if __name__ == "__main__":

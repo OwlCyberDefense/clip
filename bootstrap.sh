@@ -196,7 +196,7 @@ gpgcheck=0
 fi
 /usr/bin/sudo yum --enablerepo=epel -y install epel-release
 
-PACKAGES="mock pigz createrepo repoview rpm-build make python-kid pykickstart pungi"
+PACKAGES="mock pigz createrepo repoview rpm-build make python-kid pykickstart pungi python2-dnf"
 
 /usr/bin/sudo /usr/bin/yum install -y $PACKAGES
 
