@@ -12,6 +12,7 @@ from pykickstart.parser import KickstartParser
 from pykickstart.version import makeVersion
 
 verbose_output = False
+dry_run = False
 
 buildrequires_regex = re.compile(r"^BuildRequires:\s*(?P<reqs>.+)$")
 lorax_regex = re.compile(r"^installpkg\s*(?P<reqs>.+)$")
@@ -172,12 +173,15 @@ def read_pkglists(repos):
 		repo["pkgs"].update(read_pkglist(repo["pkglist"]))
 
 def dump_pkglist(pkglist_path, pkgs):
+	verbose("INFO: Updating %s" % (pkglist_path,))
+	if dry_run:
+		pkglist_path = "/dev/stdout"
+
 	with open(pkglist_path, "w") as f:
 		pkg_list = list(pkgs)
 		pkg_list.sort()
 		for p in pkg_list:
 			f.write("%s\n" % os.path.basename (p.location))
-	verbose("INFO: Updated %s" % (pkglist_path,))
 
 
 def dump_pkglists(repos, dnf_conf):
@@ -212,6 +216,7 @@ def main():
 	parser.add_argument("-d", "--dnf_cache", default="tmp", action="store")
 	parser.add_argument("-p", "--package", action="append")
 	parser.add_argument("-r", "--require", action="append")
+	parser.add_argument ("--dryrun", action="store_true", default=False, help="Dry run - don't update files")
 	parser.add_argument("-R", "--required-versions-file", action="append")
 	parser.add_argument('-v', "--verbose", action="store_true", default=False)
 	parser.add_argument("repo", help="repository information.  for each repository, 2 components must be supplied in the following form:  repo_path,pkglis", nargs="+", metavar="PATH,PKGLIST")
@@ -219,6 +224,8 @@ def main():
 	args = parser.parse_args()
 
 	global verbose_output
+	verbose_output = args.verbose
+
 	global buildrequires_regex
 	if args.runtime:
 		verbose("Using only Requires tags")
@@ -226,6 +233,10 @@ def main():
 	else:
 		verbose("Using both Requires and BuildRequires tags")
 		buildrequires_regex = re.compile(r"^(Build)?Requires:\s*(?P<reqs>.+)$")
+
+	global dry_run
+	dry_run = args.dryrun
+	verbose("Dry Run: %s" % dry_run)
 
 	config = args.config
 	command = args.COMMAND
@@ -247,7 +258,6 @@ def main():
 	required_versions_file = args.required_versions_file
 	if required_versions_file is None:
 		required_versions_file = list()
-	verbose_output = args.verbose
 
 	arch = args.arch
 	repos = repos_from_args(args.repo)
