@@ -16,7 +16,7 @@ dry_run = False
 
 buildrequires_regex = re.compile(r"^BuildRequires:\s*(?P<reqs>.+)$")
 lorax_regex = re.compile(r"^installpkg\s*(?P<reqs>.+)$")
-spec_req_regex = re.compile(r"^(?P<req>[a-zA-Z0-9_\(\).\+/\-]+)")
+spec_req_regex = re.compile(r"\s*([a-zA-Z0-9_\(\).\+/\-\:%{}]+\s*([<>]?=\s*[a-zA-Z0-9.:-]+)?)")
 
 def verbose(info):
 	global verbose_output
@@ -89,12 +89,17 @@ def get_build_reqs_from_spec(spec_path):
 				continue
 
 			reqs_str = match.group("reqs")
-			reqs_list = reqs_str.split(' ')
-			for req_str in reqs_list:
-				print("Requirement: %s" % reqs_list)
-				match = spec_req_regex.match(req_str)
-				if match:
-					reqs.add(match.group("req"))
+#			verbose("Spec Requirements: %s" % reqs_str)
+			req = spec_req_regex.findall(reqs_str)
+			for req_str in req:
+				# check for macro in require
+				if req_str[0].find("%") >= 0:
+					# if macro is in version, add just name
+					parts = re.split ("[ =<>]", req_str[0])
+					if parts[0].find("%") == -1:
+						reqs.add(parts[0].strip ())
+					continue
+				reqs.add(req_str[0].strip ())
 	return reqs
 
 def get_build_reqs_from_rpm(rpm_path):
@@ -104,8 +109,10 @@ def get_build_reqs_from_rpm(rpm_path):
 	hdr = ts.hdrFromFdno(fdno)
 	os.close(fdno)
 
-	for line in hdr[rpm.RPMTAG_REQUIRES]:
-		reqs.add(line)
+	reqs_list = hdr[rpm.RPMTAG_REQUIRES]
+#	verbose("RPM Requirement: %s" % reqs_list)
+	for line in reqs_list:
+		reqs.add(line.strip ())
 
 	return reqs
 
@@ -118,11 +125,10 @@ def get_build_reqs_from_lorax(lorax_path):
 				continue
 
 			reqs_str = match.group("reqs")
-			reqs_list = reqs_str.split(' ')
-			for req_str in reqs_list:
-				match = spec_req_regex.match(req_str)
-				if match:
-					reqs.add(match.group("req"))
+#			verbose("Lorax Requirements: %s" % reqs_str)
+			req = spec_req_regex.findall(reqs_str)
+			for req_str in req:
+				reqs.add(req_str[0].strip ())
 	return reqs
 
 
@@ -134,6 +140,8 @@ def get_kickstart_reqs(kickstart_path):
 	ksparser = KickstartParser(makeVersion())
 	ksparser.readKickstart(kickstart_path)
 	reqs.update(ksparser.handler.packages.packageList)
+#	verbose("Kickstart Requirements: %s" % reqs)
+
 	return reqs
 
 
@@ -220,7 +228,7 @@ def main():
 	parser.add_argument("-R", "--required-versions-file", action="append")
 	parser.add_argument('-v', "--verbose", action="store_true", default=False)
 	parser.add_argument("repo", help="repository information.  for each repository, 2 components must be supplied in the following form:  repo_path,pkglis", nargs="+", metavar="PATH,PKGLIST")
-	parser.add_argument("-t", "--runtime", action='store_true', help="Generate list of run time dependencies instead of build time dependencies")
+	parser.add_argument("-t", "--runtime", action='store_true', default=False, help="Generate list of run time dependencies instead of build time dependencies")
 	args = parser.parse_args()
 
 	global verbose_output
@@ -290,28 +298,30 @@ def main():
 		if not os.path.exists(p):
 			raise Exception("ERROR: package file %s does not exist" % (p,))
 		tmp = get_build_reqs_from_rpm(p)
-		verbose ("List of requirements (%s) from rpm: %s" % (tmp, p))
+		verbose ("INFO: Requirements from rpm: %s: %s" % (p, tmp))
 		reqs.update(tmp)
 
 	# load repodata
 	dnf_conf = load_repodata(config, args.dnf_cache)
 
 	# requirement strings (capabilities, files, packages)
+	verbose ("INFO: additional command line requirements: %s" % manual_reqs)
 	reqs.update(manual_reqs)
 
-	dependencies = set()
-
+	verbose ("INFO: All required packages: %s" % reqs)
 	for req in reqs:
 		try:
-			dnf_conf.install_specs ([req], strict=False)
-		except dnf.exceptions.MarkingErrors as me:
-			print ("ERROR: Unable find package %s: %s" % (req, me))
+			dnf_conf.install (req, strict=False)
+		except dnf.exceptions.MarkingError as me:
+			print ("WARNING: Unable to find package %s: %s" % (req, me))
 
 	try:
 #		dnf_conf.install_specs (reqs, strict=False)
 		dnf_conf.resolve ()
 	except dnf.exceptions.MarkingErrors as me:
 		print ("dnf errors: %s" % me)
+	except dnf.exceptions.DepsolveError as de:
+		print ("Error resolving dependencies: %s" % de)
 
 	# write new pkglist files
 	dump_pkglists(repos, dnf_conf)
