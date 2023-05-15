@@ -1,0 +1,7 @@
+# This file contains a list of packages that are known to cause problems.
+# List one package per-line.  These packages will be excluded from all
+# dnf/rpm operations.
+# examples:
+# httpd
+# java-11-openjdk-headless-11.0.ea.28-7.el7
+

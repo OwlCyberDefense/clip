@@ -40,7 +40,7 @@ export CONF_DIR ?= $(ROOT_DIR)/conf
 export MOCK_DIR ?= $(RPM_TMPDIR)/mockbuild
 
 # Config deps
-CONFIG_BUILD_DEPS = $(ROOT_DIR)/CONFIG_BUILD $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
+CONFIG_BUILD_DEPS = $(ROOT_DIR)/CONFIG_BUILD $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.excludelist
 
 # MOCK_REL_INSTANCE must be configured in MOCK_CONF_DIR/MOCK_REL_INSTANCE.cfg
 MOCK_REL := rhel-$(RHEL_VER)-$(TARGET_ARCH)
@@ -106,7 +106,7 @@ endif
 # Add to this list to pass deps down to SRPM creation
 export SRPM_DEPS := $(CONFIG_BUILD_DEPS)
 
-PKG_BLACKLIST := $(shell $(SED) -e 's/\(.*\)\#.*/\1/g' $(CONF_DIR)/pkglist.blacklist|$(SED) -e ':a;N;$$!ba;s/\n/ /g')
+PKG_EXCLUDELIST := $(shell $(SED) -e 's/\(.*\)\#.*/\1/g' $(CONF_DIR)/pkglist.excludelist|$(SED) -e ':a;N;$$!ba;s/\n/ /g')
 
 # Macros to determine package info: version, release, arch.
 PKG_VER = $(strip $(eval $(shell $(GREP) ^VERSION $(PKG_DIR)/$(1)/Makefile))$(VERSION))
@@ -199,8 +199,8 @@ $(eval REPO_URL := file://$(REPO_DIR)/$(REPO_ID)-repo)
 $(eval REPO_KEY := $(call GET_REPO_KEY_INFO,RPM-GPG-KEY-$(REPO_ID)-$(RHEL_VER)))
 $(eval setup_all_repos += setup-$(REPO_ID)-repo)
 
-$(eval YUM_CONF += \\n[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=file://$(REPO_PATH)\\nenabled=1\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
-$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n$(REPO_KEY)\\n\\nexclude=$(strip $(PKG_BLACKLIST))\\n)
+$(eval YUM_CONF += \\n[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=file://$(REPO_PATH)\\nenabled=1\\n\\nexclude=$(strip $(PKG_EXCLUDELIST))\\n)
+$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n$(REPO_KEY)\\n\\nexclude=$(strip $(PKG_EXCLUDELIST))\\n)
 $(eval MY_REPO_DEPS += $(REPO_DIR)/$(REPO_ID)-repo/last-updated)
 $(eval REPO_LINES := $(REPO_LINES)repo --name=$(REPO_ID) --baseurl=file://$(REPO_DIR)/$(REPO_ID)-repo\n)
 
@@ -409,7 +409,7 @@ $(INSTISOS):  $(BUILD_CONF_DEPS) create-repos $(RPMS)
 	$(call CHECK_DEPS)
 	$(MAKE) SYSTEM_NAME=$(SYSTEM_NAME) -C $(KICKSTART_DIR)/$(SYSTEM_NAME) iso
 
-$(MOCK_CONF_DIR)/$(MOCK_REL_INSTANCE).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl $(CONF_DIR)/pkglist.blacklist conf/pkglist_hash $(filter-out $(ROOT_DIR)/CONFIG_BUILD,$(CONFIG_BUILD_DEPS))
+$(MOCK_CONF_DIR)/$(MOCK_REL_INSTANCE).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl $(CONF_DIR)/pkglist.excludelist conf/pkglist_hash $(filter-out $(ROOT_DIR)/CONFIG_BUILD,$(CONFIG_BUILD_DEPS))
 	$(call CHECK_DEPS)
 	$(VERBOSE)cat $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmpl > $@
 	$(VERBOSE)echo -e $(MOCK_YUM_CONF) >> $@
@@ -417,7 +417,7 @@ $(MOCK_CONF_DIR)/$(MOCK_REL_INSTANCE).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmp
 	$(VERBOSE)sed -i '2i config_opts["cache_topdir"] = "$(MOCK_DIR)/cache"' $@
 	$(VERBOSE)sed -i '2i config_opts["root"] = "$(MOCK_REL_INSTANCE)"' $@
 	$(VERBOSE)sed -i '2i config_opts["rootdir"] = "$(MOCK_DIR)/$(MOCK_REL_INSTANCE)"' $@
-	$(VERBOSE)echo -e "[clip-repo]\\nname=clip-repo\\nbaseurl=file://$(CLIP_REPO_DIR)/\\nenabled=1\\ngpgcheck=0\\nexclude=$(strip $(PKG_BLACKLIST))\\n" >> $@
+	$(VERBOSE)echo -e "[clip-repo]\\nname=clip-repo\\nbaseurl=file://$(CLIP_REPO_DIR)/\\nenabled=1\\ngpgcheck=0\\nexclude=$(strip $(PKG_EXCLUDELIST))\\n" >> $@
 	$(VERBOSE)echo '"""' >> $@
 
 ifneq ($(OVERLAY_HOME_SIZE),)
@@ -427,7 +427,7 @@ ifneq ($(OVERLAY_SIZE),)
 OVERLAYS += --overlay-size-mb $(OVERLAY_SIZE)
 endif
 
-clean-mock: $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.blacklist
+clean-mock: $(ROOT_DIR)/CONFIG_REPOS $(ROOT_DIR)/Makefile $(CONF_DIR)/pkglist.excludelist
 	$(VERBOSE)$(RM) $(YUM_CONF_FILE)
 	$(VERBOSE)$(RM) $(MOCK_CONF_DIR)/$(MOCK_REL_INSTANCE).cfg
 	$(VERBOSE)$(RM) -rf $(REPO_DIR)/yumcache
