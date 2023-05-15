@@ -477,6 +477,9 @@ As of RHEL 7.0, LiveCDs are no longer functional. Please see issue #178 for more
 ##### Where are my USB devices?
 There is a STIG requirement (CCE-27277-3) to not allow USB storage devices.  This is accomplished by not allowing the usb_storage module to be loaded.  To allow USB storage devices, remove /etc/modprobe.d/usb_storage.conf.
 
+##### How to I exclude RPMs?
+There is a file conf/pkglist.excludelist which is used to exclude RPMs as build or runtime dependencies.  Add one rpm per line, it can be as generic as the name of the package (i.e. httpd, java) or specific with version (i.e. httpd-2.4.53-7.el9_1.1. java-11-openjdk-headless-11.0.ea.28-7.el7).  
+
 ## Known Issues <a id="known-issues"></a>
 
 ##### VirtualBox

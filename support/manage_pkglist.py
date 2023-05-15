@@ -74,6 +74,9 @@ def load_repodata(dnf_file, cache_dir, arch='x86_64'):
 		if dnf_config.has_option (section, "sslclientcert"):
 			repo.sslclientcert = dnf_config.get (section, "sslclientcert")
 
+		if dnf_config.has_option (section, "exclude"):
+			repo.exclude = dnf_config.get (section, "exclude")
+
 		base.repos.add (repo)
 	base.fill_sack(load_system_repo=False)
 
