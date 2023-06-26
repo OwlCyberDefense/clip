@@ -73,9 +73,8 @@ def load_repodata(dnf_file, cache_dir, arch='x86_64'):
 			repo.sslclientkey = dnf_config.get (section, "sslclientkey")
 		if dnf_config.has_option (section, "sslclientcert"):
 			repo.sslclientcert = dnf_config.get (section, "sslclientcert")
-
-		if dnf_config.has_option (section, "exclude"):
-			repo.exclude = dnf_config.get (section, "exclude")
+		if dnf_config.has_option (section, "excludepkgs"):
+			repo.excludepkgs = dnf_config.get (section, "excludepkgs").split(" ")
 
 		base.repos.add (repo)
 	base.fill_sack(load_system_repo=False)
