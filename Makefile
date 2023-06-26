@@ -199,8 +199,8 @@ $(eval REPO_URL := file://$(REPO_DIR)/$(REPO_ID)-repo)
 $(eval REPO_KEY := $(call GET_REPO_KEY_INFO,RPM-GPG-KEY-$(REPO_ID)-$(RHEL_VER)))
 $(eval setup_all_repos += setup-$(REPO_ID)-repo)
 
-$(eval YUM_CONF += \\n[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=file://$(REPO_PATH)\\nenabled=1\\n\\nexclude=$(strip $(PKG_EXCLUDELIST))\\n)
-$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n$(REPO_KEY)\\n\\nexclude=$(strip $(PKG_EXCLUDELIST))\\n)
+$(eval YUM_CONF += \\n[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=file://$(REPO_PATH)\\nenabled=1\\n\\nexcludepkgs=$(strip $(PKG_EXCLUDELIST))\\n)
+$(eval MOCK_YUM_CONF := $(MOCK_YUM_CONF)[$(REPO_ID)]\\nname=$(REPO_ID)\\nbaseurl=$(REPO_URL)\\nenabled=1\\n$(REPO_KEY)\\n\\nexcludepkgs=$(strip $(PKG_EXCLUDELIST))\\n)
 $(eval MY_REPO_DEPS += $(REPO_DIR)/$(REPO_ID)-repo/last-updated)
 $(eval REPO_LINES := $(REPO_LINES)repo --name=$(REPO_ID) --baseurl=file://$(REPO_DIR)/$(REPO_ID)-repo\n)
 
@@ -417,7 +417,7 @@ $(MOCK_CONF_DIR)/$(MOCK_REL_INSTANCE).cfg:  $(MOCK_CONF_DIR)/$(MOCK_REL).cfg.tmp
 	$(VERBOSE)sed -i '2i config_opts["cache_topdir"] = "$(MOCK_DIR)/cache"' $@
 	$(VERBOSE)sed -i '2i config_opts["root"] = "$(MOCK_REL_INSTANCE)"' $@
 	$(VERBOSE)sed -i '2i config_opts["rootdir"] = "$(MOCK_DIR)/$(MOCK_REL_INSTANCE)"' $@
-	$(VERBOSE)echo -e "[clip-repo]\\nname=clip-repo\\nbaseurl=file://$(CLIP_REPO_DIR)/\\nenabled=1\\ngpgcheck=0\\nexclude=$(strip $(PKG_EXCLUDELIST))\\n" >> $@
+	$(VERBOSE)echo -e "[clip-repo]\\nname=clip-repo\\nbaseurl=file://$(CLIP_REPO_DIR)/\\nenabled=1\\ngpgcheck=0\\nexcludepkgs=$(strip $(PKG_EXCLUDELIST))\\n" >> $@
 	$(VERBOSE)echo '"""' >> $@
 
 ifneq ($(OVERLAY_HOME_SIZE),)
